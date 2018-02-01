@@ -6,28 +6,18 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM ibmcom/ibmnode:4 as build
+FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:latest as build
 
-ARG DEVELOPMENT=true
 ARG COMPONENT
-ARG TINI_VERSION=v0.16.1
-
-RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant
-RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
-
 
 ADD . /work/$COMPONENT
 
 WORKDIR /work/$COMPONENT
 RUN mkdir out 
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini out/tini
-RUN chmod +x out/tini
+RUN cp /usr/local/bin/tini out/tini
 RUN ant
 RUN tar --strip-components=1 -zxf dist/$COMPONENT.tar.gz -C out 
 RUN install -m 755 /work/$COMPONENT/$COMPONENT /work/$COMPONENT/out/entrypoint.sh
-
 
 FROM ibmcom/ibmnode:4
 
