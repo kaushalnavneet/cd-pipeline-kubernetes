@@ -17,7 +17,7 @@ RUN mkdir out
 RUN cp /usr/local/bin/tini out/tini
 RUN ant
 RUN tar --strip-components=1 -zxf dist/$COMPONENT.tar.gz -C out 
-RUN install -m 755 /work/$COMPONENT/$COMPONENT /work/$COMPONENT/out/entrypoint.sh
+RUN mv /work/entrypoint.sh /work/$COMPONENT/export/
 
 FROM ibmcom/ibmnode:4
 
@@ -31,7 +31,7 @@ RUN useradd -ms /bin/bash node
 ENV HOME /home/node
 WORKDIR /home/node
 
-COPY --from=build --chown=node /work/$COMPONENT/out /home/node
+COPY --from=build --chown=node /work/$COMPONENT/export/ /home/node
 
 USER node
 EXPOSE 3000
