@@ -8,8 +8,6 @@
 ###############################################################################
 FROM ibmcom/ibmnode:6
 
-ARG DEVELOPMENT=true
-ARG COMPONENT
 ARG TINI_VERSION=v0.16.1
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list

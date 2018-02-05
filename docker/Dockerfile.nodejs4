@@ -26,6 +26,7 @@ ARG COMPONENT
 
 ENV IS_CF=true
 ENV PORT=3000
+ARG NODE_ENV=production
 
 RUN useradd -ms /bin/bash node 
 ENV HOME /home/node
