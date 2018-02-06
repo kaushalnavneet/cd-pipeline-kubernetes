@@ -23,6 +23,7 @@ FROM ibmcom/ibmnode:4
 
 ARG APP_BUILD_NUMBER=latest
 ARG COMPONENT
+ARG NODE_ENV=production
 
 ENV IS_CF=true
 ENV PORT=3000
