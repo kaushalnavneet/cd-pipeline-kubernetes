@@ -8,22 +8,20 @@
 ###############################################################################
 FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:nodejs4 as build
 
-ARG COMPONENT
 ARG IDS_TOKEN
 
-ADD . /work/$COMPONENT
+ADD . /work/component
 
-WORKDIR /work/$COMPONENT
+WORKDIR /work/component
 RUN mkdir export 
 RUN cp /usr/local/bin/tini export/tini
 RUN ant
-RUN tar --strip-components=1 -zxf dist/$COMPONENT.tar.gz -C export 
-RUN cp -a /work/scripts/entrypoint.nodejs.sh /work/$COMPONENT/export/entrypoint.sh
+RUN tar --strip-components=1 -zxf dist/*.tar.gz -C export 
+RUN cp -a /work/scripts/entrypoint.nodejs.sh /work/component/export/entrypoint.sh
 
 FROM ibmcom/ibmnode:4
 
 ARG APP_BUILD_NUMBER=latest
-ARG COMPONENT
 ARG NODE_ENV=production
 
 ENV IS_CF=true
@@ -33,7 +31,7 @@ RUN useradd -ms /bin/bash node
 ENV HOME /home/node
 WORKDIR /home/node
 
-COPY --from=build --chown=node /work/$COMPONENT/export/ /home/node
+COPY --from=build --chown=node /work/component/export/ /home/node
 
 USER node
 EXPOSE 3000
