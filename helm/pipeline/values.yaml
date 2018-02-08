@@ -1,0 +1,24 @@
+basedomain: devops.dev.us-south.bluemix.net
+
+image:
+  repository: registry.ng.bluemix.net/opentoolchain 
+  tag: latest 
+  pullPolicy: IfNotPresent
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+service:
+  type: ClusterIP
+
+configmap:
+  data:
+    TEST: value
+    
+secret:
+  data:
+    TEST: value

@@ -1,0 +1,28 @@
+{{- template "common.deployment" (list . "pipeline.deployment") -}}
+{{- define "pipeline.deployment" -}}
+## Define overrides for your Deployment resource here, e.g.
+spec:
+  template:
+    spec:
+      containers:
+      - {{ template "common.container" (list . "pipeline.deployment.container") }}
+{{- end -}}
+{{- define "pipeline.deployment.container" -}}
+## Define overrides for your Container here, e.g.
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80
+readinessProbe:
+  httpGet:
+    path: /status
+    port: 80
+env:
+{{ $fullname := include "common.fullname" . }}
+{{- range $envvar, $envvarvalue := .Values.secret.data }}
+- {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
+{{- end }}
+{{- range $envvar, $envvarvalue := .Values.configmap.data }}
+- {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
+{{- end }}
+{{- end -}}
