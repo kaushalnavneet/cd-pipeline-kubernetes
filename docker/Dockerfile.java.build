@@ -13,6 +13,19 @@ ARG TINI_VERSION=v0.16.1
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip
+RUN update-alternatives --set rmid /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/rmid && \
+    update-alternatives --set java /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/java && \
+    update-alternatives --set keytool /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/keytool && \
+    update-alternatives --install /usr/bin/jjs jjs /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/jjs 80 && \
+    update-alternatives --set jjs /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/jjs && \
+    update-alternatives --install /usr/bin/pack200 pack200 /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/pack200 80 && \
+    update-alternatives --set pack200 /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/pack200 && \
+    update-alternatives --set rmiregistry /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/rmiregistry && \
+    update-alternatives --install /usr/bin/unpack200 unpack200 /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/unpack200 80 && \
+    update-alternatives --set unpack200 /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/unpack200 && \
+    update-alternatives --set tnameserv /usr/lib/jvm/java-ibm-x86_64-80/jre/bin/tnameserv && \
+    update-alternatives --install /usr/bin/jexec jexec /usr/lib/jvm/java-ibm-x86_64-80/jre/lib/jexec 80 && \
+    update-alternatives --set jexec /usr/lib/jvm/java-ibm-x86_64-80/jre/lib/jexec
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/local/bin/tini
 RUN chmod +x /usr/local/bin/tini
 
