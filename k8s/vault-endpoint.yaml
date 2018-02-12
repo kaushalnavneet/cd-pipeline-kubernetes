@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  namespace: opentoolchain
+spec:
+  ports:
+  - port: 8200
+    targetPort: 31168 
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: vault
+  namespace: opentoolchain
+subsets:
+  - addresses:
+      - ip: 10.184.63.109
+    ports: 
+      - port: 31168

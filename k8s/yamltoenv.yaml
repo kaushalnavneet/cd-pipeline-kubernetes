@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: yamltoenv
+  namespace: opentoolchain
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: yamltoenv
+      annotations:
+        pod.boostport.com/vault-approle: cd-app
+        pod.boostport.com/vault-init-container: get-vault-token
+    spec:
+      imagePullSecrets: 
+      - name: otc-registry-secret
+      containers:
+      - name: yamltoenv
+        image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+      initContainers:
+      - name: get-vault-token
+        image: boostport/kubernetes-vault-init
+        imagePullPolicy: Always
+        env:
+        - name: VAULT_ROLE_ID
+          value: b6258dfa-f600-cdbc-c3e5-b79604a34a3b
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+      - name: yamltoenv
+        image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+
+      volumes:
+      - name: vault-token
+        emptyDir: {}
