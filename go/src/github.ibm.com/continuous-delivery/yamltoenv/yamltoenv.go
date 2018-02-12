@@ -11,10 +11,8 @@ import (
         "text/tabwriter"
 	"bufio"
         "github.com/sirupsen/logrus"
-
         "github.com/hashicorp/go-cleanhttp"
         "github.com/hashicorp/vault/api"
-
 )
 
 const (
@@ -36,18 +34,8 @@ type secretID struct {
         VaultAddr string `json:"vaultAddr"`
 }
 
-var (
-        commit    string
-        tag       string
-        buildDate string
-)
 
 func main() {
-
-        if len(os.Args) == 2 && os.Args[1] == "version" {
-                showBuildInfo()
-                return
-        }
 
         logger := logrus.New()
         logger.Level = logrus.DebugLevel
@@ -55,6 +43,10 @@ func main() {
         tokenPath := filepath.Join(credentialsPath, "vault-token")
         secretIDPath := filepath.Join(credentialsPath, "vault-secret-id")
 
+	secretPath := os.Getenv("SECRET_PATH");
+	if len(secretPath) <= 0 {
+           logger.Fatal("SECRET_PATH environmental variable must be defined")
+	}
         w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 
 	var c *api.Logical
@@ -82,7 +74,6 @@ func main() {
                 fmt.Fprintf(w, "Lease Duration:\t%d\n", token.LeaseDuration)
                 fmt.Fprintf(w, "Renewable:\t%t\n", token.Renewable)
                 fmt.Fprintf(w, "Vault Address:\t%s\n", token.VaultAddr)
-                fmt.Fprintf(w, "Sample App %s (%s) built on %s\n", tag, commit, buildDate)
 
 		client, err := api.NewClient(&api.Config{Address: token.VaultAddr, HttpClient: httpClient})
 		if err != nil {
@@ -132,7 +123,7 @@ func main() {
         }
 
 
-	s, err := c.Read("secret/pipeline/development")
+	s, err := c.Read(secretPath)
 
 	if err != nil {
 		logger.Fatal(err)
@@ -141,7 +132,7 @@ func main() {
 		logger.Fatal("secret was nil")
 	}
 
-	f, err := os.Create("/var/run/secrets/boostport.com/secrets.sh")
+	f, err := os.Create(filepath.Join(credentialsPath, "secrets.sh"))
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -174,8 +165,3 @@ func main() {
 
         <-sigs
 }
-
-func showBuildInfo() {
-        fmt.Printf("Vault secret extractor %s (%s) built on %s\n", tag, commit, buildDate)
-}
-
