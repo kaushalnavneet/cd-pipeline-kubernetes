@@ -4,8 +4,34 @@
 spec:
   template:
     spec:
+      imagePullSecrets: 
+      - name: otc-registry-secret
+      volumes:
+      - name: vault-token
+        emptyDir: {}
+      initContainers:
+      - name: get-vault-token
+        image: boostport/kubernetes-vault-init
+        imagePullPolicy: Always
+        env:
+        - name: VAULT_ROLE_ID
+          value: {{ .Values.vault.roleID }}
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+      - name: yamltoenv
+        image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
+        env:
+        - name: SECRET_PATHS 
+          value: {{ .Values.vault.secretPaths }} 
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
       containers:
       - {{ template "common.container" (list . "pipeline.deployment.container") }}
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
 {{- end -}}
 {{- define "pipeline.deployment.container" -}}
 ## Define overrides for your Container here, e.g.

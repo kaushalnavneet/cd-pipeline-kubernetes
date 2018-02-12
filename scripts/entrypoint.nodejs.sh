@@ -26,4 +26,8 @@ CF_INSTANCE_INDEX=$((CF_INSTANCE_INDEX+100))
 
 export VCAP_SERVICES CF_INSTANCE_INDEX
 
+if [ -f /var/run/secrets/boostport.com/secrets.sh ]; then
+	source /var/run/secrets/boostport.com/secrets.sh
+fi
+
 exec "$@"

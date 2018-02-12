@@ -1,4 +1,7 @@
 basedomain: devops.dev.us-south.bluemix.net
+vault:
+  roleID: b6258dfa-f600-cdbc-c3e5-b79604a34a3b
+  secretPaths: secret/pipeline/development
 
 image:
   repository: registry.ng.bluemix.net/opentoolchain 
