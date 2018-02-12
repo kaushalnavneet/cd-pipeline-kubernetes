@@ -13,6 +13,7 @@ import (
         "github.com/sirupsen/logrus"
         "github.com/hashicorp/go-cleanhttp"
         "github.com/hashicorp/vault/api"
+	"strings"
 )
 
 const (
@@ -43,9 +44,9 @@ func main() {
         tokenPath := filepath.Join(credentialsPath, "vault-token")
         secretIDPath := filepath.Join(credentialsPath, "vault-secret-id")
 
-	secretPath := os.Getenv("SECRET_PATH");
+	secretPath := os.Getenv("SECRET_PATHS");
 	if len(secretPath) <= 0 {
-           logger.Fatal("SECRET_PATH environmental variable must be defined")
+           logger.Fatal("SECRET_PATHS environmental variable must be defined")
 	}
         w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 
@@ -122,43 +123,32 @@ func main() {
                 logger.Fatal("Could not find a vault-token or vault-secret-id.")
         }
 
-
-	s, err := c.Read(secretPath)
-
-	if err != nil {
-		logger.Fatal(err)
-	}
-	if s == nil {
-		logger.Fatal("secret was nil")
-	}
-
 	f, err := os.Create(filepath.Join(credentialsPath, "secrets.sh"))
 	if err != nil {
 		logger.Fatal(err)
 	}
 	defer f.Close()
 	w2 := bufio.NewWriter(f)
-	for k, v := range s.Data {
-		_, err := w2.WriteString(fmt.Sprintf("export %s=%s\n", k, v))
+
+	result := strings.Split(secretPath, ",")
+	for i := range result {
+		s, err := c.Read(strings.TrimSpace(result[i]))
 		if err != nil {
 			logger.Fatal(err)
 		}
+		if s == nil {
+			logger.Fatal("secret was nil")
+		}
+		for k, v := range s.Data {
+			_, err := w2.WriteString(fmt.Sprintf("export %s=%s\n", k, v))
+			if err != nil {
+				logger.Fatal(err)
+			}
+		}
 	}
  	w2.Flush()
-
-        caBundlePath := filepath.Join(credentialsPath, "ca.crt")
-
-        _, err = os.Stat(caBundlePath)
-
-        caBundleExists := true
-
-        if err != nil && os.IsNotExist(err) {
-                caBundleExists = false
-        }
-
-        fmt.Fprintf(w, "CA Bundle Exists:\t%t\n", caBundleExists)
-
         w.Flush()
+
         sigs := make(chan os.Signal, 1)
 
         signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
