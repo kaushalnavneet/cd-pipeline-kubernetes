@@ -5,15 +5,15 @@ import (
         "fmt"
         "io/ioutil"
         "os"
-        "os/signal"
         "path/filepath"
-        "syscall"
         "text/tabwriter"
 	"bufio"
+	"strings"
         "github.com/sirupsen/logrus"
         "github.com/hashicorp/go-cleanhttp"
         "github.com/hashicorp/vault/api"
-	"strings"
+//        "os/signal"
+//        "syscall"
 )
 
 const (
@@ -70,11 +70,11 @@ func main() {
                 }
 
                 fmt.Fprint(w, "Found Vault token...\n")
-                fmt.Fprintf(w, "Token:\t%s\n", token.ClientToken)
-                fmt.Fprintf(w, "Accessor:\t%s\n", token.Accessor)
-                fmt.Fprintf(w, "Lease Duration:\t%d\n", token.LeaseDuration)
-                fmt.Fprintf(w, "Renewable:\t%t\n", token.Renewable)
-                fmt.Fprintf(w, "Vault Address:\t%s\n", token.VaultAddr)
+//                fmt.Fprintf(w, "Token:\t%s\n", token.ClientToken)
+//                fmt.Fprintf(w, "Accessor:\t%s\n", token.Accessor)
+//                fmt.Fprintf(w, "Lease Duration:\t%d\n", token.LeaseDuration)
+//                fmt.Fprintf(w, "Renewable:\t%t\n", token.Renewable)
+//                fmt.Fprintf(w, "Vault Address:\t%s\n", token.VaultAddr)
 
 		client, err := api.NewClient(&api.Config{Address: token.VaultAddr, HttpClient: httpClient})
 		if err != nil {
@@ -101,10 +101,10 @@ func main() {
                 }
 
                 fmt.Fprint(w, "Found Vault secret_id...\n")
-                fmt.Fprintf(w, "RoleID:\t%s\n", secret.RoleID)
-                fmt.Fprintf(w, "SecretID:\t%s\n", secret.SecretID)
-                fmt.Fprintf(w, "Accessor:\t%s\n", secret.Accessor)
-                fmt.Fprintf(w, "Vault Address:\t%s\n", secret.VaultAddr)
+//                fmt.Fprintf(w, "RoleID:\t%s\n", secret.RoleID)
+//                fmt.Fprintf(w, "SecretID:\t%s\n", secret.SecretID)
+//                fmt.Fprintf(w, "Accessor:\t%s\n", secret.Accessor)
+//                fmt.Fprintf(w, "Vault Address:\t%s\n", secret.VaultAddr)
 
 		client, err := api.NewClient(&api.Config{Address: secret.VaultAddr, HttpClient: httpClient})
 		token, err := client.Logical().Write("auth/approle/login", map[string]interface{}{
@@ -140,18 +140,16 @@ func main() {
 			logger.Fatal("secret was nil")
 		}
 		for k, v := range s.Data {
-			_, err := w2.WriteString(fmt.Sprintf("export %s=%s\n", k, v))
+			_, err := w2.WriteString(fmt.Sprintf("export %s=%q\n", k, v))
 			if err != nil {
 				logger.Fatal(err)
 			}
 		}
 	}
- 	w2.Flush()
+	w2.Flush()
         w.Flush()
 
-        sigs := make(chan os.Signal, 1)
-
-        signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-        <-sigs
+//        sigs := make(chan os.Signal, 1)
+//       signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+//      <-sigs
 }

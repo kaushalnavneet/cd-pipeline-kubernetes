@@ -18,6 +18,9 @@ spec:
       containers:
       - name: yamltoenv
         image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
+        env:
+        - name: SECRET_PATHS 
+          value: secret/pipeline/development 
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
@@ -31,12 +34,6 @@ spec:
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
-      - name: yamltoenv
-        image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
-        volumeMounts:
-        - name: vault-token
-          mountPath: /var/run/secrets/boostport.com
-
       volumes:
       - name: vault-token
         emptyDir: {}
