@@ -1,7 +1,7 @@
 basedomain: devops.dev.us-south.bluemix.net
 
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always 
 
 vault:
   roleID: b6258dfa-f600-cdbc-c3e5-b79604a34a3b
