@@ -1,27 +1,19 @@
 basedomain: devops.dev.us-south.bluemix.net
+
+image:
+  pullPolicy: IfNotPresent
+
 vault:
   roleID: b6258dfa-f600-cdbc-c3e5-b79604a34a3b
   secretPaths: secret/pipeline/development
 
-image:
-  repository: registry.ng.bluemix.net/opentoolchain 
-  tag: latest 
-  pullPolicy: IfNotPresent
 resources:
   limits:
     cpu: 100m
-    memory: 128Mi
+    memory: 1Gi
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 1Gi
 
 service:
   type: ClusterIP
-
-configmap:
-  data:
-    TEST: value
-    
-secret:
-  data:
-    TEST: value

@@ -28,6 +28,7 @@ export VCAP_SERVICES CF_INSTANCE_INDEX
 
 if [ -f /var/run/secrets/boostport.com/secrets.sh ]; then
 	source /var/run/secrets/boostport.com/secrets.sh
+	cat /var/run/secrets/boostport.com/secrets.sh
 fi
 
 exec "$@"
