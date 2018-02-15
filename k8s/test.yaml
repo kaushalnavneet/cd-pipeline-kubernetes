@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: yamltoenv
+  namespace: opentoolchain
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: yamltoenv
+      annotations:
+        pod.boostport.com/vault-approle: cd-app
+        pod.boostport.com/vault-init-container: get-vault-token
+    spec:
+      imagePullSecrets: 
+      - name: otc-registry-secret
+      containers:
+      - name: ubuntu
+        image: ubuntu:latest
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "sleep infinity" ]
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+      initContainers:
+      - name: get-vault-token
+        image: boostport/kubernetes-vault-init
+        imagePullPolicy: Always
+        env:
+        - name: VAULT_ROLE_ID
+          value: b6258dfa-f600-cdbc-c3e5-b79604a34a3b
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+      - name: vault-side-kick
+        image: quay.io/ukhomeofficedigital/vault-sidekick:v0.3.3
+        env:
+        - name: AUTH_FILE 
+          value: /var/run/secrets/boostport.com/vault-token
+        - name: AUTH_FORMAT
+          value: kubernetes-vault
+        args:
+          - -output=/etc/secrets
+          - -one-shot
+          - -logtostderr=true
+          - -cn=secret:secret/pipeline/development:fmt=json
+        volumeMounts:
+          - name: secrets
+            mountPath: /etc/secrets
+          - name: vault-token
+            mountPath: /var/run/secrets/boostport.com
+      volumes:
+      - name: vault-token
+        emptyDir: {}
+      - name: secrets
+        emptyDir: {}
