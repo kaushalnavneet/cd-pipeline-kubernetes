@@ -52,8 +52,10 @@ spec:
       containers:
       - {{ template "common.container" (list . "pipeline.deployment.container") }}
         volumeMounts:
-        - name: vault-token
+        - name: secrets 
           mountPath: /etc/secrets
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com 
 {{- end -}}
 {{- define "pipeline.deployment.container" -}}
 ## Define overrides for your Container here, e.g.
