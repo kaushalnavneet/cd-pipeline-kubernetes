@@ -32,7 +32,6 @@ spec:
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
-      containers:
       - name: vault-side-kick
         image: quay.io/ukhomeofficedigital/vault-sidekick:v0.3.3
         env:
@@ -42,6 +41,7 @@ spec:
           value: kubernetes-vault
         args:
           - -output=/etc/secrets
+          - -one-shot
           - -logtostderr=true
 {{ include "secret_paths" . | indent 10 }}
         volumeMounts:
@@ -49,6 +49,7 @@ spec:
             mountPath: /etc/secrets
           - name: vault-token
             mountPath: /var/run/secrets/boostport.com
+      containers:
       - {{ template "common.container" (list . "pipeline.deployment.container") }}
         volumeMounts:
         - name: vault-token
