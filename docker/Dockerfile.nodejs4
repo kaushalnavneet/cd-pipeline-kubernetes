@@ -13,11 +13,8 @@ ARG IDS_TOKEN
 ADD . /work/component
 
 WORKDIR /work/component
-RUN mkdir export 
-RUN cp /usr/local/bin/tini export/tini
 RUN ant
 RUN tar --strip-components=1 -zxf dist/*.tar.gz -C export 
-RUN cp -a /work/scripts/entrypoint.nodejs.sh /work/component/export/entrypoint.sh
 
 FROM ibmcom/ibmnode:4
 

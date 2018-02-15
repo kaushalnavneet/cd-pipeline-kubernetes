@@ -9,6 +9,7 @@
 FROM ibmcom/ibmnode:4
 
 ARG TINI_VERSION=v0.16.1
+ARG JQ_VERSION=jq-1.5
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
 RUN apt-get update
@@ -16,8 +17,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip
 RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
 
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/local/bin/tini
-RUN chmod +x /usr/local/bin/tini
-
-RUN mkdir /work
-ADD . /work 
+RUN mkdir -p /work/component/export
+ADD . /work
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /work/component/export/tini
+ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
+RUN chmod +x /work/component/export/tini /work/component/export/jq
+RUN cp -a /work/scripts/entrypoint.nodejs.sh /work/component/export/entrypoint.sh

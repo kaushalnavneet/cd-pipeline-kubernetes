@@ -1,4 +1,9 @@
 {{- template "common.deployment" (list . "pipeline.deployment") -}}
+{{- define "secret_paths" }}
+{{- range .Values.vault.secretPaths }}
+{{- print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- end -}}
 {{- define "pipeline.deployment" -}}
 ## Define overrides for your Deployment resource here, e.g.
 spec:
@@ -15,6 +20,8 @@ spec:
       volumes:
       - name: vault-token
         emptyDir: {}
+      - name: secrets 
+        emptyDir: {}
       initContainers:
       - name: get-vault-token
         image: boostport/kubernetes-vault-init
@@ -25,19 +32,27 @@ spec:
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
-      - name: yamltoenv
-        image: registry.ng.bluemix.net/opentoolchain/yamltoenv:latest
-        env:
-        - name: SECRET_PATHS 
-          value: {{ .Values.vault.secretPaths }} 
-        volumeMounts:
-        - name: vault-token
-          mountPath: /var/run/secrets/boostport.com
       containers:
+      - name: vault-side-kick
+        image: quay.io/ukhomeofficedigital/vault-sidekick:v0.3.3
+        env:
+        - name: AUTH_FILE 
+          value: /var/run/secrets/boostport.com/vault-token
+        - name: AUTH_FORMAT
+          value: kubernetes-vault
+        args:
+          - -output=/etc/secrets
+          - -logtostderr=true
+{{ include "secret_paths" . | indent 10 }}
+        volumeMounts:
+          - name: secrets
+            mountPath: /etc/secrets
+          - name: vault-token
+            mountPath: /var/run/secrets/boostport.com
       - {{ template "common.container" (list . "pipeline.deployment.container") }}
         volumeMounts:
         - name: vault-token
-          mountPath: /var/run/secrets/boostport.com
+          mountPath: /etc/secrets
 {{- end -}}
 {{- define "pipeline.deployment.container" -}}
 ## Define overrides for your Container here, e.g.
