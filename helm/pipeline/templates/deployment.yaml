@@ -55,7 +55,6 @@ spec:
         volumeMounts:
         - name: secrets
           mountPath: /etc/secrets
-          readOnly: true
         - name: vault-sidekick
           mountPath: /var/run/certs
           readOnly: true

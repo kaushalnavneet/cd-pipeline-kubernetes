@@ -3,10 +3,6 @@ basedomain: devops.dev.us-south.bluemix.net
 image:
   pullPolicy: Always
 
-vault:
-  secretPaths:
-  - secret/pipeline/development
-
 resources:
   limits:
     cpu: 100m
