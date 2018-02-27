@@ -8,7 +8,7 @@ TAG=$2
 NAMESPACE=opentoolchain
 
 if [  -d cd-pipeline-kubernetes ]; then
-  docker build --no-cache -f cd-pipeline-kubernetes/docker/Dockerfile.nodejs4 -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+  docker build -f cd-pipeline-kubernetes/docker/Dockerfile.nodejs4 -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   helm dep up ${RELEASE_NAME}
   if ! helm list ${RELEASE_NAME}; then
