@@ -5,7 +5,7 @@ development:
     - generic/project/continuous-delivery-dev/cd-pipeline
   configmap:
     data:
-      AMQPS_PORT: 18815
+      AMQPS_PORT: 18815  
       AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
       AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
       AMQP_PREFETCH: 1
@@ -15,10 +15,9 @@ development:
       AMQP_USER: jazzhub
       ARCHIVE_QUEUE_NAME: reporting.archive
       ARCHIVE_TYPE: s3ObjectStorage
+      BUILD_PREFIX: master
       CERT_FILE: keys/server.crt
       CF_DOMAIN: stage1.ng.bluemix.net
-      CF_INSTANCES: 3
-      CF_MEMORY: 1G
       CONTEXT_PATH: /api
       DB_HOST: sl-us-dal-9-portal.1.dblayer.com
       DB_NAME: compose
@@ -27,14 +26,8 @@ development:
       DB_TYPE: postgresql
       DB_USER: admin
       KEY_FILE: keys/server.key
-      LOGICAL_APP_NAME: pipeline-log-service
       LOGICAL_ENV_NAME: DEV
       LOGNAME: pipeline
-      LOGS_EXCHANGE_NAME: reporting
-      LOGS_QUEUE_MSG_TTL: 7200000
-      LOGS_QUEUE_NAME: reporting.jobs.logs
-      LOGS_ROUTING_KEY: reporting.jobs.logs
-      NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
       OBJECT_STORAGE_INTERFACE: public
       OBJECT_STORAGE_PROJECT: object_storage_6057de4d_a7c7_4b4a_93be_940ca5764c53
       OBJECT_STORAGE_PROJECT_ID: 1d644021a18b420882d129127edd575c
@@ -49,7 +42,6 @@ development:
       VM_AMQPS_PORT: 5674
       VM_AMQP_HOST: 169.55.35.183
       VM_AMQP_USER: guest
-      log4js_logmet_component: otc-pipeline-log-service
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
       log4js_logmet_logging_port: 9091
@@ -57,6 +49,28 @@ development:
       log4js_syslog_appender_enabled: true
       log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
       log4js_syslog_appender_port: 6515
-      log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
       log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
-      log4js_syslog_appender_whitelist: audit-logs
+  pipeline-log-service:
+    configmap:
+      data:
+        CF_INSTANCES: 3
+        CF_MEMORY: 1G
+        log4js_logmet_component: otc-pipeline-log-service
+        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
+        LOGICAL_APP_NAME: pipeline-log-service
+        LOGS_EXCHANGE_NAME: reporting
+        LOGS_QUEUE_MSG_TTL: 7200000
+        LOGS_QUEUE_NAME: reporting.jobs.logs
+        LOGS_ROUTING_KEY: reporting.jobs.logs
+        NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
+  pipeline-log-archiver:
+    configmap:
+      data:
+        ARCHIVE_EXCHANGE_NAME: reporting
+        ARCHIVE_ROUTING_KEY: reporting.archive
+        CF_INSTANCES: 3
+        CF_MEMORY: 1G
+        log4js_logmet_component: otc-pipeline-log-archiver
+        log4js_syslog_appender_product: otc-pipeline-log-archiver-ys1-dev
+        LOGICAL_APP_NAME: pipeline-log-archiver
+        NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
