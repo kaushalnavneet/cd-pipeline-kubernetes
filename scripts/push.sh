@@ -4,11 +4,12 @@
 RELEASE_NAME=$1
 IMAGE_NAME=$1
 CHART_DIR=$1
-TAG=$2
+TAG=${2:-latest}
 NAMESPACE=opentoolchain
+CODE_BASE=${3:-nodejs4}
 
 if [  -d cd-pipeline-kubernetes ]; then
-  docker build -f cd-pipeline-kubernetes/docker/Dockerfile.nodejs4 -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+  docker build -f cd-pipeline-kubernetes/docker/Dockerfile.node -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   helm dep up ${RELEASE_NAME}
   if ! helm list ${RELEASE_NAME}; then
