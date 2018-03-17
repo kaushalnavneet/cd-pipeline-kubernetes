@@ -74,3 +74,6 @@ development:
         log4js_syslog_appender_product: otc-pipeline-log-archiver-ys1-dev
         LOGICAL_APP_NAME: pipeline-log-archiver
         NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
+  source-change-service:
+    configmap:
+      data:
