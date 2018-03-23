@@ -16,7 +16,7 @@ WORKDIR /work/component
 RUN ant
 RUN tar --strip-components=1 -zxf dist/*.tar.gz -C export 
 
-FROM ibmcom/ibmnode:4
+FROM ibmcom/ibmnode:6
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
