@@ -7,7 +7,7 @@
 # Contract with IBM Corp.
 ###############################################################################
 
-FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:latest as build
+FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:java as build
 
 ARG DEVELOPMENT=true
 
