@@ -2,7 +2,7 @@ development:
   basedomain: devops.dev.us-south.bluemix.net
   vault:
     secretPaths:
-    - generic/project/continuous-delivery-dev/cd-pipeline
+    - generic/project/continuous-delivery-dev/cd-pipeline/development/common
   configmap:
     data:
       CF_DOMAIN: stage1.ng.bluemix.net
