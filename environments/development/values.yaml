@@ -26,16 +26,44 @@ development:
        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
-        CF_INSTANCES: 3
-        CF_MEMORY: 1G
-        log4js_logmet_component: otc-pipeline-log-service
-        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
-        LOGICAL_APP_NAME: pipeline-log-service
+        AMQPS_PORT: 18815
+        AMQP_CERT_PASSPHRASE: 
+        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQP_KEYSTORE: 
+        AMQP_KEYSTORE_ENCODING: 
+        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PEM_CA: 
+        AMQP_PORT: 
+        AMQP_PREFETCH: 1
+        AMQP_PROTOCOL: amqps
+        AMQP_REJECT_UNAUTH_CERTS: true
+        AMQP_SSL_PROTOCOL: TLSv1_2_method
+        AMQP_USER: jazzhub
+        ARCHIVE_QUEUE_NAME: reporting.archive
+        ARCHIVE_TYPE: s3ObjectStorage
+        CA_FILE: 
+        CERT_FILE: keys/server.crt
+        DB_CA_FILE: 
+        DB_CA_PEM: 
+        DB_HOST: sl-us-dal-9-portal.1.dblayer.com
+        DB_NAME: compose
+        DB_PORT: 10570
+        DB_SSL_PROTOCOL: TLSv1.2
+        DB_TYPE: postgresql
+        DB_USER: admin
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: 7200000
         LOGS_QUEUE_NAME: reporting.jobs.logs
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
+        NODE_MODULES_CACHE: false
+        OBJECT_STORAGE_INTERFACE: public
+        OBJECT_STORAGE_REGION: dallas
+        OBJECT_STORAGE_URL: https://identity.open.softlayer.com
+        S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
+        S3_STORAGE_REGION: us-standard
+        log4js_logmet_component: otc-pipeline-log-service
+        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
   pipeline-log-archiver:
     configmap:
       data:
