@@ -23,7 +23,7 @@ development:
   pipeline-log-service:
     vault:
       secretPaths:
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
         AMQPS_PORT: 18815
