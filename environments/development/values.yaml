@@ -21,6 +21,9 @@ development:
       log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
         CF_INSTANCES: 3
