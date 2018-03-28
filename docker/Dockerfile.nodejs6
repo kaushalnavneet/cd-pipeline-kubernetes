@@ -13,25 +13,24 @@ ARG IDS_TOKEN
 ADD . /work/component
 
 WORKDIR /work/component
-RUN ant
-RUN tar --strip-components=1 -zxf dist/*.tar.gz -C export 
+RUN npm install --production
 
 FROM ibmcom/ibmnode:6
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
 
-ENV IS_CF=true
-ENV PORT=3000
+ENV PORT=80
 
 RUN useradd -ms /bin/bash node 
 ENV HOME /home/node
 WORKDIR /home/node
 
+COPY --from=build --chown=node /work/component/ /home/node
 COPY --from=build --chown=node /work/component/export/ /home/node
 
 USER node
-EXPOSE 3000
+EXPOSE 80
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
