@@ -18,7 +18,7 @@ if [  -d cd-pipeline-kubernetes ]; then
   fi 
   helm dep up ${RELEASE_NAME}
   if ! helm list ${RELEASE_NAME}; then
-    deleted = $(helm list --all $RELEASE_NAME} | grep DELETED)
+    deleted=$(helm list --all $RELEASE_NAME} | grep DELETED)
     if [ -z $deleted ]; then
       helm delete --purge ${RELEASE_NAME}
     fi

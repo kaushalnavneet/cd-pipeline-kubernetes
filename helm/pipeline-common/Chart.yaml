@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Pipeline Common chartbuilding components and helpers
+name: pipeline-common
+version: 0.0.2

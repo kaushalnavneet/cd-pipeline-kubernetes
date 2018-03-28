@@ -1,0 +1,23 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
+FROM golang:1.10-alpine3.7
+
+ARG JQ_VERSION=jq-1.5
+RUN apk update
+RUN apk add build-base git bash
+
+RUN go get -u github.com/FiloSottile/gvt
+RUN go get github.com/alecthomas/gometalinter
+RUN go get github.com/stretchr/testify/assert
+
+RUN mkdir -p /work/component/export
+ADD . /work
+ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
+RUN chmod +x /work/component/export/jq
+RUN cp -a /work/scripts/entrypoint.go.sh /work/component/export/entrypoint.sh
