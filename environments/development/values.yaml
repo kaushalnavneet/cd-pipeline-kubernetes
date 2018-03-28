@@ -265,9 +265,15 @@ development:
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: HmacSHA1
         IS_CF: 1
-        log4js_logmet_component: pipeline-inventory
-        log4js_syslog_appender_product: otc-pipeline-inventory-ys1-dev
-        log4js_syslog_appender_keystore_path: qr.jks
+        logmet_host: ingest.logging.stage1.ng.bluemix.net
+        logmet_port: 9091
+        logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
+        qradar_enabled: true
+        qradar_host: syslog.prd.ccs.ibmcloud.com
+        qradar_keystore_path: qr.jks
+        qradar_port: 6515
+        qradar_product: otc-pipeline-inventory-ys1-dev
+        qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
     configmap:
       data:
