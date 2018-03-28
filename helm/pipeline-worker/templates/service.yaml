@@ -1,0 +1,8 @@
+{{- template "common.service" (list . "pipeline.service") -}}
+{{- define "pipeline.service" -}}
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80 
+{{- end -}}

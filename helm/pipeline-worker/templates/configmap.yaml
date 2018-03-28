@@ -1,0 +1,7 @@
+{{- template "common.configmap" (list . "pipeline.configmap") -}}
+{{- define "pipeline.configmap" -}}
+data:
+  {{- range $envvar, $envvarvalue := .Values.configmap.data }}
+  {{ $envvar }}: {{ $envvarvalue | quote }}
+  {{- end }}
+{{- end -}}

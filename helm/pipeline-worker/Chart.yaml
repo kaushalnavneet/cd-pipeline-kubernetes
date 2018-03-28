@@ -1,0 +1,6 @@
+name: pipeline-worker
+description: Worker Pipeline 
+version: 1.0.0
+home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes
+sources:
+    - https://github.ibm.com/org-ids/cd-pipeline-kubernetes

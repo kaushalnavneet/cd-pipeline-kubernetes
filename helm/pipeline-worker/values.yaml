@@ -1,0 +1,15 @@
+basedomain: devops.dev.us-south.bluemix.net
+
+image:
+  pullPolicy: Always
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 1Gi
+
+service:
+  type: ClusterIP

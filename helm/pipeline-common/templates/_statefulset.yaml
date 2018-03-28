@@ -1,5 +1,5 @@
-{{- define "common.deployment.tpl" -}}
-apiVersion: apps/v1
+{{- define "pipeline.common.statefulset.tpl" -}}
+apiVersion: apps/v1beta2
 kind: StatefulSet 
 {{ template "common.metadata" . }}
 spec:
@@ -13,7 +13,6 @@ spec:
       -
 {{ include "common.container.tpl" . | indent 8 }}
 {{- end -}}
-{{- define "common.deployment" -}}
-{{- template "common.util.merge" (append . "common.deployment.tpl") -}}
+{{- define "pipeline.common.statefulset" -}}
+{{- template "common.util.merge" (append . "pipeline.common.statefulset.tpl") -}}
 {{- end -}}
-
