@@ -151,6 +151,9 @@ development:
         log4js_logmet_component: otc-webhook-relay-sub
         log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
   blade-pipeline-broker:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
