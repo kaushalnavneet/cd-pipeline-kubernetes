@@ -1,7 +1,11 @@
 {{- template "common.deployment" (list . "pipeline.deployment") -}}
 {{- define "secret_paths" }}
 {{- range .Values.vault.secretPaths }}
-{{- print "- -cn=secret:" . ":fmt=json"}}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- $fullname := include "common.fullname" . -}}
+{{- range  index .Values $fullname "vault" "secretPaths" }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
 {{- end -}}
 {{- define "pipeline.deployment" -}}
