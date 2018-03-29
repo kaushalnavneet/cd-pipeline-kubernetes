@@ -6,15 +6,14 @@ development:
   configmap:
     data:
       OTC_API_URL: https://devops-api.stage1.ng.bluemix.net/v1
-      SECGRP: GRP3DEVS
       log4js_logmet_enabled: true
-      log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
+      log4js_logmet_logging_host: ingest.logging.ng.bluemix.net
       log4js_logmet_logging_port: 9091
-      log4js_logmet_space_id: ed841776-9394-4b51-a86c-72ddc5529e05
+      log4js_logmet_space_id: 3f02963c-7330-4cef-b34c-1356ff3924c2
       log4js_syslog_appender_enabled: true
       log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
       log4js_syslog_appender_port: 6515
-      log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
+      log4js_syslog_appender_url: devops.ng.bluemix.net
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
     vault:
@@ -47,7 +46,6 @@ development:
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
-        KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: 7200000
         LOGS_QUEUE_NAME: reporting.jobs.logs
@@ -294,13 +292,9 @@ development:
     configmap:
       data:
         AMQP_LISTENERS_DISABLED: false
-        JBP_CONFIG_IBMJDK: "version: 1.8.+"
+        JBP_CONFIG_IBMJDK: version: 1.8.+
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: resources/security/qr.jks
         qradar_port: 6515
         qradar_product: otc-pipeline-server-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
-  travis-worker:
-    configmap:
-      data:
-        TEST: TEST
