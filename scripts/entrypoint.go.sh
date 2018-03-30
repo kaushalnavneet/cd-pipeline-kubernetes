@@ -30,7 +30,7 @@ export VCAP_SERVICES CF_INSTANCE_INDEX
 if [ -d /etc/secrets ]; then
     for file in /etc/secrets/*; do
         [ -e "$file" ] || continue
-        eval "$(/home/node/jq -r '. | to_entries | .[] | "export " + .key + "=\"" + .value + "\""' < $file)"
+        eval "$(jq -r '. | to_entries | .[] | "export " + .key + "=\"" + .value + "\""' < $file)"
     done
 fi
 

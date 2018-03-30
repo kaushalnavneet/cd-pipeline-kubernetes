@@ -3,6 +3,10 @@
 {{- range .Values.vault.secretPaths }}
 {{- print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
+{{- $fullname := include "common.fullname" . -}}
+{{- range  index .Values $fullname "vault" "secretPaths" }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
 {{- end -}}
 {{- define "pipeline.statefulset" -}}
 ## Define overrides for your Deployment resource here, e.g.
@@ -59,12 +63,16 @@ spec:
           mountPath: /var/run/certs
           readOnly: true
       - {{ template "common.container" (list . "pipeline.statefulset.container") }}
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: secrets
           mountPath: /etc/secrets
           readOnly: true
+{{- if .Values.persistentVolume.enabled }}
         - name: dockervarlib
           mountPath: /var/lib/docker
+{{- end -}}
 {{- end -}}
 {{- define "pipeline.statefulset.container" -}}
 # Define overrides for your Container here, e.g.

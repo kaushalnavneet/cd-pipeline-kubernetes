@@ -3,7 +3,11 @@ apiVersion: apps/v1beta2
 kind: StatefulSet 
 {{ template "common.metadata" . }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ template "common.name" . }} 
   template:
+    serviceName: "{{ template "common.fullname" . }}"
     metadata:
       labels:
         app: {{ template "common.name" . }}
