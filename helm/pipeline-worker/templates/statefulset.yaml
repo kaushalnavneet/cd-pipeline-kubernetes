@@ -26,6 +26,9 @@ spec:
             path: vault.pem
       - name: secrets
         emptyDir: {}
+      - name: otc-registry-secret
+        secret:
+          secretName: otc-registry-secret
       containers:
       - name: vault-sidekick
         image: quay.io/ukhomeofficedigital/vault-sidekick:latest
@@ -68,6 +71,9 @@ spec:
         volumeMounts:
         - name: secrets
           mountPath: /etc/secrets
+          readOnly: true
+        - name: otc-registry-secret
+          mountPath: /var/run/secrets/cloud.ibm.com/travis-worker
           readOnly: true
 {{- if .Values.persistentVolume.enabled }}
         - name: dockervarlib
