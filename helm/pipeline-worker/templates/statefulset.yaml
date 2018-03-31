@@ -17,6 +17,10 @@ spec:
       imagePullSecrets:
       - name: otc-registry-secret
       volumes:
+    {{- if not .Values.persistentVolume.enabled }}
+      - name: dockervarlib
+        emptyDir: {}
+    {{- end }}
       - name: vault-sidekick
         secret:
           defaultMode: 420
@@ -75,10 +79,8 @@ spec:
         - name: otc-registry-secret
           mountPath: /var/run/secrets/cloud.ibm.com/travis-worker
           readOnly: true
-{{- if .Values.persistentVolume.enabled }}
         - name: dockervarlib
           mountPath: /var/lib/docker
-{{- end -}}
 {{- end -}}
 {{- define "pipeline.statefulset.container" -}}
 # Define overrides for your Container here, e.g.
@@ -94,7 +96,7 @@ spec:
 {{- if .Values.persistentVolume.enabled }}
 volumeClaimTemplates:
 - metadata:
-    name: dockervarlib 
+    name: dockervarlib
     annotations:
     {{- range $key, $value := .Values.persistentVolume.annotations }}
       {{ $key }}: {{ $value }}
