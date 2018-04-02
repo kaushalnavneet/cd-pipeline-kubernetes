@@ -33,4 +33,4 @@ USER node
 EXPOSE 80
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
-CMD ["node", "index.js"]
+CMD "env > envcheck.txt && node index.js"
