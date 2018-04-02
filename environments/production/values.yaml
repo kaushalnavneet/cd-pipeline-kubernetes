@@ -21,59 +21,63 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
-        AMQPS_PORT: 18815
-        AMQP_CERT_PASSPHRASE: 
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQPS_PORT: 10830
+        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
         AMQP_KEYSTORE: 
         AMQP_KEYSTORE_ENCODING: 
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /otc-pipeline-yp
         AMQP_PEM_CA: 
         AMQP_PORT: 
         AMQP_PREFETCH: 1
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: logservice
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: 
         CERT_FILE: keys/server.crt
+        CIPHER_ALGORITHM: aes-128-cbc
         DB_CA_FILE: 
         DB_CA_PEM: 
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
-        DB_PORT: 10570
+        DB_PORT: 15107
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
+        HMAC_ALGORITHM: sha1
+        KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: 7200000
         LOGS_QUEUE_NAME: reporting.jobs.logs
         LOGS_ROUTING_KEY: reporting.jobs.logs
-        NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
+        NEW_RELIC_APP_NAME: Pipeline Log Service - YP
         NODE_MODULES_CACHE: false
         OBJECT_STORAGE_INTERFACE: public
         OBJECT_STORAGE_REGION: dallas
         OBJECT_STORAGE_URL: https://identity.open.softlayer.com
+        OBJECT_STORAGE_USERNAME: 5f6115a63c5040b08a0db1b003e5ff37
+        S3_LOGS_BUCKET_NAME: pipeline-logs
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         log4js_logmet_component: otc-pipeline-log-service
-        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
+        log4js_syslog_appender_product: otc-pipeline-log-service-yp
   pipeline-log-archiver:
     configmap:
       data:
-        AMQPS_PORT: 18815
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQPS_PORT: 10830
+        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
         AMQP_KEYSTORE: 
         AMQP_KEYSTORE_ENCODING: 
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /otc-pipeline-yp
         AMQP_PEM_CA: 
         AMQP_PORT: 
-        AMQP_PREFETCH: 1
+        AMQP_PREFETCH: 
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: logarchiver
         ARCHIVE_EXCHANGE_NAME: reporting
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
@@ -84,38 +88,42 @@ development:
         DB_CA_PEM: 
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
-        DB_PORT: 10570
+        DB_PORT: 15107
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
         HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
-        NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
+        NEW_RELIC_APP_NAME: Pipeline Log Archiver - YP
         OBJECT_STORAGE_INTERFACE: public
         OBJECT_STORAGE_REGION: dallas
         OBJECT_STORAGE_URL: https://identity.open.softlayer.com
+        S3_LOGS_BUCKET_NAME: pipeline-logs
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
+        SECGRP: GRP3PRDS
+        log4js_logmet_component: otc-pipeline-log-archiver
+        log4js_syslog_appender_product: otc-pipeline-log-archiver-yp
   source-change-service:
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
         CLOUDANT_DB: pipeline-source-changes
-        CLOUDANT_URL: bmdevops-ys1-us-south.cloudant.com
+        CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: sha1
         HTTPS_PORT: 
         HTTP_PORT: 
         IS_CF: true
-        NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
+        NEW_RELIC_APP_NAME: Pipeline Source Change Service - YP
         log4js_logmet_component: otc-pipeline-source-change-service
-        log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-dev
+        log4js_syslog_appender_product: otc-pipeline-source-changes-yp
   otc-github-relay-pub:
     configmap:
       data:
         AMQP_EXCHANGE: 
         AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
-        AMQP_MSG_EXP_TIME: 
+        AMQP_MSG_EXP_TIME:
         AMQP_PATH: /otc-yp
         AMQP_PORT: 10866
         AMQP_PROTOCOL: amqps
@@ -123,11 +131,10 @@ development:
         AMQP_RECONNECT_TIMEOUT: 
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
-        LOG4JS_CONFIG_PATH: app/assets/log4js.json
-        MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
-        NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
+        LOG4JS_CONFIG_PATH: 
+        NEW_RELIC_APP_NAME: otc-webhook-relay - PROD
         log4js_logmet_component: otc-webhook-relay-pub
-        log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
+        log4js_syslog_appender_product: otc-github-relay-pub-yp
   otc-github-relay-sub:
     configmap:
       data:
@@ -137,57 +144,57 @@ development:
         AMQP_PATH: /otc-yp
         AMQP_PORT: 10866
         AMQP_PROTOCOL: amqps
-        AMQP_QUEUE: webhook-relay.ys1-dev
+        AMQP_QUEUE: webhook-relay.yp
         AMQP_RECONNECT_TIMEOUT: 
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: 
-        NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        POST_URL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline/triggers/
+        NEW_RELIC_APP_NAME: otc-webhook-relay-sub - YP
+        POST_URL: https://devops-api.ng.bluemix.net/v1/pipeline/triggers/
         log4js_logmet_component: otc-webhook-relay-sub
-        log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
+        log4js_syslog_appender_product: otc-github-relay-sub-yp
   blade-pipeline-broker:
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
-        NEW_RELIC_APP_NAME: Pipeline Broker - YS1
+        NEW_RELIC_APP_NAME: Pipeline Broker - YP
         log4js_logmet_component: otc-pipeline-broker
-        log4js_syslog_appender_product: otc-pipeline-broker-ys1-dev
+        log4js_syslog_appender_product: otc-pipeline-broker-yp
   pipeline-consumption:
     configmap:
       data:
-        NODE_ENV: development
-        apiTest__monitorInterval: 60000
-        log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
+        NODE_ENV: production
+        appUrl: https://console.bluemix.net
+        auth__ibmId: pipeaut2@us.ibm.com
+        log4js_logmet_component: otc-pipeline-consumption-monitor
+        uiTest__isEnabled: true
   pipeline-ui:
     configmap:
       data:
-        ACE_PROXY_URL: https://dev-console.stage1.bluemix.net
         AMQP_CA: 
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
         AMQP_KEYSTORE_ENCODING: 
         AMQP_MSG_EXP_TIME: 3000
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /otc-pipeline-yp
         AMQP_PFX: 
-        AMQP_PORT: 18815
+        AMQP_PORT: 10830
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
-        AMQP_REJECT_UNAUTH_CERTS: true
+        AMQP_REJECT_UNAUTH_CERTS: 
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
-        ARS_URL: https://pipeline-artifact-repository-service.stage1.ng.bluemix.net/codestation/v2
-        BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
-        BLUEMIX_URL: https://dev-console.stage1.bluemix.net
+        AMQP_USER: ui
+        ARS_URL: https://pipeline-artifact-repository-service.ng.bluemix.net/codestation/v2
+        BLUEMIX_API_URL: https://api.ng.bluemix.net
+        BLUEMIX_URL: https://console.ng.bluemix.net
         BSS_CHECKED: true
         BSS_ENFORCED: false
-        CF_DOMAIN: stage1.ng.bluemix.net
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
-        CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.stage1.ng.bluemix.net
+        CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.ng.bluemix.net
         CS_VERSION: 2
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
@@ -195,51 +202,38 @@ development:
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
         HIDE_VIEW_PIPELINES: false
-        IAM_CLIENT_ID: otc
-        IAM_GLOBAL_URL: https://iam.stage1.bluemix.net
-        IS_DEV: false
         K8S_REGIONS: 
-        MAP_API_URL: 
+        MAP_API_URL: https://multi-app-pipeline-api.ng.bluemix.net/v1/multi-app-pipeline/graphql
         MAP_ENABLED: true
-        NEW_RELIC_APP_NAME: Pipeline UI - YS1
-        PIPELINE_URL: https://otc-pipeline-server.stage1.ng.bluemix.net/pipeline
-        REDIS_URL: redis://127.0.0.1:6379
-        SESSION_CACHE_NAME: main-cache
-        SESSION_KEY: opsConsole.sid
-        SESSION_TTL: 86400
-        TIAM_URL: https://devops-api.stage1.ng.bluemix.net/v1/identity
-        TUNNEL_DEST_HOST: 10.99.58.69
-        TUNNEL_DEST_PORT: 5000
-        TUNNEL_LOCAL_PORT: 6379
-        TUNNEL_SSH_HOST: sl-us-dal-9-portal.1.dblayer.com
-        TUNNEL_SSH_PORT: 15779
-        TUNNEL_USERID: compose
-        UAA_CLIENT_ID: otcclient
-        U_SERVICES_DOMAIN: stage1.ng.bluemix.net
+        NEW_RELIC_APP_NAME: Pipeline UI - YP
+        PIPELINE_URL: https://otc-pipeline-server.ng.bluemix.net/pipeline
+        TIAM_COOKIE: tiam.session.us-south
+        TIAM_URL: https://devops-api.ng.bluemix.net/v1/identity
         log4js_logmet_component: pipeline-ui-service
-        log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
+        log4js_syslog_appender_product: otc-pipeline-ui-yp
   pipeline-artifact-repository-service:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP__PATH: otc-pipeline-ys1-dev-2017-01-23
+        AMQP__HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
+        AMQP__PATH: otc-pipeline-yp
         AMQP__PEMCA: 
-        AMQP__PORT: 18815
+        AMQP__PORT: 10830
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
-        AMQP__REJECTUNAUTHCERTS: true
+        AMQP__REJECTUNAUTHCERTS: 
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: jazzhub
-        CLOUDANT_HOST: bmdevops-ys1-us-south.cloudant.com
+        CLOUDANT_HOST: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_PORT: 443
         CLOUDANT_USERNAME: mencessiongisteridecoute
         LOG_LEVEL: debug
-        NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
-        NODE_ENV: staging-us-south
-        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
+        NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YP
+        NODE_ENV: production-yp-us-south
+        S3_ARS_BUCKET_NAME: pipeline-artifacts
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
+        SECGRP: GRP3DEVS
         SSL: true
         STATUS_TIMEOUT: 4500
         STORAGE_AUTH_URL: https://identity.open.softlayer.com
@@ -247,47 +241,46 @@ development:
         STORAGE_DOMAIN_ID: cc8d71f3e8704f8387275758be9c04ae
         STORAGE_DOMAIN_NAME: 1073451
         STORAGE_INTERFACE: public
-        STORAGE_PROJECT: object_storage_04bbe9fd_7940_477c_8c24_dcdd7e10bf0b
-        STORAGE_PROJECT_ID: e6a48c019c904be2bf626fe4c91c8e68
+        STORAGE_PROJECT: object_storage_4a039100_569b_43d4_9c1b_e34794ab583e
+        STORAGE_PROJECT_ID: a0f13855080642bdbcaf573972779bd6
         STORAGE_REGION: dallas
-        STORAGE_USERID: 528ea5b6577f4b06a8ef0fa8969a23bb
-        STORAGE_USERNAME: admin_6a49519e0f7b815d63e272ffb3425dab3dd31d4a
+        STORAGE_USERID: 4abe111116964ad3a2bae35b0ad36f59
+        STORAGE_USERNAME: admin_3ac0fb36a5ea601b0d30e7d293673471fb33f030
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service
-        log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
+        log4js_syslog_appender_product: pipeline-artifact-repository-service-yp
   pipeline-inventory:
     configmap:
       data:
         CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
         CLOUDANT_DB: pipeline-inv
-        CLOUDANT_URL: https://bmdevops-ys1-us-south.cloudant.com
+        CLOUDANT_URL: https://bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: HmacSHA1
         IS_CF: 1
-        logmet_host: ingest.logging.stage1.ng.bluemix.net
-        logmet_port: 9091
-        logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
+        logmet_host: ingest.logging.ng.bluemix.net
+        logmet_tenant_id: 3f02963c-7330-4cef-b34c-1356ff3924c2
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
         qradar_port: 6515
-        qradar_product: otc-pipeline-inventory-ys1-dev
-        qradar_url: devops.stage1.ng.bluemix.net
+        qradar_product: otc-pipeline-inventory-yp
+        qradar_url: devops.ng.bluemix.net
   test-report-service:
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
         CLOUDANT_DB: pipeline-tests
-        CLOUDANT_URL: bmdevops-ys1-us-south.cloudant.com
+        CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: sha1
         HTTPS_PORT: 
         HTTP_PORT: 
         IS_CF: true
         JSON_LIMIT: 5mb
-        NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1
-        log4js_logmet_component: otc-pipeline-test-reporting
-        log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
+        NEW_RELIC_APP_NAME: Pipeline Test Report Service - YP
+        log4js_logmet_component: otc-pipeline-test-report
+        log4js_syslog_appender_product: otc-pipeline-test-reporting-yp
   pipeline-service:
     configmap:
       data:
@@ -296,5 +289,5 @@ development:
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: resources/security/qr.jks
         qradar_port: 6515
-        qradar_product: otc-pipeline-server-ys1-dev
-        qradar_url: devops.stage1.ng.bluemix.net
+        qradar_product: otc-pipeline-server-yp
+        qradar_url: devops.ng.bluemix.net
