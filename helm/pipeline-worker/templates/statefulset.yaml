@@ -109,6 +109,9 @@ volumeClaimTemplates:
     resources:
       requests:
         storage: {{ .Values.persistentVolume.size | quote }}
+      {{- if .Values.persistentVolume.iops }}
+        iops: {{ .Values.persistentVolume.iops | quote }} 
+      {{- end }}
   {{- if .Values.persistentVolume.storageClass }}
   {{- if (eq "-" .Values.persistentVolume.storageClass) }}
     storageClassName: ""
