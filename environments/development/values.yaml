@@ -62,6 +62,9 @@ development:
         log4js_logmet_component: otc-pipeline-log-service
         log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
   pipeline-log-archiver:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
     configmap:
       data:
         AMQPS_PORT: 18815
@@ -99,6 +102,9 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
   source-change-service:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
@@ -113,6 +119,9 @@ development:
         log4js_logmet_component: otc-pipeline-source-change-service
         log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-dev
   otc-github-relay-pub:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
     configmap:
       data:
         AMQP_EXCHANGE: 
@@ -131,6 +140,9 @@ development:
         log4js_logmet_component: otc-webhook-relay-pub
         log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
   otc-github-relay-sub:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
     configmap:
       data:
         AMQP_EXCHANGE: 
@@ -161,12 +173,18 @@ development:
         log4js_logmet_component: otc-pipeline-broker
         log4js_syslog_appender_product: otc-pipeline-broker-ys1-dev
   pipeline-consumption:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption
     configmap:
       data:
         NODE_ENV: development
         apiTest__monitorInterval: 60000
         log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
   pipeline-ui:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
     configmap:
       data:
         ACE_PROXY_URL: https://dev-console.stage1.bluemix.net
@@ -224,6 +242,9 @@ development:
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
     configmap:
       data:
         AMQP__ENABLED: true
@@ -261,6 +282,9 @@ development:
         log4js_logmet_component: pipeline-artifact-repository-service
         log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
   pipeline-inventory:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
     configmap:
       data:
         CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
@@ -279,6 +303,9 @@ development:
         qradar_product: otc-pipeline-inventory-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
@@ -294,6 +321,9 @@ development:
         log4js_logmet_component: otc-pipeline-test-reporting
         log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
   pipeline-service:
+   vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
     configmap:
       data:
         AMQP_LISTENERS_DISABLED: false
