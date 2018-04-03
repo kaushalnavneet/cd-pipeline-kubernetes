@@ -293,7 +293,7 @@ development:
         CLOUDANT_URL: https://bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: HmacSHA1
-        IS_CF: 1
+        IS_CF: "1"
         logmet_host: ingest.logging.stage1.ng.bluemix.net
         logmet_port: "9091"
         logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
