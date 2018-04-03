@@ -80,6 +80,7 @@ development:
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
         ARCHIVE_EXCHANGE_NAME: reporting
+        ARCHIVE_FILE_PATH: "${HOME}/var/log/pipeline-log-archiver"
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
