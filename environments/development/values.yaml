@@ -9,11 +9,11 @@ development:
       SECGRP: GRP3DEVS
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
-      log4js_logmet_logging_port: 9091
+      log4js_logmet_logging_port: "9091"
       log4js_logmet_space_id: ed841776-9394-4b51-a86c-72ddc5529e05
       log4js_syslog_appender_enabled: true
       log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
-      log4js_syslog_appender_port: 6515
+      log4js_syslog_appender_port: "6515"
       log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
@@ -22,7 +22,7 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
-        AMQPS_PORT: 18815
+        AMQPS_PORT: "18815"
         AMQP_CERT_PASSPHRASE: 
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
         AMQP_KEYSTORE: 
@@ -30,7 +30,7 @@ development:
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
         AMQP_PEM_CA: 
         AMQP_PORT: 
-        AMQP_PREFETCH: 1
+        AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
@@ -43,7 +43,7 @@ development:
         DB_CA_PEM: 
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
-        DB_PORT: 10570
+        DB_PORT: "10570"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
@@ -67,14 +67,14 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
     configmap:
       data:
-        AMQPS_PORT: 18815
+        AMQPS_PORT: "18815"
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
         AMQP_KEYSTORE: 
         AMQP_KEYSTORE_ENCODING: 
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
         AMQP_PEM_CA: 
         AMQP_PORT: 
-        AMQP_PREFETCH: 1
+        AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
@@ -90,7 +90,7 @@ development:
         DB_CA_PEM: 
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
-        DB_PORT: 10570
+        DB_PORT: "10570"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
@@ -129,7 +129,7 @@ development:
         AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
         AMQP_MSG_EXP_TIME: 
         AMQP_PATH: /otc-yp
-        AMQP_PORT: 10866
+        AMQP_PORT: "10866"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: 
         AMQP_RECONNECT_TIMEOUT: 
@@ -150,7 +150,7 @@ development:
         AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
         AMQP_MSG_EXP_TIME: 
         AMQP_PATH: /otc-yp
-        AMQP_PORT: 10866
+        AMQP_PORT: "10866"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: 
@@ -180,7 +180,7 @@ development:
     configmap:
       data:
         NODE_ENV: development
-        apiTest__monitorInterval: 60000
+        apiTest__monitorInterval: "60000"
         log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
   pipeline-ui:
    vault:
@@ -193,10 +193,10 @@ development:
         AMQP_EXCHANGE: pipeline
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
         AMQP_KEYSTORE_ENCODING: 
-        AMQP_MSG_EXP_TIME: 3000
+        AMQP_MSG_EXP_TIME: "3000"
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
         AMQP_PFX: 
-        AMQP_PORT: 18815
+        AMQP_PORT: "18815"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
         AMQP_REJECT_UNAUTH_CERTS: true
@@ -212,7 +212,7 @@ development:
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
         CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.stage1.ng.bluemix.net
-        CS_VERSION: 2
+        CS_VERSION: "2"
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
         ENABLE_CONTAINER_REGISTRY_BUILDER_TYPE: true
@@ -232,11 +232,11 @@ development:
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
         TIAM_URL: https://devops-api.stage1.ng.bluemix.net/v1/identity
-        TUNNEL_DEST_HOST: 10.99.58.69
-        TUNNEL_DEST_PORT: 5000
-        TUNNEL_LOCAL_PORT: 6379
+        TUNNEL_DEST_HOST: "10.99.58.69"
+        TUNNEL_DEST_PORT: "5000"
+        TUNNEL_LOCAL_PORT: "6379"
         TUNNEL_SSH_HOST: sl-us-dal-9-portal.1.dblayer.com
-        TUNNEL_SSH_PORT: 15779
+        TUNNEL_SSH_PORT: "15779"
         TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
@@ -252,14 +252,14 @@ development:
         AMQP__HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
         AMQP__PATH: otc-pipeline-ys1-dev-2017-01-23
         AMQP__PEMCA: 
-        AMQP__PORT: 18815
+        AMQP__PORT: "18815"
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
         AMQP__REJECTUNAUTHCERTS: true
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: jazzhub
         CLOUDANT_HOST: bmdevops-ys1-us-south.cloudant.com
-        CLOUDANT_PORT: 443
+        CLOUDANT_PORT: "443"
         CLOUDANT_USERNAME: mencessiongisteridecoute
         LOG_LEVEL: debug
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
@@ -268,11 +268,11 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         SSL: true
-        STATUS_TIMEOUT: 4500
+        STATUS_TIMEOUT: "4500"
         STORAGE_AUTH_URL: https://identity.open.softlayer.com
-        STORAGE_AUTH_VERSION: 3
+        STORAGE_AUTH_VERSION: "3"
         STORAGE_DOMAIN_ID: cc8d71f3e8704f8387275758be9c04ae
-        STORAGE_DOMAIN_NAME: 1073451
+        STORAGE_DOMAIN_NAME: "1073451"
         STORAGE_INTERFACE: public
         STORAGE_PROJECT: object_storage_04bbe9fd_7940_477c_8c24_dcdd7e10bf0b
         STORAGE_PROJECT_ID: e6a48c019c904be2bf626fe4c91c8e68
@@ -295,12 +295,12 @@ development:
         HMAC_ALGORITHM: HmacSHA1
         IS_CF: 1
         logmet_host: ingest.logging.stage1.ng.bluemix.net
-        logmet_port: 9091
+        logmet_port: "9091"
         logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
-        qradar_port: 6515
+        qradar_port: "6515"
         qradar_product: otc-pipeline-inventory-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
@@ -331,7 +331,7 @@ development:
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: resources/security/qr.jks
-        qradar_port: 6515
+        qradar_port: "6515"
         qradar_product: otc-pipeline-server-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   travis-worker:
@@ -341,15 +341,15 @@ development:
     configmap:
       data:
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP_PORT: 18815 
+        AMQP_PORT: "18815"
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23 
         AMQP_SSL: true
         AMQP_USER: jazzhub
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
         QUEUE_NAME: builds.linux
         DOCKER_SSH_USER: pipeline
-        DOCKER_RETRY_INTERVAL: 5
+        DOCKER_RETRY_INTERVAL: "5"
         STATUS_UPDATE_INTERVAL: 5m
-        POOL_SIZE: 18
+        POOL_SIZE: "18"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
