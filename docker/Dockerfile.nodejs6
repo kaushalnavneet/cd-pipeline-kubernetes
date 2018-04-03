@@ -22,14 +22,14 @@ ARG NODE_ENV=production
 
 ENV PORT=80
 
-RUN useradd -ms /bin/bash node 
+#RUN useradd -ms /bin/bash node 
 ENV HOME /home/node
 WORKDIR /home/node
 
 COPY --from=build --chown=node /work/component/ /home/node
 COPY --from=build --chown=node /work/component/export/ /home/node
 
-USER node
+#USER node
 EXPOSE 80
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
