@@ -12,6 +12,33 @@
 ## Define overrides for your Deployment resource here, e.g.
 spec:
   replicas: {{ .Values.replicas }}
+{{- if .Values.persistentVolume.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: dockervarlib
+      annotations:
+      {{- range $key, $value := .Values.persistentVolume.annotations }}
+        {{ $key }}: {{ $value }}
+      {{- end }}
+    spec:
+      accessModes:
+      {{- range .Values.persistentVolume.accessModes }}
+        - {{ . | quote }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.persistentVolume.size | quote }}
+        {{- if .Values.persistentVolume.iops }}
+          iops: {{ .Values.persistentVolume.iops | quote }} 
+        {{- end }}
+    {{- if .Values.persistentVolume.storageClass }}
+    {{- if (eq "-" .Values.persistentVolume.storageClass) }}
+      storageClassName: ""
+    {{- else }}
+      storageClassName: "{{ .Values.persistentVolume.storageClass }}"
+    {{- end }}
+    {{- end }}
+{{- end }}
   template:
     spec:
       imagePullSecrets:
@@ -29,6 +56,8 @@ spec:
           - key: vault.pem
             path: vault.pem
       - name: secrets
+        emptyDir: {}
+      - name: varlog
         emptyDir: {}
       - name: otc-registry-secret
         secret:
@@ -81,6 +110,20 @@ spec:
           readOnly: true
         - name: dockervarlib
           mountPath: /var/lib/docker
+        - name: varlog
+          mountPath: /var/log
+      - name: docker-log
+        image: alpine
+        args: [/bin/sh, -c, 'while ! tail -n+1 -f /var/log/docker.log ; do sleep 5 ; done']
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      - name: travis-worker-log
+        image: alpine 
+        args: [/bin/sh, -c, 'while ! tail -n+1 -f /var/log/travis-worker.log ; do sleep 5 ; done']
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
 {{- end -}}
 {{- define "pipeline.statefulset.container" -}}
 # Define overrides for your Container here, e.g.
@@ -92,34 +135,6 @@ spec:
 #  httpGet:
 #    path: /status
 #    port: 80
-
-{{- if .Values.persistentVolume.enabled }}
-volumeClaimTemplates:
-- metadata:
-    name: dockervarlib
-    annotations:
-    {{- range $key, $value := .Values.persistentVolume.annotations }}
-      {{ $key }}: {{ $value }}
-    {{- end }}
-  spec:
-    accessModes:
-    {{- range .Values.persistentVolume.accessModes }}
-      - {{ . | quote }}
-    {{- end }}
-    resources:
-      requests:
-        storage: {{ .Values.persistentVolume.size | quote }}
-      {{- if .Values.persistentVolume.iops }}
-        iops: {{ .Values.persistentVolume.iops | quote }} 
-      {{- end }}
-  {{- if .Values.persistentVolume.storageClass }}
-  {{- if (eq "-" .Values.persistentVolume.storageClass) }}
-    storageClassName: ""
-  {{- else }}
-    storageClassName: "{{ .Values.persistentVolume.storageClass }}"
-  {{- end }}
-  {{- end }}
-{{- end }}
 env:
 {{ $fullname := include "common.fullname" . }}
 {{- range $envvar, $envvarvalue := .Values.configmap.data }}
