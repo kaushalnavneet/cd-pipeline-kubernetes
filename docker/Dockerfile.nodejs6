@@ -26,8 +26,8 @@ ENV PORT=80
 ENV HOME /home/node
 WORKDIR /home/node
 
-COPY --from=build --chown=node /work/component/ /home/node
-COPY --from=build --chown=node /work/component/export/ /home/node
+COPY --from=build /work/component/ /home/node
+COPY --from=build /work/component/export/ /home/node
 
 #USER node
 EXPOSE 80
