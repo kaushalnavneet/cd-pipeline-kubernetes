@@ -18,7 +18,7 @@ fi
 read -d '' vcap_services_template <<"EOF"
     "%s": [
         {
-            "credentials": %s,
+            "credentials": "%s",
             %s
         }
     ]
