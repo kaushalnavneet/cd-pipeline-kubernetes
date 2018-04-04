@@ -6,7 +6,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:64-nodejs6 as build
+FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:65-nodejs6 as build
 
 ARG IDS_TOKEN
 
