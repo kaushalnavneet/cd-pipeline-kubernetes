@@ -9,8 +9,41 @@
 FROM golang:1.10-alpine3.7
 
 ARG JQ_VERSION=jq-1.5
+ENV LANG=en_US.UTF-8
+
 RUN apk update
-RUN apk add build-base git bash
+RUN apk add build-base ca-certificates openssl wget curl bash bash-completion git unzip docker
+RUN update-ca-certificates  2>/dev/null || true
+RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-document - "https://api.github.com/repos/sgerrand/alpine-pkg-glibc/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/'); fi && \
+    wget --quiet --output-document /etc/apk/keys/sgerrand.rsa.pub https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/sgerrand.rsa.pub && \
+    wget --quiet \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
+    apk --allow-untrusted --no-cache add glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    rm -f glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    /usr/glibc-compat/bin/localedef --force --inputfile ${LANG%.*} --charmap ${LANG#*.} ${LANG}
+
+RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get && \
+    chmod +x /tmp/get_helm.sh && \
+    /tmp/get_helm.sh && \ 
+    rm -fr /tmp/get_helm.sh
+
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz && \
+    tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
+    /tmp/Bluemix_CLI/install_bluemix_cli && \
+    rm -rf /tmp/Bluemix_CLI* 
+
+RUN bx config --check-version false
+RUN bx plugin install container-service -r Bluemix
+RUN bx plugin install container-registry -r Bluemix
+RUN bx plugin install cloud-functions -r Bluemix
+RUN bx --version
+RUN bx plugin list
+RUN helm init --client-only
 
 RUN go get -u github.com/FiloSottile/gvt
 RUN go get github.com/alecthomas/gometalinter
