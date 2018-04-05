@@ -8,6 +8,13 @@
 # Contract with IBM Corp.
 ###############################################################################
 
+if [ -d /etc/secrets ]; then
+    for file in /etc/secrets/*; do
+        [ -e "$file" ] || continue
+        eval "$(jq -r '. | to_entries | .[] | "export " + .key + "=\"" + .value + "\""' < $file)"
+    done
+fi
+
 read -d '' vcap_services_template <<"EOF"
     "%s": [
         {
@@ -25,14 +32,6 @@ CF_INSTANCE_INDEX=$(hostname | grep -o "[[:digit:]]*$")
 CF_INSTANCE_INDEX=$((CF_INSTANCE_INDEX+100))
 
 export VCAP_SERVICES CF_INSTANCE_INDEX
-
-
-if [ -d /etc/secrets ]; then
-    for file in /etc/secrets/*; do
-        [ -e "$file" ] || continue
-        eval "$(jq -r '. | to_entries | .[] | "export " + .key + "=\"" + .value + "\""' < $file)"
-    done
-fi
 
 #Component specific entry point script
 COMPONENT_ENTRY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/entrypoint.component.sh"
