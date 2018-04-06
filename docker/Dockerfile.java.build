@@ -12,7 +12,7 @@ ARG TINI_VERSION=v0.16.1
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip wget docker
 RUN update-alternatives --install /usr/bin/rmid rmid /opt/ibm/java/jre/bin/rmid 80 && \
     update-alternatives --set rmid /opt/ibm/java/jre/bin/rmid && \
     update-alternatives --install /usr/bin/java java /opt/ibm/java/jre/bin/java 80 && \
@@ -36,3 +36,25 @@ RUN chmod +x /usr/local/bin/tini
 
 RUN mkdir /work
 ADD . /work 
+
+RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get && \
+    chmod +x /tmp/get_helm.sh && \
+    /tmp/get_helm.sh && \
+    rm -fr /tmp/get_helm.sh
+
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz && \
+    tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
+    /tmp/Bluemix_CLI/install_bluemix_cli && \
+    rm -rf /tmp/Bluemix_CLI*
+
+RUN bx config --check-version false
+RUN bx plugin install container-service -r Bluemix
+RUN bx plugin install container-registry -r Bluemix
+RUN bx plugin install cloud-functions -r Bluemix
+RUN bx --version
+RUN bx plugin list
+RUN helm init --client-only
+
