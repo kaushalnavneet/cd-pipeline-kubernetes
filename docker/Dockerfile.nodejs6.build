@@ -14,7 +14,7 @@ ARG JQ_VERSION=jq-1.5
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker wget netcat-openbsd
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker.io wget netcat-openbsd
 RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
 
 
