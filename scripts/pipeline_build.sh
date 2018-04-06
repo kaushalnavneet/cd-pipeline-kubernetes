@@ -1,8 +1,10 @@
 #!/bin/bash
 
+cp -a /work cd-pipeline-kubernetes
+
 IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME%%:*}}
-DOCKERFILE=${DOCKERFILE:-/work/docker/Dockerfile.${DOCKER_IMAGE##*:}}
+DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
