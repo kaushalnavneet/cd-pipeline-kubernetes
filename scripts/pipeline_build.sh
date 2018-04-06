@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
-COMPONENT_NAME=${COMPONENT_NAME:-$(s=${OUTPUT_IMAGE%%:*} && echo ${s##*/})}
+COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME%%:*}}
 DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
@@ -21,8 +21,8 @@ APPLICATION_VERSION="$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 
-docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${OUTPUT_IMAGE%%/*}
-docker build . -t ${OUTPUT_IMAGE}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false
-docker tag ${OUTPUT_IMAGE}:${APPLICATION_VERSION} ${OUTPUT_IMAGE}:latest
-docker push ${OUTPUT_IMAGE}:${APPLICATION_VERSION}
-docker push ${OUTPUT_IMAGE}:latest
+docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
+docker build . -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false
+docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${IMAGE_NAME}:latest
+docker push ${IMAGE_NAME}:${APPLICATION_VERSION}
+docker push ${IMAGE_NAME}:latest
