@@ -23,7 +23,9 @@ APPLICATION_VERSION="$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 
-docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
+docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}A
+# For some reason this doesn't get repulled in docker engine
+docker rmi -f ${DOCKER_IMAGE} || : 
 docker build . -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false
 docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${IMAGE_NAME}:latest
 docker push ${IMAGE_NAME}:${APPLICATION_VERSION}
