@@ -15,7 +15,7 @@ ADD . /work/component
 WORKDIR /work/component
 RUN npm install --production
 
-RUN sh ./extraSteps.sh
+RUN sh /work/scripts/extraSteps.sh
 FROM ibmcom/ibmnode:6
 
 ARG APP_BUILD_NUMBER=latest
