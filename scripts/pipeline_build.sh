@@ -20,7 +20,7 @@ done
 
 export DOCKER_HOST='tcp://localhost:2375'
 
-APPLICATION_VERSION="$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)"
+export APPLICATION_VERSION="$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 
