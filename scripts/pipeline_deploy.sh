@@ -5,8 +5,10 @@ IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 CHART_NAMESPACE=${CHART_NAMESPACE:-${IMAGE_NAMESPACE}}
 ENVIRONMENT=${ENVIRONMENT:-development}
+APP_TEMP="${APPLICATION_VERSION%\"}"
+APPLICATION_VERSION="${APP_TEMP#\"}"
 
-printf "Deploying ${COMPONENT_NAME} into cluster ${IDS_JOB_NAME} ,\nnamespace ${CHART_NAMESPACE}\n with image: ${IMAGE_NAME}:${APPLICATION_VERSION}"
+printf "Deploying release ${IDS_STAGE_NAME} into cluster ${IDS_JOB_NAME},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}.\n"
 
 cp -a /work cd-pipeline-kubernetes
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}

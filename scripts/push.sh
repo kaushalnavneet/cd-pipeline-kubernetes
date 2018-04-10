@@ -7,7 +7,7 @@ CHART_DIR=$1
 TAG=${2:-latest}
 NAMESPACE=opentoolchain
 ENVIRONMENT=${3:-development}
-CODE_BASE=${4:-nodejs4}
+CODE_BASE=${4:-nodejs6}
 
 if [  -d cd-pipeline-kubernetes ]; then
   if hash docker 2>/dev/null; then
