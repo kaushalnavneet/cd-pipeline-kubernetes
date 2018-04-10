@@ -26,8 +26,28 @@ echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
 # For some reason this doesn't get repulled in docker engine
 docker pull ${DOCKER_IMAGE}
+if [ $? -ne 0 ]; then
+    echo \"Failed during execution of docker pull command\"
+    exit 1
+fi
 
 docker build . -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false
+
+if [ $? -ne 0 ]; then
+    echo \"Failed during execution of docker build command\"
+    exit 1
+fi
+
 docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${IMAGE_NAME}:latest
+if [ $? -ne 0 ]; then
+    echo \"Failed during execution of docker tag command\"
+    exit 1
+fi
+
 docker push ${IMAGE_NAME}:${APPLICATION_VERSION}
+if [ $? -ne 0 ]; then
+    echo \"Failed during execution of docker push command\"
+    exit 1
+fi
+
 docker push ${IMAGE_NAME}:latest
