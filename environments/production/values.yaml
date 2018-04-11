@@ -5,7 +5,7 @@ development:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
   configmap:
     data:
-      OTC_API_URL: https://devops-api.stage1.ng.bluemix.net/v1
+      OTC_API_URL: http://otc-api/api/v1
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.ng.bluemix.net
       log4js_logmet_logging_port: "9091"
@@ -152,7 +152,7 @@ development:
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: 
         NEW_RELIC_APP_NAME: otc-webhook-relay-sub - YP
-        POST_URL: https://devops-api.ng.bluemix.net/v1/pipeline/triggers/
+        POST_URL: http://otc-api/api/v1/pipeline/triggers/
         log4js_logmet_component: otc-webhook-relay-sub
         log4js_syslog_appender_product: otc-github-relay-sub-yp
   blade-pipeline-broker:
@@ -186,7 +186,7 @@ development:
         AMQP_REJECT_UNAUTH_CERTS: 
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: ui
-        ARS_URL: https://pipeline-artifact-repository-service.ng.bluemix.net/codestation/v2
+        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
         BLUEMIX_API_URL: https://api.ng.bluemix.net
         BLUEMIX_URL: https://console.ng.bluemix.net
         BSS_CHECKED: true
@@ -194,7 +194,7 @@ development:
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
-        CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.ng.bluemix.net
+        CONSUMPTION_MONITOR_HOST: http://otc-pipeline-consumption-monitor
         CS_VERSION: "2"
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
@@ -203,12 +203,12 @@ development:
         ENABLE_K8S_DEPLOYER_TYPE: true
         HIDE_VIEW_PIPELINES: false
         K8S_REGIONS: 
-        MAP_API_URL: https://multi-app-pipeline-api.ng.bluemix.net/v1/multi-app-pipeline/graphql
+        MAP_API_URL: http://multi-app-pipeline-api/v1/multi-app-pipeline/graphql
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YP
-        PIPELINE_URL: https://otc-pipeline-server.ng.bluemix.net/pipeline
+        PIPELINE_URL: http://otc-pipeline-server/pipeline
         TIAM_COOKIE: tiam.session.us-south
-        TIAM_URL: https://devops-api.ng.bluemix.net/v1/identity
+        TIAM_URL: http://otc-tiam/identity/v1
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-yp
   pipeline-artifact-repository-service:
