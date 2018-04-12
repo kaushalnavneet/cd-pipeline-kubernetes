@@ -11,7 +11,7 @@ FROM alpine
 ENV LANG=en_US.UTF-8
 
 RUN apk update
-RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq
+RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq python py-pip
 RUN update-ca-certificates  2>/dev/null || true
 RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-document - "https://api.github.com/repos/sgerrand/alpine-pkg-glibc/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/'); fi && \
     wget --quiet --output-document /etc/apk/keys/sgerrand.rsa.pub https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/sgerrand.rsa.pub && \
@@ -43,5 +43,8 @@ RUN bx plugin install cloud-functions -r Bluemix
 RUN bx --version
 RUN bx plugin list
 RUN helm init --client-only
+
+RUN pip install --upgrade pip 
+RUN pip install yq
 
 ADD . /work
