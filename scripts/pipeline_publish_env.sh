@@ -17,9 +17,10 @@ git config --global push.default matching
 
 ENVIRONMENT_REPO_ABS=$(pwd)/${ENVIRONMENT_REPO}
 
-ENVIRONMENT_VERSION=$(ls -v ${ENVIRONMENT_REPO_ABS}/charts/${ENVIRONMENT}* 2> /dev/null | sort --version-sort --field-separator=- --key=2,2 | tail -n 1 | grep -Eo '${MAJOR_VERSION}\.${MINOR_VERSION}\.[0-9]+' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
+ENVIRONMENT_VERSION=$(ls -v ${ENVIRONMENT_REPO_ABS}/charts/${ENVIRONMENT}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
+ENVIRONMENT_VERSION=${ENVIRONMENT_VERSION:=1.0.0}
 
-printf "Publishing environment ${ENVIRONMENT},\nversion ${ENVIRONMENT_VERSION}"
+printf "Publishing environment ${ENVIRONMENT},\nversion ${ENVIRONMENT_VERSION}\n"
 
 tmp=$(mktemp)
 yq --yaml-output --arg envver "${ENVIRONMENT_VERSION}" '.version=$envver' ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml > "$tmp" && mv "$tmp" ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml 
@@ -39,8 +40,7 @@ if helm lint --strict --namespace ${CHART_NAMESPACE} ${WORKDIR}/environments/${E
   echo "helm lint done"
 else
   echo "helm lint failed"
-  echo "Currently helm linting won't fail the build." 
-  #exit 1
+  exit 1
 fi
 
 git -C $ENVIRONMENT_REPO_ABS pull --no-edit
