@@ -6,6 +6,8 @@ COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 CHART_NAMESPACE=${CHART_NAMESPACE:-${IMAGE_NAMESPACE}}
 DRY_RUN_CLUSTER=${DRY_RUN_CLUSTER:-${IDS_JOB_NAME}}
 WORKDIR=${WORKDIR:-/work}
+ACCOUNT_ID=${DRY_RUN_ACCOUNT_ID:-${ACCOUNT_ID}}
+API_KEY=${DRY_RUN_API_KEY:-${API_KEY}}
 
 cp -a ${WORKDIR} cd-pipeline-kubernetes
 
@@ -23,7 +25,7 @@ printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for clu
 
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
-$(bx cs cluster-config --export ${DRY_RUN_CLUSTER}})
+$(bx cs cluster-config --export ${DRY_RUN_CLUSTER})
 
 if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${CHART_REPO}" ]; then
   echo "Major & minor version and chart repo vars need to be set"
