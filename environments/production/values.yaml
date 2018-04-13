@@ -1,4 +1,4 @@
-development:
+production:
   basedomain: devops.dev.us-south.bluemix.net
   vault:
     secretPaths:
@@ -285,7 +285,7 @@ development:
     configmap:
       data:
         AMQP_LISTENERS_DISABLED: false
-        JBP_CONFIG_IBMJDK: version: 1.8.+
+        JBP_CONFIG_IBMJDK: "version: 1.8.+"
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: resources/security/qr.jks
         qradar_port: "6515"

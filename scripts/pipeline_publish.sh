@@ -52,7 +52,7 @@ helm dep up ${COMPONENT_NAME}
 
 echo "=========================================================="
 echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
-if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --install --dry-run; then
+if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run; then
   echo "helm upgrade --dry-run done"
 else
   echo "helm upgrade --dry-run failed"
