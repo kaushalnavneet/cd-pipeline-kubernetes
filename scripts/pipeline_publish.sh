@@ -4,6 +4,7 @@ IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
 IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 CHART_NAMESPACE=${CHART_NAMESPACE:-${IMAGE_NAMESPACE}}
+DRY_RUN_CLUSTER=${DRY_RUN_CLUSTER:-${IDS_JOB_NAME}}
 WORKDIR=${WORKDIR:-/work}
 
 cp -a ${WORKDIR} cd-pipeline-kubernetes
@@ -18,11 +19,11 @@ CHART_REPO_ABS=$(pwd)/${CHART_REPO}
 CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${COMPONENT_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
 CHART_VERSION=${CHART_VERSION:=1.0.0}
 
-printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for cluster ${IDS_JOB_NAME},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
+printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for cluster ${DRY_RUN_CLUSTER},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
 
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
-$(bx cs cluster-config --export ${IDS_JOB_NAME})
+$(bx cs cluster-config --export ${DRY_RUN_CLUSTER}})
 
 if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${CHART_REPO}" ]; then
   echo "Major & minor version and chart repo vars need to be set"
@@ -48,7 +49,7 @@ git -C $CHART_REPO_ABS pull --no-edit
 helm dep up ${COMPONENT_NAME}
 
 echo "=========================================================="
-echo -e "Dry run into: ${IDS_JOB_NAME}/${CHART_NAMESPACE}."
+echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
 if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --install --dry-run; then
   echo "helm upgrade --dry-run done"
 else
