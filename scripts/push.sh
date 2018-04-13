@@ -22,9 +22,9 @@ if [  -d cd-pipeline-kubernetes ]; then
     if [ -z $deleted ]; then
       helm delete --purge ${RELEASE_NAME}
     fi
-    helm install --name ${RELEASE_NAME} ${CHART_DIR} --namespace ${NAMESPACE} --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${TAG}
+    helm install --name ${RELEASE_NAME} ${CHART_DIR} --namespace ${NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${TAG}
   else
-    helm upgrade ${RELEASE_NAME} ${CHART_DIR} --install --namespace ${NAMESPACE} --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${TAG}
+    helm upgrade ${RELEASE_NAME} ${CHART_DIR} --install --namespace ${NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${TAG}
   fi
 else
   echo "Must clone https://github.ibm.com/org-ids/cd-pipeline-kubernetes as cd-pipeline-kubernetes into root of component directory. Then execute this script as ./cd-pipeline-kubernetes/scripts/push.sh"
