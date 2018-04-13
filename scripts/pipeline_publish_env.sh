@@ -28,7 +28,7 @@ yq --yaml-output --arg envver "${ENVIRONMENT_VERSION}" '.version=$envver' ${WORK
 helm init -c
 
 # Add the repository that contains the individual components packaged helm charts (if needed)
-if helm repo add otc-config --no-update https://$IDS_TOKEN@raw.github.ibm.com/$ENVIRONMENT_ORG/$CHART_REPO/master/charts; then
+if helm repo add otc-config --no-update https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts; then
   echo "Helm repo otc-config added"
 else
   echo "Helm repo otc-config already present"
