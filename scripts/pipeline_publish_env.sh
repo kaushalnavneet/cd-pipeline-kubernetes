@@ -4,18 +4,18 @@ CHART_NAMESPACE=${CHART_NAMESPACE:-${IMAGE_NAMESPACE}}
 ENVIRONMENT=${ENVIRONMENT:-development}
 WORKDIR=${WORKDIR:-/work}
 
-if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${ENVIRONMENT_REPO}" ]; then
+if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${CHART_REPO}" ]; then
   echo "Major & minor version and chart repo vars need to be set"
   exit 1
 fi
 
-git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$ENVIRONMENT_REPO
+git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO
 rc=$?; echo "error is $rc"; if [[ $rc != 0 ]]; then exit $rc; fi
 git config --global user.email "idsorg@us.ibm.com"
 git config --global user.name "IDS Organization"
 git config --global push.default matching
 
-ENVIRONMENT_REPO_ABS=$(pwd)/${ENVIRONMENT_REPO}
+ENVIRONMENT_REPO_ABS=$(pwd)/${CHART_REPO}
 
 ENVIRONMENT_VERSION=$(ls -v ${ENVIRONMENT_REPO_ABS}/charts/${ENVIRONMENT}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
 ENVIRONMENT_VERSION=${ENVIRONMENT_VERSION:=1.0.0}
@@ -60,7 +60,7 @@ if [ "$PRUNE_ENVIRONMENT_REPO" == "true" ]; then
     ls -v charts/${ENVIRONMENT}* | head --lines=-${NUMBER_OF_VERSION_KEPT} | xargs rm
 fi
 
-helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$ENVIRONMENT_REPO/master/charts
+helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
 
 git add -A .
 git commit -m "${ENVIRONMENT} ${ENVIRONENT_VERSION}"
@@ -73,7 +73,7 @@ if [ -n "$TRIGGER_BRANCH" ]; then
   cd trigger
   git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO -b $TRIGGER_BRANCH
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
-  cd $CHART_REPO
+  cd $ENVIRONMENT_REPO_ABS
   printf "On $(date), published helm chart for $ENVIRONMENT ($ENVIRONMENT_VERSION)" > trigger.txt
   git add .
   git commit -m "Published $ENVIRONMENT ($ENVIRONMENT_VERSION)"

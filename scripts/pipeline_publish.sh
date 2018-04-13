@@ -93,7 +93,7 @@ if [ -n "$TRIGGER_BRANCH" ]; then
   cd trigger
   git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO -b $TRIGGER_BRANCH
   rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
-  cd $CHART_REPO
+  cd $CHART_REPO_ABS 
   printf "On $(date), published helm chart for $COMPONENT_NAME ($CHART_VERSION)" > trigger.txt
   git add .
   git commit -m "Published $COMPONENT_NAME ($CHART_VERSION)"
