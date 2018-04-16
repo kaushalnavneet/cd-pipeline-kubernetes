@@ -17,7 +17,7 @@ $(bx cs cluster-config --export ${IDS_JOB_NAME})
 
 helm dep up ${IDS_STAGE_NAME}
 if ! helm list ${IDS_STAGE_NAME}; then
-  deleted=$(helm list --all $IDS_STAGE_NAME} | grep DELETED)
+  deleted=$(helm list --all ${IDS_STAGE_NAME} | grep DELETED)
   if [ -z $deleted ]; then
     helm delete --purge ${IDS_STAGE_NAME}
   fi
