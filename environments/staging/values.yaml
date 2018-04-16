@@ -330,6 +330,7 @@ staging:
         qradar_product: otc-pipeline-server-ys1-int
         qradar_url: devops.stage1.ng.bluemix.net
   travis-worker:
+    replicas: 6
     vault:
       secretPaths:
       - generic/project/continuous-delivery-stage/cd-pipeline/staging/travis-worker
