@@ -1,4 +1,4 @@
-production:
+us-south:
   basedomain: devops.dev.us-south.bluemix.net
   vault:
     secretPaths:
