@@ -23,13 +23,13 @@ development:
     configmap:
       data:
         AMQPS_PORT: "18815"
-        AMQP_CERT_PASSPHRASE: 
+        AMQP_CERT_PASSPHRASE: ''
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP_KEYSTORE: 
-        AMQP_KEYSTORE_ENCODING: 
+        AMQP_KEYSTORE: ''
+        AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
-        AMQP_PEM_CA: 
-        AMQP_PORT: 
+        AMQP_PEM_CA: ''
+        AMQP_PORT: ''
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
@@ -37,10 +37,10 @@ development:
         AMQP_USER: jazzhub
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
-        CA_FILE: 
+        CA_FILE: ''
         CERT_FILE: keys/server.crt
-        DB_CA_FILE: 
-        DB_CA_PEM: 
+        DB_CA_FILE: ''
+        DB_CA_PEM: ''
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
         DB_PORT: "10570"
@@ -69,11 +69,11 @@ development:
       data:
         AMQPS_PORT: "18815"
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP_KEYSTORE: 
-        AMQP_KEYSTORE_ENCODING: 
+        AMQP_KEYSTORE: ''
+        AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
-        AMQP_PEM_CA: 
-        AMQP_PORT: 
+        AMQP_PEM_CA: ''
+        AMQP_PORT: ''
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
@@ -85,8 +85,8 @@ development:
         ARCHIVE_TYPE: s3ObjectStorage
         CERT_FILE: keys/server.crt
         CIPHER_ALGORITHM: aes-128-cbc
-        DB_CA_FILE: 
-        DB_CA_PEM: 
+        DB_CA_FILE: ''
+        DB_CA_PEM: ''
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
         DB_PORT: "10570"
@@ -112,8 +112,8 @@ development:
         CLOUDANT_URL: bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: sha1
-        HTTPS_PORT: 
-        HTTP_PORT: 
+        HTTPS_PORT: ''
+        HTTP_PORT: ''
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
         log4js_logmet_component: otc-pipeline-source-change-service
@@ -124,14 +124,14 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
     configmap:
       data:
-        AMQP_EXCHANGE: 
+        AMQP_EXCHANGE: ''
         AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
-        AMQP_MSG_EXP_TIME: 
+        AMQP_MSG_EXP_TIME: ''
         AMQP_PATH: /otc-yp
         AMQP_PORT: "10866"
         AMQP_PROTOCOL: amqps
-        AMQP_QUEUE: 
-        AMQP_RECONNECT_TIMEOUT: 
+        AMQP_QUEUE: ''
+        AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
         LOG4JS_CONFIG_PATH: app/assets/log4js.json
@@ -145,19 +145,19 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
     configmap:
       data:
-        AMQP_EXCHANGE: 
+        AMQP_EXCHANGE: ''
         AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
-        AMQP_MSG_EXP_TIME: 
+        AMQP_MSG_EXP_TIME: ''
         AMQP_PATH: /otc-yp
         AMQP_PORT: "10866"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: webhook-relay.ys1-dev
-        AMQP_RECONNECT_TIMEOUT: 
+        AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
-        LOG4JS_CONFIG_PATH: 
+        LOG4JS_CONFIG_PATH: ''
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: http://otc-api/api/v1/pipeline/triggers/
         log4js_logmet_component: otc-webhook-relay-sub
@@ -188,13 +188,13 @@ development:
     configmap:
       data:
         ACE_PROXY_URL: https://dev-console.stage1.bluemix.net
-        AMQP_CA: 
+        AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP_KEYSTORE_ENCODING: 
+        AMQP_KEYSTORE_ENCODING: ''
         AMQP_MSG_EXP_TIME: "3000"
         AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
-        AMQP_PFX: 
+        AMQP_PFX: ''
         AMQP_PORT: "18815"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
@@ -221,8 +221,8 @@ development:
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.stage1.bluemix.net
         IS_DEV: false
-        K8S_REGIONS: 
-        MAP_API_URL: 
+        K8S_REGIONS: ''
+        MAP_API_URL: ''
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
         PIPELINE_URL: http://otc-pipeline-server/pipeline
@@ -250,7 +250,7 @@ development:
         AMQP__ENABLED: true
         AMQP__HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
         AMQP__PATH: otc-pipeline-ys1-dev-2017-01-23
-        AMQP__PEMCA: 
+        AMQP__PEMCA: ''
         AMQP__PORT: "18815"
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
@@ -313,8 +313,8 @@ development:
         CLOUDANT_URL: bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
         HMAC_ALGORITHM: sha1
-        HTTPS_PORT: 
-        HTTP_PORT: 
+        HTTPS_PORT: ''
+        HTTP_PORT: ''
         IS_CF: true
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1
@@ -333,6 +333,179 @@ development:
         qradar_port: "6515"
         qradar_product: otc-pipeline-server-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
+        serverHttpPort: 80
+        serverHttpsPort: 443
+        serverRootDir: /deployRoot/${p:environment.name}/${p:application/serverName}
+        serverJava: /opt/ibm/ibm-java-x86_64-70/jre
+        ldapRealm: x
+        ldapHost: x
+        ltpaCookie: x
+        ltpaPassword: x
+        ltpaKeysFile: x
+        com_ibm_team_integration_pipeline_loginRedirectUrl: https://psdev.login.jazz.net/psso/proxy/jazzlogin
+        com_ibm_team_integration_pipeline_jazzhub_url: https://dev02.hub.jazz.net
+        jenkins_client_ribbon_listOfServers: ''
+        cf_client_ribbon_listOfServers: api.ng.bluemix.net:443
+        jazzhub_client_ribbon_listOfServers: dev02.hub.jazz.net:443
+        jazzhub_login_client_ribbon_listOfServers: psdev.login.jazz.net:443
+        bluemix_client_ribbon_listOfServers: ace.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_db: cloudant
+        com_ibm_team_integration_pipeline_db_cloudant_url: https://bmdevops-ys1-us-south.cloudant.com
+        com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
+        com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
+        mqttUrl: ssl://169.55.35.183:8883
+        mqttUser: guest
+        com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
+        com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
+        com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
+        contextPath: /pipelines
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.stage1.ng.bluemix.net:443
+        cleanup_disabled: false
+        cleanup_buildsToKeep: 10
+        cleanup_deploysToKeep: 10
+        com_ibm_team_integration_pipeline_logHTTPTraffic: false
+        jobTimeout: 60
+        inventory_client_ribbon_listOfServers: otc-pipeline-inventory.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_inventory_disabled: false
+        com_ibm_team_integration_pipeline_billing_disabled: false
+        com_ibm_team_integration_pipeline_jazzhub_billing_user: DevOps
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_redirectUrl: https://dev02.hub.jazz.net/trust/authorize
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_clientId: jazzhuborionclient
+        gitAdminUser: gerr1tsldev
+        jazzhubAdminUser: jazzhubadmin
+        jenkinsAdminUser: pipeline
+        com_ibm_team_integration_pipeline_messaging_amqp_disabled: false
+        ice_client_ribbon_listOfServers: api-ice.stage1.ng.bluemix.net:443
+        cleanup_stageExecutionsToKeep: 10
+        docker_client_ribbon_listOfServers: 169.55.35.171:40000,169.55.34.134:40000,169.55.34.152:40000,169.55.34.141:40000,169.55.35.180:40000,169.55.35.189:40000,192.155.248.226:40000
+        com_ibm_team_integration_pipeline_jazzhub_auth_token_client: pipeline
+        jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
+        com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
+        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com:18815/otc-pipeline-ys1-dev-2017-01-23
+        com_ibm_team_integration_pipeline_messaging_amqp_user: jazzhub
+        com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
+        com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
+        com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
+        test_service_client_ribbon_listOfServers: otc-pipeline-test-reporting.stage1.ng.bluemix.net:443
+        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change-service.stage1.ng.bluemix.net:443
+        scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
+        log_service_client_ribbon_listOfServers: otc-pipeline-log-service.stage1.ng.bluemix.net:443
+        log_archiver_service_client_ribbon_listOfServers: otc-pipeline-log-archiver.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_toolchain_region: ibm:ys1:us-south
+        com_ibm_team_integration_pipeline_toolchain_enabled: false
+        com_ibm_team_integration_pipeline_server_url: https://devops.stage1.ng.bluemix.net/devops/pipelines
+        com_ibm_team_integration_pipeline_toolchain_capability_slack_icon: ''
+        com_ibm_team_integration_pipeline_features_executionEngine: Engine2
+        toolchain_client_ribbon_listOfServers: ''
+        com_ibm_team_integration_pipeline_features_context: Blade
+        com_ibm_team_integration_pipeline_features_stage_queue: true
+        tiam_client_ribbon_listOfServers: devops-api.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
+        com_ibm_team_integration_pipeline_eventLogging_enabled: false
+        com_ibm_team_integration_pipeline_eventLogging_path: /var/log/pipeline-event-logging
+        com_ibm_team_integration_pipeline_eventLogging_frequencyInSeconds: 30
+        com_ibm_team_integration_pipeline_eventLogging_httpEnabled: false
+        com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
+        mccp_client_ribbon_listOfServers: mccp.stage1.ng.bluemix.net:443
+        blade_toolchain_client_ribbon_listOfServers: otc-api.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
+        com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
+        com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
+        com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.ng.bluemix.net
+        debug_script: false
+        artifact_size_limit: 0
+        artifact_file_limit: 0
+        newRelicJvmOption: -javaagent:/deployRoot/${p:environment.name}/${p:application/serverName}/wlp/usr/servers/${p:application/serverName}/newrelic/newrelic.jar
+        com_ibm_team_integration_pipeline_server_job_status_updates_logging_enabled: false
+        com_ibm_team_integration_pipeline_github_branchPerPage: 50
+        com_ibm_team_integration_pipeline_db_cloudant_connections_ext: 20
+        com_ibm_team_integration_pipeline_db_cloudant_connections_pipeline: 30
+        com_ibm_team_integration_pipeline_db_cloudant_connections_stage: 30
+        com_ibm_team_integration_pipeline_db_cloudant_timeout: 1000
+        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        useKeystoreEncodings: false
+        com_ibm_team_integration_pipeline_events_threadCount: 3
+        codestation_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        log_archiver_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        source_changes_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        tests_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        scm_proxy_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        inventory_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        blade_toolchain_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        ice_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        logs_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        toolchain_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        tiam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        mccp_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        cf_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bluemix_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        nossl_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        com_ibm_team_integration_pipeline_toolchain_events_disabled: false
+        com_ibm_team_integration_pipeline_cloud_cf_version: 2
+        com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
+        com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.stage1.ng.bluemix.net
+        com_ibm_team_integration_pipeline_logging_logmet_tenantId: ed841776-9394-4b51-a86c-72ddc5529e05
+        com_ibm_team_integration_pipeline_logging_logmet_token: 75YJPS7Let03
+        com_ibm_team_integration_pipeline_redis_disabled: false
+        com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.2.dblayer.com
+        com_ibm_team_integration_pipeline_redis_port: 10653
+        com_ibm_team_integration_pipeline_messaging_amqp_key_type: JKS
+        com_ibm_team_integration_pipeline_messaging_amqp_keystore: /resources/security/mqtt_keystore.keystore
+        com_ibm_team_integration_pipeline_messaging_amqp_truststore: ''
+        com_ibm_team_integration_pipeline_messaging_amqp_exchange: pipeline
+        com_ibm_team_integration_pipeline_messaging_amqp_routePrefix: pipelines.
+        com_ibm_team_integration_pipeline_sshtunnel_disabled: false
+        com_ibm_team_integration_pipeline_sshtunnel_localhost: localhost
+        com_ibm_team_integration_pipeline_sshtunnel_localport: 6379
+        com_ibm_team_integration_pipeline_sshtunnel_remotehost: 10.99.56.197
+        com_ibm_team_integration_pipeline_sshtunnel_remoteport: 5000
+        com_ibm_team_integration_pipeline_sshtunnel_user: compose
+        com_ibm_team_integration_pipeline_sshtunnel_keepaliveinterval: 2000
+        com_ibm_team_integration_pipeline_sshtunnel_alivetimeout: 1000
+        com_ibm_team_integration_pipeline_sshtunnel_sessiontimeout: 5000
+        com_ibm_team_integration_pipeline_sshtunnel_pubkey: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDM3RtcVBkenFPL0lxZTBRT2tZeVdWV2lFSGlaVzBaZWFJUnhidkhGTXdIb0xTMXJMME5EdEpnbk5HeTViYXlHbmRhb3pXbGZJUkNmMTRXQWF4SVh2V2dGclFtSytRVVVKSG96RW5YeVgrVEdXK3lkaFp1SC9yMEEvdTE0Wnc2aVNkYm9ySk9XZHd2U2xURitpaUpkdGtad1VuM3J1Uys3TDJxY0RycHRBMVFDMkhaaWtWNHJXL2VORmhpa21MSEpNQStzaEJOT2RSYWJkQ3NNenBTR1VlNEVtRDlTY3NuVXZQamVBSEhQSm5HRWlvQjM5N01SN0I0Uk9qaGNyR1FnZ1V3Sm1GU0hjUVExUFFlNkJkNnpjdE1kSkdFalVLK2RhTTFTbjUvcDdmVG00b3FoU3VKSi96TStNZGZ3WVBWblNZR2JkWk9JcDRMU05EdFMyUFk3dnQgcGlwZWxpbmVAaWJtDQo\=
+        com_ibm_team_integration_pipeline_stage_creationLimit: 30
+        com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
+        log4jRootlogger: INFO, console, LOGMET
+        bss_service_client_ribbon_listOfServers: continuous-delivery-bss.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_bss_disabled: false
+        com_ibm_team_integration_pipeline_bss_timeout: 10000
+        com_ibm_team_integration_pipeline_security_bssWhiteList: ''
+        com_ibm_team_integration_pipeline_engine2_logArchiveQueue: reporting.archive
+        com_ibm_team_integration_pipeline_migration_users: ''
+        com_ibm_team_integration_pipeline_rest_notifications_tokenAuth: false
+        cfAppRetryAttempts: 3
+        codestation_dark_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_codestation_api_version: 2
+        gitlab_client_ribbon_listOfServers: git.stage1.ng.bluemix.net:443
+        gitlab_client_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        com_ibm_team_integration_pipeline_auth_tiam_accessControlDisabled: false
+        com_ibm_team_integration_pipeline_features_launchDarkly_sdkKey: sdk-322d7e2d-59d8-4eda-a2ba-0fa6a0946cd4
+        com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal2129-22.pipeline-dev.ibm-16.composedb.com:17383/pipeline-dev
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: core
+        github_services: github,githubpublic,github_integrated,githubconsolidated
+        com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
+        codestationReadTimeout: 5000
+        com_ibm_team_integration_pipeline_features_IBMUsers_enabled: false
+        com_ibm_team_integration_pipeline_deploy_deployer_k8s_enabled: true
+        com_ibm_team_integration_pipeline_jazzhub_triggers_disabled: false
+        doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        gitlab_services: hostedgit,gitlab
+        artifacts_useS3: true
+        com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
+        com_ibm_team_integration_pipeline_bss_checkQuotas: true
+        com_ibm_team_integration_pipeline_bss_enforceQuotas: false
+        com_ibm_team_integration_pipeline_json_verification_disabled: false
+        com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
+        com_ibm_team_integration_pipeline_bss_user: pipeline_server
+        com_ibm_team_integration_pipeline_bss_password: QoiCWP3bOP1QPZbqUrVzYtnqGTddGi2LLlf8HkEBWhsFGQlUcFbAmdFskxcMzyp5
+        com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
   travis-worker:
     replicas: 2
     vault:
