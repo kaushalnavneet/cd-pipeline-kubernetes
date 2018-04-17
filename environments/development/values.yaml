@@ -287,6 +287,7 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
     configmap:
       data:
+        newrelic_env: YS1-k8s
         CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
         CLOUDANT_DB: pipeline-inv
         CLOUDANT_URL: https://bmdevops-ys1-us-south.cloudant.com
@@ -326,6 +327,7 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
     configmap:
       data:
+        newrelic_env: YS1-k8s
         AMQP_LISTENERS_DISABLED: false
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
         qradar_host: syslog.prd.ccs.ibmcloud.com
