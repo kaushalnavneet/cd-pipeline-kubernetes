@@ -21,13 +21,13 @@ ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /w
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
-FROM websphere-liberty:kernel
+FROM websphere-liberty:microProfile
 
 ARG APP_BUILD_NUMBER=latest
 ARG MODE=DEVELOPMENT
 ARG warname
 
-RUN installUtility install --acceptLicense servlet-3.1 ssl-1.0 jsp-2.2
+#RUN installUtility install --acceptLicense servlet-3.1 ssl-1.0 jsp-2.2
 ENV WLP_OUTPUT_DIR=/opt/ibm/wlp/usr/servers
 
 
