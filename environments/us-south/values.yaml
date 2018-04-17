@@ -282,6 +282,7 @@ us-south:
         log4js_logmet_component: otc-pipeline-test-report
         log4js_syslog_appender_product: otc-pipeline-test-reporting-yp
   pipeline-service:
+    replicas: 3
     configmap:
       data:
         AMQP_LISTENERS_DISABLED: false

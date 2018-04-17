@@ -334,6 +334,7 @@ development:
         qradar_product: otc-pipeline-server-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   travis-worker:
+    replicas: 2
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker
