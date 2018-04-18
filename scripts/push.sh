@@ -1,5 +1,10 @@
 #!/bin/bash
 
+NOCRBUILD=true
+if [ "x$1" = x--crbuild ]; then
+  shift
+  NOCRBUILD=false
+fi
 
 RELEASE_NAME=$1
 IMAGE_NAME=$1
@@ -10,7 +15,7 @@ ENVIRONMENT=${3:-development}
 CODE_BASE=${4:-nodejs6}
 
 if [  -d cd-pipeline-kubernetes ]; then
-  if hash docker 2>/dev/null; then
+  if $NOCRBUILD && hash docker 2>/dev/null; then
     docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
     docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
