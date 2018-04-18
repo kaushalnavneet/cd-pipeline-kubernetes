@@ -247,6 +247,7 @@ development:
         TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
+        USE_HTTP: true
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
