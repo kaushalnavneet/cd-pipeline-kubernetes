@@ -17,6 +17,7 @@ development:
       log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
@@ -62,6 +63,7 @@ development:
         log4js_logmet_component: otc-pipeline-log-service
         log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
   pipeline-log-archiver:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
@@ -102,6 +104,7 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
   source-change-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service
@@ -119,6 +122,7 @@ development:
         log4js_logmet_component: otc-pipeline-source-change-service
         log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-dev
   otc-github-relay-pub:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
@@ -140,6 +144,7 @@ development:
         log4js_logmet_component: otc-webhook-relay-pub
         log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
   otc-github-relay-sub:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
@@ -163,6 +168,7 @@ development:
         log4js_logmet_component: otc-webhook-relay-sub
         log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
   blade-pipeline-broker:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker
@@ -182,6 +188,7 @@ development:
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
   pipeline-ui:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
@@ -242,6 +249,7 @@ development:
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
@@ -282,6 +290,7 @@ development:
         log4js_logmet_component: pipeline-artifact-repository-service
         log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
   pipeline-inventory:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
@@ -304,6 +313,7 @@ development:
         qradar_product: otc-pipeline-inventory-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service
@@ -322,6 +332,7 @@ development:
         log4js_logmet_component: otc-pipeline-test-reporting
         log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
   pipeline-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
