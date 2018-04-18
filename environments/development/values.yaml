@@ -5,7 +5,7 @@ development:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
   configmap:
     data:
-      OTC_API_URL: http://otc-api/api/v1
+      OTC_API_URL: https://otc-api.stage1.ng.bluemix.net/api/v1
       SECGRP: GRP3DEVS
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
@@ -17,6 +17,7 @@ development:
       log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
@@ -59,9 +60,11 @@ development:
         OBJECT_STORAGE_URL: https://identity.open.softlayer.com
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
+        USE_HTTP: true
         log4js_logmet_component: otc-pipeline-log-service
         log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
   pipeline-log-archiver:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
@@ -102,6 +105,7 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
   source-change-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service
@@ -119,6 +123,7 @@ development:
         log4js_logmet_component: otc-pipeline-source-change-service
         log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-dev
   otc-github-relay-pub:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
@@ -140,6 +145,7 @@ development:
         log4js_logmet_component: otc-webhook-relay-pub
         log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
   otc-github-relay-sub:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
@@ -159,10 +165,11 @@ development:
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: ''
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        POST_URL: http://otc-api/api/v1/pipeline/triggers/
+        POST_URL: https://otc-api.stage1.ng.bluemix.net/api/v1/pipeline/triggers/
         log4js_logmet_component: otc-webhook-relay-sub
         log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
   blade-pipeline-broker:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker
@@ -182,6 +189,7 @@ development:
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
   pipeline-ui:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
@@ -201,7 +209,7 @@ development:
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
-        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
+        ARS_URL: https://pipeline-artifact-repository-service.stage1.ng.bluemix.net/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
@@ -210,7 +218,7 @@ development:
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
-        CONSUMPTION_MONITOR_HOST: http://otc-pipeline-consumption-monitor
+        CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.stage1.ng.bluemix.net
         CS_VERSION: "2"
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
@@ -225,12 +233,12 @@ development:
         MAP_API_URL: ''
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
-        PIPELINE_URL: http://otc-pipeline-server/pipeline
+        PIPELINE_URL: https://otc-pipeline-server.stage1.ng.bluemix.net/pipeline
         REDIS_URL: redis://127.0.0.1:6379
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
-        TIAM_URL: http://otc-tiam/identity/v1
+        TIAM_URL: https://otc-tiam.stage1.ng.bluemix.net/identity/v1
         TUNNEL_DEST_HOST: "10.99.58.69"
         TUNNEL_DEST_PORT: "5000"
         TUNNEL_LOCAL_PORT: "6379"
@@ -242,6 +250,7 @@ development:
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
@@ -282,6 +291,7 @@ development:
         log4js_logmet_component: pipeline-artifact-repository-service
         log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
   pipeline-inventory:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
@@ -304,6 +314,7 @@ development:
         qradar_product: otc-pipeline-inventory-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service
@@ -322,6 +333,7 @@ development:
         log4js_logmet_component: otc-pipeline-test-reporting
         log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
   pipeline-service:
+    replicas: 1
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
