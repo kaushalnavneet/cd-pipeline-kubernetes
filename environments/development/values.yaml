@@ -275,7 +275,7 @@ development:
         LOG_LEVEL: debug
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
         NODE_ENV: staging-us-south
-        RUN_ARS_K8s: true
+        RUN_ARS_K8S: true
         S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
