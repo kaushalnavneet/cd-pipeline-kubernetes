@@ -1,11 +1,21 @@
 {{- template "common.deployment" (list . "pipeline.deployment") -}}
 {{- define "secret_paths" }}
+{{- if .Values.vault}}
+{{- if .Values.vault.secretPaths}}
 {{- range .Values.vault.secretPaths }}
 {{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
+{{- end -}}
+{{- end -}}
 {{- $fullname := include "common.fullname" . -}}
+{{- if index .Values $fullname}}
+{{- if index .Values $fullname "vault"}}
+{{- if index .Values $fullname "secretPaths"}}
 {{- range  index .Values $fullname "vault" "secretPaths" }}
 {{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- define "pipeline.deployment" -}}
