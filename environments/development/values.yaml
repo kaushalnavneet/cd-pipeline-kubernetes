@@ -235,7 +235,7 @@ development:
         MAP_API_URL: ''
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
-        PIPELINE_URL: https://otc-pipeline-server.stage1.ng.bluemix.net/pipeline
+        PIPELINE_URL: http://pipeline-service/pipeline/
         REDIS_URL: redis://127.0.0.1:6379
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
