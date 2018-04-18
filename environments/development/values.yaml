@@ -217,7 +217,7 @@ development:
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
-        CONSUMPTION_MONITOR_HOST: http://pipeline-consumption
+        CONSUMPTION_MONITOR_HOST: http://otc-pipeline-consumption-monitor
         CS_VERSION: "2"
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
@@ -232,7 +232,7 @@ development:
         MAP_API_URL: ''
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
-        PIPELINE_URL: http://pipeline-service/pipeline
+        PIPELINE_URL: http://otc-pipeline-server/pipeline
         REDIS_URL: redis://127.0.0.1:6379
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
@@ -372,13 +372,13 @@ development:
         com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
         com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
         contextPath: /pipelines
-        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service:443
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.stage1.ng.bluemix.net:443
         cleanup_disabled: false
         cleanup_buildsToKeep: 10
         cleanup_deploysToKeep: 10
         com_ibm_team_integration_pipeline_logHTTPTraffic: false
         jobTimeout: 60
-        inventory_client_ribbon_listOfServers: pipeline-inventory:443
+        inventory_client_ribbon_listOfServers: otc-pipeline-inventory.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_inventory_disabled: false
         com_ibm_team_integration_pipeline_billing_disabled: false
         com_ibm_team_integration_pipeline_jazzhub_billing_user: DevOps
@@ -400,11 +400,11 @@ development:
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        test_service_client_ribbon_listOfServers: test-report-service:443
-        source_change_service_client_ribbon_listOfServers: source-change-service:443
+        test_service_client_ribbon_listOfServers: otc-pipeline-test-reporting.stage1.ng.bluemix.net:443
+        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change-service.stage1.ng.bluemix.net:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        log_service_client_ribbon_listOfServers: pipeline-log-service:443
-        log_archiver_service_client_ribbon_listOfServers: pipeline-log-archiver:443
+        log_service_client_ribbon_listOfServers: otc-pipeline-log-service.stage1.ng.bluemix.net:443
+        log_archiver_service_client_ribbon_listOfServers: otc-pipeline-log-archiver.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_toolchain_region: ibm:ys1:us-south
         com_ibm_team_integration_pipeline_toolchain_enabled: false
         com_ibm_team_integration_pipeline_server_url: https://devops.stage1.ng.bluemix.net/devops/pipelines
@@ -421,12 +421,12 @@ development:
         com_ibm_team_integration_pipeline_eventLogging_httpEnabled: false
         com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
         mccp_client_ribbon_listOfServers: mccp.stage1.ng.bluemix.net:443
-        blade_toolchain_client_ribbon_listOfServers: otc-api:443
+        blade_toolchain_client_ribbon_listOfServers: otc-api.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-sub
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.ng.bluemix.net
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
@@ -482,7 +482,7 @@ development:
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console, LOGMET
-        bss_service_client_ribbon_listOfServers: continuous-delivery-bss:443
+        bss_service_client_ribbon_listOfServers: continuous-delivery-bss.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: 10000
         com_ibm_team_integration_pipeline_security_bssWhiteList: ''
@@ -491,7 +491,7 @@ development:
         com_ibm_team_integration_pipeline_rest_notifications_tokenAuth: false
         cfAppRetryAttempts: 3
         codestation_dark_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service:443
+        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_codestation_api_version: 2
         gitlab_client_ribbon_listOfServers: git.stage1.ng.bluemix.net:443
         gitlab_client_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
