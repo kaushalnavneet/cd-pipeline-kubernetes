@@ -1,5 +1,12 @@
 development:
   basedomain: devops.dev.us-south.bluemix.net
+  resources:
+      limits:
+        cpu: 100m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 1Gi
   vault:
     secretPaths:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
