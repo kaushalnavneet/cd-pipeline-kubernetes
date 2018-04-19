@@ -25,8 +25,22 @@ printf "Publishing environment ${ENVIRONMENT},\nversion ${ENVIRONMENT_VERSION}\n
 tmp=$(mktemp)
 yq --yaml-output --arg envver "${ENVIRONMENT_VERSION}" '.version=$envver' ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml > "$tmp" && mv "$tmp" ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml 
 
-helm init -c
+#Construct the environment fragment to be included in the umbrella
+EXCLUDE_KEYS=["basedomain","vault","configmap"]
+components=$(yq -r --arg excludekeys ${EXCLUDE_KEYS} '.development | to_entries[] | .key | select( . as $in | $excludekeys | index($in) | not )' values.yaml)
+first=true
+for component in $components
+do
+  if [ "$first" = false ] ; then
+    REQUIREMENTS=${REQUIREMENTS}","
+  else
+    first=false
+  fi
+  REQUIREMENTS=${REQUIREMENTS}$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env)","parent":"\($component).pipeline"}')
+  REQUIREMENTS=${REQUIREMENTS}","$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env).\($component)","parent":"\($component).pipeline"}')
+done
 
+helm init -c
 # Add the repository that contains the individual components packaged helm charts (if needed)
 if helm repo add otc-config --no-update https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts; then
   echo "Helm repo otc-config added"
@@ -46,6 +60,10 @@ fi
 git -C $ENVIRONMENT_REPO_ABS pull --no-edit
 
 echo "Packaging Environment Chart"
+
+# Enironmement fragment
+echo '{ "dependencies": [ {"name":"'${ENVIRONMENT}'","version":"'${ENVIRONMENT_VERSION}'","repository":"alias:otc-config","tags":["environment"],"import-values":['${REQUIREMENTS}']}]}' | yq --yaml-output '.' > ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
+
 
 mkdir -p $ENVIRONMENT_REPO_ABS/charts
 helm package ${WORKDIR}/environments/${ENVIRONMENT} -d $ENVIRONMENT_REPO_ABS/charts
