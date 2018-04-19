@@ -13,6 +13,7 @@ development:
   configmap:
     data:
       OTC_API_URL: https://otc-api.stage1.ng.bluemix.net/api/v1
+      USE_K8S: true
       SECGRP: GRP3DEVS
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
