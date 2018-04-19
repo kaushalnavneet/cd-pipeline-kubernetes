@@ -9,7 +9,7 @@
 ###############################################################################
 
 if [ -d /etc/secrets ]; then
-    for file in /etc/secrets/*; do
+    for file in /etc/secrets/*.secret; do
         [ -e "$file" ] || continue
         eval "$(/home/node/jq -r  '. | to_entries | .[] | "export " + .key + "=" + ( .value|if (type|. != "string") then tostring else "\""+.+"\"" end)' < $file)"
     done
