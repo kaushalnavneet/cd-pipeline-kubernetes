@@ -18,14 +18,20 @@ fi
 read -d '' vcap_services_template <<"EOF"
     "%s": [
         {
-            "credentials": "%s",
+            "credentials": {
+	       "pipeline":{  
+               	 "initial":null,
+                 "secret":"%s"
+               }
+	    },
             %s
         }
     ]
 EOF
 
-printf -v VCAP_SERVICES "{$vcap_services_template}" "user-provided" "$OTC_TIAM_CLIENTS" "\"name\": \"otc-tiam-clients\""
+printf -v VCAP_SERVICES "{$vcap_services_template}" "user-provided" "$vcap_pipeline_secret" "\"name\": \"otc-tiam-clients\""
 
+export VCAP_SERVICES
 CF_INSTANCE_INDEX=$(hostname | grep -o "[[:digit:]]*$")
 
 #Avoid queue conflicts with CF instances
