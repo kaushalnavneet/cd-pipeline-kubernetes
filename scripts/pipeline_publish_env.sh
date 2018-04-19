@@ -26,8 +26,7 @@ tmp=$(mktemp)
 yq --yaml-output --arg envver "${ENVIRONMENT_VERSION}" '.version=$envver' ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml > "$tmp" && mv "$tmp" ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml 
 
 #Construct the environment fragment to be included in the umbrella
-EXCLUDE_KEYS=["basedomain","vault","configmap"]
-components=$(yq -r --arg excludekeys ${EXCLUDE_KEYS} '.development | to_entries[] | .key | select( . as $in | $excludekeys | index($in) | not )' values.yaml)
+components=$(yq -r --arg env ${ENVIRONMENT} '.[$env] | to_entries[] | .key | select( . as $in | ["basedomain","vault","configmap", "resources"] | index($in) | not )' ${WORKDIR}/environments/${ENVIRONMENT}/values.yaml)
 first=true
 for component in $components
 do
