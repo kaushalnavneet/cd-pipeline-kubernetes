@@ -12,6 +12,7 @@
 ## Define overrides for your Deployment resource here, e.g.
 spec:
   replicas: {{ .Values.replicas }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     spec:
       imagePullSecrets:
