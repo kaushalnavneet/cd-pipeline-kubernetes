@@ -26,6 +26,7 @@ development:
       log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
@@ -73,6 +74,7 @@ development:
         log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
   pipeline-log-archiver:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
@@ -116,6 +118,7 @@ development:
         USE_HTTP: true
   source-change-service:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service
@@ -156,6 +159,7 @@ development:
         log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
   otc-github-relay-sub:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
@@ -180,6 +184,7 @@ development:
         log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
   blade-pipeline-broker:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker
@@ -190,6 +195,8 @@ development:
         log4js_logmet_component: otc-pipeline-broker
         log4js_syslog_appender_product: otc-pipeline-broker-ys1-dev
   pipeline-consumption:
+    replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption
@@ -200,6 +207,7 @@ development:
         log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
   pipeline-ui:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
@@ -262,6 +270,7 @@ development:
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
@@ -304,6 +313,7 @@ development:
         log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
   pipeline-inventory:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
@@ -327,6 +337,7 @@ development:
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service
@@ -346,6 +357,7 @@ development:
         log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
   pipeline-service:
     replicas: 1
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
@@ -534,6 +546,7 @@ development:
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
   travis-worker:
     replicas: 2
+    revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker
