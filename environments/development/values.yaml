@@ -266,6 +266,7 @@ development:
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
+        USE_NEW_RELIC: true
         log4js_logmet_component: pipeline-ui-service
         log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
   pipeline-artifact-repository-service:
