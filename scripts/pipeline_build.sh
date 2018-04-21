@@ -23,7 +23,7 @@ export DOCKER_HOST='tcp://localhost:2375'
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 
-docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
+docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
 # For some reason this doesn't get repulled in docker engine
 docker pull ${DOCKER_IMAGE}
 if [ $? -ne 0 ]; then
