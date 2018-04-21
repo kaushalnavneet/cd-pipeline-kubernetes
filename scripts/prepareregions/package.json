@@ -1,0 +1,20 @@
+{
+  "name": "prepareregions",
+  "version": "1.0.0",
+  "description": "Script to substitute regions in requirements.yaml",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.ibm.com/org-ids/cd-pipeline-kubernetes"
+  },
+  "author": "kuschel@ca.ibm.com",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^3.11.0",
+    "nodegit": "^0.22.0",
+    "tar": "^4.4.1"
+  }
+}
