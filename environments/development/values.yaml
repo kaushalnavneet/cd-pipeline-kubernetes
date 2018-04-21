@@ -12,7 +12,7 @@ development:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
   configmap:
     data:
-      OTC_API_URL: https://otc-api.stage1.ng.bluemix.net/api/v1
+      OTC_API_URL: https://devops-api.stage1.ng.bluemix.net/v1
       USE_K8S: true
       SECGRP: GRP3DEVS
       log4js_logmet_enabled: true
