@@ -1,5 +1,12 @@
 staging:
   basedomain: stage.us-south.devops.cloud.ibm.com
+  resources:
+    limits:
+      cpu: 100m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
   vault:
     secretPaths:
     - generic/project/continuous-delivery-stage/cd-pipeline/staging/common
