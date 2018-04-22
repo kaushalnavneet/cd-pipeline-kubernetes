@@ -1,5 +1,3 @@
-basedomain: devops.dev.us-south.bluemix.net
-
 image:
   pullPolicy: Always
 
