@@ -326,7 +326,7 @@ us-south:
         qradar_product: otc-pipeline-server-yp
         qradar_url: devops.ng.bluemix.net
   travis-worker:
-    replicas: 4
+    replicas: 1
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker
@@ -336,8 +336,9 @@ us-south:
         AMQP_PORT: "10830"
         AMQP_PATH: /otc-pipeline-yp
         AMQP_SSL: true
-        AMQP_USER: jazzhub 
+        AMQP_USER: jazzhub
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
+        AMQP_TLS_CACERT: /home/travis/keys/cacert_rabbitmq.pem
         QUEUE_NAME: builds.linux
         DOCKER_SSH_USER: pipeline
         DOCKER_RETRY_INTERVAL: "5"
