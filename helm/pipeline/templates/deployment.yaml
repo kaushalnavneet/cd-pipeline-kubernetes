@@ -27,12 +27,13 @@ spec:
             path: vault.pem
       - name: secrets
         emptyDir: {}
-      containers:
+      initContainers:
       - name: vault-sidekick
         image: quay.io/ukhomeofficedigital/vault-sidekick:latest
         args:
         - -logtostderr=true
         - -ca-cert=/var/run/certs/vault.pem
+        - -one-shot
 {{ include "secret_paths" . | indent 8 }}
         env:
         - name: VAULT_ADDR
@@ -63,6 +64,7 @@ spec:
         - name: vault-sidekick
           mountPath: /var/run/certs
           readOnly: true
+      containers:
       - {{ template "common.container" (list . "pipeline.deployment.container") }}
         volumeMounts:
         - name: secrets
