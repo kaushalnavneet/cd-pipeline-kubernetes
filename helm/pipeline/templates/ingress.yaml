@@ -11,5 +11,5 @@ spec:
   tls:
   - hosts:
     - {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
-    secretName: {{ template "common.fullname" $ }}-tls
+    secretName: {{ .Values.basedomain }} 
 {{- end -}}
