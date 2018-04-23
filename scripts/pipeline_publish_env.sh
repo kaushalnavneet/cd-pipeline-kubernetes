@@ -62,7 +62,7 @@ echo "Packaging Environment Chart"
 
 # Enironmement fragment
 echo '{ "dependencies": [ {"name":"'${ENVIRONMENT}'","version":"'${ENVIRONMENT_VERSION}'","repository":"alias:otc-config","tags":["environment"],"import-values":['${REQUIREMENTS}']}]}' | yq --yaml-output '.' > ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
-
+sed -i '2,$s/^/  /'  ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
 
 mkdir -p $ENVIRONMENT_REPO_ABS/charts
 helm package ${WORKDIR}/environments/${ENVIRONMENT} -d $ENVIRONMENT_REPO_ABS/charts
