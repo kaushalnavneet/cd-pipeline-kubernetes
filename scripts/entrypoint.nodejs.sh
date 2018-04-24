@@ -8,7 +8,7 @@
 # Contract with IBM Corp.
 ###############################################################################
 #wait 5 seconds for vault
-sleep 5
+sleep 15
 
 if [ -d /etc/secrets ]; then
     for file in /etc/secrets/*.secret; do
