@@ -116,6 +116,7 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
+        log4js_logmet_enabled: false
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
