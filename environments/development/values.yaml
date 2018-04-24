@@ -133,8 +133,8 @@ development:
         HTTP_PORT: ''
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
-        log4js_logmet_component: otc-pipeline-source-change-service
-        log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-dev
+        log4js_logmet_component: otc-pipeline-source-change
+        log4js_syslog_appender_product: otc-pipeline-source-change-ys1-dev
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -181,7 +181,7 @@ development:
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: https://otc-api.stage1.ng.bluemix.net/api/v1/pipeline/triggers/
         log4js_logmet_component: otc-webhook-relay-sub
-        log4js_syslog_appender_product: otc-webhook-relay-ys1-dev
+        log4js_syslog_appender_product: otc-webhook-relay-sub-ys1-dev
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -231,7 +231,7 @@ development:
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
-        BSS_ENFORCED: false
+        BSS_ENFORCED: true
         CF_DOMAIN: stage1.ng.bluemix.net
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
@@ -427,7 +427,7 @@ development:
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         test_service_client_ribbon_listOfServers: otc-pipeline-test-reporting.stage1.ng.bluemix.net:443
-        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change-service.stage1.ng.bluemix.net:443
+        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change.stage1.ng.bluemix.net:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: otc-pipeline-log-service.stage1.ng.bluemix.net:443
         log_archiver_service_client_ribbon_listOfServers: otc-pipeline-log-archiver.stage1.ng.bluemix.net:443
