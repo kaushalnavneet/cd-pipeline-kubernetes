@@ -1,5 +1,5 @@
 development:
-  basedomain: dev.us-south.devops.cloud.ibm.com
+  basedomain: devops.dev.us-south.bluemix.net
   resources:
     limits:
       cpu: 100m
