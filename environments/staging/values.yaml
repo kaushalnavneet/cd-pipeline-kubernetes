@@ -131,8 +131,8 @@ staging:
         HTTP_PORT: ""
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1-INT
-        log4js_logmet_component: otc-pipeline-source-change-service
-        log4js_syslog_appender_product: otc-pipeline-source-change-service-ys1-int
+        log4js_logmet_component: otc-pipeline-source-change
+        log4js_syslog_appender_product: otc-pipeline-source-change-ys1-int
   otc-github-relay-sub:
     vault:
       secretPaths:
@@ -382,7 +382,7 @@ staging:
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy-integration.stage1.ng.bluemix.net:443
         test_service_client_ribbon_listOfServers: otc-pipeline-test-reporting-integration.stage1.ng.bluemix.net:443
-        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change-service-integration.stage1.ng.bluemix.net:443
+        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change-integration.stage1.ng.bluemix.net:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy-integration.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: otc-pipeline-log-service-integration.stage1.ng.bluemix.net:443
         log_archiver_service_client_ribbon_listOfServers: otc-pipeline-log-archiver-integration.stage1.ng.bluemix.net:443
