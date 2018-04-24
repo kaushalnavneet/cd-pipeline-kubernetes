@@ -231,7 +231,7 @@ development:
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
-        BSS_ENFORCED: false
+        BSS_ENFORCED: true
         CF_DOMAIN: stage1.ng.bluemix.net
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
