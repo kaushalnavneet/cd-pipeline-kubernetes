@@ -14,6 +14,8 @@ NAMESPACE=opentoolchain
 ENVIRONMENT=${3:-development}
 CODE_BASE=${4:-nodejs6}
 
+echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
+
 if [  -d cd-pipeline-kubernetes ]; then
   if $NOCRBUILD && hash docker 2>/dev/null; then
     docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
