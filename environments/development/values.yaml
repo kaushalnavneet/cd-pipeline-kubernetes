@@ -117,6 +117,8 @@ development:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         log4js_logmet_enabled: false
+        log4js_logmet_component: otc-pipeline-log-archiver-dev
+        log4js_syslog_appender_product: otc-pipeline-log-archiver-dev
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
