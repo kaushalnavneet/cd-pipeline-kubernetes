@@ -326,7 +326,7 @@ us-south:
         qradar_product: otc-pipeline-server-yp
         qradar_url: devops.ng.bluemix.net
   travis-worker:
-    replicas: 1
+    replicas: 4
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker
