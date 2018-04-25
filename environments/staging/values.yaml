@@ -80,7 +80,7 @@ staging:
     configmap:
       data:
         AMQPS_PORT: 15112
-        MQP_HOST: portal840-1.otc-pipeline-ys1-int.ibm-16.composedb.com
+        AMQP_HOST: portal840-1.otc-pipeline-ys1-int.ibm-16.composedb.com
         AMQP_KEYSTORE: ""
         AMQP_KEYSTORE_ENCODING: ""
         AMQP_PATH: /otc-pipeline-ys1-int
