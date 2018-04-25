@@ -289,6 +289,7 @@ development:
         AMQP__REJECTUNAUTHCERTS: true
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: jazzhub
+        CLOUDANT_URL: https://bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_HOST: bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_PORT: "443"
         CLOUDANT_USERNAME: mencessiongisteridecoute
