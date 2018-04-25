@@ -282,6 +282,7 @@ staging:
         STORAGE_USERID: 885900f8f3b14149af6a976c7d48aa55
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service
+        RUN_ARS_K8S: true
   pipeline-inventory:
     vault:
       secretPaths:
