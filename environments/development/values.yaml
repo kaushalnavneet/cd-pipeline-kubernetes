@@ -542,7 +542,7 @@ development:
         artifacts_useS3: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: true
-        com_ibm_team_integration_pipeline_bss_enforceQuotas: false
+        com_ibm_team_integration_pipeline_bss_enforceQuotas: true
         com_ibm_team_integration_pipeline_json_verification_disabled: false
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
