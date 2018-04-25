@@ -1,5 +1,12 @@
 us-south:
   basedomain: us-south.devops.cloud.ibm.com
+  resources:
+    limits:
+      cpu: 100m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
   vault:
     secretPaths:
     - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common
