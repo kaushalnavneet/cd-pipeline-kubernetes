@@ -325,7 +325,7 @@ staging:
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
         SECGRP: GRP3STGY
         qradar_host: syslog.prd.ccs.ibmcloud.com
-        qradar_keystore_path: resources/security/qr.jks
+        qradar_keystore_path: qr.jks
         qradar_port: "6515"
         qradar_product: otc-pipeline-server-ys1-int
         qradar_url: devops.stage1.ng.bluemix.net
