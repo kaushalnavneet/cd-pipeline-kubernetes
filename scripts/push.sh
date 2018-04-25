@@ -13,11 +13,14 @@ TAG=${2:-latest}
 NAMESPACE=opentoolchain
 ENVIRONMENT=${3:-development}
 CODE_BASE=${4:-nodejs6}
-
+PULL_BUILDER=${5:-true}
 echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
 
 if [  -d cd-pipeline-kubernetes ]; then
   if $NOCRBUILD && hash docker 2>/dev/null; then
+    if $PULL_BUILDER ; then
+      docker pull registry.ng.bluemix.net/${NAMESPACE}/cd-build-base:${CODE_BASE}
+    fi
     docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
     docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
