@@ -282,6 +282,7 @@ us-south:
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service
         log4js_syslog_appender_product: pipeline-artifact-repository-service-yp
+        RUN_ARS_K8S: true
   pipeline-inventory:
     vault:
       secretPaths:
