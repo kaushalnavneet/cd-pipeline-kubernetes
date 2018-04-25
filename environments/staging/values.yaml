@@ -116,6 +116,7 @@ staging:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         log4js_logmet_component: otc-pipeline-log-archiver
+        log4js_syslog_appender_product: otc-pipeline-log-archiver-ys1-int
   source-change-service:
     vault:
       secretPaths:
