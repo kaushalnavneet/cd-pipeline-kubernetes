@@ -7,8 +7,6 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-#wait 5 seconds for vault
-sleep 15
 
 if [ -d /etc/secrets ]; then
     for file in /etc/secrets/*.secret; do
