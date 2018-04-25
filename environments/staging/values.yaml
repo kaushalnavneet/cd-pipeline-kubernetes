@@ -474,7 +474,7 @@ staging:
         com_ibm_team_integration_pipeline_rest_notifications_tokenAuth: false
         cfAppRetryAttempts: "3"
         codestation_dark_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service-int.stage1.ng.bluemix.net:443
+        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service-integration.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_codestation_api_version: "2"
         gitlab_client_ribbon_listOfServers: git-integration.stage1.ng.bluemix.net:443
         gitlab_client_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
