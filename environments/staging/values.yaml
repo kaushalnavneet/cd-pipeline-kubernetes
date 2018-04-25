@@ -295,6 +295,7 @@ staging:
         HMAC_ALGORITHM: HmacSHA1
         IS_CF: "1"
         logmet_host: ingest.logging.stage1.ng.bluemix.net
+        logmet_tenant_id: 2f25b56c-5979-4808-93f6-c458b092ff66
         qradar_enabled: false
   test-report-service:
     vault:
