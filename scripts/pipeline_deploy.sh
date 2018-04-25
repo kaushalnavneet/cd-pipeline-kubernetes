@@ -19,7 +19,7 @@ $(bx cs cluster-config --export ${IDS_JOB_NAME})
 tmp=$(mktemp)
 yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride = $stagename | .pipeline.nameOverride = $stagename' > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
-helm dep up ${IDS_STAGE_NAME}
+helm dep up ${COMPONENT_NAME}
 if ! helm list ${IDS_STAGE_NAME}; then
   deleted=$(helm list --all ${IDS_STAGE_NAME} | grep DELETED)
   if [ -z $deleted ]; then
