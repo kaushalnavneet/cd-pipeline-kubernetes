@@ -257,6 +257,7 @@ staging:
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: codestation
         CLOUDANT_HOST: bmdevops-ys1-integration-us-south.cloudant.com
+        CLOUDANT_URL: bmdevops-ys1-integration-us-south.cloudant.com
         CLOUDANT_PORT: 443
         CLOUDANT_USERNAME: mencessiongisteridecoute
         LOG_LEVEL: debug
