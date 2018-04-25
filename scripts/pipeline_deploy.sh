@@ -16,8 +16,8 @@ bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
 $(bx cs cluster-config --export ${IDS_JOB_NAME})
 
-#tmp=$(mktemp)
-#yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride = $stagename | .pipeline.nameOverride = $stagename' > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+tmp=$(mktemp)
+yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride = $stagename | .pipeline.nameOverride = $stagename' > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
 helm dep up ${IDS_STAGE_NAME}
 if ! helm list ${IDS_STAGE_NAME}; then
