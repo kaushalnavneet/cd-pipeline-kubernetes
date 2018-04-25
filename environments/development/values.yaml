@@ -549,7 +549,7 @@ development:
         com_ibm_team_integration_pipeline_bss_password: QoiCWP3bOP1QPZbqUrVzYtnqGTddGi2LLlf8HkEBWhsFGQlUcFbAmdFskxcMzyp5
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
   travis-worker:
-    replicas: 2
+    replicas: 1
     revisionHistoryLimit: 3
     vault:
       secretPaths:
