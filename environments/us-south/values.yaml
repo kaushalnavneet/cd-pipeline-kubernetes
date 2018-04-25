@@ -249,6 +249,7 @@ us-south:
         AMQP__REJECTUNAUTHCERTS: 
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: jazzhub
+        CLOUDANT_URL: https://bmdevops-yp-us-south.cloudant.com
         CLOUDANT_HOST: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_PORT: 443
         CLOUDANT_USERNAME: mencessiongisteridecoute
