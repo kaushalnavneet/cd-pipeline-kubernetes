@@ -25,6 +25,7 @@ us-south:
       CONTEXT_PATH: /api
       OTC_API_URL: http://otc-api/api/v1
       SECGRP: GRP1PRDY
+      USE_K8S: true
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.ng.bluemix.net
       log4js_logmet_logging_port: 9091
