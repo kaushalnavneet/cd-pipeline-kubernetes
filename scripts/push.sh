@@ -6,7 +6,7 @@ if [ "x$1" = x--crbuild ]; then
   NOCRBUILD=false
 fi
 
-RELEASE_NAME=travis-worker-staging
+RELEASE_NAME=$1
 IMAGE_NAME=$1
 CHART_DIR=$1
 TAG=${2:-latest}
