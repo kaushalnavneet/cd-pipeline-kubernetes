@@ -223,8 +223,8 @@ staging:
         IAM_GLOBAL_URL: https://iam.stage1.bluemix.net
         IS_DEV: false
         K8S_REGIONS: ""
-        MAP_API_URL: https://multi-app-pipeline-api-integration.stage1.ng.bluemix.net/v1/multi-app-pipeline/graphql
-        MAP_ENABLED: true
+        MAP_API_URL: ""
+        MAP_ENABLED: false
         NEW_RELIC_APP_NAME: Pipeline UI - YS1.INTEGRATION
         PIPELINE_URL: https://otc-pipeline-server-integration.stage1.ng.bluemix.net/pipeline
         REDIS_URL: redis://127.0.0.1:6379
