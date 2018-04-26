@@ -12,6 +12,7 @@ us-south:
     - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common
   configmap:
     data:
+      CONTEXT_PATH: /api
       OTC_API_URL: http://otc-api/api/v1
       SECGRP: GRP1PRDY
       log4js_logmet_enabled: true
@@ -31,11 +32,11 @@ us-south:
       data:
         AMQPS_PORT: 10830
         AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
-        AMQP_KEYSTORE: 
-        AMQP_KEYSTORE_ENCODING: 
+        AMQP_KEYSTORE: ""
+        AMQP_KEYSTORE_ENCODING: "" 
         AMQP_PATH: /otc-pipeline-yp
-        AMQP_PEM_CA: 
-        AMQP_PORT: 
+        AMQP_PEM_CA: ""
+        AMQP_PORT: ""
         AMQP_PREFETCH: 1
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
@@ -43,11 +44,11 @@ us-south:
         AMQP_USER: logservice
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
-        CA_FILE: 
+        CA_FILE: ""
         CERT_FILE: keys/server.crt
         CIPHER_ALGORITHM: aes-128-cbc
-        DB_CA_FILE: 
-        DB_CA_PEM: 
+        DB_CA_FILE: ""
+        DB_CA_PEM: ""
         DB_HOST: sl-us-dal-9-portal.1.dblayer.com
         DB_NAME: compose
         DB_PORT: 15107
@@ -57,7 +58,7 @@ us-south:
         HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
-        LOGS_QUEUE_MSG_TTL: 7200000
+        LOGS_QUEUE_MSG_TTL: "7200000"
         LOGS_QUEUE_NAME: reporting.jobs.logs
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - YP
