@@ -15,7 +15,6 @@ staging:
       OTC_API_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1
       USE_K8S: true
       SECGRP: GRP3STGS
-      CONTEXT_PATH: /api
       log4js_logmet_enabled: true
       log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
       log4js_logmet_logging_port: "9091"
@@ -48,6 +47,7 @@ staging:
         CA_FILE: ""
         CERT_FILE: keys/server.crt
         CIPHER_ALGORITHM: aes-128-cbc
+        CONTEXT_PATH: /api
         DB_CA_FILE: ""
         DB_CA_PEM: ""
         DB_HOST: sl-us-dal-9-portal.2.dblayer.com
@@ -97,6 +97,7 @@ staging:
         ARCHIVE_TYPE: s3ObjectStorage
         CERT_FILE: keys/server.crt
         CIPHER_ALGORITHM: aes-128-cbc
+        CONTEXT_PATH: /api
         DB_CA_FILE: ""
         DB_CA_PEM: ""
         DB_HOST: sl-us-dal-9-portal.2.dblayer.com
@@ -128,6 +129,7 @@ staging:
         CLOUDANT_DB: pipeline-source-changes
         CLOUDANT_URL: bmdevops-ys1-integration-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
+        CONTEXT_PATH: /api
         HMAC_ALGORITHM: sha1
         HTTPS_PORT: ""
         HTTP_PORT: ""
@@ -307,6 +309,7 @@ staging:
         CLOUDANT_DB: pipeline-tests
         CLOUDANT_URL: bmdevops-ys1-integration-us-south.cloudant.com
         CLOUDANT_USER: mencessiongisteridecoute
+        CONTEXT_PATH: /api
         HMAC_ALGORITHM: sha1
         HTTPS_PORT: ""
         HTTP_PORT: ""
