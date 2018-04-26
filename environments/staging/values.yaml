@@ -231,7 +231,7 @@ staging:
         SESSION_CACHE_NAME: Redis_main-cache
         SESSION_TTL: "86400"
         TIAM_COOKIE: tiam.session.us-south
-        TIAM_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1/identity
+        TIAM_URL: https://tiam-integration.stage1.ng.bluemix.net/identity/v1
         TUNNEL_DEST_HOST: "10.99.58.165"
         TUNNEL_DEST_PORT: "5000"
         TUNNEL_LOCAL_PORT: "6379"
