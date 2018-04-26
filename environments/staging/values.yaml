@@ -185,7 +185,6 @@ staging:
       - generic/project/continuous-delivery-stage/cd-pipeline/staging/pipeline-ui
     configmap:
       data:
-        ACE_PROXY_URL: https://console.stage1.bluemix.net
         AMQP_CA: ""
         AMQP_EXCHANGE: pipeline
         AMQP_HOST: portal840-1.otc-pipeline-ys1-int.ibm-16.composedb.com

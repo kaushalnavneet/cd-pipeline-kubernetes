@@ -215,7 +215,6 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
     configmap:
       data:
-        ACE_PROXY_URL: https://dev-console.stage1.bluemix.net
         AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
