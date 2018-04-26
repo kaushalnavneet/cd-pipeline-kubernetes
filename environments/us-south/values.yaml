@@ -355,24 +355,3 @@ us-south:
         POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
-  travis-worker-staging:
-    replicas: 2
-    vault:
-      secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging
-    configmap:
-      data:
-        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
-        AMQP_PORT: "10830"
-        AMQP_PATH: /otc-pipeline-yp
-        AMQP_SSL: true
-        AMQP_USER: travis
-        AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
-        QUEUE_NAME: builds.linux_ys1
-        DOCKER_SSH_USER: pipeline
-        DOCKER_RETRY_INTERVAL: "5"
-        STATUS_UPDATE_INTERVAL: 5m
-        POOL_SIZE: "9"
-        HARD_TIMEOUT: 60m
-        LOG_TIMEOUT: 60m
-
