@@ -10,6 +10,16 @@ us-south:
   vault:
     secretPaths:
     - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common
+  probes:
+    enabled: false
+    liveness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 3
+    readiness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
   configmap:
     data:
       CONTEXT_PATH: /api

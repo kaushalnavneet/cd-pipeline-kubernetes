@@ -10,6 +10,16 @@ staging:
   vault:
     secretPaths:
     - generic/project/continuous-delivery-stage/cd-pipeline/staging/common
+  probes:
+    enabled: false
+    liveness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 3
+    readiness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
   configmap:
     data:
       OTC_API_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1
