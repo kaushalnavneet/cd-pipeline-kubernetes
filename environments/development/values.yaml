@@ -10,6 +10,16 @@ development:
   vault:
     secretPaths:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
+  probes:
+    enabled: true
+    liveness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 3
+    readiness:
+      initialDelay: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
   configmap:
     data:
       OTC_API_URL: https://devops-api.stage1.ng.bluemix.net/v1
@@ -202,6 +212,9 @@ development:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption
+    probes:
+      readiness:
+        path: "/version"
     configmap:
       data:
         NODE_ENV: development
@@ -276,6 +289,11 @@ development:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
+    probes:
+      liveness:
+        path: "/codestation/v2/artifacts/version"
+      readiness:
+        path: "/codestation/v2/artifacts/status"
     configmap:
       data:
         AMQP__ENABLED: true
@@ -320,6 +338,14 @@ development:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
+    probes:
+      enabled: false
+      liveness:
+        initialDelay: 60
+        path: "/api/status"
+      readiness:
+        initialDelay: 60
+        path: "/api/status"
     configmap:
       data:
         newrelic_env: YS1-k8s
@@ -364,6 +390,14 @@ development:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
+    probes:
+      enabled: false
+      liveness:
+        initialDelay: 120
+        path: "/pipeline/status"
+      readiness:
+        initialDelay: 120
+        path: "/pipeline/status"
     configmap:
       data:
         newrelic_env: YS1-k8s

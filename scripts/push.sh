@@ -14,7 +14,14 @@ NAMESPACE=opentoolchain
 ENVIRONMENT=${3:-development}
 CODE_BASE=${4:-nodejs6}
 PULL_BUILDER=${5:-true}
-echo "{\"id\":\"$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)\"}" > build_info.json
+
+cat <<END > build_info.json                                       
+{
+  "build": "$(date +%Y%m%d%H%M%Z)",
+  "commit": "$(git rev-parse HEAD)",
+  "appName" : "${RELEASE_NAME}"
+}
+END
 
 if [  -d cd-pipeline-kubernetes ]; then
   if $NOCRBUILD && hash docker 2>/dev/null; then
