@@ -6,7 +6,7 @@ if [ "x$1" = x--crbuild ]; then
   NOCRBUILD=false
 fi
 
-RELEASE_NAME=$1
+RELEASE_NAME=travis-worker-staging
 IMAGE_NAME=$1
 CHART_DIR=$1
 TAG=${2:-latest}
@@ -26,7 +26,7 @@ if [  -d cd-pipeline-kubernetes ]; then
   else
     bx cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   fi 
-  helm dep up ${RELEASE_NAME}
+  helm dep up ${CHART_DIR}
   if ! helm list ${RELEASE_NAME}; then
     deleted=$(helm list --all $RELEASE_NAME} | grep DELETED)
     if [ -z $deleted ]; then
