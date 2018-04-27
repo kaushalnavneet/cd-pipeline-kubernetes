@@ -211,6 +211,7 @@ us-south:
         appUrl: https://console.bluemix.net
         auth__ibmId: pipeaut2@us.ibm.com
         log4js_logmet_component: otc-pipeline-consumption-monitor
+        log4js_syslog_appender_product: otc-pipeline-consumption-monitor-yp
         uiTest__isEnabled: true
   pipeline-ui:
     vault:
@@ -328,6 +329,7 @@ us-south:
         IS_CF: "1"
         logmet_host: ingest.logging.ng.bluemix.net
         logmet_tenant_id: 3f02963c-7330-4cef-b34c-1356ff3924c2
+        logmet_component_name: pipeline-inventory
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
@@ -351,7 +353,7 @@ us-south:
         IS_CF: true
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YP
-        log4js_logmet_component: otc-pipeline-test-report
+        log4js_logmet_component: otc-pipeline-test-reporting
         log4js_syslog_appender_product: otc-pipeline-test-reporting-yp
   pipeline-service:
     vault:
