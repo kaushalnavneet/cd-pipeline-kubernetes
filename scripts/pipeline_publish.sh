@@ -71,9 +71,9 @@ yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-
 mv cd-pipeline-kubernetes/helm/pipeline cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
 
 yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .repository ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+yq --yaml-output '(.dependencies[] | select(.name=="pipeline") | .alias ) |= "pipeline"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 
-yq --yaml-output '(.dependencies[] | select(.name=="pipeline") | .alias ) |= "pipeline"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 
 helm dep up ${COMPONENT_NAME}
 
