@@ -48,6 +48,19 @@ helm init -c
 
 git -C $CHART_REPO_ABS pull --no-edit
 
+
+# Move common dependency to unqiue name
+mv cd-pipeline-kubernetes/helm/pipeline cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
+
+tmp=$(mktemp)
+yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-pipeline-kubernetes/helm/pipeline/Chart.yaml > "$tmp" && mv "$tmp" cd-pipeline-kubernetes/helm/pipeline/Chart.yaml
+
+tmp=$(mktemp)
+yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .name ) |= "\$(chartver)"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .repository ) |= "file://../cd-pipeline-kubernetes/helm/\$(chartver)"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+
 helm dep up ${COMPONENT_NAME}
 
 echo "=========================================================="
