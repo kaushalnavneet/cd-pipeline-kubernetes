@@ -7,7 +7,7 @@ development:
     requests:
       cpu: 100m
       memory: 1Gi
-  vault:
+  vaultpublic:
     secretPaths:
     - generic/project/continuous-delivery-dev/cd-pipeline/development/common
   probes:
