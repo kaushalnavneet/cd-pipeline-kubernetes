@@ -66,7 +66,6 @@ echo "Packaging Helm Chart"
 \rm -fr ${COMPONENT_NAME}/requirements.lock ${COMPONENT_NAME}/charts
 tmp=$(mktemp)
 yq --yaml-output 'del(.. | select(path(.tags? // empty | .[] | select(test("environment")))))' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml
-helm dep up ${COMPONENT_NAME}
 
 # Move common dependency to unqiue name
 
