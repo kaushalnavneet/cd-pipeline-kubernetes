@@ -18,6 +18,8 @@ ADD . /work/warbuild
 WORKDIR /work/warbuild
 ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/warbuild/jq
 
+COPY --from=build /work/warbuild/build_info.json /work/warbuild/src/mainr/resources
+
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
@@ -38,7 +40,6 @@ COPY --from=build /work/warbuild/serverConf/qr.jks /opt/ibm/wlp/usr/servers/defa
 COPY --from=build /work/warbuild/serverConf/log4j.properties /opt/ibm/wlp/usr/servers/defaultServer/
 COPY --from=build /work/warbuild/jq /opt/ibm/wlp/
 COPY --from=build /work/warbuild/lib/newrelic.jar /opt/ibm/wlp/usr/servers/defaultServer/newrelic/
-COPY --from=build /work/warbuild/build_info.json /opt/ibm/wlp/usr/servers/defaultServer/
 #COPY --from=build /work/warbuild/serverConf/resources/security/* /opt/ibm/wlp/usr/servers/defaultServer/resources/security/
 
 RUN chmod 755 /opt/ibm/wlp/pipeline-server /opt/ibm/wlp/jq
