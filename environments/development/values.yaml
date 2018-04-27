@@ -587,6 +587,8 @@ development:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker
+    probes:
+      enabled: false
     configmap:
       data:
         AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
