@@ -7,7 +7,7 @@ us-south:
     requests:
       cpu: 100m
       memory: 1Gi
-  vault:
+  vaultpublic:
     secretPaths:
     - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common
   probes:
