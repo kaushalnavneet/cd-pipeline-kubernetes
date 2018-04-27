@@ -38,10 +38,8 @@ tmp=$(mktemp)
 yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
 #specific image
-tmp=$(mktemp)
 yq --yaml-output --arg image "${IMAGE_NAME}" '.pipeline.image.repository=$image' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
-tmp=$(mktemp)
 yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${COMPONENT_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/Chart.yaml
 
 helm init -c
@@ -63,22 +61,19 @@ fi
 echo "Packaging Helm Chart"
 
 #turn off local enviroments, use umbrella published environment
-\rm -fr ${COMPONENT_NAME}/requirements.lock ${COMPONENT_NAME}/charts
-tmp=$(mktemp)
+rm -fr ${COMPONENT_NAME}/requirements.lock ${COMPONENT_NAME}/charts
 yq --yaml-output 'del(.. | select(path(.tags? // empty | .[] | select(test("environment")))))' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml
 
 # Move common dependency to unqiue name
 
-tmp=$(mktemp)
 yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-pipeline-kubernetes/helm/pipeline/Chart.yaml > "$tmp" && mv "$tmp" cd-pipeline-kubernetes/helm/pipeline/Chart.yaml
 
 mv cd-pipeline-kubernetes/helm/pipeline cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
 
-tmp=$(mktemp)
 yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .repository ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
-
-tmp=$(mktemp)
 yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+yq --yaml-output '(.dependencies[] | select(.name=="pipeline") | .alias ) |= "pipeline"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 
 helm dep up ${COMPONENT_NAME}
 
