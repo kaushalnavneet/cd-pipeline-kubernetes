@@ -49,20 +49,6 @@ helm init -c
 git -C $CHART_REPO_ABS pull --no-edit
 
 
-# Move common dependency to unqiue name
-
-tmp=$(mktemp)
-yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-pipeline-kubernetes/helm/pipeline/Chart.yaml > "$tmp" && mv "$tmp" cd-pipeline-kubernetes/helm/pipeline/Chart.yaml
-
-mv cd-pipeline-kubernetes/helm/pipeline cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
-
-
-tmp=$(mktemp)
-yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .repository ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
-
-tmp=$(mktemp)
-yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
-
 helm dep up ${COMPONENT_NAME}
 
 echo "=========================================================="
@@ -74,13 +60,28 @@ else
   exit 1
 fi
 
+echo "Packaging Helm Chart"
+
 #turn off local enviroments, use umbrella published environment
 \rm -fr ${COMPONENT_NAME}/requirements.lock ${COMPONENT_NAME}/charts
 tmp=$(mktemp)
 yq --yaml-output 'del(.. | select(path(.tags? // empty | .[] | select(test("environment")))))' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml
 helm dep up ${COMPONENT_NAME}
 
-echo "Packaging Helm Chart"
+# Move common dependency to unqiue name
+
+tmp=$(mktemp)
+yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-pipeline-kubernetes/helm/pipeline/Chart.yaml > "$tmp" && mv "$tmp" cd-pipeline-kubernetes/helm/pipeline/Chart.yaml
+
+mv cd-pipeline-kubernetes/helm/pipeline cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
+
+tmp=$(mktemp)
+yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .repository ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+tmp=$(mktemp)
+yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+helm dep up ${COMPONENT_NAME}
 
 mkdir -p $CHART_REPO_ABS/charts
 helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts

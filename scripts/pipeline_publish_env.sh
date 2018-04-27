@@ -35,8 +35,8 @@ do
   else
     first=false
   fi
-  REQUIREMENTS=${REQUIREMENTS}$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env)","parent":"\($component).pipeline"}')
-  REQUIREMENTS=${REQUIREMENTS}","$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env).\($component)","parent":"\($component).pipeline"}')
+  REQUIREMENTS=${REQUIREMENTS}$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env)","parent":"\($component).\($component)-common"}')
+  REQUIREMENTS=${REQUIREMENTS}","$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env).\($component)","parent":"\($component).\($component)-common"}')
 done
 
 helm init -c
