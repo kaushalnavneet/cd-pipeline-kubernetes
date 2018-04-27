@@ -151,7 +151,7 @@ staging:
     replicas: 1
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
+      - generic/project/continuous-delivery-stage/cd-pipeline/staging/otc-github-relay-pub
     configmap:
       data:
         AMQP_EXCHANGE: ''
