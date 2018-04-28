@@ -148,7 +148,7 @@ staging:
         log4js_logmet_component: otc-pipeline-source-change
         log4js_syslog_appender_product: otc-pipeline-source-change-ys1-int
   otc-github-relay-pub:
-    replicas: 1
+    replicas: 0
     vault:
       secretPaths:
       - generic/project/continuous-delivery-stage/cd-pipeline/staging/otc-github-relay-pub
