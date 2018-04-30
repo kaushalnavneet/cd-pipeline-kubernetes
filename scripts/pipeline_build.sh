@@ -21,7 +21,7 @@ done
 export DOCKER_HOST='tcp://localhost:2375'
 
 echo ${APPLICATION_VERSION} > .pipeline_build_id
-echo "{\"build\": \"$(date +%Y%m%d%H%M%Z)\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\"}" > build_info.json
+echo "{\"build\": \"$(date +%Y%m%d%H%M%Z)\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_NAME%%/*}
 # For some reason this doesn't get repulled in docker engine
