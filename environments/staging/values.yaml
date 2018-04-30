@@ -1,39 +1,40 @@
 staging:
-  basedomain: stage.us-south.devops.cloud.ibm.com
-  resources:
-    limits:
-      cpu: 100m
-      memory: 1Gi
-    requests:
-      cpu: 100m
-      memory: 1Gi
-  vaultpublic:
-    secretPaths:
-    - generic/project/continuous-delivery-stage/cd-pipeline/staging/common
-  probes:
-    enabled: false
-    liveness:
-      initialDelay: 30
-      periodSeconds: 30
-      timeoutSeconds: 3
-    readiness:
-      initialDelay: 30
-      periodSeconds: 30
-      timeoutSeconds: 10
-  configmap:
-    data:
-      OTC_API_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1
-      USE_K8S: true
-      SECGRP: GRP3STGS
-      log4js_logmet_enabled: true
-      log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
-      log4js_logmet_logging_port: "9091"
-      log4js_logmet_space_id: 2f25b56c-5979-4808-93f6-c458b092ff66
-      log4js_syslog_appender_enabled: false
-      log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
-      log4js_syslog_appender_port: "6515"
-      log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
-      log4js_syslog_appender_whitelist: audit-logs
+  common:
+    basedomain: stage.us-south.devops.cloud.ibm.com
+    resources:
+      limits:
+        cpu: 100m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 1Gi
+    vaultcommon:
+      secretPaths:
+      - generic/project/continuous-delivery-stage/cd-pipeline/staging/common
+    probes:
+      enabled: false
+      liveness:
+        initialDelay: 30
+        periodSeconds: 30
+        timeoutSeconds: 3
+      readiness:
+        initialDelay: 30
+        periodSeconds: 30
+        timeoutSeconds: 10
+    configmap:
+      data:
+        OTC_API_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1
+        USE_K8S: true
+        SECGRP: GRP3STGS
+        log4js_logmet_enabled: true
+        log4js_logmet_logging_host: ingest.logging.stage1.ng.bluemix.net
+        log4js_logmet_logging_port: "9091"
+        log4js_logmet_space_id: 2f25b56c-5979-4808-93f6-c458b092ff66
+        log4js_syslog_appender_enabled: false
+        log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
+        log4js_syslog_appender_port: "6515"
+        log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
+        log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
     vault:
       secretPaths:

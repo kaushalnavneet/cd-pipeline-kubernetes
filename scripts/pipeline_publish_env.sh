@@ -26,7 +26,7 @@ tmp=$(mktemp)
 yq --yaml-output --arg envver "${ENVIRONMENT_VERSION}" '.version=$envver' ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml > "$tmp" && mv "$tmp" ${WORKDIR}/environments/${ENVIRONMENT}/Chart.yaml 
 
 #Construct the environment fragment to be included in the umbrella
-components=$(yq -r --arg env ${ENVIRONMENT} '.[$env] | to_entries[] | .key | select( . as $in | ["travis-worker","probes", "basedomain","vaultpublic","configmap", "resources"] | index($in) | not )' ${WORKDIR}/environments/${ENVIRONMENT}/values.yaml)
+components=$(yq -r --arg env ${ENVIRONMENT} '.[$env] | to_entries[] | .key | select( . as $in | ["common","travis-worker","probes", "basedomain","vaultpublic","configmap", "resources"] | index($in) | not )' ${WORKDIR}/environments/${ENVIRONMENT}/values.yaml)
 first=true
 for component in $components
 do
@@ -36,7 +36,7 @@ do
     first=false
   fi
   REQUIREMENTS=${REQUIREMENTS}$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env).\($component)","parent":"\($component).pipeline"}')
-  REQUIREMENTS=${REQUIREMENTS}","$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env)","parent":"\($component).pipeline"}')
+  REQUIREMENTS=${REQUIREMENTS}","$(jq -n --arg env "${ENVIRONMENT}" --arg component "$component" '{"child":"\($env).common","parent":"\($component).pipeline"}')
 done
 
 helm init -c
