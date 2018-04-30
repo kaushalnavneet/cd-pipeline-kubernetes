@@ -15,11 +15,12 @@ ENVIRONMENT=${3:-development}
 CODE_BASE=${4:-nodejs6}
 PULL_BUILDER=${5:-true}
 
-cat <<END > build_info.json                                       
+cat <<END > build_info.json
 {
   "build": "$(date +%Y%m%d%H%M%Z)",
   "commit": "$(git rev-parse HEAD)",
-  "appName" : "${RELEASE_NAME}"
+  "appName" : "${RELEASE_NAME}",
+  "platform" : "Armada"
 }
 END
 
