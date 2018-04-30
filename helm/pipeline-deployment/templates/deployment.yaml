@@ -1,0 +1,101 @@
+{{- template "common.deployment" (list . "pipeline.deployment") -}}
+{{- define "secret_paths" }}
+{{- range .Values.vaultcommon.secretPaths }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- range .Values.vault.secretPaths }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- end -}}
+{{- define "pipeline.deployment" -}}
+## Define overrides for your Deployment resource here, e.g.
+spec:
+  replicas: {{ .Values.replicas }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  template:
+    spec:
+      imagePullSecrets:
+      - name: otc-registry-secret
+      volumes:
+      - name: vault-sidekick
+        secret:
+          defaultMode: 420
+          secretName: vault-sidekick
+          items:
+          - key: vault.pem
+            path: vault.pem
+      - name: secrets
+        emptyDir: {}
+      initContainers:
+      - name: vault-sidekick
+        image: quay.io/ukhomeofficedigital/vault-sidekick:latest
+        args:
+        - -logtostderr=true
+        - -ca-cert=/var/run/certs/vault.pem
+        - -one-shot
+{{ include "secret_paths" . | indent 8 }}
+        env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: vault-sidekick
+        - name: VAULT_AUTH_METHOD
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_AUTH_METHOD
+              name: vault-sidekick
+        - name: VAULT_SIDEKICK_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_SIDEKICK_ROLE_ID
+              name: vault-sidekick
+        - name: VAULT_SIDEKICK_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_SIDEKICK_SECRET_ID
+              name: vault-sidekick
+        - name: VAULT_OUTPUT
+          value: /etc/secrets
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+        - name: vault-sidekick
+          mountPath: /var/run/certs
+          readOnly: true
+      containers:
+      - {{ template "common.container" (list . "pipeline.deployment.container") }}
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/secrets
+          readOnly: false
+{{- end -}}
+{{- define "pipeline.deployment.container" -}}
+# Define overrides for your Container here, e.g.
+{{- if .Values.probes.enabled }}
+livenessProbe:
+  httpGet:
+    path: {{.Values.probes.liveness.path | default "/version"}}
+    port: 80
+  initialDelaySeconds: {{.Values.probes.liveness.initialDelay | default 30}}
+  timeoutSeconds: {{.Values.probes.liveness.timeoutSeconds | default 3}}
+  periodSeconds: {{.Values.probes.liveness.periodSeconds | default 30}}
+readinessProbe:
+  httpGet:
+    path: {{.Values.probes.readiness.path | default "/status"}}
+    port: 80
+  initialDelaySeconds: {{.Values.probes.readiness.initialDelay | default 30}}
+  timeoutSeconds: {{.Values.probes.readiness.timeoutSeconds | default 3}}
+  periodSeconds: {{.Values.probes.readiness.periodSeconds | default 30}}
+{{- end }}
+env:
+{{ $fullname := include "common.fullname" . }}
+{{- range $envvar, $envvarvalue := .Values.configmap.data }}
+- {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
+{{- end }}
+{{- if .Values.secret }}
+{{- range $envvar, $envvarvalue := .Values.secret.data }}
+- {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
+{{- end }}
+{{- end }}
+{{- end -}}

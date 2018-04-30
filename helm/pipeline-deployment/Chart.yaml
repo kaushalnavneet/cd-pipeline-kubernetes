@@ -1,0 +1,6 @@
+name: pipeline-deployment
+description: K8s deployment chart for pipeline microservices 
+version: 1.0.0
+home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes
+sources:
+    - https://github.ibm.com/org-ids/cd-pipeline-kubernetes
