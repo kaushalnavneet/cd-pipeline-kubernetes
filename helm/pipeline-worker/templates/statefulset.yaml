@@ -1,10 +1,9 @@
 {{- template "pipeline.common.statefulset" (list . "pipeline.statefulset") -}}
 {{- define "secret_paths" }}
-{{- range .Values.vaultpublic.secretPaths }}
-{{- print "- -cn=secret:" . ":fmt=json"}}
+{{- range .Values.vaultcommon.secretPaths }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
-{{- $fullname := include "common.fullname" . -}}
-{{- range  index .Values $fullname "vault" "secretPaths" }}
+{{- range .Values.vault.secretPaths }}
 {{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
 {{- end -}}
