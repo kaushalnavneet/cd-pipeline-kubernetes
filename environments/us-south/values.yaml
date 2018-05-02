@@ -540,7 +540,6 @@ us-south:
         com_ibm_team_integration_pipeline_json_verification_disabled: false
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
-        com_ibm_team_integration_pipeline_bss_password: QoiCWP3bOP1QPZbqUrVzYtnqGTddGi2LLlf8HkEBWhsFGQlUcFbAmdFskxcMzyp5
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
   travis-worker:
     replicas: 4
