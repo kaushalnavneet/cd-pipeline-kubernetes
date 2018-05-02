@@ -83,8 +83,8 @@ us-south:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-service
-        log4js_syslog_appender_product: otc-pipeline-log-service-yp
+        log4js_logmet_component: pipeline-log-service-k8s
+        log4js_syslog_appender_product: pipeline-log-service-k8s-yp
   pipeline-log-archiver:
     vault:
       secretPaths:
@@ -129,8 +129,8 @@ us-south:
         S3_STORAGE_REGION: us-standard
         SECGRP: GRP3PRDS
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-archiver
-        log4js_syslog_appender_product: otc-pipeline-log-archiver-yp
+        log4js_logmet_component: pipeline-log-archiver-k8s
+        log4js_syslog_appender_product: pipeline-log-archiver-k8s-yp
   source-change-service:
     vault:
       secretPaths:
@@ -147,8 +147,8 @@ us-south:
         HTTP_PORT: ""
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YP
-        log4js_logmet_component: otc-pipeline-source-change-service
-        log4js_syslog_appender_product: otc-pipeline-source-changes-yp
+        log4js_logmet_component: source-change-service-k8s
+        log4js_syslog_appender_product: source-change-service-k8s-yp
   otc-github-relay-pub:
     vault:
       secretPaths:
@@ -167,8 +167,8 @@ us-south:
         AMQP_USER: jazzhub
         LOG4JS_CONFIG_PATH: ""
         NEW_RELIC_APP_NAME: otc-webhook-relay - PROD
-        log4js_logmet_component: otc-webhook-relay-pub
-        log4js_syslog_appender_product: otc-github-relay-pub-yp
+        log4js_logmet_component: otc-github-relay-pub-k8s
+        log4js_syslog_appender_product: otc-github-relay-pub-k8s-yp
   otc-github-relay-sub:
     vault:
       secretPaths:
@@ -190,8 +190,8 @@ us-south:
         LOG4JS_CONFIG_PATH: 
         NEW_RELIC_APP_NAME: otc-webhook-relay-sub - YP
         POST_URL: https://devops-api.ng.bluemix.net/v1/pipeline/triggers/
-        log4js_logmet_component: otc-webhook-relay-sub
-        log4js_syslog_appender_product: otc-github-relay-sub-yp
+        log4js_logmet_component: otc-github-relay-sub-k8s
+        log4js_syslog_appender_product: otc-github-relay-sub-k8s-yp
   blade-pipeline-broker:
     vault:
       secretPaths:
@@ -200,8 +200,8 @@ us-south:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YP
-        log4js_logmet_component: otc-pipeline-broker
-        log4js_syslog_appender_product: otc-pipeline-broker-yp
+        log4js_logmet_component: blade-pipeline-broker-k8s
+        log4js_syslog_appender_product: blade-pipeline-broker-k8s-yp
   pipeline-consumption:
     vault:
       secretPaths:
@@ -211,8 +211,8 @@ us-south:
         NODE_ENV: production
         appUrl: https://console.bluemix.net
         auth__ibmId: pipeaut2@us.ibm.com
-        log4js_logmet_component: otc-pipeline-consumption-monitor
-        log4js_syslog_appender_product: otc-pipeline-consumption-monitor-yp
+        log4js_logmet_component: pipeline-consumption-k8s
+        log4js_syslog_appender_product: pipeline-consumption-k8s-yp
         uiTest__isEnabled: true
   pipeline-ui:
     vault:
@@ -271,8 +271,8 @@ us-south:
         TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         USE_HTTP: true
-        log4js_logmet_component: pipeline-ui-service
-        log4js_syslog_appender_product: otc-pipeline-ui-yp
+        log4js_logmet_component: pipeline-ui-k8s
+        log4js_syslog_appender_product: pipeline-ui-k8s-yp
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
@@ -313,8 +313,8 @@ us-south:
         STORAGE_USERID: 4abe111116964ad3a2bae35b0ad36f59
         STORAGE_USERNAME: admin_3ac0fb36a5ea601b0d30e7d293673471fb33f030
         USE_S3: true
-        log4js_logmet_component: pipeline-artifact-repository-service
-        log4js_syslog_appender_product: pipeline-artifact-repository-service-yp
+        log4js_logmet_component: pipeline-artifact-repository-service-k8s
+        log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-yp
         RUN_ARS_K8S: true
   pipeline-inventory:
     vault:
@@ -330,12 +330,12 @@ us-south:
         IS_CF: "1"
         logmet_host: ingest.logging.ng.bluemix.net
         logmet_tenant_id: 3f02963c-7330-4cef-b34c-1356ff3924c2
-        logmet_component_name: pipeline-inventory
+        logmet_component_name: pipeline-inventory-k8s
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
         qradar_port: "6515"
-        qradar_product: otc-pipeline-inventory-yp
+        qradar_product: pipeline-inventory-k8s-yp
         qradar_url: devops.ng.bluemix.net
   test-report-service:
     vault:
@@ -354,8 +354,8 @@ us-south:
         IS_CF: true
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YP
-        log4js_logmet_component: otc-pipeline-test-reporting
-        log4js_syslog_appender_product: otc-pipeline-test-reporting-yp
+        log4js_logmet_component: test-report-service-k8s
+        log4js_syslog_appender_product: test-report-service-k8s-yp
   pipeline-service:
     vault:
       secretPaths:
@@ -367,7 +367,7 @@ us-south:
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
         qradar_port: "6515"
-        qradar_product: otc-pipeline-server-yp
+        qradar_product: pipeline-service-k8s-yp
         qradar_url: devops.ng.bluemix.net
         serverHttpPort: "80"
         serverHttpsPort: "443"
@@ -483,7 +483,7 @@ us-south:
         com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
         com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.ng.bluemix.net
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3f02963c-7330-4cef-b34c-1356ff3924c2
-        com_ibm_team_integration_pipeline_logging_logmet_token: df0AKA9T_V0H
+        com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
         com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.1.dblayer.com
         com_ibm_team_integration_pipeline_redis_port: "15159"
