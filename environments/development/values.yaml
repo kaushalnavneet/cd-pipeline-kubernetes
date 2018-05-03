@@ -23,7 +23,7 @@ development:
         timeoutSeconds: 10
     configmap:
       data:
-        OTC_API_URL: https://devops-api.stage1.ng.bluemix.net/v1
+        OTC_API_URL: http://otc-api/api/v1
         USE_K8S: true
         SECGRP: GRP3DEVS
         log4js_logmet_enabled: true
@@ -242,7 +242,7 @@ development:
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: jazzhub
-        ARS_URL: https://pipeline-artifact-repository-service.stage1.ng.bluemix.net/codestation/v2
+        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
@@ -251,7 +251,7 @@ development:
         CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_USER: bmdevops-yp-us-south
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
-        CONSUMPTION_MONITOR_HOST: https://otc-pipeline-consumption-monitor.stage1.ng.bluemix.net
+        CONSUMPTION_MONITOR_HOST: http://pipeline-consumption
         CS_VERSION: "2"
         DISABLE_REGION_CACHE: true
         ENABLE_ACCESS_CONTROL: true
@@ -266,12 +266,12 @@ development:
         MAP_API_URL: ''
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
-        PIPELINE_URL: https://otc-pipeline-server.stage1.ng.bluemix.net/pipeline
+        PIPELINE_URL: http://pipeline-service/pipeline
         REDIS_URL: redis://127.0.0.1:6379
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
-        TIAM_URL: https://tiam.stage1.ng.bluemix.net/identity/v1
+        TIAM_URL: http://otc-tiam/identity/v1
         TUNNEL_DEST_HOST: "10.99.58.69"
         TUNNEL_DEST_PORT: "5000"
         TUNNEL_LOCAL_PORT: "6379"
