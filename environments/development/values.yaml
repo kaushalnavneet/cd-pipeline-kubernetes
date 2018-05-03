@@ -443,6 +443,7 @@ development:
         com_ibm_team_integration_pipeline_logHTTPTraffic: false
         jobTimeout: 60
         inventory_client_ribbon_listOfServers: pipeline-inventory
+        inventory_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_inventory_disabled: false
         com_ibm_team_integration_pipeline_billing_disabled: false
         com_ibm_team_integration_pipeline_jazzhub_billing_user: DevOps
