@@ -403,7 +403,7 @@ development:
       data:
         newrelic_env: YS1-k8s
         AMQP_LISTENERS_DISABLED: false
-        DEBUG_PIPELINE=1
+        DEBUG_PIPELINE: 1
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
