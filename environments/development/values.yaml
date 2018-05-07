@@ -465,11 +465,15 @@ development:
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        test_service_client_ribbon_listOfServers: otc-pipeline-test-reporting.stage1.ng.bluemix.net:443
-        source_change_service_client_ribbon_listOfServers: otc-pipeline-source-change.stage1.ng.bluemix.net:443
+        test_service_client_ribbon_listOfServers: test-report-service
+        test_service_client_ribbon_IsSecure: false
+        source_change_service_client_ribbon_listOfServers: source-change-service
+        source_change_service_client_ribbon_IsSecure: false
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        log_service_client_ribbon_listOfServers: otc-pipeline-log-service.stage1.ng.bluemix.net:443
-        log_archiver_service_client_ribbon_listOfServers: otc-pipeline-log-archiver.stage1.ng.bluemix.net:443
+        log_service_client_ribbon_listOfServers: pipeline-log-service
+        log_service_client_ribbon_IsSecure: false
+        log_archiver_service_client_ribbon_listOfServers: pipeline-log-archiver
+        log_archiver_service_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_toolchain_region: ibm:ys1:us-south
         com_ibm_team_integration_pipeline_toolchain_enabled: false
         com_ibm_team_integration_pipeline_server_url: https://devops.stage1.ng.bluemix.net/devops/pipelines
