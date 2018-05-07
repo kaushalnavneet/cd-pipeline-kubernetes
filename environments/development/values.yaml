@@ -81,8 +81,8 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-service
-        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-dev
+        log4js_logmet_component: pipeline-log-service-k8s
+        log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
   pipeline-log-archiver:
     replicas: 1
     revisionHistoryLimit: 3
@@ -127,8 +127,8 @@ development:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-archiver
-        log4js_syslog_appender_product: otc-pipeline-log-archiver-ys1-dev
+        log4js_logmet_component: pipeline-log-archiver-k8s
+        log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -146,8 +146,8 @@ development:
         HTTP_PORT: ''
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
-        log4js_logmet_component: otc-pipeline-source-change
-        log4js_syslog_appender_product: otc-pipeline-source-change-ys1-dev
+        log4js_logmet_component: source-change-service-k8s
+        log4js_syslog_appender_product: source-change-service-k8s-ys1-dev
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -168,8 +168,8 @@ development:
         LOG4JS_CONFIG_PATH: app/assets/log4js.json
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        log4js_logmet_component: otc-webhook-relay-pub
-        log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-dev
+        log4js_logmet_component: otc-github-relay-pub-k8s
+        log4js_syslog_appender_product: otc-github-relay-pub-k8s-ys1-dev
   otc-github-relay-sub:
     replicas: 1
     revisionHistoryLimit: 3
@@ -193,8 +193,8 @@ development:
         LOG4JS_CONFIG_PATH: ''
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: https://otc-api.stage1.ng.bluemix.net/api/v1/pipeline/triggers/
-        log4js_logmet_component: otc-webhook-relay-sub
-        log4js_syslog_appender_product: otc-webhook-relay-sub-ys1-dev
+        log4js_logmet_component: otc-github-relay-sub-k8s
+        log4js_syslog_appender_product: otc-github-relay-sub-k8s-ys1-dev
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -205,8 +205,8 @@ development:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
-        log4js_logmet_component: otc-pipeline-broker
-        log4js_syslog_appender_product: otc-pipeline-broker-ys1-dev
+        log4js_logmet_component: blade-pipeline-broker-k8s
+        log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
@@ -220,7 +220,7 @@ development:
       data:
         NODE_ENV: development
         apiTest__monitorInterval: "60000"
-        log4js_logmet_component: otc-pipeline-consumption-monitor-ys1
+        log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
@@ -282,8 +282,8 @@ development:
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
         USE_NEW_RELIC: true
-        log4js_logmet_component: pipeline-ui-service
-        log4js_syslog_appender_product: otc-pipeline-ui-ys1dev
+        log4js_logmet_component: pipeline-ui-k8s
+        log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -331,8 +331,8 @@ development:
         STORAGE_USERID: 528ea5b6577f4b06a8ef0fa8969a23bb
         STORAGE_USERNAME: admin_6a49519e0f7b815d63e272ffb3425dab3dd31d4a
         USE_S3: true
-        log4js_logmet_component: pipeline-artifact-repository-service
-        log4js_syslog_appender_product: pipeline-artifact-repository-service-ys1-dev
+        log4js_logmet_component: pipeline-artifact-repository-service-k8s
+        log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
   pipeline-inventory:
     replicas: 1
     revisionHistoryLimit: 3
@@ -358,12 +358,13 @@ development:
         IS_CF: "1"
         logmet_host: ingest.logging.stage1.ng.bluemix.net
         logmet_port: "9091"
+        logmet_component_name: pipeline-inventory-k8s
         logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
         qradar_port: "6515"
-        qradar_product: otc-pipeline-inventory-ys1-dev
+        qradar_product: pipeline-inventory-k8s-ys1-dev
         qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
     replicas: 1
@@ -383,8 +384,8 @@ development:
         IS_CF: true
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1
-        log4js_logmet_component: otc-pipeline-test-reporting
-        log4js_syslog_appender_product: otc-pipeline-test-resporting-ys1-dev
+        log4js_logmet_component: test-report-service-k8s
+        log4js_syslog_appender_product: test-report-service-k8s-ys1-dev
   pipeline-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -529,7 +530,7 @@ development:
         com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
         com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.stage1.ng.bluemix.net
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: ed841776-9394-4b51-a86c-72ddc5529e05
-        com_ibm_team_integration_pipeline_logging_logmet_token: 75YJPS7Let03
+        com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
         com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.2.dblayer.com
         com_ibm_team_integration_pipeline_redis_port: 10653
@@ -586,7 +587,6 @@ development:
         com_ibm_team_integration_pipeline_json_verification_disabled: false
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
-        com_ibm_team_integration_pipeline_bss_password: QoiCWP3bOP1QPZbqUrVzYtnqGTddGi2LLlf8HkEBWhsFGQlUcFbAmdFskxcMzyp5
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
   travis-worker:
     replicas: 2

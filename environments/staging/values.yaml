@@ -82,8 +82,8 @@ staging:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-service
-        log4js_syslog_appender_product: otc-pipeline-log-service-ys1-int
+        log4js_logmet_component: pipeline-log-service-k8s
+        log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-int
   pipeline-log-archiver:
     vault:
       secretPaths:
@@ -128,8 +128,8 @@ staging:
         S3_STORAGE_REGION: us-standard
         SECGRP: GRP3DEV1
         USE_HTTP: true
-        log4js_logmet_component: otc-pipeline-log-archiver
-        log4js_syslog_appender_product: otc-pipeline-log-archiver-ys1-int
+        log4js_logmet_component: pipeline-log-archiver-k8s
+        log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-int
   source-change-service:
     vault:
       secretPaths:
@@ -146,8 +146,8 @@ staging:
         HTTP_PORT: ""
         IS_CF: true
         NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1-INT
-        log4js_logmet_component: otc-pipeline-source-change
-        log4js_syslog_appender_product: otc-pipeline-source-change-ys1-int
+        log4js_logmet_component: source-change-service-k8s
+        log4js_syslog_appender_product: source-change-service-k8s-ys1-int
   otc-github-relay-pub:
     replicas: 0
     vault:
@@ -168,8 +168,8 @@ staging:
         LOG4JS_CONFIG_PATH: app/assets/log4js.json
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        log4js_logmet_component: otc-webhook-relay-pub
-        log4js_syslog_appender_product: otc-webhook-relay-pub-ys1-int
+        log4js_logmet_component: otc-github-relay-pub-k8s
+        log4js_syslog_appender_product: otc-github-relay-pub-k8s-ys1-int
   otc-github-relay-sub:
     vault:
       secretPaths:
@@ -191,8 +191,8 @@ staging:
         LOG4JS_CONFIG_PATH: ""
         NEW_RELIC_APP_NAME: otc-webhook-relay-ys1-integration
         POST_URL: https://devops-api-integration.stage1.ng.bluemix.net/v1/pipeline/triggers/
-        log4js_logmet_component: otc-webhook-relay-sub
-        log4js_syslog_appender_product: otc-github-relay-sub-ys1-int
+        log4js_logmet_component: otc-github-relay-sub-k8s
+        log4js_syslog_appender_product: otc-github-relay-sub-k8s-ys1-int
   blade-pipeline-broker:
     vault:
       secretPaths:
@@ -201,8 +201,8 @@ staging:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1 integration
-        log4js_logmet_component: otc-pipeline-broker
-        log4js_syslog_appender_product: otc-pipeline-broker-integration-ys1-int
+        log4js_logmet_component: blade-pipeline-broker-k8s
+        log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-int
   pipeline-consumption:
     vault:
       secretPaths:
@@ -212,7 +212,7 @@ staging:
         NODE_ENV: integration
         SECGRP: GRP1PRDS
         apiTest__monitorInterval: "60000"
-        log4js_logmet_component: otc-pipeline-consumption-monitor-ys1int
+        log4js_logmet_component: pipeline-consumption-k8s-ys1-int
         slack__webhookUrl: https://hooks.slack.com/services/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
   pipeline-ui:
     vault:
@@ -274,8 +274,8 @@ staging:
         TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         USE_HTTP: true
-        log4js_logmet_component: pipeline-ui-service
-        log4js_syslog_appender_product: otc-pipeline-ui-integration
+        log4js_logmet_component: pipeline-ui-k8s
+        log4js_syslog_appender_product: pipeline-ui-k8s-ys1-int
         log4js_syslog_appender_enabled: true
   pipeline-artifact-repository-service:
     vault:
@@ -315,7 +315,7 @@ staging:
         STORAGE_REGION: dallas
         STORAGE_USERID: 885900f8f3b14149af6a976c7d48aa55
         USE_S3: true
-        log4js_logmet_component: pipeline-artifact-repository-service
+        log4js_logmet_component: pipeline-artifact-repository-service-k8s
         RUN_ARS_K8S: true
   pipeline-inventory:
     vault:
@@ -332,6 +332,7 @@ staging:
         logmet_host: ingest.logging.stage1.ng.bluemix.net
         logmet_tenant_id: 2f25b56c-5979-4808-93f6-c458b092ff66
         qradar_enabled: false
+        logmet_component_name: pipeline-inventory-k8s
   test-report-service:
     vault:
       secretPaths:
@@ -350,7 +351,7 @@ staging:
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1-INT
         SECGRP: GRP3DEVS
-        log4js_logmet_component: otc-pipeline-test-reporting
+        log4js_logmet_component: test-report-service-k8s
   pipeline-service:
     vault:
       secretPaths:
@@ -480,6 +481,7 @@ staging:
         com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
         com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.stage1.ng.bluemix.net
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: 2f25b56c-5979-4808-93f6-c458b092ff66
+        com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
         com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.1.dblayer.com
         com_ibm_team_integration_pipeline_redis_port: "15158"
