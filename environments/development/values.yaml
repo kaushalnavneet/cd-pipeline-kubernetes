@@ -553,7 +553,8 @@ development:
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console, LOGMET
-        bss_service_client_ribbon_listOfServers: continuous-delivery-bss.stage1.ng.bluemix.net:443
+        bss_service_client_ribbon_listOfServers: continuous-delivery-bss
+        bss_service_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: 10000
         com_ibm_team_integration_pipeline_security_bssWhiteList: ''
