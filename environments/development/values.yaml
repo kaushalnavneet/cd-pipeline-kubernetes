@@ -483,8 +483,7 @@ development:
         toolchain_client_ribbon_listOfServers: ''
         com_ibm_team_integration_pipeline_features_context: Blade
         com_ibm_team_integration_pipeline_features_stage_queue: true
-        tiam_client_ribbon_listOfServers: otc-tiam
-        tiam_client_ribbon_IsSecure: false
+        tiam_client_ribbon_listOfServers: devops-api.stage1.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
         com_ibm_team_integration_pipeline_eventLogging_enabled: false
         com_ibm_team_integration_pipeline_eventLogging_path: /var/log/pipeline-event-logging
