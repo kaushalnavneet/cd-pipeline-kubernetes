@@ -2,8 +2,7 @@
 
 NAMESPACE=${3:-opentoolchain}
 
-export KUBECONFIG=~/.bluemix/plugins/container-service/clusters/"$1"/kube-config
--"$2"-"$1".yml
+export KUBECONFIG=~/.bluemix/plugins/container-service/clusters/"$1"/kube-config-"$2"-"$1".yml
 
 eval $CONFIG
 
