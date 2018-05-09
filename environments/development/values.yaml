@@ -436,8 +436,8 @@ development:
         com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
         com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
         contextPath: /pipelines
-        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service
-        codestation_client_ribbon_IsSecure: false
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.dev.us-south.devops.cloud.ibm.com
+        codestation_client_ribbon_IsSecure: true
         cleanup_disabled: false
         cleanup_buildsToKeep: 10
         cleanup_deploysToKeep: 10
