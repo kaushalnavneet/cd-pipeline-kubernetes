@@ -5,6 +5,7 @@ IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
+bx login -a ${IBM_CLOUD_API} ---apikey ${DOCKER_PASSWORD}
 # default value for PIPELINE_IMAGE_URL -- uncomment and customize as needed
 export PIPELINE_IMAGE_URL="${IMAGE_NAME}:${APPLICATION_VERSION}"
 echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
