@@ -10,11 +10,11 @@ bx login -a ${IBM_CLOUD_API} --apikey ${DOCKER_PASSWORD}
 export PIPELINE_IMAGE_URL="${IMAGE_NAME}:${APPLICATION_VERSION}"
 echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
 
-for iteration in {1..3}
+for iteration in {1..6}
 do
   [[ $(bx cr va $PIPELINE_IMAGE_URL) == *BXNVA0009E* ]] || break
   echo -e "A vulnerability report was not found for the specified image, either the image doesn't exist or the scan hasn't completed yet. Waiting for scan to complete.."
-  sleep 60
+  sleep 10
 done
 
 set +e
