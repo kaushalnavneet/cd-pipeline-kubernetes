@@ -43,12 +43,7 @@ yq --yaml-output --arg image "${IMAGE_NAME}" '.pipeline.image.repository=$image'
 yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${COMPONENT_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/Chart.yaml
 
 helm init -c
-
-git -C $CHART_REPO_ABS pull --no-edit
-
-
 helm dep up ${COMPONENT_NAME}
-
 echo "=========================================================="
 echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
 if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run; then
@@ -74,28 +69,43 @@ yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONE
 yq --yaml-output '(.dependencies[] | select(.name=="pipeline-deployment") | .alias ) |= "pipeline"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline-deployment") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
 
-
 helm dep up ${COMPONENT_NAME}
 
-mkdir -p $CHART_REPO_ABS/charts
-helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
+n=0
+rc=0
+ORIG_DIR=$(pwd)
+until [ $n -ge 5 ]
+do
+  cd $ORIG_DIR
+  git -C $CHART_REPO_ABS pull --no-edit
+  mkdir -p $CHART_REPO_ABS/charts
+  helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
 
-cd $CHART_REPO_ABS
-echo "Updating Helm Chart Repository index"
-touch charts/index.yaml
+  cd $CHART_REPO_ABS
+  echo "Updating Helm Chart Repository index"
+  touch charts/index.yaml
 
-if [ "$PRUNE_CHART_REPO" == "true" ]; then
+  if [ "$PRUNE_CHART_REPO" == "true" ]; then
     NUMBER_OF_VERSION_KEPT=${NUMBER_OF_VERSION_KEPT:-3}
     echo "Keeping last ${NUMBER_OF_VERSION_KEPT} versions of ${COMPONENT_NAME} component"
     ls -v charts/${COMPONENT_NAME}* | head --lines=-${NUMBER_OF_VERSION_KEPT} | xargs rm
-fi
+  fi
 
-helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
+  helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
 
-git add -A .
-git commit -m "${APPLICATION_VERSION}"
-git push
-rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+  git add -A .
+  git commit -m "${APPLICATION_VERSION}"
+  git push
+  rc=$?
+  if [[ $rc == 0 ]]; then 
+    break;
+  fi
+  n=$[$n+1]
+  rm -fr $CHART_REPO_ABS
+  git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+done
+
+if [[ $rc != 0 ]]; then exit $rc; fi
 
 if [ -n "$TRIGGER_BRANCH" ]; then
   echo "Triggering CD pipeline ..."
