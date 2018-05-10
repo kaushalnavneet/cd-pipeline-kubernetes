@@ -76,7 +76,6 @@ rc=0
 ORIG_DIR=$(pwd)
 until [ $n -ge 5 ]
 do
-  cd $ORIG_DIR
   git -C $CHART_REPO_ABS pull --no-edit
   mkdir -p $CHART_REPO_ABS/charts
   helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
@@ -101,7 +100,9 @@ do
     break;
   fi
   n=$[$n+1]
+  cd $ORIG_DIR
   rm -fr $CHART_REPO_ABS
+  mkdir -p $CHART_REPO_ABS
   git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
 done
 
