@@ -56,32 +56,48 @@ else
   exit 1
 fi
 
-git -C $ENVIRONMENT_REPO_ABS pull --no-edit
+n=0
+rc=0
+ORIG_DIR=$(pwd)
+until [ $n -ge 5 ]
+do
+  git -C $ENVIRONMENT_REPO_ABS pull --no-edit
 
-echo "Packaging Environment Chart"
+  echo "Packaging Environment Chart"
 
-# Enironmement fragment
-echo '{ "dependencies": [ {"name":"'${ENVIRONMENT}'","version":"'${ENVIRONMENT_VERSION}'","repository":"alias:otc-config","tags":["environment"],"import-values":['${REQUIREMENTS}']}]}' | yq --yaml-output '.' > ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
-sed -i '2,$s/^/  /'  ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
+  # Enironmement fragment
+  echo '{ "dependencies": [ {"name":"'${ENVIRONMENT}'","version":"'${ENVIRONMENT_VERSION}'","repository":"alias:otc-config","tags":["environment"],"import-values":['${REQUIREMENTS}']}]}' | yq --yaml-output '.' > ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
+  sed -i '2,$s/^/  /'  ${ENVIRONMENT_REPO_ABS}/charts/requirements.${ENVIRONMENT}.yaml
 
-mkdir -p $ENVIRONMENT_REPO_ABS/charts
-helm package ${WORKDIR}/environments/${ENVIRONMENT} -d $ENVIRONMENT_REPO_ABS/charts
+  mkdir -p $ENVIRONMENT_REPO_ABS/charts
+  helm package ${WORKDIR}/environments/${ENVIRONMENT} -d $ENVIRONMENT_REPO_ABS/charts
 
-cd $ENVIRONMENT_REPO_ABS
-echo "Updating Environment Chart Repository index"
-touch charts/index.yaml
+  cd $ENVIRONMENT_REPO_ABS
+  echo "Updating Environment Chart Repository index"
+  touch charts/index.yaml
 
-if [ "$PRUNE_ENVIRONMENT_REPO" == "true" ]; then
+  if [ "$PRUNE_ENVIRONMENT_REPO" == "true" ]; then
     NUMBER_OF_VERSION_KEPT=${NUMBER_OF_VERSION_KEPT:-3}
     echo "Keeping last ${NUMBER_OF_VERSION_KEPT} versions of ${ENVIRONMENT}"
     ls -v charts/${ENVIRONMENT}* | head --lines=-${NUMBER_OF_VERSION_KEPT} | xargs rm
-fi
+  fi
 
-helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
+  helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
 
-git add -A .
-git commit -m "${ENVIRONMENT} ${ENVIRONENT_VERSION}"
-git push
+  git add -A .
+  git commit -m "${ENVIRONMENT} ${ENVIRONENT_VERSION}"
+  git push
+  rc=$?
+  if [[ $rc == 0 ]]; then
+    break;
+  fi
+  n=$[$n+1]
+  cd $ORIG_DIR
+  rm -fr $ENVIRONMENT_REPO_ABS
+  mkdir -p $ENVIRONMENT_REPO_ABS
+  git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $ENVIRONMENT_REPO_ABS
+done
+
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
 if [ -n "$TRIGGER_BRANCH" ]; then
