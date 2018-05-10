@@ -273,6 +273,7 @@ us-south:
         USE_HTTP: true
         log4js_logmet_component: pipeline-ui-k8s
         log4js_syslog_appender_product: pipeline-ui-k8s-yp
+        MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
