@@ -205,6 +205,7 @@ development:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
+        OTC_API_URL: http://otc-tiam
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   pipeline-consumption:
