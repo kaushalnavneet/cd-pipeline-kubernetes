@@ -13,7 +13,7 @@ echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
 for iteration in {1..6}
 do
   BX_CR_VA=$(bx cr va $PIPELINE_IMAGE_URL) 
-  [[ ${BX_CR_VA} == *BXNVA0009E* ||  ${BX_CR_VA} == *The\ scan\ has\ not\ yet\ completed* ]] || break
+  [[ ${BX_CR_VA} != *SAFE* ]] || break
   echo -e "A vulnerability report was not found for the specified image, either the image doesn't exist or the scan hasn't completed yet. Waiting for scan to complete.."
   sleep 10
 done
