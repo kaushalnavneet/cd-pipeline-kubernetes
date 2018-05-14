@@ -23,7 +23,6 @@ us-south:
         timeoutSeconds: 10
     configmap:
       data:
-        OTC_API_URL: http://otc-api/api/v1
         USE_K8S: true
         SECGRP: GRP1PRDY
         log4js_logmet_enabled: true

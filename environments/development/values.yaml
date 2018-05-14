@@ -23,7 +23,6 @@ development:
         timeoutSeconds: 10
     configmap:
       data:
-        OTC_API_URL: http://otc-api/api/v1
         USE_K8S: true
         SECGRP: GRP3DEVS
         log4js_logmet_enabled: true
