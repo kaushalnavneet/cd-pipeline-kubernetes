@@ -204,6 +204,7 @@ development:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
+        LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
