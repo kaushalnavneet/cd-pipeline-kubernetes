@@ -592,6 +592,10 @@ development:
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
+        bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bluemix_iam_client_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
+        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3
