@@ -1,9 +1,5 @@
 {{- template "pipeline.common.ingress" (list . "pipeline.ingress") -}}
 {{- define "pipeline.ingress" -}}
-apiVersion: extensions/v1beta1
-kind: Ingress
-  annotations:
-    ingress.bluemix.net/redirect-to-https: "True"
 spec:
   rules:
   - host: {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
