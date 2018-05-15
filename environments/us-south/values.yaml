@@ -23,7 +23,6 @@ us-south:
         timeoutSeconds: 10
     configmap:
       data:
-        OTC_API_URL: http://otc-api/api/v1
         USE_K8S: true
         SECGRP: GRP1PRDY
         log4js_logmet_enabled: true
@@ -200,6 +199,7 @@ us-south:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - YP
+        LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
@@ -552,6 +552,10 @@ us-south:
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
+        bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bluemix_iam_client_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
+        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
   travis-worker:
     replicas: 4
     vault:
