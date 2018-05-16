@@ -3,7 +3,3 @@ image:
 
 service:
   type: ClusterIP
-
-ingress:
-  annotations:
-    ingress.bluemix.net/redirect-to-https: "True"
