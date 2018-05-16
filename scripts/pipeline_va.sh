@@ -18,7 +18,5 @@ do
   sleep 10
 done
 
-set +e
-bx cr va $PIPELINE_IMAGE_URL
-set -e
-[[ $(bx cr va $PIPELINE_IMAGE_URL) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
+echo "${BX_CR_VA}"
+[[ ${BX_CR_VA} != *SAFE* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
