@@ -9,19 +9,17 @@ kind: Ingress
   {{- end }}
 spec:
   rules:
-  {{- range $host := .Values.ingress.hosts }}
-  - host: {{ $host }}
+  - host: {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ template "common.fullname" $ }}
           servicePort: 80
-  {{- end }}
-  {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end -}}
+  - hosts:
+    - {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
+    secretName: {{ .Values.basedomain }}
 {{- end -}}
 {{- end -}}
 {{- define "pipeline.common.ingress" -}}

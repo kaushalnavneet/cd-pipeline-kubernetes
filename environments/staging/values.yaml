@@ -8,9 +8,6 @@ staging:
       requests:
         cpu: 100m
         memory: 1Gi
-    ingress:
-      annotations:
-        ingress.bluemix.net/redirect-to-https: "True"
     vaultcommon:
       secretPaths:
       - generic/project/continuous-delivery-stage/cd-pipeline/staging/common
