@@ -235,7 +235,7 @@ us-south:
         AMQP_REJECT_UNAUTH_CERTS: ""
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: ui
-        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
+        ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.ng.bluemix.net
         BLUEMIX_URL: https://console.ng.bluemix.net
         BSS_CHECKED: true
