@@ -34,4 +34,4 @@ COPY --from=build /work/component/export/ /home/node
 EXPOSE 80
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
-CMD ["sh","-c","env > /etc/secrets/envcheck.txt && node index.js"]
+CMD ["sh","-c","env > /home/node/envcheck.txt && node index.js"]
