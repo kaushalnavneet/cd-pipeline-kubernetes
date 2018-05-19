@@ -59,6 +59,7 @@ spec:
       - name: vault-secrets
         secret:
           defaultMode: 420
+          optional: true
           secretName: {{ template "common.fullname" . }}
       - name: varlog
         emptyDir: {}
