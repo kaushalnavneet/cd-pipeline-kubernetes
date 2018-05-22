@@ -427,10 +427,10 @@ us-south:
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: ""
-        test_service_client_ribbon_listOfServers: test-report-service
-        test_service_client_ribbon_IsSecure: false
-        source_change_service_client_ribbon_listOfServers: source-change-service
-        source_change_service_client_ribbon_IsSecure: false
+        test_service_client_ribbon_listOfServers: test-report-service.us-south.devops.cloud.ibm.com:443
+        test_service_client_ribbon_IsSecure: true
+        source_change_service_client_ribbon_listOfServers: source-change-service.us-south.devops.cloud.ibm.com:443
+        source_change_service_client_ribbon_IsSecure: true
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
         log_service_client_ribbon_IsSecure: false
