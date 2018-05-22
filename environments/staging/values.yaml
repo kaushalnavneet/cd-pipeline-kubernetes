@@ -281,6 +281,7 @@ staging:
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-int
         log4js_syslog_appender_enabled: true
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
+        ENV_ID: ibm:ys1:us-south
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
