@@ -23,7 +23,7 @@ COPY build_info.json /work/warbuild/src/main/resources/
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
-FROM websphere-liberty:microProfile
+FROM registry.ng.bluemix.net/opentoolchain/websphere-liberty:secure
 
 ARG APP_BUILD_NUMBER=latest
 ARG MODE=DEVELOPMENT
