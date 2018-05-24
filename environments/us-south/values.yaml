@@ -367,6 +367,7 @@ us-south:
         log4js_logmet_component: test-report-service-k8s
         log4js_syslog_appender_product: test-report-service-k8s-yp
   pipeline-service:
+    replicas: 2
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/pipeline-service
