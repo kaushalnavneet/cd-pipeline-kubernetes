@@ -2,14 +2,18 @@
 {{- define "pipeline.ingress" -}}
 spec:
   rules:
-  - host: {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
+{{- range .Values.basedomains }}
+  - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
     http:
       paths:
       - backend:
-          serviceName: {{ template "common.fullname" $ }} 
+          serviceName: continuous-delivery-broker
           servicePort: 80
+{{- end }}
   tls:
-  - hosts:
-    - {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
-    secretName: {{ template "common.fullname" $ }}-tls
+{{- range .Values.basedomains }}
+  - secretName: {{ .tlsSecret }}
+    hosts:
+    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+{{- end }}
 {{- end -}}

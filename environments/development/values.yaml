@@ -1,6 +1,12 @@
 development:
   common:
-    basedomain: dev.us-south.devops.cloud.ibm.com
+    basedomains: 
+    - domain: dev.us-south.devops.cloud.ibm.com
+      tlsSecret: star.dev.us-south.devops.cloud.ibm.com
+      hostNameSuffix: ""
+    - domain: stage1.ng.bluemix.net
+      tlsSecret: star.stage1.ng.bluemix.net
+      hostNameSuffix: ""
     resources:
       limits:
         cpu: 100m

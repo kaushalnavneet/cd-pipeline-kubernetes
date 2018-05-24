@@ -1,6 +1,12 @@
 us-south:
   common:
-    basedomain: us-south.devops.cloud.ibm.com
+    basedomains:
+    - domain: us-south.devops.cloud.ibm.com
+      tlsSecret: star.us-south.devops.cloud.ibm.com
+      hostNameSuffix: ""
+    - domain: ng.bluemix.net
+      tlsSecret: star.ng.bluemix.net
+      hostNameSuffix: ""
     resources:
       limits:
         cpu: 100m
