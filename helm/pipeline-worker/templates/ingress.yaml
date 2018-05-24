@@ -7,7 +7,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: continuous-delivery-broker
+          serviceName: {{ template "common.fullname" $ }}
           servicePort: 80
 {{- end }}
   tls:
