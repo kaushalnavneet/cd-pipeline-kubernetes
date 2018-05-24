@@ -10,7 +10,7 @@ bx login -a ${IBM_CLOUD_API} --apikey ${DOCKER_PASSWORD}
 export PIPELINE_IMAGE_URL="${IMAGE_NAME}:${APPLICATION_VERSION}"
 echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
 
-for iteration in {1..10}
+for iteration in {1..30}
 do
   BX_CR_VA=$(bx cr va $PIPELINE_IMAGE_URL) 
   if [[ "${BX_CR_VA}" =~ SAFE ]] || [[ "${BX_CR_VA}" =~ CAUTION ]] || [[ "${BX_CR_VA}" =~ BLOCKED ]]; then
