@@ -50,7 +50,7 @@ development:
       data:
         AMQPS_PORT: "42615"
         AMQP_CERT_PASSPHRASE: ''
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -97,7 +97,7 @@ development:
     configmap:
       data:
         AMQPS_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -239,7 +239,7 @@ development:
       data:
         AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_MSG_EXP_TIME: "3000"
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -308,7 +308,7 @@ development:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP__PATH: bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP__PEMCA: ''
         AMQP__PORT: "42615"
@@ -613,7 +613,7 @@ development:
     configmap:
       data:
         AMQP_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_SSL: true
         AMQP_USER: admin
