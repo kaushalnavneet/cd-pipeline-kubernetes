@@ -48,19 +48,19 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
-        AMQPS_PORT: "18815"
+        AMQPS_PORT: "42615"
         AMQP_CERT_PASSPHRASE: ''
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_PEM_CA: ''
         AMQP_PORT: ''
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ''
@@ -96,18 +96,18 @@ development:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
     configmap:
       data:
-        AMQPS_PORT: "18815"
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQPS_PORT: "42615"
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_PEM_CA: ''
         AMQP_PORT: ''
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         ARCHIVE_EXCHANGE_NAME: reporting
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
@@ -239,17 +239,17 @@ development:
       data:
         AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_MSG_EXP_TIME: "3000"
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23
+        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_PFX: ''
-        AMQP_PORT: "18815"
+        AMQP_PORT: "42615"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         ARS_URL: https://pipeline-artifact-repository-service.dev.us-south.devops.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
@@ -308,15 +308,15 @@ development:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP__PATH: otc-pipeline-ys1-dev-2017-01-23
+        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP__PATH: bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP__PEMCA: ''
-        AMQP__PORT: "18815"
+        AMQP__PORT: "42615"
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
         AMQP__REJECTUNAUTHCERTS: true
         AMQP__SSLMETHOD: TLSv1_2_method
-        AMQP__USER: jazzhub
+        AMQP__USER: admin
         CLOUDANT_URL: https://bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_HOST: bmdevops-ys1-us-south.cloudant.com
         CLOUDANT_PORT: "443"
@@ -470,8 +470,8 @@ development:
         jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
         com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
-        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com:18815/otc-pipeline-ys1-dev-2017-01-23
-        com_ibm_team_integration_pipeline_messaging_amqp_user: jazzhub
+        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1 
+        com_ibm_team_integration_pipeline_messaging_amqp_user: admin
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
@@ -580,8 +580,8 @@ development:
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal2129-22.pipeline-dev.ibm-16.composedb.com:17383/pipeline-dev
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: core
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: admin
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
         codestationReadTimeout: 5000
@@ -612,11 +612,11 @@ development:
       enabled: false
     configmap:
       data:
-        AMQP_HOST: portal1532-1.otc-pipeline-ys1-dev-2017-01-23.ibm-16.composedb.com
-        AMQP_PORT: "18815"
-        AMQP_PATH: /otc-pipeline-ys1-dev-2017-01-23 
+        AMQP_PORT: "42615"
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_SSL: true
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
         QUEUE_NAME: builds.linux
         DOCKER_SSH_USER: pipeline
