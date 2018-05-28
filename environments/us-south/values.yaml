@@ -283,6 +283,7 @@ us-south:
         log4js_syslog_appender_product: pipeline-ui-k8s-yp
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:yp:us-south
+        ENABLE_MCCP_REGION_FEATURE: false
   pipeline-artifact-repository-service:
     vault:
       secretPaths:

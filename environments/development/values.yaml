@@ -294,6 +294,7 @@ development:
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
+        ENABLE_MCCP_REGION_FEATURE: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
