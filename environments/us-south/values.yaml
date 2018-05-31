@@ -208,6 +208,7 @@ us-south:
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
+        EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-yp
   pipeline-consumption:
