@@ -343,6 +343,7 @@ development:
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
+        PAYLOAD_ENCRYPT: false
   pipeline-inventory:
     replicas: 1
     revisionHistoryLimit: 3
