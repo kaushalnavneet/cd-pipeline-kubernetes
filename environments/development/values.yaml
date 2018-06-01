@@ -88,7 +88,7 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
   pipeline-log-archiver:
     replicas: 1
     revisionHistoryLimit: 3
@@ -135,7 +135,7 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -292,7 +292,7 @@ development:
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
         ENABLE_MCCP_REGION_FEATURE: true
   pipeline-artifact-repository-service:
     replicas: 1
@@ -343,7 +343,7 @@ development:
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
   pipeline-inventory:
     replicas: 1
     revisionHistoryLimit: 3
@@ -441,7 +441,7 @@ development:
         com_ibm_team_integration_pipeline_db_cloudant_url: https://bmdevops-ys1-us-south.cloudant.com
         com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
-        com_ibm_team_integration_pipeline_encrypt_payload_enabled: false
+        com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
         mqttUrl: ssl://169.55.35.183:8883
         mqttUser: guest
         com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
@@ -619,4 +619,4 @@ development:
         POOL_SIZE: "18"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
