@@ -211,6 +211,7 @@ staging:
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
+        EXT_PIPELINE_API_URL: https://pipeline-service.stage.us-south.devops.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-int
   pipeline-consumption:
@@ -222,6 +223,7 @@ staging:
         NODE_ENV: integration
         SECGRP: GRP1PRDS
         apiTest__monitorInterval: "60000"
+        auth__ibmId: pipeauto@us.ibm.com
         log4js_logmet_component: pipeline-consumption-k8s-ys1-int
         slack__webhookUrl: https://hooks.slack.com/services/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
   pipeline-ui:
@@ -289,6 +291,7 @@ staging:
         log4js_syslog_appender_enabled: true
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
+        ENABLE_MCCP_REGION_FEATURE: true
   pipeline-artifact-repository-service:
     vault:
       secretPaths:

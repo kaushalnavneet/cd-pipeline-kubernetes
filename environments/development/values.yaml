@@ -88,9 +88,7 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: true
-        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
-        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
+        PAYLOAD_ENCRYPT: false
   pipeline-log-archiver:
     replicas: 1
     revisionHistoryLimit: 3
@@ -137,9 +135,7 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: true
-        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
-        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
+        PAYLOAD_ENCRYPT: false
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -219,6 +215,7 @@ development:
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
+        EXT_PIPELINE_API_URL: https://pipeline-service.dev.us-south.devops.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   pipeline-consumption:
@@ -233,6 +230,7 @@ development:
     configmap:
       data:
         NODE_ENV: development
+        auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
   pipeline-ui:
@@ -294,9 +292,8 @@ development:
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
-        PAYLOAD_ENCRYPT: true
-        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
-        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
+        PAYLOAD_ENCRYPT: false
+        ENABLE_MCCP_REGION_FEATURE: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
