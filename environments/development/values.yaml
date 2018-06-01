@@ -606,7 +606,7 @@ development:
     configmap:
       data:
         AMQP_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_SSL: true
         AMQP_USER: admin
