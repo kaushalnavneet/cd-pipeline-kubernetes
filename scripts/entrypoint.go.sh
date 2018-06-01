@@ -11,7 +11,7 @@
 if [ -d /etc/secrets ]; then
     for file in /etc/secrets/*.secret; do
         [ -e "$file" ] || continue
-        eval "$(jq -r  '. | to_entries | .[] | "export " + .key + "=" + ( .value|if (type|. != "string") then tostring else "\""+.+"\"" end)' < $file)"
+        eval "$(jq -r  '. | to_entries | .[] | "export " + .key + "=" + ( .value|if (type|. != "string") then tostring else .|tojson end)' < $file)"
     done
 fi
 
