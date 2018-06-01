@@ -88,6 +88,9 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
+        PAYLOAD_ENCRYPT: true
+        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
+        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
   pipeline-log-archiver:
     replicas: 1
     revisionHistoryLimit: 3
@@ -134,6 +137,9 @@ development:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
+        PAYLOAD_ENCRYPT: true
+        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
+        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -275,17 +281,11 @@ development:
         MAP_ENABLED: true
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
         PIPELINE_URL: http://pipeline-service/pipeline
-        REDIS_URL: redis://127.0.0.1:6379
+        REDIS_URL: rediss://portal650-26.bmix-dal-yp-990eba2e-e522-4949-b8c6-3620beef579d.2438855152.composedb.com:42781 
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
         TIAM_URL: http://otc-tiam/identity/v1
-        TUNNEL_DEST_HOST: "10.99.58.69"
-        TUNNEL_DEST_PORT: "5000"
-        TUNNEL_LOCAL_PORT: "6379"
-        TUNNEL_SSH_HOST: sl-us-dal-9-portal.1.dblayer.com
-        TUNNEL_SSH_PORT: "15779"
-        TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
@@ -294,6 +294,9 @@ development:
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
+        PAYLOAD_ENCRYPT: true
+        PAYLOAD_CIPHER_KEY: cfb21350e782ce44b8379882636af9e9
+        PAYLOAD_HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -440,6 +443,7 @@ development:
         com_ibm_team_integration_pipeline_db_cloudant_url: https://bmdevops-ys1-us-south.cloudant.com
         com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
+        com_ibm_team_integration_pipeline_encrypt_payload_enabled: false
         mqttUrl: ssl://169.55.35.183:8883
         mqttUser: guest
         com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
@@ -541,23 +545,15 @@ development:
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: ed841776-9394-4b51-a86c-72ddc5529e05
         com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
-        com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.2.dblayer.com
-        com_ibm_team_integration_pipeline_redis_port: 10653
+        com_ibm_team_integration_pipeline_redis_host: portal650-26.bmix-dal-yp-990eba2e-e522-4949-b8c6-3620beef579d.2438855152.composedb.com
+        com_ibm_team_integration_pipeline_redis_port: 42781
+        com_ibm_team_integration_pipeline_redis_ssl: true
         com_ibm_team_integration_pipeline_messaging_amqp_key_type: JKS
         com_ibm_team_integration_pipeline_messaging_amqp_keystore: /resources/security/mqtt_keystore.keystore
         com_ibm_team_integration_pipeline_messaging_amqp_truststore: ''
         com_ibm_team_integration_pipeline_messaging_amqp_exchange: pipeline
         com_ibm_team_integration_pipeline_messaging_amqp_routePrefix: pipelines.
-        com_ibm_team_integration_pipeline_sshtunnel_disabled: false
-        com_ibm_team_integration_pipeline_sshtunnel_localhost: localhost
-        com_ibm_team_integration_pipeline_sshtunnel_localport: 6379
-        com_ibm_team_integration_pipeline_sshtunnel_remotehost: 10.99.56.197
-        com_ibm_team_integration_pipeline_sshtunnel_remoteport: 5000
-        com_ibm_team_integration_pipeline_sshtunnel_user: compose
-        com_ibm_team_integration_pipeline_sshtunnel_keepaliveinterval: 2000
-        com_ibm_team_integration_pipeline_sshtunnel_alivetimeout: 1000
-        com_ibm_team_integration_pipeline_sshtunnel_sessiontimeout: 5000
-        com_ibm_team_integration_pipeline_sshtunnel_pubkey: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFDM3RtcVBkenFPL0lxZTBRT2tZeVdWV2lFSGlaVzBaZWFJUnhidkhGTXdIb0xTMXJMME5EdEpnbk5HeTViYXlHbmRhb3pXbGZJUkNmMTRXQWF4SVh2V2dGclFtSytRVVVKSG96RW5YeVgrVEdXK3lkaFp1SC9yMEEvdTE0Wnc2aVNkYm9ySk9XZHd2U2xURitpaUpkdGtad1VuM3J1Uys3TDJxY0RycHRBMVFDMkhaaWtWNHJXL2VORmhpa21MSEpNQStzaEJOT2RSYWJkQ3NNenBTR1VlNEVtRDlTY3NuVXZQamVBSEhQSm5HRWlvQjM5N01SN0I0Uk9qaGNyR1FnZ1V3Sm1GU0hjUVExUFFlNkJkNnpjdE1kSkdFalVLK2RhTTFTbjUvcDdmVG00b3FoU3VKSi96TStNZGZ3WVBWblNZR2JkWk9JcDRMU05EdFMyUFk3dnQgcGlwZWxpbmVAaWJtDQo\=
+        com_ibm_team_integration_pipeline_sshtunnel_disabled: true
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console, LOGMET
