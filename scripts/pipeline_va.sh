@@ -13,7 +13,7 @@ echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
 for iteration in {1..30}
 do
   BX_CR_VA=$(bx cr va $PIPELINE_IMAGE_URL) 
-  if [[ "${BX_CR_VA}" =~ SAFE ]] || [[ "${BX_CR_VA}" =~ CAUTION ]] || [[ "${BX_CR_VA}" =~ BLOCKED ]] || [[ "${BX_CR_VA}" =~ "NO ISSUES" ]]; then
+  if [[ "${BX_CR_VA}" =~ SAFE ]] || [[ "${BX_CR_VA}" =~ CAUTION ]] || [[ "${BX_CR_VA}" =~ BLOCKED ]] || [[ "${BX_CR_VA}" =~ NO[[:space:]]ISSUES ]]; then
     break
   fi
 
@@ -22,7 +22,7 @@ do
 done
 
 echo "${BX_CR_VA}"
-if [[ "${BX_CR_VA}" =~ SAFE ]] || [[ "${BX_CR_VA}" =~ "NO ISSUES" ]]; then
+if [[ ! "${BX_CR_VA}" =~ SAFE ]] && [[ ! "${BX_CR_VA}" =~ NO[[:space:]]ISSUES ]]; then
   echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."
   exit 1
 fi
