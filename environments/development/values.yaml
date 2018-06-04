@@ -442,6 +442,7 @@ development:
         com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
         com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
+        com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
         mqttUrl: ssl://169.55.35.183:8883
         mqttUser: guest
         com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
