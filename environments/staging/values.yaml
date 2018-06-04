@@ -67,10 +67,9 @@ staging:
         CIPHER_ALGORITHM: aes-128-cbc
         CONTEXT_PATH: /api
         DB_CA_FILE: ""
-        DB_CA_PEM: ""
-        DB_HOST: sl-us-dal-9-portal.2.dblayer.com
+        DB_HOST: sl-us-south-1-portal.24.dblayer.com
         DB_NAME: compose
-        DB_PORT: "10788"
+        DB_PORT: "42789"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
