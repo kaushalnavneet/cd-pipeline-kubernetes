@@ -238,7 +238,7 @@ staging:
         AMQP_HOST: portal-ssl654-26.bmix-dal-yp-6a2f634b-b30a-4b74-bfba-c7b250dec20b.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ""
         AMQP_MSG_EXP_TIME: "3000"
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PATH: /bmix-dal-yp-6a2f634b-b30a-4b74-bfba-c7b250dec20b
         AMQP_PFX: ""
         AMQP_PORT: "42793"
         AMQP_PROTOCOL: amqps
