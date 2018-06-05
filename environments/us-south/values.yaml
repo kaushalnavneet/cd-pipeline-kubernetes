@@ -46,18 +46,18 @@ us-south:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/pipeline-log-service
     configmap:
       data:
-        AMQPS_PORT: "10830"
-        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
+        AMQPS_PORT: "42794"
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_KEYSTORE: ""
         AMQP_KEYSTORE_ENCODING: "" 
-        AMQP_PATH: /otc-pipeline-yp
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP_PEM_CA: ""
         AMQP_PORT: ""
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: logservice
+        AMQP_USER: admin
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ""
@@ -66,9 +66,9 @@ us-south:
         CONTEXT_PATH: /api
         DB_CA_FILE: ""
         DB_CA_PEM: ""
-        DB_HOST: sl-us-dal-9-portal.1.dblayer.com
+        DB_HOST: sl-us-south-1-portal.25.dblayer.com
         DB_NAME: compose
-        DB_PORT: "15107"
+        DB_PORT: "42791"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
@@ -90,24 +90,25 @@ us-south:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-yp
+        PAYLOAD_ENCRYPT: false
   pipeline-log-archiver:
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/pipeline-log-archiver
     configmap:
       data:
-        AMQPS_PORT: "10830"
-        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
+        AMQPS_PORT: "42794"
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_KEYSTORE: ""
         AMQP_KEYSTORE_ENCODING: ""
-        AMQP_PATH: /otc-pipeline-yp
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP_PEM_CA: ""
         AMQP_PORT: ""
         AMQP_PREFETCH: ""
         AMQP_PROTOCOL: amqps
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: logarchiver
+        AMQP_USER: admin
         ARCHIVE_EXCHANGE_NAME: reporting
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
@@ -117,9 +118,9 @@ us-south:
         CONTEXT_PATH: /api
         DB_CA_FILE: ""
         DB_CA_PEM: ""
-        DB_HOST: sl-us-dal-9-portal.1.dblayer.com
+        DB_HOST: sl-us-south-1-portal.25.dblayer.com
         DB_NAME: compose
-        DB_PORT: "15107"
+        DB_PORT: "42791"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
@@ -136,6 +137,7 @@ us-south:
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-yp
+        PAYLOAD_ENCRYPT: false
   source-change-service:
     vault:
       secretPaths:
@@ -231,17 +233,17 @@ us-south:
       data:
         AMQP_CA: ""
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ""
         AMQP_MSG_EXP_TIME: "3000"
-        AMQP_PATH: /otc-pipeline-yp
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP_PFX: ""
-        AMQP_PORT: "10830"
+        AMQP_PORT: "42794"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
         AMQP_REJECT_UNAUTH_CERTS: ""
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: ui
+        AMQP_USER: admin
         ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.ng.bluemix.net
         BLUEMIX_URL: https://console.ng.bluemix.net
@@ -267,17 +269,11 @@ us-south:
         MAP_ENABLED: false # TODO do we need to enable MAP
         NEW_RELIC_APP_NAME: Pipeline UI - YP
         PIPELINE_URL: http://pipeline-service/pipeline
-        REDIS_URL: redis://127.0.0.1:6379
+        REDIS_URL: rediss://portal610-25.bmix-dal-yp-079b8eda-dd61-4ff1-aba1-d3152db04838.2438855152.composedb.com:42785 
         SESSION_CACHE_NAME: Redis_main-cache
         SESSION_TTL: "86400"
         TIAM_COOKIE: tiam.session.us-south
         TIAM_URL: http://otc-tiam/identity/v1
-        TUNNEL_DEST_HOST: "10.99.58.197"
-        TUNNEL_DEST_PORT: "5000"
-        TUNNEL_LOCAL_PORT: "6379"
-        TUNNEL_SSH_HOST: sl-us-dal-9-portal.3.dblayer.com
-        TUNNEL_SSH_PORT: "15782"
-        TUNNEL_USERID: compose
         UAA_CLIENT_ID: otcclient
         USE_HTTP: true
         log4js_logmet_component: pipeline-ui-k8s
@@ -285,6 +281,7 @@ us-south:
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:yp:us-south
         ENABLE_MCCP_REGION_FEATURE: false
+        PAYLOAD_ENCRYPT: false
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
@@ -292,15 +289,15 @@ us-south:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
-        AMQP__PATH: otc-pipeline-yp
+        AMQP__HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com 
+        AMQP__PATH: bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP__PEMCA: ""
-        AMQP__PORT: "10830"
+        AMQP__PORT: "42794"
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
         AMQP__REJECTUNAUTHCERTS: 
         AMQP__SSLMETHOD: TLSv1_2_method
-        AMQP__USER: jazzhub
+        AMQP__USER: admin
         CLOUDANT_URL: https://bmdevops-yp-us-south.cloudant.com
         CLOUDANT_HOST: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_PORT: "443"
@@ -328,6 +325,7 @@ us-south:
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-yp
         RUN_ARS_K8S: true
+        PAYLOAD_ENCRYPT: false
   pipeline-inventory:
     vault:
       secretPaths:
@@ -402,6 +400,8 @@ us-south:
         com_ibm_team_integration_pipeline_db_cloudant_url: https://bmdevops-yp-us-south.cloudant.com
         com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
+        com_ibm_team_integration_pipeline_encrypt_payload_enabled: false
+        com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
         mqttUrl: ssl://169.55.14.79:8883
         mqttUser: guest
         com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
@@ -432,8 +432,8 @@ us-south:
         jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
         com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
-        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal830-1.otc-pipeline-yp.ibm-16.composedb.com:10830/otc-pipeline-yp
-        com_ibm_team_integration_pipeline_messaging_amqp_user: jazzhub
+        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com:42794/bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b,amqps://portal-ssl655-26.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com:42794/bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b 
+        com_ibm_team_integration_pipeline_messaging_amqp_user: admin
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: ""
@@ -503,23 +503,15 @@ us-south:
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3f02963c-7330-4cef-b34c-1356ff3924c2
         com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
-        com_ibm_team_integration_pipeline_redis_host: sl-us-dal-9-portal.1.dblayer.com
-        com_ibm_team_integration_pipeline_redis_port: "15159"
+        com_ibm_team_integration_pipeline_redis_host: portal610-25.bmix-dal-yp-079b8eda-dd61-4ff1-aba1-d3152db04838.2438855152.composedb.com
+        com_ibm_team_integration_pipeline_redis_port: "42785"
+        com_ibm_team_integration_pipeline_redis_ssl: true
         com_ibm_team_integration_pipeline_messaging_amqp_key_type: JKS
         com_ibm_team_integration_pipeline_messaging_amqp_keystore: /resources/security/mqtt_keystore.keystore
         com_ibm_team_integration_pipeline_messaging_amqp_truststore: ""
         com_ibm_team_integration_pipeline_messaging_amqp_exchange: pipeline
         com_ibm_team_integration_pipeline_messaging_amqp_routePrefix: pipelines.
-        com_ibm_team_integration_pipeline_sshtunnel_disabled: false
-        com_ibm_team_integration_pipeline_sshtunnel_localhost: localhost
-        com_ibm_team_integration_pipeline_sshtunnel_localport: "6379"
-        com_ibm_team_integration_pipeline_sshtunnel_remotehost: "10.99.57.229"
-        com_ibm_team_integration_pipeline_sshtunnel_remoteport: "5000"
-        com_ibm_team_integration_pipeline_sshtunnel_user: compose
-        com_ibm_team_integration_pipeline_sshtunnel_keepaliveinterval: "2000"
-        com_ibm_team_integration_pipeline_sshtunnel_alivetimeout: "1000"
-        com_ibm_team_integration_pipeline_sshtunnel_sessiontimeout: "5000"
-        com_ibm_team_integration_pipeline_sshtunnel_pubkey: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEY1p3SWRUd3JpMzJFNlVWeERENWFWQUtQUjdsUnQwWWFGN3dIUFJDUG1jT3AwQTh6bzI0Uit5NDZneGdvRDVvSzBQeVdlT0pJZC9NL3kyUlkrWFlwZUtWaTNyVUxzc052SGw1YmZwaUtKclQyQW5mblpzeXBCVVcrcjVtRERKa2lUTXBva1NvazJjQ2NwMStZZ20rekR5bnFNZWF4cFZNQlJra21nYUpJRG5hT3BZWGFjTmo1RWtDczlGNlYyRlltYjVSV3VWc2poKzlTVTZFQXNJc1JhNHd0dVB5dFFETTNBQ29XM29qdEE1N04zUm9QNXAzMWtpeVpGWFJyUXk2ZVdBZWxrRDU3RWJYQWduZEVabVoxSEJ5bUxBNldFN2dFSE14ZVZSQ29mL0FKaVh4dzFXMjFJQUg5UFFoSFYxL0ozbTVNYTZ5WThyMDRSME9QK0VUNzMgcGlwZWxpbmUteXAK
+        com_ibm_team_integration_pipeline_sshtunnel_disabled: true
         com_ibm_team_integration_pipeline_stage_creationLimit: "30"
         com_ibm_team_integration_pipeline_stage_job_creationLimit: "10"
         log4jRootlogger: INFO, console, LOGMET
@@ -571,11 +563,11 @@ us-south:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker
     configmap:
       data:
-        AMQP_HOST: sl-us-dal-9-portal.1.dblayer.com
-        AMQP_PORT: "10830"
-        AMQP_PATH: /otc-pipeline-yp
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
+        AMQP_PORT: "42794"
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75
         AMQP_SSL: true
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
         AMQP_TLS_CACERT: /home/travis/keys/cacert_rabbitmq.pem
         QUEUE_NAME: builds.linux
@@ -585,3 +577,4 @@ us-south:
         POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
+        PAYLOAD_ENCRYPT: false

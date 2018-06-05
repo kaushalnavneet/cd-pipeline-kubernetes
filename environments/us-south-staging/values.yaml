@@ -36,11 +36,11 @@ us-south:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging
     configmap:
       data:
-        AMQP_HOST: portal830-1.otc-pipeline-yp.ibm-16.composedb.com
-        AMQP_PORT: "10830"
-        AMQP_PATH: /otc-pipeline-yp
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
+        AMQP_PORT: "42794"
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75
         AMQP_SSL: true
-        AMQP_USER: travis
+        AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
         QUEUE_NAME: builds.linux_ys1
         DOCKER_SSH_USER: pipeline
