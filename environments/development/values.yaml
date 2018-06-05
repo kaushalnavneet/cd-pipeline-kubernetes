@@ -145,8 +145,8 @@ development:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
         CLOUDANT_DB: pipeline-source-changes
-        CLOUDANT_URL: bmdevops-ys1-us-south.cloudant.com
-        CLOUDANT_USER: mencessiongisteridecoute
+        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
+        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
         HMAC_ALGORITHM: sha1
         HTTPS_PORT: ''
         HTTP_PORT: ''
@@ -259,8 +259,8 @@ development:
         BSS_CHECKED: true
         BSS_ENFORCED: true
         CF_DOMAIN: stage1.ng.bluemix.net
-        CLOUDANT_URL: bmdevops-yp-us-south.cloudant.com
-        CLOUDANT_USER: bmdevops-yp-us-south
+        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
+        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
         CONSUMPTION_MONITOR_HOST: http://pipeline-consumption
         CS_VERSION: "2"
