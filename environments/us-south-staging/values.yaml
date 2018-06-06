@@ -49,3 +49,4 @@ us-south:
         POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
+        PAYLOAD_ENCRYPT: false
