@@ -565,7 +565,7 @@ us-south:
       data:
         AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_PORT: "42794"
-        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP_SSL: true
         AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
