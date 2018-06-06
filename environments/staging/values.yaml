@@ -531,8 +531,8 @@ staging:
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ""
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net,rpc.api.stage1.eu-gb.bluemix.net
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal830-1.otc-pipeline-yp.ibm-16.composedb.com:10830/otc-pipeline-yp
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: amqp_rpc
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com:42794/bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b,amqps://portal-ssl655-26.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com:42794/bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: admin 
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
         codestationReadTimeout: "5000"

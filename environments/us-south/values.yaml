@@ -569,7 +569,6 @@ us-south:
         AMQP_SSL: true
         AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
-        AMQP_TLS_CACERT: /home/travis/keys/cacert_rabbitmq.pem
         QUEUE_NAME: builds.linux
         DOCKER_SSH_USER: pipeline
         DOCKER_RETRY_INTERVAL: "5"
