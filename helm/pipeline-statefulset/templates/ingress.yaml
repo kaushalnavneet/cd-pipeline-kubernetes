@@ -1,0 +1,19 @@
+{{- template "pipeline.common.ingress" (list . "pipeline.ingress") -}}
+{{- define "pipeline.ingress" -}}
+spec:
+  rules:
+{{- range .Values.basedomains }}
+  - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "common.fullname" $ }}
+          servicePort: 80
+{{- end }}
+  tls:
+{{- range .Values.basedomains }}
+  - secretName: {{ .tlsSecret }}
+    hosts:
+    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+{{- end }}
+{{- end -}}

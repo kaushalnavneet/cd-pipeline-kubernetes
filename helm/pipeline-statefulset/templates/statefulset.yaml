@@ -1,15 +1,14 @@
-{{- template "common.deployment" (list . "pipeline.deployment") -}}
+{{- template "pipeline.common.statefulset" (list . "pipeline.statefulset") -}}
 {{- define "secret_paths" }}
-{{- range .Values.vaultpublic.secretPaths }}
+{{- range .Values.vaultcommon.secretPaths }}
 {{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
-{{- $fullname := include "common.fullname" . -}}
-{{- range  index .Values $fullname "vault" "secretPaths" }}
+{{- range .Values.vault.secretPaths }}
 {{ print "- -cn=secret:" . ":fmt=json"}}
 {{- end -}}
 {{- end -}}
-{{- define "pipeline.deployment" -}}
-## Define overrides for your Deployment resource here, e.g.
+{{- define "pipeline.statefulset" -}}
+## Define overrides for your statefulset resource here, e.g.
 spec:
   replicas: {{ .Values.replicas }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
@@ -17,6 +16,8 @@ spec:
     spec:
       imagePullSecrets:
       - name: otc-registry-secret
+      serviceAccountName: {{ template "common.fullname" . }}
+      serviceAccount: {{ template "common.fullname" . }}
       volumes:
       - name: vault-sidekick
         secret:
@@ -25,11 +26,14 @@ spec:
           items:
           - key: vault.pem
             path: vault.pem
-      - name: secrets
-        emptyDir: {}
+      - name: vault-secrets  
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: {{ template "common.fullname" . }}
       initContainers:
       - name: vault-sidekick
-        image: quay.io/ukhomeofficedigital/vault-sidekick:latest
+        image: registry.ng.bluemix.net/opentoolchain/vault-sidekick:latest
         args:
         - -logtostderr=true
         - -ca-cert=/var/run/certs/vault.pem
@@ -57,21 +61,21 @@ spec:
               key: VAULT_SIDEKICK_SECRET_ID
               name: vault-sidekick
         - name: VAULT_OUTPUT
-          value: /etc/secrets
+          value: /home/vault/secrets
+        - name: VAULT_COMPONENT
+          value: {{ template "common.fullname" . }} 
         volumeMounts:
-        - name: secrets
-          mountPath: /etc/secrets
         - name: vault-sidekick
           mountPath: /var/run/certs
           readOnly: true
       containers:
-      - {{ template "common.container" (list . "pipeline.deployment.container") }}
+      - {{ template "common.container" (list . "pipeline.statefulset.container") }}
         volumeMounts:
-        - name: secrets
+        - name: vault-secrets
           mountPath: /etc/secrets
-          readOnly: false
+          readOnly: false 
 {{- end -}}
-{{- define "pipeline.deployment.container" -}}
+{{- define "pipeline.statefulset.container" -}}
 # Define overrides for your Container here, e.g.
 {{- if .Values.probes.enabled }}
 livenessProbe:

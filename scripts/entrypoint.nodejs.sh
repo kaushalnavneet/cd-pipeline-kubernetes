@@ -32,6 +32,9 @@ EOF
 printf -v VCAP_SERVICES "{$vcap_services_template}" "user-provided" "$vcap_pipeline_secret" "\"name\": \"otc-tiam-clients\""
 
 export VCAP_SERVICES
+
+export HOST_INSTANCE=${HOSTNAME##*-} 
+
 CF_INSTANCE_INDEX=$(hostname | grep -o "[[:digit:]]*$")
 
 #Avoid queue conflicts with CF instances
