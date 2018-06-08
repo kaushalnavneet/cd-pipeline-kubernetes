@@ -229,6 +229,7 @@ development:
     configmap:
       data:
         NODE_ENV: development
+        OTC_API_URL: http://otc-api/v1
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
