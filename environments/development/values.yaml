@@ -229,7 +229,7 @@ development:
     configmap:
       data:
         NODE_ENV: development
-        OTC_API_URL: http://otc-api/v1
+        OTC_API_URL: http://otc-api/api/v1
         PIPELINE_API_URL: http://pipeline-service/pipeline
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
