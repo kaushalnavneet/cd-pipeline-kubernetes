@@ -222,6 +222,8 @@ staging:
     configmap:
       data:
         NODE_ENV: integration
+        OTC_API_URL: http://otc-api/api/v1
+        PIPELINE_API_URL: http://pipeline-service/pipeline
         SECGRP: GRP1PRDS
         apiTest__monitorInterval: "60000"
         auth__ibmId: pipeauto@us.ibm.com
