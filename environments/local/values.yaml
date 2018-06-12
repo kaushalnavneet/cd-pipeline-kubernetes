@@ -110,41 +110,53 @@ local:
       secretPaths:
     configmap:
       data:
-        AMQPS_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        ADMIN_ID: "00000000-0000-0000-0000-000000000000"
+        AMQPS_PORT: ""
+        AMQP_HOST: nuanced-eagle-rabbitmq.default.svc.cluster.local
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PASSWORD: "nciKYrLyXy"
+        AMQP_PATH: /
         AMQP_PEM_CA: ''
-        AMQP_PORT: ''
+        AMQP_PORT: '5672'
         AMQP_PREFETCH: "1"
-        AMQP_PROTOCOL: amqps
+        AMQP_PROTOCOL: amqp
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: admin
+        AMQP_USER: user
         ARCHIVE_EXCHANGE_NAME: reporting
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
         CERT_FILE: keys/server.crt
         CIPHER_ALGORITHM: aes-128-cbc
+        CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         DB_CA_FILE: ''
         DB_CA_PEM: ''
-        DB_HOST: sl-us-dal-9-portal.1.dblayer.com
+        DB_HOST: lanky-lamb-postgresql.default.svc.cluster.local
         DB_NAME: compose
-        DB_PORT: "10570"
-        DB_SSL_PROTOCOL: TLSv1.2
+        DB_PASSWORD: bbiSSd1C3R
+        DB_PORT: "5432"
         DB_TYPE: postgresql
-        DB_USER: admin
+        DB_USER: postgres
         HMAC_ALGORITHM: sha1
+        HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
         KEY_FILE: keys/server.key
         NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
         OBJECT_STORAGE_INTERFACE: public
         OBJECT_STORAGE_REGION: dallas
         OBJECT_STORAGE_URL: https://identity.open.softlayer.com
+        OBJECT_STORAGE_PASSWORD: "x38.1h/Ge2Mij9&5"
+        OBJECT_STORAGE_PROJECT: "object_storage_6057de4d_a7c7_4b4a_93be_940ca5764c53"
+        OBJECT_STORAGE_PROJECT_ID: "1d644021a18b420882d129127edd575c"
+        OBJECT_STORAGE_USERNAME: "247af93fbd3a4004acf76213301b363f"
+        PAYLOAD_CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
+        PAYLOAD_HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
+        S3_STORAGE_ACCESS_KEY: "oyvOqdMnDRPrUn5Awcvd"
+        S3_STORAGE_SECRET_KEY: "X4hERNriaxcbmG4jRzqqn16biiLunsmIOmsMaVIV"
         USE_HTTP: true
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
