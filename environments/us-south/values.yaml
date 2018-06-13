@@ -284,6 +284,7 @@ us-south:
         PAYLOAD_ENCRYPT: false
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
+        REDIS_ENCRYPT: true
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
@@ -404,6 +405,7 @@ us-south:
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
         com_ibm_team_integration_pipeline_encrypt_payload_enabled: false
         com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
+        com_ibm_team_integration_pipeline_encrypt_redis_payload_enabled: true
         mqttUrl: ssl://169.55.14.79:8883
         mqttUser: guest
         com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
