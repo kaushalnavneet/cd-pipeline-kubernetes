@@ -50,18 +50,18 @@ local:
         ADMIN_ID: "00000000-0000-0000-0000-000000000000"
         AMQPS_PORT: ""
         AMQP_CERT_PASSPHRASE: ''
-        AMQP_HOST: nuanced-eagle-rabbitmq.default.svc.cluster.local
+        AMQP_HOST: @KAMQP_HOST@
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PASSWORD: "nciKYrLyXy"
+        AMQP_PASSWORD: "@KAMQP_PASSWORD@"
         AMQP_PATH: /
         AMQP_PEM_CA: ''
-        AMQP_PORT: '5672'
+        AMQP_PORT: '@KAMQP_PORT@'
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqp
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: user
+        AMQP_USER: @KAMQP_USERID@
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ''
@@ -70,12 +70,12 @@ local:
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         DB_CA_FILE: ''
         DB_CA_PEM: ""
-        DB_HOST: lanky-lamb-postgresql.default.svc.cluster.local
+        DB_HOST: @KPG_HOST@
         DB_NAME: compose
-        DB_PASSWORD: bbiSSd1C3R
-        DB_PORT: "5432"
+        DB_PASSWORD: @KPG_PASSWORD@
+        DB_PORT: "@KPG_PORT@"
         DB_TYPE: postgresql
-        DB_USER: postgres
+        DB_USER: @KPG_USERID@
         HMAC_ALGORITHM: sha1
         HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
         KEY_FILE: keys/server.key
@@ -112,18 +112,18 @@ local:
       data:
         ADMIN_ID: "00000000-0000-0000-0000-000000000000"
         AMQPS_PORT: ""
-        AMQP_HOST: nuanced-eagle-rabbitmq.default.svc.cluster.local
+        AMQP_HOST: @KAMQP_HOST@
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PASSWORD: "nciKYrLyXy"
+        AMQP_PASSWORD: "@KAMQP_PASSWORD@"
         AMQP_PATH: /
         AMQP_PEM_CA: ''
-        AMQP_PORT: '5672'
+        AMQP_PORT: '@KAMQP_PORT@'
         AMQP_PREFETCH: "1"
         AMQP_PROTOCOL: amqp
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: user
+        AMQP_USER: @KAMQP_USERID@
         ARCHIVE_EXCHANGE_NAME: reporting
         ARCHIVE_QUEUE_NAME: reporting.archive
         ARCHIVE_ROUTING_KEY: reporting.archive
@@ -133,12 +133,12 @@ local:
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         DB_CA_FILE: ''
         DB_CA_PEM: ''
-        DB_HOST: lanky-lamb-postgresql.default.svc.cluster.local
+        DB_HOST: @KPG_HOST@
         DB_NAME: compose
-        DB_PASSWORD: bbiSSd1C3R
-        DB_PORT: "5432"
+        DB_PASSWORD: @KPG_PASSWORD@
+        DB_PORT: "@KPG_PORT@"
         DB_TYPE: postgresql
-        DB_USER: postgres
+        DB_USER: @KPG_USERID@
         HMAC_ALGORITHM: sha1
         HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
         KEY_FILE: keys/server.key
@@ -172,9 +172,9 @@ local:
         CIPHER_ALGORITHM: aes-128-cbc
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         CLOUDANT_DB: pipeline-source-changes
-        CLOUDANT_PASSWORD: "jXuOTIS3USldyB6xCZCq"
-        CLOUDANT_URL: pipeline-cloudant-couchdb.default.svc.cluster.local:5984
-        CLOUDANT_USER: admin
+        CLOUDANT_PASSWORD: "@KCOUCHDB_PASSWORD@"
+        CLOUDANT_URL: @KCOUCHDB_HOST@:@KCOUCHDB_PORT@
+        CLOUDANT_USER: @KCOUCHDB_USERID@
         COUCHDB: true
         HMAC_ALGORITHM: sha1
         HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
