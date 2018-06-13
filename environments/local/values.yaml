@@ -168,11 +168,16 @@ local:
       secretPaths:
     configmap:
       data:
+        ADMIN_ID: "00000000-0000-0000-0000-000000000000"
         CIPHER_ALGORITHM: aes-128-cbc
+        CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         CLOUDANT_DB: pipeline-source-changes
-        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
+        CLOUDANT_PASSWORD: "jXuOTIS3USldyB6xCZCq"
+        CLOUDANT_URL: pipeline-cloudant-couchdb.default.svc.cluster.local:5984
+        CLOUDANT_USER: admin
+        COUCHDB: true
         HMAC_ALGORITHM: sha1
+        HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
         HTTPS_PORT: ''
         HTTP_PORT: ''
         IS_CF: true
