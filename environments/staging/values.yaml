@@ -289,6 +289,8 @@ staging:
         ENV_ID: ibm:ys1:us-south
         ENABLE_MCCP_REGION_FEATURE: true
         PAYLOAD_ENCRYPT: true
+        IAM_CLIENT_ID_PROD: otc
+        IAM_CLIENT_ID_INT: otc
   pipeline-artifact-repository-service:
     vault:
       secretPaths:

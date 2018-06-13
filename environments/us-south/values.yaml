@@ -282,6 +282,8 @@ us-south:
         ENV_ID: ibm:yp:us-south
         ENABLE_MCCP_REGION_FEATURE: false
         PAYLOAD_ENCRYPT: false
+        IAM_CLIENT_ID_PROD: otc
+        IAM_CLIENT_ID_INT: otc
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
