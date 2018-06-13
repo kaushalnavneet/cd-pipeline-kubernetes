@@ -345,22 +345,30 @@ local:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
-        AMQP__PATH: bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP__HOST: @KAMQP_HOST@
+        AMQP__PASSWORD: "@KAMQP_PASSWORD@"
+        AMQP__PATH: ''
         AMQP__PEMCA: ''
-        AMQP__PORT: "42615"
-        AMQP__PROTOCOL: amqps
+        AMQP__PORT: '@KAMQP_PORT@'
+        AMQP__PROTOCOL: amqp
         AMQP__QUEUE: reporting.codestation
         AMQP__REJECTUNAUTHCERTS: true
         AMQP__SSLMETHOD: TLSv1_2_method
-        AMQP__USER: admin
-        CLOUDANT_URL: https://d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_HOST: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_PORT: "443"
-        CLOUDANT_USERNAME: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
+        AMQP__USER: @KAMQP_USERID@
+        CIPHER_ALGORITHM: "aes-128-cbc"
+        CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
+        CLOUDANT_URL: "http://@KCOUCHDB_USERID@:@KCOUCHDB_PASSWORD@@@KCOUCHDB_HOST@:@KCOUCHDB_PORT@"
+        CLOUDANT_HOST: @KCOUCHDB_HOST@
+        CLOUDANT_PORT: "@KCOUCHDB_PORT@"
+        CLOUDANT_PASSWORD: "@KCOUCHDB_PASSWORD@"
+        CLOUDANT_USERNAME: @KCOUCHDB_USERID@
+        HMAC_ALGORITHM: "sha1"
+        HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         LOG_LEVEL: debug
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
         NODE_ENV: staging-us-south
+        PAYLOAD_CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
+        PAYLOAD_HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         RUN_ARS_K8S: true
         S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
@@ -377,6 +385,10 @@ local:
         STORAGE_REGION: dallas
         STORAGE_USERID: 528ea5b6577f4b06a8ef0fa8969a23bb
         STORAGE_USERNAME: admin_6a49519e0f7b815d63e272ffb3425dab3dd31d4a
+        S3_STORAGE_ACCESS_KEY: "oyvOqdMnDRPrUn5Awcvd"
+        S3_STORAGE_SECRET_KEY: "X4hERNriaxcbmG4jRzqqn16biiLunsmIOmsMaVIV"
+        STORAGE_PASSWORD: "Swq.F*5}4IKA=4SS"
+        STORAGE_TEMP_URL_KEY: "hj4ufgr8p2"
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
