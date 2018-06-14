@@ -410,16 +410,20 @@ local:
       data:
         newrelic_env: YS1-k8s
         CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
+        CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         CLOUDANT_DB: pipeline-inv
-        CLOUDANT_URL: https://d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
+        CLOUDANT_PW: "@KCOUCHDB_PASSWORD@"
+        CLOUDANT_URL: http://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
+        CLOUDANT_USER: @KCOUCHDB_USERID@
         HMAC_ALGORITHM: HmacSHA1
+        HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         IS_CF: "1"
         logmet_host: ingest.logging.stage1.ng.bluemix.net
         logmet_port: "9091"
         logmet_component_name: pipeline-inventory-k8s
         logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
-        qradar_enabled: true
+        logmet_token: "75YJPS7Let03"
+        qradar_enabled: false
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
         qradar_port: "6515"
