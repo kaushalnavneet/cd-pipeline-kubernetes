@@ -17,7 +17,7 @@ bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 $(bx cs cluster-config --export ${IDS_JOB_NAME})
 
 INGRESS_SUBDOMAIN=$(bx cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
-INGRESS_SECRET=$(bx cs cluster-get -s {IDS_JOB_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+INGRESS_SECRET=$(bx cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
 
 tmp=$(mktemp)
 yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
