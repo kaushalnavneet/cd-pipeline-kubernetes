@@ -2,6 +2,14 @@
 {{- define "pipeline.ingress" -}}
 spec:
   rules:
+{{- if .Values.global.ingressSubDomain }}
+  - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "common.fullname" $ }}
+          servicePort: 80
+{{- end }}
 {{- range .Values.basedomains }}
   - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
     http:
@@ -15,5 +23,10 @@ spec:
   - secretName: {{ .tlsSecret }}
     hosts:
     - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+{{- end }}
+{{- if .Values.global.ingressSecret }}
+  - secretName: {{ .Values.global.ingressSecret }}
+    hosts:
+    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
 {{- end }}
 {{- end -}}
