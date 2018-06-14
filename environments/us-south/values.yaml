@@ -220,11 +220,13 @@ us-south:
     configmap:
       data:
         NODE_ENV: production
+        OTC_API_URL: http://otc-api/api/v1
+        PIPELINE_API_URL: http://pipeline-service/pipeline
         appUrl: https://console.bluemix.net
         auth__ibmId: pipeaut2@us.ibm.com
         log4js_logmet_component: pipeline-consumption-k8s
         log4js_syslog_appender_product: pipeline-consumption-k8s-yp
-        uiTest__isEnabled: true
+        uiTest__isEnabled: false
   pipeline-ui:
     vault:
       secretPaths:
