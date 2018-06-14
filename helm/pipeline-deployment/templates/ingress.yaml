@@ -3,7 +3,7 @@
 spec:
   rules:
 {{- if .Values.global.ingressSubDomain }}
-  - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+  - host: {{ template "common.fullname" $ }}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
     http:
       paths:
       - backend:
@@ -19,14 +19,14 @@ spec:
           servicePort: 80
 {{- end }}
   tls:
+{{- if .Values.global.ingressSecret }}
+  - secretName: {{ .Values.global.ingressSecret }}
+    hosts:
+    - {{ template "common.fullname" $ }}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+{{- end }}
 {{- range .Values.basedomains }}
   - secretName: {{ .tlsSecret }}
     hosts:
     - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
-{{- end }}
-{{- if .Values.global.ingressSecret }}
-  - secretName: {{ .Values.global.ingressSecret }}
-    hosts:
-    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
 {{- end }}
 {{- end -}}
