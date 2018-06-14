@@ -291,6 +291,7 @@ staging:
         PAYLOAD_ENCRYPT: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
+        REDIS_ENCRYPT: true
   pipeline-artifact-repository-service:
     vault:
       secretPaths:
@@ -402,6 +403,7 @@ staging:
         com_ibm_team_integration_pipeline_db_cloudant_username: mencessiongisteridecoute
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
         com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
+        com_ibm_team_integration_pipeline_encrypt_redis_payload_enabled: true
         com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
         mqttUrl: ssl://169.55.34.147:8883
         mqttUser: guest
