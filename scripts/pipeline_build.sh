@@ -31,7 +31,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-docker build . -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false ${EXTRA_DOCKER_OPTS}
+docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false
 
 if [ $? -ne 0 ]; then
     echo \"Failed during execution of docker build command\"
