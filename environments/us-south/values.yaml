@@ -200,6 +200,8 @@ us-south:
         log4js_logmet_component: otc-github-relay-sub-k8s
         log4js_syslog_appender_product: otc-github-relay-sub-k8s-yp
   blade-pipeline-broker:
+    extrahosts:
+    - otc-pipeline-broker
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/blade-pipeline-broker

@@ -202,6 +202,8 @@ staging:
         log4js_logmet_component: otc-github-relay-sub-k8s
         log4js_syslog_appender_product: otc-github-relay-sub-k8s-ys1-int
   blade-pipeline-broker:
+    extrahosts:
+    - otc-pipeline-broker
     vault:
       secretPaths:
       - generic/project/continuous-delivery-stage/cd-pipeline/staging/blade-pipeline-broker

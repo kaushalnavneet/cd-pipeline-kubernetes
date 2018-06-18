@@ -1,9 +1,10 @@
 {{- template "pipeline.common.ingress" (list . "pipeline.ingress") -}}
 {{- define "pipeline.ingress" -}}
+{{- $values := .Values -}}
 spec:
   rules:
 {{- if .Values.global.ingressSubDomain }}
-  - host: {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+  - host: {{ template "common.fullname" $ }}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
     http:
       paths:
       - backend:
@@ -18,15 +19,28 @@ spec:
           serviceName: {{ template "common.fullname" $ }}
           servicePort: 80
 {{- end }}
-  tls:
-{{- range .Values.basedomains }}
-  - secretName: {{ .tlsSecret }}
-    hosts:
-    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+{{- range $host := .Values.extrahosts }}
+{{- range $values.basedomains }}
+  - host: {{ $host  }}{{.hostNameSuffix}}.{{ .domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "common.fullname" $ }}
+          servicePort: 80
 {{- end }}
+{{- end }}
+  tls:
 {{- if .Values.global.ingressSecret }}
   - secretName: {{ .Values.global.ingressSecret }}
     hosts:
-    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+    - {{ template "common.fullname" $ }}-{{ .Release.Namespace }}.{{ .Values.global.ingressSubDomain }}
+{{- end }}
+{{- range $scope := .Values.basedomains }}
+  - secretName: {{ .tlsSecret }}
+    hosts:
+    - {{ template "common.fullname" $ }}{{.hostNameSuffix}}.{{ .domain }}
+{{- range $host := $values.extrahosts }}
+    - {{ $host }}{{$scope.hostNameSuffix}}.{{$scope.domain}}
+{{- end }}
 {{- end }}
 {{- end -}}

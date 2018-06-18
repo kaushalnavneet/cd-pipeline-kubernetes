@@ -204,6 +204,8 @@ development:
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
+    extrahosts:
+    - otc-pipeline-broker
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker
