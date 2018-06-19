@@ -157,6 +157,7 @@ us-south:
         log4js_logmet_component: source-change-service-k8s
         log4js_syslog_appender_product: source-change-service-k8s-yp
   otc-github-relay-pub:
+    replicas: 3
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/otc-github-relay-pub
