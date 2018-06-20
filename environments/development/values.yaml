@@ -602,8 +602,10 @@ development:
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         bluemix_iam_client_ribbon_IsSecure: false
-        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
-        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
+        bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
+        com_ibm_team_integration_pipeline_auth_iam_identityurl: https://iam.stage1.bluemix.net/identity/token
+        com_ibm_team_integration_pipeline_auth_iam_oidcjwks: https://iam.stage1.bluemix.net/oidc/jwks
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3
