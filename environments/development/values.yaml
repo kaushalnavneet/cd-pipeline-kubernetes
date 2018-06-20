@@ -50,7 +50,7 @@ development:
       data:
         AMQPS_PORT: "42615"
         AMQP_CERT_PASSPHRASE: ''
-        AMQP_HOST: sl-us-south-1-portal.26.dblayer.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -66,7 +66,7 @@ development:
         CA_FILE: ''
         CERT_FILE: keys/server.crt
         DB_CA_FILE: ''
-        DB_HOST: sl-us-south-1-portal.26.dblayer.com
+        DB_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         DB_NAME: compose
         DB_PORT: "42787"
         DB_SSL_PROTOCOL: TLSv1.2
@@ -97,7 +97,7 @@ development:
     configmap:
       data:
         AMQPS_PORT: "42615"
-        AMQP_HOST: sl-us-south-1-portal.26.dblayer.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -246,7 +246,7 @@ development:
       data:
         AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: sl-us-south-1-portal.26.dblayer.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_MSG_EXP_TIME: "3000"
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
@@ -314,7 +314,7 @@ development:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: sl-us-south-1-portal.26.dblayer.com
+        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP__PATH: bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP__PEMCA: ''
         AMQP__PORT: "42615"
@@ -480,7 +480,7 @@ development:
         jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
         com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
-        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://sl-us-south-1-portal.26.dblayer.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://sl-us-south-1-portal.25.dblayer.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1 
+        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1 
         com_ibm_team_integration_pipeline_messaging_amqp_user: admin
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
@@ -582,7 +582,7 @@ development:
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://sl-us-south-1-portal.26.dblayer.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://sl-us-south-1-portal.25.dblayer.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: admin
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
@@ -615,7 +615,7 @@ development:
     configmap:
       data:
         AMQP_PORT: "42615"
-        AMQP_HOST: sl-us-south-1-portal.26.dblayer.com,sl-us-south-1-portal.25.dblayer.com
+        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
         AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
         AMQP_SSL: true
         AMQP_USER: admin
