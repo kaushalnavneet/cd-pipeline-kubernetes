@@ -157,6 +157,8 @@ us-south:
         log4js_logmet_component: source-change-service-k8s
         log4js_syslog_appender_product: source-change-service-k8s-yp
   otc-github-relay-pub:
+    extrahosts:
+    - otc-webhook-relay
     replicas: 3
     vault:
       secretPaths:
