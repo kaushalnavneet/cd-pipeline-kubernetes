@@ -601,7 +601,7 @@ development:
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bluemix_iam_client_ribbon_IsSecure: false
+        bluemix_iam_client_ribbon_IsSecure: true
         bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
         com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
   travis-worker:
