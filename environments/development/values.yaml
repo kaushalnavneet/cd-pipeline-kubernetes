@@ -604,8 +604,6 @@ development:
         bluemix_iam_client_ribbon_IsSecure: false
         bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
         com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
-        com_ibm_team_integration_pipeline_auth_iam_identityurl: https://iam.stage1.bluemix.net/identity/token
-        com_ibm_team_integration_pipeline_auth_iam_oidcjwks: https://iam.stage1.bluemix.net/oidc/jwks
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3
