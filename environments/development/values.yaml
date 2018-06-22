@@ -565,6 +565,8 @@ development:
         log4jRootlogger: INFO, console, LOGMET
         bss_service_client_ribbon_listOfServers: continuous-delivery-bss
         bss_service_client_ribbon_IsSecure: false
+        bss_service_client_rg_ribbon_listOfServers: cd-broker.dev.us-south.devops.cloud.ibm.com:443
+        bss_service_client_rg_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: 10000
         com_ibm_team_integration_pipeline_security_bssWhiteList: ''
