@@ -300,6 +300,7 @@ development:
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
+        PERFORMANCE_DEBUG: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
