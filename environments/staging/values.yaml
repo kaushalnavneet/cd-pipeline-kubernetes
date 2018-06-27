@@ -523,6 +523,8 @@ staging:
         log4jRootlogger: INFO, console, LOGMET
         bss_service_client_ribbon_listOfServers: continuous-delivery-bss
         bss_service_client_ribbon_IsSecure: false
+        bss_service_client_rg_ribbon_listOfServers: cd-broker
+        bss_service_client_rg_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: "10000"
         com_ibm_team_integration_pipeline_security_bssWhiteList: ""
@@ -558,9 +560,9 @@ staging:
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bluemix_iam_client_ribbon_IsSecure: false
-        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
-        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
+        bluemix_iam_client_ribbon_IsSecure: true
+        bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
   travis-worker:
     replicas: "6"
     vault:
