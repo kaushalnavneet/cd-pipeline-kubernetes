@@ -308,10 +308,12 @@ us-south:
         AMQP__REJECTUNAUTHCERTS: 
         AMQP__SSLMETHOD: TLSv1_2_method
         AMQP__USER: admin
+        CIPHER_ALGORITHM: aes-128-cbc
         CLOUDANT_URL: https://bmdevops-yp-us-south.cloudant.com
         CLOUDANT_HOST: bmdevops-yp-us-south.cloudant.com
         CLOUDANT_PORT: "443"
         CLOUDANT_USERNAME: mencessiongisteridecoute
+        HMAC_ALGORITHM: sha1
         LOG_LEVEL: debug
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YP
         NODE_ENV: production-yp-us-south
