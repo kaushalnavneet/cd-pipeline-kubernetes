@@ -566,9 +566,11 @@ us-south:
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bluemix_iam_client_ribbon_IsSecure: false
-        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
-        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
+        bluemix_iam_client_ribbon_IsSecure: true
+        bluemix_iam_client_ribbon_listOfServers: iam.bluemix.net:443
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.bluemix.net
+        bss_service_client_rg_ribbon_listOfServers: cd-broker
+        bss_service_client_rg_ribbon_IsSecure: false
   travis-worker:
     replicas: 4
     vault:
