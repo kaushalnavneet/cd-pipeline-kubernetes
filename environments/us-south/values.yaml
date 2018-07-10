@@ -267,13 +267,10 @@ pipeline:
         ENABLE_CONTAINER_REGISTRY_BUILDER_TYPE: true
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
-        HIDE_VIEW_PIPELINES: false
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.bluemix.net
         IS_DEV: false
         K8S_REGIONS: ""
-        MAP_API_URL: https://multi-app-pipeline-api.ng.bluemix.net/v1/multi-app-pipeline/graphql
-        MAP_ENABLED: false # TODO do we need to enable MAP
         NEW_RELIC_APP_NAME: Pipeline UI - YP
         PIPELINE_URL: http://pipeline-service/pipeline
         REDIS_URL: rediss://portal610-25.bmix-dal-yp-079b8eda-dd61-4ff1-aba1-d3152db04838.2438855152.composedb.com:42785 

@@ -267,13 +267,10 @@ pipeline:
         ENABLE_CONTAINER_REGISTRY_BUILDER_TYPE: true
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
-        HIDE_VIEW_PIPELINES: false
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.stage1.bluemix.net
         IS_DEV: false
         K8S_REGIONS: ""
-        MAP_API_URL: ""
-        MAP_ENABLED: false
         NEW_RELIC_APP_NAME: Pipeline UI - YS1.INTEGRATION
         PIPELINE_URL: http://pipeline-service/pipeline
         REDIS_URL: rediss://portal671-24.bmix-dal-yp-caeb30b9-7261-41d7-9d8f-5568466b1af7.2438855152.composedb.com:42783
