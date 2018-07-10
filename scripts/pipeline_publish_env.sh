@@ -17,7 +17,7 @@ git config --global push.default matching
 
 ENVIRONMENT_REPO_ABS=$(pwd)/${CHART_REPO}
 
-ENVIRONMENT_VERSION=$(ls -v ${ENVIRONMENT_REPO_ABS}/charts/${ENVIRONMENT}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
+ENVIRONMENT_VERSION=$(ls -v ${ENVIRONMENT_REPO_ABS}/charts/${ENVIRONMENT}-${MAJOR_VERSION}.${MINOR_VERSION}.* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
 ENVIRONMENT_VERSION=${ENVIRONMENT_VERSION:=1.0.0}
 
 printf "Publishing environment ${ENVIRONMENT},\nversion ${ENVIRONMENT_VERSION}\n"
