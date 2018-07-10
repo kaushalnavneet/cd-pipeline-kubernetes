@@ -1,0 +1,14 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2018. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
+name: pipeline 
+version: 1.0.0
+description: Pipeline category for values.yaml import 
+home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes
+sources:
+  - https://github.ibm.com/org-ids/cd-pipeline-kubernetes
