@@ -87,7 +87,7 @@ do
   if [ "$PRUNE_CHART_REPO" == "true" ]; then
     NUMBER_OF_VERSION_KEPT=${NUMBER_OF_VERSION_KEPT:-3}
     echo "Keeping last ${NUMBER_OF_VERSION_KEPT} versions of ${COMPONENT_NAME} component"
-    ls -v charts/${COMPONENT_NAME}* | head --lines=-${NUMBER_OF_VERSION_KEPT} | xargs rm
+    ls -v charts/${COMPONENT_NAME}* | head -n -${NUMBER_OF_VERSION_KEPT} | xargs rm
   fi
 
   helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
