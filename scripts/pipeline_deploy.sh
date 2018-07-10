@@ -12,6 +12,8 @@ API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 printf "Deploying release ${IDS_STAGE_NAME} into cluster ${IDS_JOB_NAME},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}.\n"
 
 cp -a ${WORKDIR} cd-pipeline-kubernetes
+mv cd-pipeline-kubernetes/devops-config .
+
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
 $(bx cs cluster-config --export ${IDS_JOB_NAME})
