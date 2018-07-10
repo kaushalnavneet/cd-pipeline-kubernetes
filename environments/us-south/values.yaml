@@ -1,4 +1,4 @@
-us-south:
+pipeline:
   common:
     basedomains:
     - domain: us-south.devops.cloud.ibm.com

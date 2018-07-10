@@ -1,4 +1,4 @@
-staging:
+pipeline:
   common:
     basedomains: 
     - domain: stage.us-south.devops.cloud.ibm.com
