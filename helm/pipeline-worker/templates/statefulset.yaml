@@ -16,6 +16,7 @@ spec:
   - metadata:
       name: dockervarlib
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- range $key, $value := .Values.persistentVolume.annotations }}
         {{ $key }}: {{ $value }}
       {{- end }}
