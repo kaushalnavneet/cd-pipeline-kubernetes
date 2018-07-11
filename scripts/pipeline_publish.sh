@@ -10,7 +10,7 @@ ACCOUNT_ID=${DRY_RUN_ACCOUNT_ID:-${ACCOUNT_ID}}
 API_KEY=${DRY_RUN_API_KEY:-${API_KEY}}
 
 cp -a ${WORKDIR} cd-pipeline-kubernetes
-mv cd-pipeline-kubernetes/devops-config
+mv cd-pipeline-kubernetes/devops-config .
 
 git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
