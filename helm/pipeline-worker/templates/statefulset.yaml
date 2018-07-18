@@ -16,7 +16,6 @@ spec:
   - metadata:
       name: dockervarlib
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- range $key, $value := .Values.persistentVolume.annotations }}
         {{ $key }}: {{ $value }}
       {{- end }}
@@ -40,6 +39,9 @@ spec:
     {{- end }}
 {{- end }}
   template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       imagePullSecrets:
       - name: otc-registry-secret
