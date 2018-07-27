@@ -236,6 +236,16 @@ pipeline:
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
+  pipeline-monitor:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-monitor
+    configmap:
+      data:
+        appUrl: https://dev-console.stage1.bluemix.net
+        environment: development
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
