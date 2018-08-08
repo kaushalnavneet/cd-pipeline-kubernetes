@@ -244,7 +244,7 @@ pipeline:
         pipelineDevopsURL: https://dev-console.stage1.bluemix.net/devops/pipelines
         pipelineServiceURL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
         ibmId: pipeauto@us.ibm.com
-        resultsDBName": pipeline-monitor-results-dev
+        resultsDBName: pipeline-monitor-results-dev
         pipelineId: aed1b9bd-76f3-48d3-b10f-bc70029c8af9
         minTimeBetweenTests: 2
   pipeline-ui:
