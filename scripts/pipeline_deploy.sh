@@ -5,7 +5,7 @@ IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 CHART_NAMESPACE=${CHART_NAMESPACE:-${IMAGE_NAMESPACE}}
 ENVIRONMENT=${ENVIRONMENT:-development}
-REGION=${REGION:-${ENVIRONMENT}}
+REGION=${REGION}
 WORKDIR=${WORKDIR:-/work}
 ACCOUNT_ID=${DEPLOY_ACCOUNT_ID:-${ACCOUNT_ID}}
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
@@ -17,7 +17,9 @@ mv cd-pipeline-kubernetes/devops-config .
 
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
-bx cs region-set ${REGION}
+if [[ ! -z "${REGION}" ]]; then
+ bx cs region-set ${REGION}
+fi
 
 $(bx cs cluster-config --export ${IDS_JOB_NAME})
 
