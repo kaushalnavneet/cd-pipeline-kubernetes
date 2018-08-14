@@ -13,7 +13,7 @@ ARG IDS_TOKEN
 ADD . /work/component
 
 WORKDIR /work/component
-RUN npm install
+RUN npm install --no-optional
 
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 FROM registry.ng.bluemix.net/opentoolchain/ibmnode:6secure
