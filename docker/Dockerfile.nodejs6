@@ -13,12 +13,16 @@ ARG IDS_TOKEN
 ADD . /work/component
 
 WORKDIR /work/component
+RUN npm install -g npm@3.8.0
+RUN npm -v
+
 RUN npm install
 
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 RUN npm prune --production
 
 FROM registry.ng.bluemix.net/opentoolchain/ibmnode:6secure
+
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
