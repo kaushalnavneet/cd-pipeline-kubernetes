@@ -164,7 +164,7 @@ pipeline:
         AMQP_QUEUE: ''
         AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         LOG4JS_CONFIG_PATH: app/assets/log4js.json
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
@@ -187,7 +187,7 @@ pipeline:
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
+        AMQP_USER: admin
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: ''
