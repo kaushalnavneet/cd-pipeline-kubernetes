@@ -79,6 +79,9 @@ pipeline:
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
         NODE_MODULES_CACHE: false
+        OBJECT_STORAGE_INTERFACE: public
+        OBJECT_STORAGE_REGION: dallas
+        OBJECT_STORAGE_URL: https://identity.open.softlayer.com
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
@@ -122,6 +125,9 @@ pipeline:
         HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
+        OBJECT_STORAGE_INTERFACE: public
+        OBJECT_STORAGE_REGION: dallas
+        OBJECT_STORAGE_URL: https://identity.open.softlayer.com
         S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
