@@ -48,12 +48,12 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
     configmap:
       data:
-        AMQPS_PORT: "42615"
+        AMQPS_PORT: "54222"
         AMQP_CERT_PASSPHRASE: ''
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         AMQP_PEM_CA: ''
         AMQP_PORT: ''
         AMQP_PREFETCH: "1"
@@ -96,11 +96,11 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
     configmap:
       data:
-        AMQPS_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQPS_PORT: "54222"
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
         AMQP_KEYSTORE: ''
         AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         AMQP_PEM_CA: ''
         AMQP_PORT: ''
         AMQP_PREFETCH: "1"
@@ -162,10 +162,10 @@ pipeline:
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
-        AMQP_PORT: "42615"
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
+        AMQP_PORT: "54222"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: ''
         AMQP_RECONNECT_TIMEOUT: ''
@@ -185,10 +185,10 @@ pipeline:
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
-        AMQP_PORT: "42615"
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
+        AMQP_PORT: "54222"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: ''
@@ -263,12 +263,12 @@ pipeline:
       data:
         AMQP_CA: ''
         AMQP_EXCHANGE: pipeline
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
         AMQP_KEYSTORE_ENCODING: ''
         AMQP_MSG_EXP_TIME: "3000"
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         AMQP_PFX: ''
-        AMQP_PORT: "42615"
+        AMQP_PORT: "54222"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: pipeline-ui.
         AMQP_REJECT_UNAUTH_CERTS: true
@@ -328,10 +328,10 @@ pipeline:
     configmap:
       data:
         AMQP__ENABLED: true
-        AMQP__HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
-        AMQP__PATH: bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP__HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
+        AMQP__PATH: bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         AMQP__PEMCA: ''
-        AMQP__PORT: "42615"
+        AMQP__PORT: "54222"
         AMQP__PROTOCOL: amqps
         AMQP__QUEUE: reporting.codestation
         AMQP__REJECTUNAUTHCERTS: true
@@ -496,7 +496,7 @@ pipeline:
         jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
         com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
-        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1 
+        com_ibm_team_integration_pipeline_messaging_amqp_uri: amqps://portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc,amqps:/portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         com_ibm_team_integration_pipeline_messaging_amqp_user: admin
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
@@ -600,7 +600,7 @@ pipeline:
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1,amqps://portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com:42615/bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc,amqps:/portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: admin
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
@@ -632,9 +632,9 @@ pipeline:
       enabled: false
     configmap:
       data:
-        AMQP_PORT: "42615"
-        AMQP_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com,portal-ssl581-25.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
-        AMQP_PATH: /bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1
+        AMQP_PORT: "54222"
+        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
+        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
         AMQP_SSL: true
         AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
