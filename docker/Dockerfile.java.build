@@ -10,7 +10,7 @@ FROM ibmcom/ibmjava:8-sdk
 
 ARG TINI_VERSION=v0.16.1
 
-RUN apt-get update
+RUN apt-get update && apt-get upgrade -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip wget curl docker.io netcat-openbsd
 RUN update-alternatives --install /usr/bin/rmid rmid /opt/ibm/java/jre/bin/rmid 80 && \
