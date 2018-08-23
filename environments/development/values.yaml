@@ -168,6 +168,14 @@ pipeline:
         AMQP_PORT: "54222"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: ''
+        AMQP_DEDICATED_PROTOCOL: amqps
+        AMQP_DEDICATED_HOST: sl-us-dal-9-portal.2.dblayer.com
+        AMQP_DEDICATED_PORT: 10866
+        AMQP_DEDICATED_PATH: /otc-yp
+        AMQP_DEDICATED_EXCHANGE: ''
+        AMQP_DEDICATED_QUEUE: '' 
+        AMQP_DEDICATED_USER: jazzhub
+        AMQP_DEDICATED_SSL_PROTOCOL: TLSv1_2_method
         AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: admin
