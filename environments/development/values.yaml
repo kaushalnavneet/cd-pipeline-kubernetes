@@ -257,10 +257,13 @@ pipeline:
         bluemixURL: https://api.stage1.ng.bluemix.net
         pipelineDevopsURL: https://dev-console.stage1.bluemix.net/devops/pipelines
         pipelineServiceURL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        tiamApiURL: https://devops-api.stage1.ng.bluemix.net/v1/identity
+        devopsApiURL: https://devops-api.stage1.ng.bluemix.net/v1
+        orgIdForResources: 83e0652c-20b3-498e-a19c-402f81625c24
+        spaceIdForResources: 37f69bea-93a8-4931-a004-be9a5f0fb431
         ibmId: pipeauto@us.ibm.com
         resultsDBName: pipeline-monitor-results-dev
-        pipelineId: aed1b9bd-76f3-48d3-b10f-bc70029c8af9
-        minTimeBetweenTests: 2
+        minTimeBetweenTests: 3
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
