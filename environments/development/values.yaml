@@ -162,10 +162,10 @@ pipeline:
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
-        AMQP_PORT: "54222"
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
+        AMQP_PORT: "42794"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: ''
         AMQP_DEDICATED_PROTOCOL: amqps
@@ -193,10 +193,10 @@ pipeline:
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
-        AMQP_PORT: "54222"
+        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
+        AMQP_PORT: "42794"
         AMQP_PROTOCOL: amqps
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: ''
