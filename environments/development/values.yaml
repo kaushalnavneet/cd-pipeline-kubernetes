@@ -262,7 +262,7 @@ pipeline:
         orgIdForResources: 83e0652c-20b3-498e-a19c-402f81625c24
         spaceIdForResources: 37f69bea-93a8-4931-a004-be9a5f0fb431
         ibmId: pipeauto@us.ibm.com
-        resultsDBName: pipeline-monitor-results-dev-deploy-test
+        resultsDBName: pipeline-monitor-results-dev
         minTimeBetweenTests: 3
   pipeline-ui:
     replicas: 1
