@@ -326,6 +326,7 @@ pipeline:
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
+        OTC_API_URL: http://otc-api
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
