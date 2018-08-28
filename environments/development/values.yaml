@@ -321,6 +321,7 @@ pipeline:
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
         PAYLOAD_ENCRYPT: true
+        PERFORMANCE_DEBUG: true
         REDIS_ENCRYPT: true
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
