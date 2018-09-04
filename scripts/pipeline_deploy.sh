@@ -14,7 +14,7 @@ printf "Deploying release ${IDS_STAGE_NAME} into cluster ${IDS_JOB_NAME},\nnames
 
 cp -a ${WORKDIR} cd-pipeline-kubernetes
 mv cd-pipeline-kubernetes/devops-config .
-
+ls -laR .
 bx login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
 if [[ ! -z "${REGION}" ]]; then
