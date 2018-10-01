@@ -303,7 +303,7 @@ pipeline:
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
         IAM_CLIENT_ID: otc
-        IAM_GLOBAL_URL: https://iam.stage1.bluemix.net
+        IAM_GLOBAL_URL: https://iam.test.cloud.ibm.com
         IS_DEV: false
         K8S_REGIONS: ''
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
