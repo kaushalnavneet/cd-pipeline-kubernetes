@@ -403,10 +403,10 @@ pipeline:
         CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
         HMAC_ALGORITHM: HmacSHA1
         IS_CF: "1"
-        logmet_host: ingest.logging.stage1.ng.bluemix.net
+        logmet_host: ingest.logging.ng.bluemix.net
         logmet_port: "9091"
         logmet_component_name: pipeline-inventory-k8s
-        logmet_tenant_id: ed841776-9394-4b51-a86c-72ddc5529e05
+        logmet_tenant_id: 3018df0e-a1cd-44f0-9619-aa4a7b473710
         qradar_enabled: true
         qradar_host: syslog.prd.ccs.ibmcloud.com
         qradar_keystore_path: qr.jks
@@ -577,8 +577,8 @@ pipeline:
         com_ibm_team_integration_pipeline_toolchain_events_disabled: false
         com_ibm_team_integration_pipeline_cloud_cf_version: 2
         com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
-        com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.stage1.ng.bluemix.net
-        com_ibm_team_integration_pipeline_logging_logmet_tenantId: ed841776-9394-4b51-a86c-72ddc5529e05
+        com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.ng.bluemix.net
+        com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3018df0e-a1cd-44f0-9619-aa4a7b473710
         com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
         com_ibm_team_integration_pipeline_redis_host: portal650-26.bmix-dal-yp-990eba2e-e522-4949-b8c6-3620beef579d.2438855152.composedb.com
