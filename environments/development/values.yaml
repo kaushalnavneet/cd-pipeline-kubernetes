@@ -46,6 +46,8 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
+    probes:
+      enabled: false
     configmap:
       data:
         AMQPS_PORT: "54222"
