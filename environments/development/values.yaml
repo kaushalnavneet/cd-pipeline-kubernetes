@@ -271,6 +271,8 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
+    probes:
+      enabled: false
     configmap:
       data:
         AMQP_CA: ''
