@@ -68,7 +68,7 @@ pipeline:
         CA_FILE: ''
         CERT_FILE: keys/server.crt
         DB_CA_FILE: ''
-        DB_HOST: sl-us-south-1-portal.24.dblayer.com
+        DB_HOST: sl-us-south-1-portal.25.dblayer.com
         DB_NAME: compose
         DB_PORT: "42791"
         DB_SSL_PROTOCOL: TLSv1.2
