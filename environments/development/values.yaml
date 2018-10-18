@@ -68,9 +68,9 @@ pipeline:
         CA_FILE: ''
         CERT_FILE: keys/server.crt
         DB_CA_FILE: ''
-        DB_HOST: portal-ssl615-26.bmix-dal-yp-378fdd56-d442-4d39-aff3-53ed74af36d1.2438855152.composedb.com
+        DB_HOST: sl-us-south-1-portal.24.dblayer.com
         DB_NAME: compose
-        DB_PORT: "42787"
+        DB_PORT: "42791"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
