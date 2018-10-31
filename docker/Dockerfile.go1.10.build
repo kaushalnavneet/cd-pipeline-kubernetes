@@ -31,7 +31,7 @@ RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubuserconten
     /tmp/get_helm.sh && \ 
     rm -fr /tmp/get_helm.sh
 
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz && \
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/0.11.0/IBM_Cloud_CLI_0.11.0_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI* 
