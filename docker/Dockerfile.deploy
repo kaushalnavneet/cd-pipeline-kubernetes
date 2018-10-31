@@ -37,7 +37,7 @@ RUN if [ -z ${HELM_VERSION+x} ]; then HELM_VERSION=$(wget --quiet --output-docum
     tar fvxz helm-${HELM_VERSION}-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin linux-amd64/helm && \
     chmod +x /usr/local/bin/helm
 
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/latest/Bluemix_CLI_amd64.tar.gz && \
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/0.11.0/IBM_Cloud_CLI_0.11.0_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI* 
