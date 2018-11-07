@@ -70,42 +70,20 @@ spec:
         secret:
           secretName: otc-registry-secret
       initContainers:
-      - name: vault-sidekick
-        image: registry.ng.bluemix.net/opentoolchain/vault-sidekick:latest
-        args:
-        - -logtostderr=true
-        - -ca-cert=/var/run/certs/vault.pem
-        - -one-shot
-{{ include "secret_paths" . | indent 8 }}
-        env:
-        - name: VAULT_ADDR
-          valueFrom:
-            configMapKeyRef:
-              key: VAULT_ADDR
-              name: vault-sidekick
-        - name: VAULT_AUTH_METHOD
-          valueFrom:
-            configMapKeyRef:
-              key: VAULT_AUTH_METHOD
-              name: vault-sidekick
-        - name: VAULT_SIDEKICK_ROLE_ID
-          valueFrom:
-            secretKeyRef:
-              key: VAULT_SIDEKICK_ROLE_ID
-              name: vault-sidekick
-        - name: VAULT_SIDEKICK_SECRET_ID
-          valueFrom:
-            secretKeyRef:
-              key: VAULT_SIDEKICK_SECRET_ID
-              name: vault-sidekick
-        - name: VAULT_OUTPUT
-          value: /home/vault/secrets
-        - name: VAULT_COMPONENT
-          value: {{ template "common.fullname" . }}
+      - args:
+          - sh
+          - -c
+          - FN=$( ls /etc/secrets/*.secret  2>&1 | head -1 );
+            if [ -e "$FN" ]; then exit 0; fi;
+            echo "No secrets";
+            sleep 5;
+            exit 1;
+        image: alpine:3.8
+        name: vault-init
         volumeMounts:
-        - name: vault-sidekick
-          mountPath: /var/run/certs
+        - mountPath: /etc/secrets
           readOnly: true
+          name: vault-secrets
       containers:
       - {{ template "common.container" (list . "pipeline.statefulset.container") }}
         securityContext:

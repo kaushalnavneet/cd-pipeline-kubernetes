@@ -1,0 +1,75 @@
+{{- define "secret_paths" }}
+{{- range .Values.vaultcommon.secretPaths }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- range .Values.vault.secretPaths }}
+{{ print "- -cn=secret:" . ":fmt=json"}}
+{{- end -}}
+{{- end -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: {{ template "common.fullname" . }}-job
+spec:
+  template:
+    spec:
+      containers:
+      - args:
+        - -logtostderr=true
+        - -ca-cert=/var/run/certs/vault.pem
+        - -one-shot
+{{ include "secret_paths" . | indent 8 }}
+        env:
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_ADDR
+              name: vault-sidekick
+        - name: VAULT_AUTH_METHOD
+          valueFrom:
+            configMapKeyRef:
+              key: VAULT_AUTH_METHOD
+              name: vault-sidekick
+        - name: VAULT_SIDEKICK_ROLE_ID
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_SIDEKICK_ROLE_ID
+              name: vault-sidekick
+        - name: VAULT_SIDEKICK_SECRET_ID
+          valueFrom:
+            secretKeyRef:
+              key: VAULT_SIDEKICK_SECRET_ID
+              name: vault-sidekick
+        - name: VAULT_OUTPUT
+          value: /home/vault/secrets
+        - name: VAULT_COMPONENT
+          value: {{ template "common.fullname" . }}
+        image: registry.ng.bluemix.net/opentoolchain/vault-sidekick:latest
+        name: vault-sidekick
+        volumeMounts:
+        - mountPath: /var/run/certs
+          name: vault-sidekick
+          readOnly: true
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: otc-registry-secret
+      serviceAccount: {{ template "common.fullname" . }}
+      serviceAccountName: {{ template "common.fullname" . }}
+      restartPolicy: Never
+      volumes:
+      - name: vault-sidekick
+        secret:
+          defaultMode: 420
+          items:
+          - key: vault.pem
+            path: vault.pem
+          secretName: vault-sidekick
+      - name: otc-registry-secret
+        secret:
+          secretName: otc-registry-secret
+      - name: vault-secrets
+        secret:
+          defaultMode: 0777
+          optional: true
+          secretName: travis-worker
+  backoffLimit: 4
