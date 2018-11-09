@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  name: travis-worker-registry
+spec:
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+           app: travis-registry
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app: {{ template "common.fullname" . }} 
+  policyTypes:
+  - Egress

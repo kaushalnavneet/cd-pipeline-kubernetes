@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: travis-registry
+  namespace: opentoolchain
+  labels:
+    app: travis-registry
+spec:
+  serviceName: "travis-registry"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travis-registry
+  template:
+    metadata:
+      labels:
+        app: travis-registry
+    spec:
+      containers:
+      - name: travis-registry
+        imagePullPolicy: Always
+        image: registry:2.6.2
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+         - mountPath: /var/lib/registry
+           name: travisdockerregistry
+  volumeClaimTemplates:
+  - metadata:
+      annotations:
+        volume.beta.kubernetes.io/storage-class: ibmc-block-custom
+      creationTimestamp: null
+      name: travisdockerregistry
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          iops: 10k
+          storage: 500G
+      storageClassName: ibmc-block-custom
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: travis-registry
+  namespace: opentoolchain
+spec:
+  selector:
+    app: travis-registry
+  ports:
+    - port: 5000
+      targetPort: 5000
