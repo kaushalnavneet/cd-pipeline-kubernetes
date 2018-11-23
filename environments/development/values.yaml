@@ -16,7 +16,7 @@ pipeline:
       memory: 1Gi
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/20181122
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common-20181123
     probes:
       enabled: true
       liveness:
@@ -272,7 +272,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/20181122
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
     probes:
       enabled: false
     configmap:
