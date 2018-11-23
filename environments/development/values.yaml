@@ -16,7 +16,7 @@ pipeline:
       memory: 1Gi
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/20181122
     probes:
       enabled: true
       liveness:
@@ -45,7 +45,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/20181122
     probes:
       enabled: false
     configmap:
@@ -95,7 +95,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver/20181122
     configmap:
       data:
         AMQPS_PORT: "54222"
@@ -142,7 +142,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service/20181122
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
@@ -160,7 +160,7 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/20181122
     configmap:
       data:
         AMQP_EXCHANGE: ''
@@ -191,7 +191,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/20181122
     configmap:
       data:
         AMQP_EXCHANGE: ''
@@ -234,7 +234,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/20181122
     probes:
       readiness:
         path: "/version"
@@ -252,7 +252,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-monitor
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-monitor/20181122
     configmap:
       data:
         appUrl: https://dev-console.stage1.bluemix.net
@@ -272,7 +272,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/20181122
     probes:
       enabled: false
     configmap:
@@ -338,7 +338,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/20181122
     probes:
       liveness:
         path: "/codestation/v2/artifacts/version"
@@ -390,7 +390,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory/20181122
     probes:
       enabled: false
       liveness:
@@ -423,7 +423,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service/20181122
     configmap:
       data:
         CIPHER_ALGORITHM: aes-128-cbc
@@ -443,7 +443,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/20181122
     probes:
       enabled: false
       liveness:
@@ -646,7 +646,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/20181122
     probes:
       enabled: false
     configmap:
