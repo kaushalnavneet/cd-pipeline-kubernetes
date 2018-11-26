@@ -11,12 +11,12 @@ for name in ${KEYS}
 do
   if [[ $name != "----" && $name != "Keys" ]]; then
   	 CURRENT_CONTEXT=${COMMON_PATH}/${name}
-  	 NEW_CONTEXT=${COMMON_PATH}/${name}/${TAG}
+  	 NEW_CONTEXT=${COMMON_PATH}/${name}/${name}_${TAG}
   	 echo "==="
-  	 echo ${CURRENT_CONTEXT}
+  	 echo "${CURRENT_CONTEXT} -> ${NEW_CONTEXT}"
      BACKUP_NAME=`echo ${CURRENT_CONTEXT} | rev | cut -d'/' -f-2 | rev | sed 's/\//_/g'`
      vault read --format=json ${CURRENT_CONTEXT} | jq '.data' > ${BACKUP_NAME}-$(date +%Y%m%d)-prev.json
- 	 vault read --format=json ${CURRENT_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
+ 	   vault read --format=json ${CURRENT_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
      echo "==="
   fi
 done
