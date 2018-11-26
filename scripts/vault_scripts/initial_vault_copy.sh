@@ -16,7 +16,7 @@ do
   	 echo "${CURRENT_CONTEXT} -> ${NEW_CONTEXT}"
      BACKUP_NAME=`echo ${CURRENT_CONTEXT} | rev | cut -d'/' -f-2 | rev | sed 's/\//_/g'`
      vault read --format=json ${CURRENT_CONTEXT} | jq '.data' > ${BACKUP_NAME}-$(date +%Y%m%d)-prev.json
- 	   vault read --format=json ${CURRENT_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
+ 	 vault read --format=json ${CURRENT_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
      echo "==="
   fi
 done
