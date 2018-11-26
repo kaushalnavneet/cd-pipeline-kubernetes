@@ -84,6 +84,7 @@ pipeline:
         OBJECT_STORAGE_INTERFACE: public
         OBJECT_STORAGE_REGION: dallas
         OBJECT_STORAGE_URL: https://identity.open.softlayer.com
+        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
