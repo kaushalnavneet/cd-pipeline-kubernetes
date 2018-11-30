@@ -91,53 +91,6 @@ pipeline:
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
-  pipeline-log-archiver:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-archiver/pipeline-log-archiver-20181123
-    configmap:
-      data:
-        AMQPS_PORT: "54222"
-        AMQP_HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
-        AMQP_KEYSTORE: ''
-        AMQP_KEYSTORE_ENCODING: ''
-        AMQP_PATH: /bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
-        AMQP_PEM_CA: ''
-        AMQP_PORT: ''
-        AMQP_PREFETCH: "1"
-        AMQP_PROTOCOL: amqps
-        AMQP_REJECT_UNAUTH_CERTS: true
-        AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: admin
-        ARCHIVE_EXCHANGE_NAME: reporting
-        ARCHIVE_QUEUE_NAME: reporting.archive
-        ARCHIVE_ROUTING_KEY: reporting.archive
-        ARCHIVE_TYPE: s3ObjectStorage
-        CERT_FILE: keys/server.crt
-        CIPHER_ALGORITHM: aes-128-cbc
-        DB_CA_FILE: ''
-        DB_CA_PEM: ''
-        DB_HOST: sl-us-dal-9-portal.1.dblayer.com
-        DB_NAME: compose
-        DB_PORT: "10570"
-        DB_SSL_PROTOCOL: TLSv1.2
-        DB_TYPE: postgresql
-        DB_USER: admin
-        HMAC_ALGORITHM: sha1
-        KEY_FILE: keys/server.key
-        NEW_RELIC_APP_NAME: Pipeline Log Archiver - YS1
-        OBJECT_STORAGE_INTERFACE: public
-        OBJECT_STORAGE_REGION: dallas
-        OBJECT_STORAGE_URL: https://identity.open.softlayer.com
-        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
-        S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
-        S3_STORAGE_REGION: us-standard
-        USE_HTTP: true
-        log4js_logmet_component: pipeline-log-archiver-k8s
-        log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
-        PAYLOAD_ENCRYPT: true
   source-change-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -248,26 +201,6 @@ pipeline:
         apiTest__monitorInterval: "60000"
         log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
         useResourceGroups: true
-  pipeline-monitor:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-monitor/pipeline-monitor-20181123
-    configmap:
-      data:
-        appUrl: https://dev-console.stage1.bluemix.net
-        environment: development
-        bluemixURL: https://api.stage1.ng.bluemix.net
-        pipelineDevopsURL: https://dev-console.stage1.bluemix.net/devops/pipelines
-        pipelineServiceURL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
-        tiamApiURL: https://devops-api.stage1.ng.bluemix.net/v1/identity
-        devopsApiURL: https://devops-api.stage1.ng.bluemix.net/v1
-        orgIdForResources: 83e0652c-20b3-498e-a19c-402f81625c24
-        spaceIdForResources: 37f69bea-93a8-4931-a004-be9a5f0fb431
-        ibmId: pipeauto@us.ibm.com
-        resultsDBName: pipeline-monitor-results-dev
-        minTimeBetweenTests: 3
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
