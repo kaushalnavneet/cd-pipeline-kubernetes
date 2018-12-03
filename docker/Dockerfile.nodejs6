@@ -9,6 +9,8 @@
 FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:nodejs6 as build
 
 ARG IDS_TOKEN
+ARG IDS_USER
+ARG IDS_PASS
 
 ADD . /work/component
 
