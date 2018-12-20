@@ -6,19 +6,24 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM node:8.13-jessie
+FROM ubuntu:xenial
 
 ARG TINI_VERSION=v0.16.1
 ARG JQ_VERSION=jq-1.5
+ENV NODE_VERSION 8.13.0
+ENV ARCH x64
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
+RUN apt-get update -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 RUN apt-get update && apt-get upgrade -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates 
-RUN echo deb https://apt.dockerproject.org/repo debian-jessie main > /etc/apt/sources.list.d/docker.list
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-engine wget curl netcat-openbsd
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce wget netcat-openbsd 
 RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
+RUN tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr --strip-components=1 --no-same-owner 
+RUN rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 
 
 RUN mkdir -p /work/component/export
