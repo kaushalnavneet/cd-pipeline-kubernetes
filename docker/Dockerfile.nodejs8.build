@@ -19,7 +19,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-ht
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 RUN apt-get update && apt-get upgrade -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce wget netcat-openbsd python
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce wget netcat-openbsd python make
 RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
 RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 RUN tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr --strip-components=1 --no-same-owner 

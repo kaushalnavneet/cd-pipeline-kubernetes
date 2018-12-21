@@ -21,7 +21,7 @@ RUN npm install -f
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 RUN npm prune --production
 
-FROM registry.ng.bluemix.net/opentoolchain/ibmnode:6secure
+FROM registry.ng.bluemix.net/opentoolchain/ibmnode:8secure
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
