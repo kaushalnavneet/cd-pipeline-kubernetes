@@ -15,7 +15,7 @@ ENV ARCH x64
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
 RUN apt-get update -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils g++-7
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 RUN apt-get update && apt-get upgrade -y
