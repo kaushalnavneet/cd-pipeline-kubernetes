@@ -14,9 +14,11 @@ ENV NODE_VERSION 10.13.0
 ENV ARCH x64
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
+RUN apt-get update -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common python-software-properties xz-utils
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils g++-7
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y g++-7
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7 
 RUN update-alternatives --config gcc
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
