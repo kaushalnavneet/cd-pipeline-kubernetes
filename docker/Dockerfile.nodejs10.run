@@ -1,0 +1,14 @@
+FROM ubuntu:xenial
+
+ENV NODE_VERSION 10.13.0
+ENV ARCH x64
+
+
+RUN apt-get update -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils
+
+RUN apt-get dist-upgrade -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
+RUN tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr --strip-components=1 --no-same-owner 
+RUN rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz"
