@@ -269,6 +269,10 @@ pipeline:
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
+        ENABLE_CURATED_DOCKER_IMAGE_FEATURE: true
+        DOCKER_IMAGES: "2.0, 1.0"
+        LEGACY_DOCKER_IMAGE: "1.0"
+        LATEST_DOCKER_IMAGE: "2.0"
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
