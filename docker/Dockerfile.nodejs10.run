@@ -13,7 +13,7 @@ ENV ARCH x64
 
 
 RUN apt-get update -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common python-software-properties xz-utils bzip2
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common python-software-properties xz-utils bzip2 build-essential
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN apt-get update -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y g++-7
