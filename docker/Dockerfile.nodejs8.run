@@ -14,11 +14,6 @@ ENV ARCH x64
 
 RUN apt-get update -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common xz-utils bzip2 build-essential
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
-RUN apt-get update -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y g++-7
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7 
-RUN update-alternatives --config gcc
 
 RUN apt-get dist-upgrade -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
