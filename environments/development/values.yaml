@@ -279,22 +279,23 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service-20181123
     probes:
+      enabled: false
       liveness:
         path: "/codestation/v2/artifacts/version"
       readiness:
         path: "/codestation/v2/artifacts/status"
     configmap:
       data:
-        AMQP__ENABLED: true
-        AMQP__HOST: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
-        AMQP__PATH: bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
-        AMQP__PEMCA: ''
-        AMQP__PORT: "54222"
-        AMQP__PROTOCOL: amqps
-        AMQP__QUEUE: reporting.codestation
-        AMQP__REJECTUNAUTHCERTS: true
-        AMQP__SSLMETHOD: TLSv1_2_method
-        AMQP__USER: admin
+        amqp__enabled: true
+        amqp__host: portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com,portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com
+        amqp__path: bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
+        amqp__pemca: ''
+        amqp__port: "54222"
+        amqp__protocol: amqps
+        amqp__queue: reporting.codestation
+        amqp__rejectunauthcerts: true
+        amqp__sslmethod: TLSv1_2_method
+        amqp__user: admin
         CIPHER_ALGORITHM: aes-128-cbc
         CLOUDANT_URL: https://d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
         CLOUDANT_HOST: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
