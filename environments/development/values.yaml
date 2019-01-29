@@ -550,6 +550,7 @@ pipeline:
         doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         gitlab_services: hostedgit,gitlab
         artifacts_useS3: true
+        CURATED_DEBUG: true
         worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-9dc0a12,2.0=travis-registry:5000/pipeline-worker:master-9dc0a12,1.0=travis-registry:5000/pipeline-worker:master-b919518,
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: false
