@@ -1,8 +1,8 @@
 pipeline:
   common:
     basedomains: 
-    - domain: dev.us-south.devops.cloud.ibm.com
-      tlsSecret: star.dev.us-south.devops.cloud.ibm.com
+    - domain: us-south.devops.dev.cloud.ibm.com
+      tlsSecret: star.us-south.devops.dev.cloud.ibm.com
       hostNameSuffix: ""
     - domain: stage1.ng.bluemix.net
       tlsSecret: star.stage1.ng.bluemix.net
@@ -161,7 +161,7 @@ pipeline:
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
-        EXT_PIPELINE_API_URL: https://pipeline-service.dev.us-south.devops.cloud.ibm.com/pipeline
+        EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   pipeline-consumption:
@@ -205,7 +205,7 @@ pipeline:
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: admin
-        ARS_URL: https://pipeline-artifact-repository-service.dev.us-south.devops.cloud.ibm.com/codestation/v2
+        ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
@@ -412,7 +412,7 @@ pipeline:
         com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
         com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
         contextPath: /pipelines
-        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.dev.us-south.devops.cloud.ibm.com:443
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com:443
         cleanup_disabled: false
         cleanup_buildsToKeep: 10
         cleanup_deploysToKeep: 10
@@ -441,7 +441,7 @@ pipeline:
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        test_service_client_ribbon_listOfServers: test-report-service.dev.us-south.devops.cloud.ibm.com:443
+        test_service_client_ribbon_listOfServers: test-report-service.us-south.devops.dev.cloud.ibm.com:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
         log_service_client_ribbon_IsSecure: false
