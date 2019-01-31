@@ -218,7 +218,7 @@ pipeline:
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
         PIPELINE_API_URL: http://pipeline-service/pipeline
-        EXT_PIPELINE_API_URL: https://pipeline-service.dev.us-south.devops.cloud.ibm.com/pipeline
+        EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   pipeline-consumption:
@@ -257,7 +257,7 @@ pipeline:
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: @KAMQP_USERID@
-        ARS_URL: https://pipeline-artifact-repository-service.dev.us-south.devops.cloud.ibm.com/codestation/v2
+        ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
