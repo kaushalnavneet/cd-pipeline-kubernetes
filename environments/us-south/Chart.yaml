@@ -1,0 +1,6 @@
+name: us-south 
+description: US-SOUTH environment properties
+version: 1.0.0
+home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes/environments/us-south
+sources:
+    - https://github.ibm.com/org-ids/cd-pipeline-kubernetes/environments/us-south
