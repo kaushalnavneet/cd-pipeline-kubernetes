@@ -1,6 +1,0 @@
-name: us-south-staging
-description: US-SOUTH environment properties for staging workers
-version: 1.0.0
-home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes/environments/us-south-staging
-sources:
-    - https://github.ibm.com/org-ids/cd-pipeline-kubernetes/environments/us-south-staging
