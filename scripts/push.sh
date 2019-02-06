@@ -34,10 +34,10 @@ if [  -d cd-pipeline-kubernetes ]; then
     if $PULL_BUILDER ; then
       docker pull registry.ng.bluemix.net/${NAMESPACE}/cd-build-base:${CODE_BASE}
     fi
-    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
     docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
-    bx cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    bx cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   fi 
   helm dep up ${CHART_DIR}
   if ! helm list ${RELEASE_NAME}; then
