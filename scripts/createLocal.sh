@@ -17,5 +17,6 @@ sed \
  -e "s!@KCOUCHDB_PORT@!$KCOUCHDB_PORT!g" \
  -e "s!@KCOUCHDB_PASSWORD@!$KCOUCHDB_PASSWORD!g" \
  -e "s!@KCOUCHDB_USERID@!$KCOUCHDB_USERID!g" \
+ -e "s!@PREFIX@!$PREFIX!g" \
 cd-pipeline-kubernetes/environments/local/values.yaml.template >cd-pipeline-kubernetes/environments/local/values.yaml
 
