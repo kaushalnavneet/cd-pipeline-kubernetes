@@ -161,6 +161,29 @@ pipeline:
         log4js_logmet_component: pipeline-log-archiver-k8s
         log4js_syslog_appender_product: pipeline-log-archiver-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
+  source-change-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+    configmap:
+      data:
+        ADMIN_ID: "00000000-0000-0000-0000-000000000000"
+        CIPHER_ALGORITHM: aes-128-cbc
+        CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
+        CLOUDANT_DB: pipeline-source-changes
+        CLOUDANT_PASSWORD: "@KCOUCHDB_PASSWORD@"
+        CLOUDANT_URL: @KCOUCHDB_HOST@:@KCOUCHDB_PORT@
+        CLOUDANT_USER: @KCOUCHDB_USERID@
+        COUCHDB: true
+        HMAC_ALGORITHM: sha1
+        HMAC_KEY: 0f8c68f3b80d05471d34b574bd703408
+        HTTPS_PORT: ''
+        HTTP_PORT: ''
+        IS_CF: true
+        NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
+        log4js_logmet_component: source-change-service-k8s
+        log4js_syslog_appender_product: source-change-service-k8s-ys1-dev
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -511,6 +534,7 @@ pipeline:
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         test_service_client_ribbon_listOfServers: test-report-service.dev
+        source_change_service_client_ribbon_listOfServers: source-change-service
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
         log_service_client_ribbon_IsSecure: false
