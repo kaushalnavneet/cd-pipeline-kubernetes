@@ -257,7 +257,7 @@ pipeline:
         AMQP_REJECT_UNAUTH_CERTS: true
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: @KAMQP_USERID@
-        ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com/codestation/v2
+        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
         BSS_CHECKED: true
@@ -321,17 +321,17 @@ pipeline:
         path: "/codestation/v2/artifacts/status"
     configmap:
       data:
-        AMQP__ENABLED: true
-        AMQP__HOST: @KAMQP_HOST@
-        AMQP__PASSWORD: "@KAMQP_PASSWORD@"
-        AMQP__PATH: ''
-        AMQP__PEMCA: ''
-        AMQP__PORT: '@KAMQP_PORT@'
-        AMQP__PROTOCOL: amqp
-        AMQP__QUEUE: reporting.codestation
-        AMQP__REJECTUNAUTHCERTS: true
-        AMQP__SSLMETHOD: TLSv1_2_method
-        AMQP__USER: @KAMQP_USERID@
+        amqp__enabled: true
+        amqp__host: @KAMQP_HOST@
+        amqp__password: "@KAMQP_PASSWORD@"
+        amqp__path: /
+        amqp__pemca: ''
+        amqp__port: '@KAMQP_PORT@'
+        amqp__protocol: amqp
+        amqp__queue: reporting.codestation
+        amqp__rejectunauthcerts: false
+        amqp__sslmethod: TLSv1_2_method
+        amqp__user: @KAMQP_USERID@
         CIPHER_ALGORITHM: "aes-128-cbc"
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         CLOUDANT_URL: "https://@KCOUCHDB_USERID@:@KCOUCHDB_PASSWORD@@@KCOUCHDB_HOST@:@KCOUCHDB_PORT@"
@@ -343,11 +343,11 @@ pipeline:
         HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         LOG_LEVEL: debug
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
-        NODE_ENV: staging-us-south
+        NODE_ENV: local
         PAYLOAD_CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         PAYLOAD_HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
         RUN_ARS_K8S: true
-        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
+        S3_ARS_BUCKET_NAME: @PREFIX@-pipeline-artifacts-ys1-dev
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         SSL: true
