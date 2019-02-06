@@ -16,7 +16,7 @@ pipeline:
       memory: 256M
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common-20181123
     probes:
       enabled: false
       liveness:
@@ -334,7 +334,7 @@ pipeline:
         AMQP__USER: @KAMQP_USERID@
         CIPHER_ALGORITHM: "aes-128-cbc"
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
-        CLOUDANT_URL: "http://@KCOUCHDB_USERID@:@KCOUCHDB_PASSWORD@@@KCOUCHDB_HOST@:@KCOUCHDB_PORT@"
+        CLOUDANT_URL: "https://@KCOUCHDB_USERID@:@KCOUCHDB_PASSWORD@@@KCOUCHDB_HOST@:@KCOUCHDB_PORT@"
         CLOUDANT_HOST: @KCOUCHDB_HOST@
         CLOUDANT_PORT: "@KCOUCHDB_PORT@"
         CLOUDANT_PASSWORD: "@KCOUCHDB_PASSWORD@"
@@ -390,7 +390,7 @@ pipeline:
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
         CLOUDANT_DB: pipeline-inv
         CLOUDANT_PW: "@KCOUCHDB_PASSWORD@"
-        CLOUDANT_URL: http://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
+        CLOUDANT_URL: https://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
         CLOUDANT_USER: @KCOUCHDB_USERID@
         HMAC_ALGORITHM: HmacSHA1
         HMAC_KEY: "0f8c68f3b80d05471d34b574bd703408"
@@ -470,7 +470,7 @@ pipeline:
         jazzhub_login_client_ribbon_listOfServers: psdev.login.jazz.net:443
         bluemix_client_ribbon_listOfServers: ace.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_db: cloudant
-        com_ibm_team_integration_pipeline_db_cloudant_url: http://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
+        com_ibm_team_integration_pipeline_db_cloudant_url: https://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
         com_ibm_team_integration_pipeline_db_cloudant_username: @KCOUCHDB_USERID@
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
         com_ibm_team_integration_pipeline_db_cloudant_password: "@KCOUCHDB_PASSWORD@"
