@@ -411,7 +411,7 @@ pipeline:
         newrelic_env: YS1-k8s
         CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
         CIPHER_KEY: "cfb21350e782ce44b8379882636af9e9"
-        CLOUDANT_DB: pipeline-inv
+        CLOUDANT_DB: @PREFIX@-pipeline-inv
         CLOUDANT_PW: "@KCOUCHDB_PASSWORD@"
         CLOUDANT_URL: https://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
         CLOUDANT_USER: @KCOUCHDB_USERID@
