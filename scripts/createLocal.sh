@@ -20,3 +20,25 @@ sed \
  -e "s!@PREFIX@!$PREFIX!g" \
 cd-pipeline-kubernetes/environments/local/values.yaml.template >cd-pipeline-kubernetes/environments/local/values.yaml
 
+if [ -e pipeline-artifact-repository-service ]; then
+cat - >server/config.local.json <<EOF
+{
+  "amqp": {
+    "enabled": true
+  },
+  "downloadURL": "http://pipeline-artifact-repository-service",
+  "orgURI": "https://api.stage1.ng.bluemix.net/v2/organizations",
+  "log_level": "info"
+}
+EOF
+
+cat - >server/datasources.local.json <<EOF
+{
+  "db": {
+    "database": "${PREFIX}-ars-local"
+  }
+}
+EOF
+
+fi
+
