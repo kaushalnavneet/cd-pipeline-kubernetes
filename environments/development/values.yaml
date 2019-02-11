@@ -572,7 +572,7 @@ pipeline:
         artifacts_useS3: true
         CURATED_DEBUG: true
         CURATED_SLEEP: 3m
-        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,2.0=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,1.5=travis-registry:5000/pipeline-worker:master-be10b9b,1.0=travis-registry:5000/pipeline-worker-legacy:master-be10b9b,
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,2.0=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,1.5=travis-registry:5000/pipeline-worker:master-master-2019-02-11_17-08-49,1.0=travis-registry:5000/pipeline-worker-legacy:master-2019-02-11_17-12-32,
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: false
         com_ibm_team_integration_pipeline_bss_enforceQuotas: true
