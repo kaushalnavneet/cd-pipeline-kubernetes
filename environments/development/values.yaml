@@ -270,7 +270,7 @@ pipeline:
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
-        DOCKER_IMAGES: "2.0, 1.5, 1.0"
+        DOCKER_IMAGES: "2.0, 1.0"
         LEGACY_DOCKER_IMAGE: "1.0"
         LATEST_DOCKER_IMAGE: "2.0"
   pipeline-artifact-repository-service:
@@ -571,7 +571,7 @@ pipeline:
         doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         gitlab_services: hostedgit,gitlab
         artifacts_useS3: true
-        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,2.0=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,1.5=travis-registry:5000/pipeline-worker:master-2019-02-14_00-23-17,1.0=travis-registry:5000/pipeline-worker-legacy:master-2019-02-12_23-19-12,
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,2.0=travis-registry:5000/pipeline-worker:master-2019-02-08_18-44-06,1.0=travis-registry:5000/pipeline-worker:master-2019-02-14_00-23-17,
         worker_dindBase: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: false
