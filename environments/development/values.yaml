@@ -149,7 +149,7 @@ pipeline:
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
+        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com,portal-ssl655-26.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
         AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
         AMQP_PORT: "42794"
