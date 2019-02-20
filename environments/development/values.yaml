@@ -362,6 +362,9 @@ pipeline:
   test-report-service:
     replicas: 1
     revisionHistoryLimit: 3
+    ingress:
+        annotations:
+            ingress.bluemix.net/client-max-body-size: "size=5m"
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service/test-report-service-20181123
