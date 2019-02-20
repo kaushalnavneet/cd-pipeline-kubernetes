@@ -240,7 +240,7 @@ pipeline:
         ENABLE_CONTAINER_REGISTRY_BUILDER_TYPE: true
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
-        ENABLE_CURATED_FEATURE: true
+        ENABLE_CURATED_FEATURE: false
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.test.cloud.ibm.com
         IS_DEV: false
@@ -576,7 +576,7 @@ pipeline:
         artifacts_useS3: true
         worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-02-15_16-40-53,2.0=travis-registry:5000/pipeline-worker:master-2019-02-15_16-40-53,1.0=travis-registry:5000/pipeline-worker:master-2019-02-15_00-04-06,
         worker_dindBase: true
-        worker_globalBaseImage: 1.0
+        worker_globalBaseImage: "1.0"
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: false
         com_ibm_team_integration_pipeline_bss_enforceQuotas: true
