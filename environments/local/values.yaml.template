@@ -494,8 +494,7 @@ pipeline:
         com_ibm_team_integration_pipeline_db: cloudant
         com_ibm_team_integration_pipeline_db_cloudant_url: https://@KCOUCHDB_HOST@:@KCOUCHDB_PORT@
         com_ibm_team_integration_pipeline_db_cloudant_username: @KCOUCHDB_USERID@
-        com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
-        com_ibm_team_integration_pipeline_db_cloudant_password: "@KCOUCHDB_PASSWORD@"
+        com_ibm_team_integration_pipeline_db_cloudant_database: @PREFIX@-pipeline
         com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
         com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
         mqttUrl: ssl://169.55.35.183:8883
@@ -505,6 +504,7 @@ pipeline:
         com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
         contextPath: /pipelines
         codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service
+        codestation_client_ribbon_IsSecure: false
         cleanup_disabled: false
         cleanup_buildsToKeep: 10
         cleanup_deploysToKeep: 10
@@ -533,7 +533,8 @@ pipeline:
         com_ibm_team_integration_pipeline_messaging_amqp_context: TLSv1.2
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        test_service_client_ribbon_listOfServers: test-report-service.dev
+        test_service_client_ribbon_listOfServers: test-report-service
+        test_service_client_ribbon_IsSecure: false
         source_change_service_client_ribbon_listOfServers: source-change-service
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
@@ -548,7 +549,7 @@ pipeline:
         toolchain_client_ribbon_listOfServers: ''
         com_ibm_team_integration_pipeline_features_context: Blade
         com_ibm_team_integration_pipeline_features_stage_queue: true
-        tiam_client_ribbon_listOfServers: otc-tiam
+        tiam_client_ribbon_listOfServers: otc-tiam.us-south.devops.dev.cloud.ibm.com
         tiam_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
         com_ibm_team_integration_pipeline_eventLogging_enabled: false
@@ -557,13 +558,13 @@ pipeline:
         com_ibm_team_integration_pipeline_eventLogging_httpEnabled: false
         com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
         mccp_client_ribbon_listOfServers: mccp.stage1.ng.bluemix.net:443
-        blade_toolchain_client_ribbon_listOfServers: otc-api
+        blade_toolchain_client_ribbon_listOfServers: otc-api.us-south.devops.dev.cloud.ibm.com
         blade_toolchain_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.ng.bluemix.net
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.us-south.devops.cloud.ibm.com
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
@@ -611,8 +612,10 @@ pipeline:
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console, LOGMET
-        bss_service_client_ribbon_listOfServers: continuous-delivery-bss
+        bss_service_client_ribbon_listOfServers: continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
         bss_service_client_ribbon_IsSecure: false
+        bss_service_client_rg_ribbon_listOfServers: cd-broker.us-south.devops.dev.cloud.ibm.com
+        bss_service_client_rg_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: 10000
         com_ibm_team_integration_pipeline_security_bssWhiteList: ''
@@ -641,6 +644,9 @@ pipeline:
         doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         gitlab_services: hostedgit,gitlab
         artifacts_useS3: true
+        CURATED_DEBUG: true
+        CURATED_SLEEP: 3m
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-9dc0a12,2.0=travis-registry:5000/pipeline-worker:master-9dc0a12,1.5=travis-registry:5000/pipeline-worker:master-a060688,1.0=travis-registry:5000/pipeline-worker:master-b919518,
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: true
         com_ibm_team_integration_pipeline_bss_enforceQuotas: true
@@ -649,42 +655,13 @@ pipeline:
         com_ibm_team_integration_pipeline_bss_user: pipeline_server
         com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bluemix_iam_client_ribbon_IsSecure: false
-        com_ibm_team_integration_pipeline_auth_iam_clientInt: otc
-        com_ibm_team_integration_pipeline_auth_iam_clientProd: otc
-        com_ibm_team_integration_pipeline_auth_iam_secretInt: "gbFmGOtQRD8D"
-        com_ibm_team_integration_pipeline_auth_iam_secretProd: "lXE3D8nxMMLY"
-        com_ibm_team_integration_pipeline_auth_tiam_client: "pipeline"
-        com_ibm_team_integration_pipeline_bss_password: "QoiCWP3bOP1QPZbqUrVzYtnqGTddGi2LLlf8HkEBWhsFGQlUcFbAmdFskxcMzyp5"
-        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_clientSecret: "STAGE1secret"
+        bluemix_iam_client_ribbon_IsSecure: true
+        bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerPassword: "@KAMQP_PASSWORD@"
-        com_ibm_team_integration_pipeline_encrypt_payload_cipher_key: "cfb21350e782ce44b8379882636af9e9"
-        com_ibm_team_integration_pipeline_encrypt_payload_hmac_key: "0f8c68f3b80d05471d34b574bd703408"
-        com_ibm_team_integration_pipeline_encrypt_redis_payload_cipher_key: "cfb21350e782ce44b8379882636af9e9"
-        com_ibm_team_integration_pipeline_encrypt_redis_payload_hmac_key: "0f8c68f3b80d05471d34b574bd703408"
-        com_ibm_team_integration_pipeline_jazzhub_auth_token_secret: "psdevSecret"
-        com_ibm_team_integration_pipeline_jazzhub_billing_password: "JazzHub"
-        com_ibm_team_integration_pipeline_logging_logmet_token: "75YJPS7Let03"
-        com_ibm_team_integration_pipeline_messaging_amqp_key_password: "ibm-team"
         com_ibm_team_integration_pipeline_messaging_amqp_password: "@KAMQP_PASSWORD@"
-        com_ibm_team_integration_pipeline_payload_cipher_key: "cfb21350e782ce44b8379882636af9e9"
-        com_ibm_team_integration_pipeline_payload_hmac_key: "0f8c68f3b80d05471d34b574bd703408"
         com_ibm_team_integration_pipeline_redis_password: "@KREDIS_PASSWORD@"
-        com_ibm_team_integration_pipeline_security_token_cipherKey: "cfb21350e782ce44b8379882636af9e9"
-        com_ibm_team_integration_pipeline_security_token_hmacKey: "0f8c68f3b80d05471d34b574bd703408"
-        com_ibm_team_integration_pipeline_sshtunnel_privkey: "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQ0KTUlJRXBnSUJBQUtDQVFFQXQ3WnFqM2M2anZ5S250RURwR01sbFZvaEI0bVZ0R1htaUVjVzd4eFRNQjZDMHRheQ0KOURRN1NZSnpSc3VXMnNocDNXcU0xcFh5RVFuOWVGZ0dzU0Y3MW9CYTBKaXZrRkZDUjZNeEoxOGwva3hsdnNuWQ0KV2JoLzY5QVA3dGVHY09va25XNkt5VGxuY0wwcFV4Zm9vaVhiWkdjRko5NjdrdnV5OXFuQTY2YlFOVUF0aDJZcA0KRmVLMXYzalJZWXBKaXh5VEFQcklRVFRuVVdtM1FyRE02VWhsSHVCSmcvVW5MSjFMejQzZ0J4enlaeGhJcUFkLw0KZXpFZXdlRVRvNFhLeGtJSUZNQ1poVWgzRUVOVDBIdWdYZXMzTFRIU1JoSTFDdm5Xak5VcCtmNmUzMDV1S0tvVQ0KcmlTZjh6UGpIWDhHRDFaMG1CbTNXVGlLZUMwalE3VXRqMk83N1FJREFRQUJBb0lCQVFDaHhPcU9qRkd2U1NnVA0KY3orK3lHTjI0VmVHV0p2UHI0OVJYekFOdTZaeEQ5enBKWStOUkZVVWhOOVhicnpXeUhXWU9GUHVQVGxiMGEwMg0KQkdWWUlvRDJ3QzIzMDB0OVRHQ056bURoSjRMQUs2dklWZHJDSHBuZUgyZDRUS2FnMVQwS3VDVlR6YzJOVTdTSQ0KNjl1NHRKYzlFUTVVTG1pRHBFblJ0R2NoMnRFcW9Xa0lIeUxFZXZkbGtBTDZoN1RpRXpDdW0yblUwdE1tZDhjTg0KY2VQVkprYnpZM2VnT1ZteVNwcTZ1MllYWEUyWlFNQmR1N0FvN2dRb1Y1V2JLemxhNVVBTER5SG40eUlVN3hoMQ0KVXQzOVRkbG1uSnROTHBBRy9vb01MRFR3b2Y1bWpjQjZIUldqUVoyQWxwWEd3ZGFLeldxUmZlMFhPYkVZbml6Rw0KZFBTbFZPcU5Bb0dCQVBSL0ZnblRibXAzcUswOHJWVVV4SXhpRmVpK2ZXTTg0ZWFyc1dEU3F0aUNTMW5SNU0rbQ0KaGNCNVRDbmpsdWdycXhGVkRLV1doeTdNNmFiVVNscEU1U2xsVllURml6Vm1NTFhrVXg5R3pNbFpTRkExMHhLbQ0KelFwaktFSW9YU1VWdTNqY204RStjRGEyY2VEdU16em53emV1UkQzdjg3cHZITStvdTF2Sk14YWJBb0dCQU1CYg0KTXllNnpqUllBdjVnbytqeFhUTUtMTStCR1diazVZUGlscG9BVkFhV05iTGRpWWZiTEkvc0hXQm5mL2VhU2oxUw0KNzI3b0FOMmpqR05JTG96b3FHOE9HdUNlOFlKRlN6T090aDFwV0tCNS8zQzE2RFdDR2ozSHVlOElXR1ZtdlBudw0KRTQvQ3U2L3hVRVZpakNTRVFmb0xlR0szT0ZRQ3phV0Y2aWpqVjF3WEFvR0JBTURNQWpYbld2ZHJ1a0E1UzdsKw0Kc2VxOVllZHhadkM5VHFtV0ZENTBnVEpQdEZsMHNRaXBtR2tKZld5K3dmMzhpVjRXZ2UyRmdMMy82Zk9iRGJLWA0KQjFvWVJWSjRiK2pBMTRKbk5NRENGTFJseWljdCttNkh4OEg4SlAvZVVtenU4VEZDVFRRYUoyU05nOGxLTEc5SA0KbHVJdWNqT2hKc0dKNHQ5QmY5VEdHSm9uQW9HQkFLOVBMeHNwZko5bUN5eHRSVldiREpiazBodzRDNytrSTYyRQ0KU0QrSXh3dk53SmtJb1R5Sk8xN2NFWlg0SGorNmhhaklPbUY0M3JraFFtU0Z0NjlDcDZlM1VqV2ZobnAwenVucA0KU2Y4YU1PVG82eTU5QzJvZzdldWFhTkg2YUIzYWVhYk03L2NZd2xmQzlhYVcveVNVeVZDclBZZXlkb3JTbHp3aA0KQlYxSWZTajNBb0dCQU1ybXRJbzZ1SVVmMExvM0ZGUmVQdVFCMWVya1RqcDY3aXpZRjBJQStzUlJnU1R3NWJIQQ0KQ1JUZzNCTE1oK1I1azNJdHUwT3JpTENTNlBUMElSRGV4dFl1N252Qms1a0lpbnpHaysvZEVQVjU0ZVV5bVZSbg0KNktQSHJMYkd3YXNidStIMmpRYkI3TndmbmFVSzlBY2lHUkdwVGJmVStFNG1Rc3pYcVNlUytORU0NCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tDQo"
-        com_ibm_team_integration_pipeline_toolchain_pipelineBrokerSecret: "olnqSTUA7Drpqmdaytswqdi3CLtoszQhCNikw6vCGdUGnZ25Ot"
-        crypto_master_key: "4d88c00619519b391f2a2e7486aaec78fb3cc1e449318cfe2d159bb763e202e6cddc7e2dc799ae3eaf4f8bd72c8a5da7ccabd838c5b31b8aee5184bcf22b14ff7fbfb3e204bc11af2159841c74279a4216b268d23a6bbc6cc318eb9679e531e5b05cf292522470518b596bfee50edff5026d80717f6b2e86dc39c1f0cd11dfbd"
-        crypto_secret_key: "owHQ5kJo/2hXbWOVSzqBn4s02faS4xs/FY1SoLT3iuZiqTTUl7ckvXLPdGFgNYmohlmTgaDbvJrMQADCIZ8KZqkJWh6CwpTQsXBT6Rv880RR6XFtXFoV7ChepNwe188DCPakKQEioaW/Bm/MyCDesgncUiYbZucQI9HkLndw9cPgAQ40j0yTDzFdMzllP+bl6iOzgUwaCpRMqjhz4mUKWw+4rNf9z2zvB2hj78bx9Y4hcHRGVS2z6nZNik3IDuB2KiDdumbm9u5FwGmkdtVRFMS/aU321ouUJ9JgE4zdYM3/yEt77yJ92V5/T59QxyUuV7gjAW2Odg7QhMeiRALBwOnL4hoaJEfajH6TPufVge4="
-        gitAdminPassword: "f94e44c449ae34080337ee3548b6d2336852b067fda9ee31acab01a24c75bb0e"
-        jazzhubAdminPassword: "#yaq07tyG#"
-        jenkinsAdminPassword: "jazzhub11"
-        mqttPassword: "jazzhub"
-        newrelic_license_key: "26c5f096f5ec0f41c3bf1972e7961fa9db553b75"
-        qradar_keystore_password: "936V72Z3"
-        tiam_api: "https://devops-api.stage1.ng.bluemix.net/v1/identity"
-        vcap_pipeline_others: "3ce1764e392d5a06ef9e268d427ca54eb1f995e5caf1330b"
-        vcap_pipeline_secret: "4858955f38db094b8b8d8a1a75e0ad6afbfafad44088973e"
+        com_ibm_team_integration_pipeline_db_cloudant_password: "@KCOUCHDB_PASSWORD@"
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3

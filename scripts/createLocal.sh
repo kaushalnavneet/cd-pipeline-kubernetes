@@ -42,3 +42,10 @@ EOF
 
 fi
 
+
+if [ -e pipeline-service -a -e vault_values.txt ]; then
+	cat <(sed '/  travis-worker:/,$d' <cd-pipeline-kubernetes/environments/local/values.yaml ) vault_values.txt  >tmp.txt
+	echo "  travis-worker:" >>tmp.txt
+	cat <(sed '1,/  travis-worker:/d' <cd-pipeline-kubernetes/environments/local/values.yaml ) >>tmp.txt
+	mv tmp.txt cd-pipeline-kubernetes/environments/local/values.yaml
+fi
