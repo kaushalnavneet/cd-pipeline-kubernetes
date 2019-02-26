@@ -91,25 +91,6 @@ pipeline:
         log4js_logmet_component: pipeline-log-service-k8s
         log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
-  source-change-service:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/source-change-service/source-change-service-20181123
-    configmap:
-      data:
-        CIPHER_ALGORITHM: aes-128-cbc
-        CLOUDANT_DB: pipeline-source-changes
-        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
-        HMAC_ALGORITHM: sha1
-        HTTPS_PORT: ''
-        HTTP_PORT: ''
-        IS_CF: true
-        NEW_RELIC_APP_NAME: Pipeline Source Change Service - YS1
-        log4js_logmet_component: source-change-service-k8s
-        log4js_syslog_appender_product: source-change-service-k8s-ys1-dev
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -465,7 +446,6 @@ pipeline:
         com_ibm_team_integration_pipeline_messaging_amqp_securityProvider: IbmX509
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         test_service_client_ribbon_listOfServers: test-report-service.us-south.devops.dev.cloud.ibm.com:443
-        source_change_service_client_ribbon_listOfServers: source-change-service.us-south.devops.dev.cloud.ibm.com:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
         log_service_client_ribbon_IsSecure: false
