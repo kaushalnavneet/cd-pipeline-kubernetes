@@ -309,6 +309,7 @@ pipeline:
         ENV_ID: ibm:ys1:us-south
         PAYLOAD_ENCRYPT: true
         ENABLE_MCCP_REGION_FEATURE: true
+        ENABLE_CONFIG_REACT: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
