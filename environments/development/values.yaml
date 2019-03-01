@@ -369,6 +369,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20181123
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr
     probes:
       enabled: false
       liveness:
@@ -510,9 +511,6 @@ pipeline:
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3018df0e-a1cd-44f0-9619-aa4a7b473710
         com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
-        com_ibm_team_integration_pipeline_redis_host: portal650-26.bmix-dal-yp-990eba2e-e522-4949-b8c6-3620beef579d.2438855152.composedb.com
-        com_ibm_team_integration_pipeline_redis_port: 42781
-        com_ibm_team_integration_pipeline_redis_ssl: true
         com_ibm_team_integration_pipeline_messaging_amqp_key_type: JKS
         com_ibm_team_integration_pipeline_messaging_amqp_keystore: /resources/security/mqtt_keystore.keystore
         com_ibm_team_integration_pipeline_messaging_amqp_truststore: ''
