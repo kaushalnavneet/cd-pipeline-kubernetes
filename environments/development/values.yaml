@@ -188,6 +188,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr
     probes:
       enabled: false
     configmap:
@@ -228,7 +229,6 @@ pipeline:
         K8S_REGIONS: ''
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
         PIPELINE_URL: http://pipeline-service/pipeline
-        REDIS_URL: rediss://portal650-26.bmix-dal-yp-990eba2e-e522-4949-b8c6-3620beef579d.2438855152.composedb.com:42781 
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
