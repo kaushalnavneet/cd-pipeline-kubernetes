@@ -13,4 +13,4 @@ BACKUP_NAME=$(echo ${OLD_CONTEXT} | rev | cut -d'/' -f-2 | rev | sed 's/\//_/g')
 vault read --format=json ${OLD_CONTEXT} | jq '.data' > ${BACKUP_NAME}-$(date -u +%Y_%m_%d_%Hh%Mm%Ss)-prev.json
 vault read --format=json ${OLD_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
 echo "==="
- 
+echo "Add \"${NEW_CONTEXT}\" to the values.yaml file"
