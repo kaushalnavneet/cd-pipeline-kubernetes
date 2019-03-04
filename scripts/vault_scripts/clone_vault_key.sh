@@ -8,7 +8,7 @@ echo "==="
 echo ${OLD_CONTEXT}
 BACKUP_NAME=`echo ${OLD_CONTEXT} | rev | cut -d'/' -f-2 | rev | sed 's/\//_/g'`
 
-vault read --format=json ${OLD_CONTEXT} | jq '.data' > ${BACKUP_NAME}-$(date +%Y%m%d)-prev.json
+vault read --format=json ${OLD_CONTEXT} | jq '.data' > ${BACKUP_NAME}-$(date -u +%Y_%m_%d_%Hh%Mm%Ss)-prev.json
 vault read --format=json ${OLD_CONTEXT} | jq '.data' | VAULT_TOKEN= vault write ${NEW_CONTEXT} -
 echo "==="
  
