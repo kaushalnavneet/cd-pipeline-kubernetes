@@ -273,6 +273,7 @@ pipeline:
         DOCKER_IMAGES: "2.0, 1.0"
         LEGACY_DOCKER_IMAGE: "1.0"
         LATEST_DOCKER_IMAGE: "2.0"
+        ENABLE_CONFIG_REACT: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
