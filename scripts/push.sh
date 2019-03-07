@@ -16,8 +16,8 @@ CODE_BASE=${4:-nodejs6}
 PULL_BUILDER=${5:-true}
 CLUSTER_NAME=${6:-otc-us-south-dev}
 
-#export INGRESS_SUBDOMAIN=$(bx cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
-#export INGRESS_SECRET=$(bx cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+#export INGRESS_SUBDOMAIN=$(ibmcloud cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
+#export INGRESS_SECRET=$(ibmcloud cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
 
 
 cat <<END > build_info.json
@@ -37,7 +37,7 @@ if [  -d cd-pipeline-kubernetes ]; then
     docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
     docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
-    bx cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    ibmcloud cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   fi 
   helm dep up ${CHART_DIR}
   if ! helm list ${RELEASE_NAME}; then
