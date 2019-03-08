@@ -327,39 +327,6 @@ pipeline:
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
-  pipeline-inventory:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-inventory/pipeline-inventory-20181123
-    probes:
-      enabled: false
-      liveness:
-        initialDelay: 60
-        path: "/api/status"
-      readiness:
-        initialDelay: 60
-        path: "/api/status"
-    configmap:
-      data:
-        newrelic_env: YS1-k8s
-        CIPHER_ALGORITHM: AES/CBC/PKCS5Padding
-        CLOUDANT_DB: pipeline-inv
-        CLOUDANT_URL: https://d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
-        HMAC_ALGORITHM: HmacSHA1
-        IS_CF: "1"
-        logmet_host: ingest.logging.ng.bluemix.net
-        logmet_port: "9091"
-        logmet_component_name: pipeline-inventory-k8s
-        logmet_tenant_id: 3018df0e-a1cd-44f0-9619-aa4a7b473710
-        qradar_enabled: true
-        qradar_host: syslog.prd.ccs.ibmcloud.com
-        qradar_keystore_path: qr.jks
-        qradar_port: "6515"
-        qradar_product: pipeline-inventory-k8s-ys1-dev
-        qradar_url: devops.stage1.ng.bluemix.net
   test-report-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -443,9 +410,6 @@ pipeline:
         cleanup_deploysToKeep: 10
         com_ibm_team_integration_pipeline_logHTTPTraffic: false
         jobTimeout: 60
-        inventory_client_ribbon_listOfServers: pipeline-inventory
-        inventory_client_ribbon_IsSecure: false
-        com_ibm_team_integration_pipeline_inventory_disabled: false
         com_ibm_team_integration_pipeline_billing_disabled: false
         com_ibm_team_integration_pipeline_jazzhub_billing_user: DevOps
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_redirectUrl: https://dev02.hub.jazz.net/trust/authorize
@@ -514,7 +478,6 @@ pipeline:
         source_changes_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         tests_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         scm_proxy_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        inventory_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         blade_toolchain_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         ice_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         logs_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
