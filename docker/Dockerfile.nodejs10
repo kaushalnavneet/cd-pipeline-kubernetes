@@ -11,6 +11,9 @@ FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:nodejs10 as build
 ARG IDS_TOKEN
 ARG IDS_USER
 ARG IDS_PASS
+ARG ARTIFACTORY_TOKEN_BASE64
+ARG ARTIFACTORY_ID
+ARG CONSOLE_AUTH_TOKEN
 
 ADD . /work/component
 
