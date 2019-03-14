@@ -1,4 +1,12 @@
 #!/bin/bash
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2019. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 
 NOCRBUILD=true
 if [ "x$1" = x--crbuild ]; then
@@ -34,10 +42,10 @@ if [  -d cd-pipeline-kubernetes ]; then
     if $PULL_BUILDER ; then
       docker pull registry.ng.bluemix.net/${NAMESPACE}/cd-build-base:${CODE_BASE}
     fi
-    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
     docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
-    ibmcloud cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    ibmcloud cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   fi 
   helm dep up ${CHART_DIR}
   if ! helm list ${RELEASE_NAME}; then

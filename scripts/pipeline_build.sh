@@ -1,5 +1,12 @@
 #!/bin/bash
-
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2019. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 cp -a /work cd-pipeline-kubernetes
 
 IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
@@ -31,7 +38,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_PASS=${IDS_PASS} --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
+docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
 if [ $? -ne 0 ]; then
     echo \"Failed during execution of docker build command\"
     exit 1
