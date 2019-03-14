@@ -35,6 +35,15 @@ if ! helm list ${IDS_STAGE_NAME}; then
   if [ -z $deleted ]; then
     helm delete --purge ${IDS_STAGE_NAME}
   fi
+  echo "IDS_STAGE_NAME=${IDS_STAGE_NAME}"
+  echo "COMPONENT_NAME=${COMPONENT_NAME}"
+  echo "CHART_NAMESPACE=${CHART_NAMESPACE}"
+  echo "ENVIRONMENT=${ENVIRONMENT}"
+  echo "APPLICATION_VERSION=${APPLICATION_VERSION}"
+  echo "IMAGE_NAME=${IMAGE_NAME}"
+  echo "INGRESS_SUBDOMAIN=${INGRESS_SUBDOMAIN}"
+  echo "INGRESS_SECRET=${INGRESS_SECRET}"
+  helm install --dry-run --debug --name ${IDS_STAGE_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_NAME} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
   helm install --name ${IDS_STAGE_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_NAME} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
 else
   helm upgrade --force ${IDS_STAGE_NAME} ${COMPONENT_NAME} --install --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_NAME} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
