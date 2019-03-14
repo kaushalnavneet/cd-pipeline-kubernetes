@@ -1,5 +1,5 @@
 {{- define "common.deployment.tpl" -}}
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 {{ template "common.metadata" . }}
 spec:
@@ -9,7 +9,6 @@ spec:
         app: {{ template "common.name" . }}
         release: {{ .Release.Name | quote }}
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
       -
 {{ include "common.container.tpl" . | indent 8 }}
