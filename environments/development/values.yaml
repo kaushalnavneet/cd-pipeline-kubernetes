@@ -21,11 +21,11 @@ pipeline:
       enabled: true
       liveness:
         initialDelay: 30
-        periodSeconds: 30
-        timeoutSeconds: 3
+        periodSeconds: 15
+        timeoutSeconds: 5
       readiness:
-        initialDelay: 30
-        periodSeconds: 30
+        initialDelay: 5
+        periodSeconds: 5
         timeoutSeconds: 10
     configmap:
       data:
@@ -47,7 +47,10 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_03_05_14h45m28s
     probes:
-      enabled: false
+      liveness:
+        path: "/api/version"
+      readiness:
+        path: "/api/status"
     configmap:
       data:
         AMQPS_PORT: "54222"
