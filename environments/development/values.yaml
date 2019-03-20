@@ -282,7 +282,6 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service-20181123
     probes:
-      enabled: false
       liveness:
         path: "/codestation/v2/artifacts/version"
       readiness:
