@@ -211,8 +211,6 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr_2019_03_04_13h14m20s
-    probes:
-      enabled: false
     configmap:
       data:
         AMQP_CA: ''
