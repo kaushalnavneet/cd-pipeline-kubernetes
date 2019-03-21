@@ -358,12 +358,9 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20181123
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr_2019_03_04_13h14m20s
     probes:
-      enabled: false
       liveness:
-        initialDelay: 120
-        path: "/pipeline/status"
+        path: "/pipeline/version"
       readiness:
-        initialDelay: 120
         path: "/pipeline/status"
     configmap:
       data:
