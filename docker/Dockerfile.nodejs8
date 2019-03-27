@@ -6,7 +6,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:nodejs8 as build
+FROM us.icr.io/opentoolchain/cd-build-base:nodejs8 as build
 
 ARG IDS_TOKEN
 ARG IDS_USER
@@ -20,7 +20,7 @@ RUN npm install -f
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 RUN npm prune --production
 
-FROM registry.ng.bluemix.net/opentoolchain/ibmnode:8secure
+FROM us.icr.io/opentoolchain/ibmnode:8secure
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production

@@ -1,13 +1,13 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2018. All Rights Reserved.
+# (c) Copyright IBM Corporation 2018, 2019. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
 
-FROM registry.ng.bluemix.net/opentoolchain/cd-build-base:java as build
+FROM us.icr.io/opentoolchain/cd-build-base:java as build
 
 ARG DEVELOPMENT=true
 ARG JQ_VERSION=jq-1.5
@@ -23,7 +23,7 @@ COPY build_info.json /work/warbuild/src/main/resources/
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
-FROM registry.ng.bluemix.net/opentoolchain/websphere-liberty:secure
+FROM us.icr.io/opentoolchain/websphere-liberty:secure
 
 ARG APP_BUILD_NUMBER=latest
 ARG MODE=DEVELOPMENT

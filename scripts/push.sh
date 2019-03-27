@@ -40,12 +40,12 @@ END
 if [  -d cd-pipeline-kubernetes ]; then
   if $NOCRBUILD && hash docker 2>/dev/null; then
     if $PULL_BUILDER ; then
-      docker pull registry.ng.bluemix.net/${NAMESPACE}/cd-build-base:${CODE_BASE}
+      docker pull us.icr.io/${NAMESPACE}/cd-build-base:${CODE_BASE}
     fi
-    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN} -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
-    docker push registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG}
+    docker build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}  --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN} -t us.icr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    docker push us.icr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG}
   else
-    ibmcloud cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  -t registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
+    ibmcloud cr build -f cd-pipeline-kubernetes/docker/Dockerfile.${CODE_BASE}   --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  -t us.icr.io/${NAMESPACE}/${IMAGE_NAME}:${TAG} . 
   fi 
   helm dep up ${CHART_DIR}
   if ! helm list ${RELEASE_NAME}; then
@@ -55,11 +55,11 @@ if [  -d cd-pipeline-kubernetes ]; then
     fi
     helm install --name ${RELEASE_NAME} ${CHART_DIR} --namespace ${NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true \
       --set pipeline.image.tag=${TAG} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET} \
-      --set pipeline.image.repository=registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME} 
+      --set pipeline.image.repository=us.icr.io/${NAMESPACE}/${IMAGE_NAME} 
   else
     helm upgrade ${RELEASE_NAME} ${CHART_DIR} --install --namespace ${NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true \
       --set pipeline.image.tag=${TAG} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET} \
-      --set pipeline.image.repository=registry.ng.bluemix.net/${NAMESPACE}/${IMAGE_NAME} 
+      --set pipeline.image.repository=us.icr.io/${NAMESPACE}/${IMAGE_NAME} 
   fi
 else
   echo "Must clone https://github.ibm.com/org-ids/cd-pipeline-kubernetes as cd-pipeline-kubernetes into root of component directory. Then execute this script as ./cd-pipeline-kubernetes/scripts/push.sh"
