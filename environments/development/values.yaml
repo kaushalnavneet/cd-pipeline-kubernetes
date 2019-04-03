@@ -275,6 +275,8 @@ pipeline:
         LEGACY_DOCKER_IMAGE: "1.0"
         LATEST_DOCKER_IMAGE: "2.0"
         ENABLE_CONFIG_REACT: true
+        PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        HOOKURL: https://otc-webhook-relay.ng.bluemix.net
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
