@@ -207,6 +207,9 @@ pipeline:
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
+    probes:
+      readiness:
+        path: "/version"
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
@@ -287,7 +290,7 @@ pipeline:
       liveness:
         path: "/codestation/v2/artifacts/version"
       readiness:
-        path: "/codestation/v2/artifacts/status"
+        path: "/codestation/v2/artifacts/version"
     configmap:
       data:
         amqp__enabled: true
@@ -363,7 +366,7 @@ pipeline:
       liveness:
         path: "/pipeline/version"
       readiness:
-        path: "/pipeline/status"
+        path: "/pipeline/version"
     configmap:
       data:
         newrelic_env: YS1-k8s
