@@ -496,6 +496,7 @@ pipeline:
         com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3018df0e-a1cd-44f0-9619-aa4a7b473710
         com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
+        com_ibm_team_integration_pipeline_redis_ssl: true
         com_ibm_team_integration_pipeline_messaging_amqp_key_type: JKS
         com_ibm_team_integration_pipeline_messaging_amqp_keystore: /resources/security/mqtt_keystore.keystore
         com_ibm_team_integration_pipeline_messaging_amqp_truststore: ''
