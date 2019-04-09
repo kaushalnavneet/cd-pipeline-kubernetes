@@ -43,7 +43,7 @@ COPY --from=build /work/warbuild/lib/newrelic.jar /opt/ibm/wlp/usr/servers/defau
 #COPY --from=build /work/warbuild/serverConf/resources/security/* /opt/ibm/wlp/usr/servers/defaultServer/resources/security/
 
 # Import the redis certificate
-RUN keytool -importkeystore -srckeystore /opt/ibm/wlp/usr/servers/defaultServer/ICDRedisTruststore.jks -srcstorepass changeit -destkeystore $JAVA_HOME/jre/lib/security/cacerts -deststorepass changeit
+RUN keytool -importkeystore -srckeystore /opt/ibm/wlp/usr/servers/defaultServer/ICDRedisTruststore.jks -srcstorepass changeit -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
 RUN chmod 755 /opt/ibm/wlp/pipeline-server /opt/ibm/wlp/jq
 
 
