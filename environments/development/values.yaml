@@ -361,7 +361,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20181123
-      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/pipeline/version"
