@@ -440,7 +440,7 @@ pipeline:
         log_archiver_service_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_toolchain_region: ibm:ys1:us-south
         com_ibm_team_integration_pipeline_toolchain_enabled: false
-        com_ibm_team_integration_pipeline_server_url: https://devops.stage1.ng.bluemix.net/devops/pipelines
+        com_ibm_team_integration_pipeline_server_url: https://dev.console.test.cloud.ibm.com/devops/pipelines
         com_ibm_team_integration_pipeline_toolchain_capability_slack_icon: ''
         com_ibm_team_integration_pipeline_features_executionEngine: Engine2
         toolchain_client_ribbon_listOfServers: ''
