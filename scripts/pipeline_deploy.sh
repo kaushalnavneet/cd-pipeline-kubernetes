@@ -28,6 +28,10 @@ if [[ ! -z "${REGION}" ]]; then
  ibmcloud cs region-set ${REGION}
 fi
 
+if [[ ! -z "${RESOURCE_GROUP}" ]]; then
+  ibmcloud target -g "${RESOURCE_GROUP}"
+fi
+
 $(ibmcloud cs cluster-config --export ${IDS_JOB_NAME})
 
 INGRESS_SUBDOMAIN=$(ibmcloud cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
