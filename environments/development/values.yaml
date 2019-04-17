@@ -46,7 +46,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_03_05_14h45m28s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/api/version"
@@ -203,7 +203,7 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr_2019_03_04_13h14m20s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq_2019_03_04_13h14m20s
     configmap:
       data:
         AMQP_EXCHANGE: pipeline
@@ -267,7 +267,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service-20181123
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/codestation/v2/artifacts/version"
@@ -336,7 +336,7 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20181123
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_03_04_13h14m20s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/pipeline/version"
@@ -525,7 +525,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker-20181123
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq_2019_03_04_13h14m20s
     probes:
       enabled: false
     configmap:
