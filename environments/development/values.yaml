@@ -208,8 +208,7 @@ pipeline:
       data:
         AMQP_EXCHANGE: pipeline
         AMQP_QUEUE: pipeline-ui.
-        AMQP_REJECT_UNAUTH_CERTS: true
-        AMQP_SSL_PROTOCOL: TLSv1_2_method
+        AMQP_MSG_EXP_TIME: "3000"
         ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev-console.stage1.bluemix.net
