@@ -226,6 +226,7 @@ pipeline:
         ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
         ENABLE_K8S_DEPLOYER_TYPE: true
         ENABLE_CURATED_FEATURE: true
+        ENABLE_PR_TRIGGER: true
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.test.cloud.ibm.com
         IS_DEV: false
@@ -259,7 +260,7 @@ pipeline:
         LATEST_DOCKER_IMAGE: "2.0"
         ENABLE_CONFIG_REACT: true
         PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
-        HOOKURL: https://otc-webhook-relay.ng.bluemix.net
+        HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
