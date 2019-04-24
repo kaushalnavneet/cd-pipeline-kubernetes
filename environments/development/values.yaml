@@ -334,7 +334,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20190424
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
@@ -494,8 +494,6 @@ pipeline:
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUri: amqps://portal-ssl1471-28.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc,amqps:/portal-ssl1526-29.bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc.2438855152.composedb.com:54222/bmix-dal-yp-be5d2615-f4a8-4c17-bdb2-2dbf03fe03bc
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerUsername: admin
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
         codestationReadTimeout: 5000
