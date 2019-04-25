@@ -45,7 +45,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_03_05_14h45m28s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_04_25_15h37m28s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
@@ -106,15 +106,12 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub-20181123
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com,portal-ssl655-26.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
-        AMQP_PORT: "42794"
-        AMQP_PROTOCOL: amqps
         AMQP_QUEUE: ''
         AMQP_DEDICATED_PROTOCOL: amqps
         AMQP_DEDICATED_HOST: sl-us-dal-9-portal.2.dblayer.com
@@ -137,19 +134,15 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub-20181123
     configmap:
       data:
         AMQP_EXCHANGE: ''
-        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com,portal-ssl655-26.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
         AMQP_MSG_EXP_TIME: ''
-        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
-        AMQP_PORT: "42794"
-        AMQP_PROTOCOL: amqps
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: ''
         AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: admin
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: ''
@@ -201,7 +194,7 @@ pipeline:
         path: "/version"
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2019_04_25_15h35m50s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     configmap:
@@ -266,7 +259,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2019_04_25_15h34m18s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
@@ -334,7 +327,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service-20190424
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2019_04_25_15h32m44s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
@@ -523,7 +516,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       enabled: false
