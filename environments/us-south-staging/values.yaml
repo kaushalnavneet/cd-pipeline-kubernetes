@@ -16,7 +16,7 @@ pipeline:
         memory: 1Gi
     vaultcommon:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common_2019_04_23_08h07m17s
     configmap:
       data:
         SECGRP: GRP1PRDY
@@ -33,14 +33,10 @@ pipeline:
     replicas: 2
     vault:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging_2019_04_30_16h50m37s
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
     configmap:
       data:
-        AMQP_HOST: portal-ssl675-24.bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b.2438855152.composedb.com
-        AMQP_PORT: "42794"
-        AMQP_PATH: /bmix-dal-yp-41d46566-95e8-48df-9ccf-03571ca4c75b
-        AMQP_SSL: true
-        AMQP_USER: admin
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
         QUEUE_NAME: builds.linux_ys1
         DOCKER_SSH_USER: pipeline
