@@ -31,7 +31,7 @@ fi
 if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
-$(ibmcloud cs cluster-config --export ${IDS_JOB_NAME})
+$(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
 
 
 
