@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 
+
 IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
 CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
 TARGET=${TARGET:-gitlab}
@@ -11,16 +12,23 @@ ACCOUNT_ID=${DEPLOY_ACCOUNT_ID:-${ACCOUNT_ID}}
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 
 
+# install vault
+curl -o v.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_linux_amd64.zip
+unzip v.zip
+rm v.zip
+
+
+
 export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
 
 # must set base64 encoded VAULT_SIDEKICK_ROLE_ID and VAULT_SIDEKICK_SECRET_ID
-export VAULT_TOKEN=$(vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID | base64 -d - ) \
+export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID | base64 -d - ) \
   secret_id=$( echo $VAULT_SIDEKICK_SECRET_ID | base64 -d - ))
 
 export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 
 
-export PG_PASSWORD=$( vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
+export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
 export PG_USERNAME=admin
 
 ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
@@ -53,11 +61,12 @@ kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-pgbouncer-secret  -
 rm -f userlist.txt
 rm -f .pgpass
 
+exit 0
 
 helm init -c
 helm dep up
 
-helm upgrade ${TARGET} . \
+helm upgrade ${TARGET} ./charts/pgbouncer  \
   --install \
   --set tags.environment=false \
   --set ${ENVIRONMENT}.enabled=true \
@@ -68,7 +77,7 @@ helm upgrade ${TARGET} . \
   --debug
 
 
-#helm install --name ${TARGET} . \
+#helm install --name ${TARGET} ./charts/pgbouncer \
 #  --set tags.environment=false \
 #  --set ${ENVIRONMENT}.enabled=true \
 #  --set enabled=true \
