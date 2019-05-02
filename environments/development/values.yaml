@@ -44,6 +44,7 @@ pipeline:
     replicas: 1
     revisionHistoryLimit: 3
     vault:
+      # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_04_25_15h37m28s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
