@@ -47,8 +47,6 @@ fi
 $(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
 
 
-
-
 kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
 echo "Creating '${TARGET}-postgres-secret' secret..."
 kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-postgres-secret --from-literal=postgres-password=${PG_PASSWORD}
@@ -65,8 +63,6 @@ EOF
 kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-pgbouncer-secret  --from-file=userlist.txt --from-file=.pgpass
 rm -f userlist.txt
 rm -f .pgpass
-
-exit 0
 
 helm init -c
 helm dep up
