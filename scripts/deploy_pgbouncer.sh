@@ -25,7 +25,12 @@ export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
 export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID | base64 -d - ) \
   secret_id=$( echo $VAULT_SIDEKICK_SECRET_ID | base64 -d - ))
 
-export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
+
+# for yq 2.2.1
+export SECRET_PATH=$( yq r ${VALUES} global.psql.secretPath  )
+
+# for yq 2.7.2
+# export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 
 
 export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
