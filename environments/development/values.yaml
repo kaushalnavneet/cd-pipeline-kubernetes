@@ -80,9 +80,9 @@ pipeline:
           i+3XjJ7/peF3xMvTMoy35DcT3E2ZeSVjouZs15O90kI3k2daS2OHJABW0vSj4nLz
           +PQzp/B9cQmOO8dCe049Q3oaUA==
           -----END CERTIFICATE-----
-        DB_HOST: 78635c21-21ed-4375-8df1-dbee51c20570.d7deeff0d58745aba57fa5c84685d5b4.databases.appdomain.cloud
+        DB_HOST: gitlab-pgbouncer
         DB_NAME: compose
-        DB_PORT: "31268"
+        DB_PORT: "6432"
         DB_SSL_PROTOCOL: TLSv1.2
         DB_TYPE: postgresql
         DB_USER: admin
