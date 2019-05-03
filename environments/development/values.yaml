@@ -121,7 +121,6 @@ pipeline:
         AMQP_MSG_EXP_TIME: 600000
         AMQP_QUEUE: webhook-relay.ys1-dev
         AMQP_RECONNECT_TIMEOUT: 3000
-        AMQP_SSL_PROTOCOL: TLSv1_2_method
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
         LOG4JS_CONFIG_PATH: ''
