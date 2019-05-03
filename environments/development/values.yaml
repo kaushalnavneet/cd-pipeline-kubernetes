@@ -87,7 +87,7 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq_2019_05_03_18h55m16s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_05_03_16h53m22s
     configmap:
       data:
@@ -103,8 +103,6 @@ pipeline:
         AMQP_DEDICATED_USER: jazzhub
         AMQP_DEDICATED_SSL_PROTOCOL: TLSv1_2_method
         AMQP_RECONNECT_TIMEOUT: 3000
-        AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: admin
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
@@ -115,7 +113,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq_2019_05_03_18h55m16s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub_2019_05_03_16h52m07s
     configmap:
       data:
