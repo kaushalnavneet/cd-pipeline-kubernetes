@@ -88,11 +88,11 @@ pipeline:
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_05_03_16h53m22s
     configmap:
       data:
-        AMQP_EXCHANGE: ''
-        AMQP_MSG_EXP_TIME: ''
+        AMQP_EXCHANGE: 'webhook-relay.fanout'
+        AMQP_MSG_EXP_TIME: 60000
         AMQP_QUEUE: ''
         AMQP_DEDICATED_PROTOCOL: amqps
         AMQP_DEDICATED_HOST: sl-us-dal-9-portal.2.dblayer.com
@@ -102,7 +102,7 @@ pipeline:
         AMQP_DEDICATED_QUEUE: '' 
         AMQP_DEDICATED_USER: jazzhub
         AMQP_DEDICATED_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_RECONNECT_TIMEOUT: ''
+        AMQP_RECONNECT_TIMEOUT: 3000
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AMQP_USER: admin
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
@@ -116,13 +116,13 @@ pipeline:
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub_2019_05_03_16h52m07s
     configmap:
       data:
-        AMQP_EXCHANGE: ''
-        AMQP_MSG_EXP_TIME: ''
+        AMQP_EXCHANGE: 'webhook-relay.fanout'
+        AMQP_MSG_EXP_TIME: 600000
         AMQP_QUEUE: webhook-relay.ys1-dev
-        AMQP_RECONNECT_TIMEOUT: ''
+        AMQP_RECONNECT_TIMEOUT: 3000
         AMQP_SSL_PROTOCOL: TLSv1_2_method
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
