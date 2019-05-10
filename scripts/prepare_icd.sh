@@ -136,11 +136,6 @@ kubectl exec -n$CHART_NAMESPACE -ti $POSTGRES_POD -- bash -c 'source icd_env.txt
 
 
 
-
-# cat otc-tok02-prod-cm-pipeline-log-service.yaml | yq 'del(.metadata.labels)' | yq 'del(.metadata.resourceVersion)' | yq 'del(.metadata.uid)' | yq 'del(.metadata.creationTimestamp)' | kubectl apply -f -
-
-# cat otc-tok02-prod-deployment-pipeline-log-service.yaml  | yq 'del(.metadata.labels)' | yq 'del(.metadata.resourceVersion)' | yq 'del(.metadata.uid)' | yq 'del(.metadata.creationTimestamp)' | yq 'del(.status)' | yq 'del(.metadata.generation)' | yq 'del(.metadata.annotations)' | yq 'del(.spec.selector)' | yq 'del(.spec.template.metadata.labels)' | kubectl apply -f -
-
 # now actually switch the clusters over to ICD
 #
 
