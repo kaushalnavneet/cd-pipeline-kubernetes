@@ -176,6 +176,8 @@ for CLUSTER_NAME in $CLUSTERS; do
 		while kubectl get pods -n$CHART_NAMESPACE | grep $pod | grep 0/1 >/dev/null 2>&1; do
 			sleep 5
 		done
+		echo Waiting for $pod container to come up
+		sleep 20
 		echo ''
 		echo "pod $pod is alive in cluster $CLUSTER_NAME"
 		kubectl logs $pod
