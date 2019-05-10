@@ -34,7 +34,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging_2019_04_30_16h50m37s
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq_2019_04_23_07h59m20s
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq-icd_2019_04_23_07h59m20s
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
