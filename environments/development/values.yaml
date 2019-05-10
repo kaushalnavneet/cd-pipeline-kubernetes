@@ -87,7 +87,7 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq_2019_05_03_18h55m16s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq-icd_2019_05_10_02h57m47s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_05_03_16h53m22s
     configmap:
       data:
@@ -113,7 +113,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq_2019_05_03_18h55m16s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq-icd_2019_05_10_02h57m47s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub_2019_05_03_16h52m07s
     configmap:
       data:
