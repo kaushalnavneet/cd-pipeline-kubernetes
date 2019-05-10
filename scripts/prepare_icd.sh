@@ -15,8 +15,6 @@ fecho () {
 	echo "$2"
 }
 
-export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
-
 if [ ! -e ${DEVOPS_CONFIG} ]; then
 	git clone git@github.ibm.com:ids-env/devops-config
 else
@@ -24,6 +22,8 @@ else
 	git pull
 	popd
 fi
+
+export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 
 
 bx cs region-set "$REGION"
