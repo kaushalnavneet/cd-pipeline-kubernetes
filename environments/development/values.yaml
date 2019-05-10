@@ -465,7 +465,7 @@ pipeline:
         com_ibm_team_integration_pipeline_features_launchDarkly_sdkKey: sdk-322d7e2d-59d8-4eda-a2ba-0fa6a0946cd4
         com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
         com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
-        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: rpc.api.stage1.ng.bluemix.net
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue:
         github_services: github,githubpublic,github_integrated,githubconsolidated
         com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
         codestationReadTimeout: 5000
