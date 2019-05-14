@@ -15,8 +15,12 @@ fecho () {
 	echo "$2"
 }
 
+if [ ! -z "$DEVOPS_CONFIG_BRANCH" ]; then
+	OPTS=" -b $DEVOPS_CONFIG_BRANCH"
+fi
+
 if [ ! -e ${DEVOPS_CONFIG} ]; then
-	git clone git@github.ibm.com:ids-env/devops-config
+	git clone $OPTS git@github.ibm.com:ids-env/devops-config
 else
 	pushd ${DEVOPS_CONFIG}
 	git pull
