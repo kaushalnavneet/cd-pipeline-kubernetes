@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-set +e
+set -e
 
 export ENVIRONMENT="$1" ; shift
 export REGION="$ENVIRONMENT"
