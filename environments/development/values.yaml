@@ -93,6 +93,7 @@ pipeline:
       data:
         AMQP_EXCHANGE: 'webhook-relay.fanout'
         AMQP_MSG_EXP_TIME: 60000
+        AMQP_RECONNECT_TIMEOUT: 5
         AMQP_QUEUE: ''
         AMQP_DEDICATED_PROTOCOL: amqps
         AMQP_DEDICATED_HOST: sl-us-dal-9-portal.2.dblayer.com
@@ -118,6 +119,7 @@ pipeline:
       data:
         AMQP_EXCHANGE: 'webhook-relay.fanout'
         AMQP_MSG_EXP_TIME: 600000
+        AMQP_RECONNECT_TIMEOUT: 5
         AMQP_QUEUE: webhook-relay.ys1-dev
         AUTO_INIT_SUBSCRIBE: true
         BASIC_USER: relay
