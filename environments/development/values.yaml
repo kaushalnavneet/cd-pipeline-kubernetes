@@ -480,6 +480,7 @@ pipeline:
         worker_dindBase: true
         worker_globalBaseImage: "1.0"
         enable_pull_request: true
+        worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: false
         com_ibm_team_integration_pipeline_bss_enforceQuotas: true
