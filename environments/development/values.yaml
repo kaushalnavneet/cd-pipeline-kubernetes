@@ -495,6 +495,7 @@ pipeline:
         pipeline_ui_ribbon_listOfServers: pipeline-ui
         pipeline_ui_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         pipeline_ui_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_ui_cast_enable: true
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3
