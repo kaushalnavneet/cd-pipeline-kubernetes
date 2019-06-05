@@ -142,6 +142,8 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
+        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
+        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
         PIPELINE_API_URL: http://pipeline-service/pipeline
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
