@@ -235,6 +235,7 @@ pipeline:
         PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
         HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
+        privateWorkerEnabled: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
