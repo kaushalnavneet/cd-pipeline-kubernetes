@@ -136,6 +136,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker-20181123
+      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2019_03_04_13h14m20s
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
