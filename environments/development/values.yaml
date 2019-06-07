@@ -147,6 +147,20 @@ pipeline:
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
+  private-worker-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq-icd_2019_05_10_02h57m47s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2019_03_04_13h14m20s
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2019_06_07_13h45m55s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Private Worker - YS1
+        log4js_logmet_component: private-worker-service-k8s
+        log4js_syslog_appender_product: private-worker-service-ys1-dev
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
