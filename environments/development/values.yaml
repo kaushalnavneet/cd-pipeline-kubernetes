@@ -143,6 +143,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
         LMS_API_URL: http://lms-api/v1/messaging
         TIAM_API_URL: http://otc-tiam
+        OTC_API_URL: http://otc-api
         PIPELINE_API_URL: http://pipeline-service/pipeline
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
