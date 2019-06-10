@@ -417,6 +417,7 @@ pipeline:
         com_ibm_team_integration_pipeline_eventLogging_httpEnabled: false
         com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
         mccp_client_ribbon_listOfServers: mccp.ng.bluemix.net:443
+        mccp_client_ribbon_IsSecure: true
         blade_toolchain_client_ribbon_listOfServers: otc-api
         blade_toolchain_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
