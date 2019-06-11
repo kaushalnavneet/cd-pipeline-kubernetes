@@ -248,6 +248,7 @@ pipeline:
         HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
+        PRIVATE_WORKER_API: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
