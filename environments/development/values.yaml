@@ -495,7 +495,7 @@ pipeline:
         artifacts_useS3: true
         worker_curatedImages: latest=travis-registry:5000/pipeline-worker:master-2019-06-13_21-47-23,2.1=travis-registry:5000/pipeline-worker:master-2019-06-13_21-47-23,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,
         worker_dindBase: true
-        worker_globalBaseImage: "1.0"
+        worker_globalBaseImage: "latest"
         enable_pull_request: true
         worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
