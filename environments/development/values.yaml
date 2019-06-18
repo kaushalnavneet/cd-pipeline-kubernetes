@@ -466,8 +466,10 @@ pipeline:
         log4jRootlogger: INFO, console, LOGMET
         bss_service_client_ribbon_listOfServers: continuous-delivery-bss
         bss_service_client_ribbon_IsSecure: false
+        bss_service_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         bss_service_client_rg_ribbon_listOfServers: cd-broker
         bss_service_client_rg_ribbon_IsSecure: false
+        bss_service_client_rg_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         com_ibm_team_integration_pipeline_bss_disabled: false
         com_ibm_team_integration_pipeline_bss_timeout: 10000
         com_ibm_team_integration_pipeline_security_bssWhiteList: ''
@@ -500,7 +502,8 @@ pipeline:
         enable_pull_request: true
         worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
-        com_ibm_team_integration_pipeline_bss_checkQuotas: false
+        com_ibm_team_integration_pipeline_bss_checkQuotas: true
+        com_ibm_team_integration_pipeline_rg_bss_checkQuotas: true
         com_ibm_team_integration_pipeline_bss_enforceQuotas: true
         com_ibm_team_integration_pipeline_json_verification_disabled: false
         com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
