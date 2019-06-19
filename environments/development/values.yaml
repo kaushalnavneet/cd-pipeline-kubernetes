@@ -186,7 +186,7 @@ pipeline:
         path: "/version"
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2019_06_04_15h21m55s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2019_06_19_17h18m53s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     configmap:
@@ -250,6 +250,8 @@ pipeline:
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
         PRIVATE_WORKER_API: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
+        ORG_BSS_HOST: http://continuous-delivery-bss
+        RG_BSS_HOST: http://cd-broker
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
