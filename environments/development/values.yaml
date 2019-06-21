@@ -282,16 +282,6 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         SSL: true
         STATUS_TIMEOUT: "4500"
-        STORAGE_AUTH_URL: https://identity.open.softlayer.com
-        STORAGE_AUTH_VERSION: "3"
-        STORAGE_DOMAIN_ID: cc8d71f3e8704f8387275758be9c04ae
-        STORAGE_DOMAIN_NAME: "1073451"
-        STORAGE_INTERFACE: public
-        STORAGE_PROJECT: object_storage_04bbe9fd_7940_477c_8c24_dcdd7e10bf0b
-        STORAGE_PROJECT_ID: e6a48c019c904be2bf626fe4c91c8e68
-        STORAGE_REGION: dallas
-        STORAGE_USERID: 528ea5b6577f4b06a8ef0fa8969a23bb
-        STORAGE_USERNAME: admin_6a49519e0f7b815d63e272ffb3425dab3dd31d4a
         USE_S3: true
         log4js_logmet_component: pipeline-artifact-repository-service-k8s
         log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
