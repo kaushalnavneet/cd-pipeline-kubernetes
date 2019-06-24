@@ -157,8 +157,8 @@ pipeline:
         NEW_RELIC_APP_NAME: Private Worker - YS1
         IAM_URL: https://iam.test.cloud.ibm.com
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
-        AGENT_VERSION_RANGE: ">=0.0.1"
-        AGENT_VERSION: "0.0.2"
+        AGENT_VERSION_RANGE: ">=0.1.0"
+        AGENT_VERSION: "0.1.0"
         log4js_logmet_component: private-worker-service-k8s
         log4js_syslog_appender_product: private-worker-service-ys1-dev
   pipeline-consumption:
