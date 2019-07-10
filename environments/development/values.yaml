@@ -254,6 +254,7 @@ pipeline:
         ORG_BSS_HOST: http://continuous-delivery-bss
         RG_BSS_HOST: http://cd-broker
         ENABLE_RG_ENTITLEMENT: true
+        ENABLE_REDUX_DEBUG: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
