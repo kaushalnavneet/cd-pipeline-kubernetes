@@ -16,7 +16,7 @@ pipeline:
       memory: 1Gi
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_2019_07_31_16h12m55s
     probes:
       enabled: true
       liveness:
