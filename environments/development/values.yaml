@@ -187,7 +187,7 @@ pipeline:
         path: "/version"
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2019_06_19_17h18m53s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2019_08_06_20h19m17s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     configmap:
