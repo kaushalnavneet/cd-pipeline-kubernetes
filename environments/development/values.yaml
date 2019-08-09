@@ -161,6 +161,18 @@ pipeline:
         AGENT_VERSION: "0.3.1-dev"
         log4js_logmet_component: private-worker-service-k8s
         log4js_syslog_appender_product: private-worker-service-ys1-dev
+  tekton-ui:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/tekton-ui/tekton-ui_2019_08_08_16h00m00s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Tekton UI - YS1
+        IAM_URL: https://iam.test.cloud.ibm.com
+        log4js_logmet_component: tekton-ui-k8s
+        log4js_syslog_appender_product: tekton-ui-ys1-dev
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
