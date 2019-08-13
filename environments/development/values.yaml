@@ -142,6 +142,7 @@ pipeline:
         PIPELINE_API_URL: http://pipeline-service/pipeline
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         log4js_logmet_component: blade-pipeline-broker-k8s
+        enableTekton: true
         log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   private-worker-service:
     replicas: 1
