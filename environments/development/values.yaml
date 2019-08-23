@@ -31,15 +31,6 @@ pipeline:
       data:
         USE_K8S: true
         SECGRP: GRP3DEVS
-        log4js_logmet_enabled: true
-        log4js_logmet_logging_host: ingest.logging.ng.bluemix.net
-        log4js_logmet_logging_port: "9091"
-        log4js_logmet_space_id: 3018df0e-a1cd-44f0-9619-aa4a7b473710
-        log4js_syslog_appender_enabled: false
-        log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
-        log4js_syslog_appender_port: "6515"
-        log4js_syslog_appender_url: devops.stage1.ng.bluemix.net
-        log4js_syslog_appender_whitelist: audit-logs
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -77,8 +68,6 @@ pipeline:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
-        log4js_logmet_component: pipeline-log-service-k8s
-        log4js_syslog_appender_product: pipeline-log-service-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
   otc-github-relay-pub:
     replicas: 1
@@ -103,8 +92,6 @@ pipeline:
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        log4js_logmet_component: otc-github-relay-pub-k8s
-        log4js_syslog_appender_product: otc-github-relay-pub-k8s-ys1-dev
   otc-github-relay-sub:
     replicas: 1
     revisionHistoryLimit: 3
@@ -123,8 +110,6 @@ pipeline:
         LOG4JS_CONFIG_PATH: ''
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline/triggers/
-        log4js_logmet_component: otc-github-relay-sub-k8s
-        log4js_syslog_appender_product: otc-github-relay-sub-k8s-ys1-dev
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -141,9 +126,7 @@ pipeline:
         LMS_API_URL: http://lms-api/v1/messaging
         PIPELINE_API_URL: http://pipeline-service/pipeline
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
-        log4js_logmet_component: blade-pipeline-broker-k8s
         enableTekton: true
-        log4js_syslog_appender_product: blade-pipeline-broker-k8s-ys1-dev
   private-worker-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -160,8 +143,6 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.3.0-dev"
         AGENT_VERSION: "0.3.1-dev"
-        log4js_logmet_component: private-worker-service-k8s
-        log4js_syslog_appender_product: private-worker-service-ys1-dev
   tekton-ui:
     replicas: 1
     revisionHistoryLimit: 3
@@ -172,8 +153,6 @@ pipeline:
       data:
         NEW_RELIC_APP_NAME: Tekton UI - YS1
         IAM_URL: https://iam.test.cloud.ibm.com
-        log4js_logmet_component: tekton-ui-k8s
-        log4js_syslog_appender_product: tekton-ui-ys1-dev
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
@@ -190,7 +169,6 @@ pipeline:
         PIPELINE_API_URL: http://pipeline-service/pipeline
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
-        log4js_logmet_component: pipeline-consumption-k8s-ys1-dev
         useResourceGroups: true
   pipeline-ui:
     replicas: 1
@@ -240,8 +218,6 @@ pipeline:
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
         USE_NEW_RELIC: true
-        log4js_logmet_component: pipeline-ui-k8s
-        log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
         ENV_ID: ibm:ys1:us-south
         PAYLOAD_ENCRYPT: true
@@ -301,8 +277,6 @@ pipeline:
         SSL: true
         STATUS_TIMEOUT: "4500"
         USE_S3: true
-        log4js_logmet_component: pipeline-artifact-repository-service-k8s
-        log4js_syslog_appender_product: pipeline-artifact-repository-service-k8s-ys1-dev
         PAYLOAD_ENCRYPT: true
   test-report-service:
     replicas: 1
@@ -325,8 +299,6 @@ pipeline:
         IS_CF: true
         JSON_LIMIT: 5mb
         NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1
-        log4js_logmet_component: test-report-service-k8s
-        log4js_syslog_appender_product: test-report-service-k8s-ys1-dev
   pipeline-service:
     replicas: 1
     revisionHistoryLimit: 3
