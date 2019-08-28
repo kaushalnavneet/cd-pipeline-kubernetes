@@ -438,14 +438,11 @@ pipeline:
         nossl_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         com_ibm_team_integration_pipeline_toolchain_events_disabled: false
         com_ibm_team_integration_pipeline_cloud_cf_version: 2
-        com_ibm_team_integration_pipeline_logging_logmet_host: ingest.logging.ng.bluemix.net
-        com_ibm_team_integration_pipeline_logging_logmet_tenantId: 3018df0e-a1cd-44f0-9619-aa4a7b473710
-        com_ibm_team_integration_pipeline_logging_logmet_componentName: pipeline-service-k8s
         com_ibm_team_integration_pipeline_redis_disabled: false
         com_ibm_team_integration_pipeline_sshtunnel_disabled: true
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
-        log4jRootlogger: INFO, console, LOGMET
+        log4jRootlogger: INFO, console
         bss_service_client_ribbon_listOfServers: continuous-delivery-bss
         bss_service_client_ribbon_IsSecure: false
         bss_service_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
