@@ -126,7 +126,7 @@ pipeline:
         LMS_API_URL: http://lms-api/v1/messaging
         PIPELINE_API_URL: http://pipeline-service/pipeline
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
-        enableTekton: false
+        enableTekton: true
   private-worker-service:
     replicas: 1
     revisionHistoryLimit: 3
