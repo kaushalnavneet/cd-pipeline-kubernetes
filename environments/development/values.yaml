@@ -142,7 +142,7 @@ pipeline:
         IAM_URL: https://iam.test.cloud.ibm.com
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.3.0-dev"
-        AGENT_VERSION: "0.3.1-dev"
+        AGENT_VERSION: "0.3.2-dev"
   tekton-ui:
     replicas: 1
     revisionHistoryLimit: 3
