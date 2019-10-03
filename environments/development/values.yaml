@@ -232,9 +232,9 @@ pipeline:
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
-        DOCKER_IMAGES: "2.5, 2.4, 2.3, 2.2, 2.1, 2.0, 1.0"
+        DOCKER_IMAGES: "2.4, 2.3, 2.2, 2.1, 2.0, 1.0"
         LEGACY_DOCKER_IMAGE: "1.0"
-        LATEST_DOCKER_IMAGE: "2.5"
+        LATEST_DOCKER_IMAGE: "2.4"
         DEFAULT_BASE_IMAGE_VERSION_FROM_CONFIG: "latest"
         ENABLE_CONFIG_REACT: true
         PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
@@ -477,8 +477,8 @@ pipeline:
         doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         gitlab_services: hostedgit,gitlab
         artifacts_useS3: true
-        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:2.5,2.5=travis-registry:5000/pipeline-worker:2.5,2.4=travis-registry:5000/pipeline-worker:2.4,2.3=travis-registry:5000/pipeline-worker:2.3,2.2=travis-registry:5000/pipeline-worker:2.2,2.1=travis-registry:5000/pipeline-worker:master-2019-06-17_13-45-47,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,
-        lastest_worker_curatedImage_forMetrics: "2.5"
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:2.4,2.4=travis-registry:5000/pipeline-worker:2.4,2.3=travis-registry:5000/pipeline-worker:2.3,2.2=travis-registry:5000/pipeline-worker:2.2,2.1=travis-registry:5000/pipeline-worker:master-2019-06-17_13-45-47,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,
+        lastest_worker_curatedImage_forMetrics: "2.4"
         worker_dindBase: true
         worker_globalBaseImage: "latest"
         enable_pull_request: true
