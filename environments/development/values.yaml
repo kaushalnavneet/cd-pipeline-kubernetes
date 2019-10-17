@@ -501,6 +501,7 @@ pipeline:
         com_ibm_team_integration_pipeline_ui_cast_enable: true
         com_ibm_team_integration_pipeline_server_without_test_server: true
         com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
+        bitbucket_server_client_ribbon_ClientClassName: com.ibm.team.integration.pipeline.http.IgnoreCookieClient
   travis-worker:
     replicas: 2
     revisionHistoryLimit: 3
