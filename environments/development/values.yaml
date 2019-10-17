@@ -74,7 +74,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/common_rabbitmq-icd_2019_05_10_02h57m47s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_05_03_16h53m22s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_10_17_19h04m06s
     configmap:
       data:
         AMQP_EXCHANGE: 'webhook-relay.fanout'
@@ -82,12 +82,12 @@ pipeline:
         AMQP_RECONNECT_TIMEOUT: 5
         AMQP_QUEUE: ''
         AMQP_DEDICATED_PROTOCOL: amqps
-        AMQP_DEDICATED_HOST: sl-us-dal-9-portal.2.dblayer.com
-        AMQP_DEDICATED_PORT: 10866
+        AMQP_DEDICATED_HOST: d4f9138f-4173-4652-8ab7-c812ea6fef8d.b2b5a92ee2df47d58bad0fa448c15585.databases.appdomain.cloud
+        AMQP_DEDICATED_PORT: 30512
         AMQP_DEDICATED_PATH: /otc-yp
         AMQP_DEDICATED_EXCHANGE: ''
         AMQP_DEDICATED_QUEUE: '' 
-        AMQP_DEDICATED_USER: jazzhub
+        AMQP_DEDICATED_USER: admin
         AMQP_DEDICATED_SSL_PROTOCOL: TLSv1_2_method
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
