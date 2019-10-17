@@ -84,6 +84,7 @@ pipeline:
         AMQP_DEDICATED_PROTOCOL: amqps
         AMQP_DEDICATED_HOST: d4f9138f-4173-4652-8ab7-c812ea6fef8d.b2b5a92ee2df47d58bad0fa448c15585.databases.appdomain.cloud
         AMQP_DEDICATED_PORT: 30512
+        AMQP_DEDICATED_PATH: ""
         AMQP_DEDICATED_EXCHANGE: ''
         AMQP_DEDICATED_QUEUE: '' 
         AMQP_DEDICATED_USER: admin
