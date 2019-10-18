@@ -256,9 +256,9 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
-        path: "/codestation/v2"
+        path: "/codestation/v2/artifacts/version"
       readiness:
-        path: "/codestation/v2/artifacts/readiness"
+        path: "/codestation/v2/artifacts/version"
     configmap:
       data:
         amqp__enabled: true
