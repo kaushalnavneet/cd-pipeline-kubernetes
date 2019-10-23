@@ -280,6 +280,8 @@ pipeline:
         STATUS_TIMEOUT: "4500"
         USE_S3: true
         PAYLOAD_ENCRYPT: true
+        CLOUDANT_DATABASE: ars-staging
+        ORG_URI: https://api.stage1.ng.bluemix.net/v2/organizations
   test-report-service:
     replicas: 1
     revisionHistoryLimit: 3
