@@ -8,7 +8,7 @@ ports:
 lifecycle:
   preStop:
     exec:
-      command: ["sleep", "60"]
+      command: {{ .Values.preStopCommand | default "[\"sleep\", \"60\"]" }}
 resources:
 {{ toYaml .Values.resources | indent 2 }}
 {{- end -}}

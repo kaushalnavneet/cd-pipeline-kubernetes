@@ -101,13 +101,13 @@ spec:
           mountPath: /var/log
       - name: docker-log
         image: alpine
-        args: [/bin/sh, -c, 'while ! tail -n+1 -f /var/log/docker.log ; do sleep 5 ; done']
+        args: [/bin/sh, -c, '( tail -n+1 -F /var/log/docker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
         volumeMounts:
         - name: varlog
           mountPath: /var/log
       - name: travis-worker-log
         image: alpine 
-        args: [/bin/sh, -c, 'while ! tail -n+1 -f /var/log/travis-worker.log ; do sleep 5 ; done']
+        args: [/bin/sh, -c, '( tail -n+1 -F /var/log/travis-worker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
         volumeMounts:
         - name: varlog
           mountPath: /var/log
