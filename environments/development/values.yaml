@@ -248,7 +248,7 @@ pipeline:
         ENABLE_REDUX_DEBUG: true
         TEKTON_UI: true
         ENABLE_SECRET_BY_REF: true
-        SECRETS_API_URL: https://dev.console.test.cloud.ibm.com/devops/setup/api/v2/secrets
+        SECRETS_API_URL: http://otc-ui/devops/setup/api/v2/secrets
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -487,7 +487,7 @@ pipeline:
         worker_globalBaseImage: "latest"
         enable_pull_request: true
         enable_secret_by_ref: true
-        secrets_api_url: https://dev.console.test.cloud.ibm.com/devops/setup/api/v2/secrets
+        secrets_api_url: http://otc-ui/devops/setup/api/v2/secrets
         worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: true
