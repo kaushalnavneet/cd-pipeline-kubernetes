@@ -482,7 +482,7 @@ pipeline:
         doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         gitlab_services: hostedgit,gitlab
         artifacts_useS3: true
-        worker_curatedImages: latest=travis-registry:5000/cdpipeline-worker:2.5,2.5=travis-registry:5000/pipeline-worker:2.5,2.4=travis-registry:5000/pipeline-worker:2.4,2.3=travis-registry:5000/pipeline-worker:2.3,2.2=travis-registry:5000/pipeline-worker:2.2,2.1=travis-registry:5000/pipeline-worker:master-2019-06-17_13-45-47,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:2.5,2.5=travis-registry:5000/pipeline-worker:2.5,2.4=travis-registry:5000/pipeline-worker:2.4,2.3=travis-registry:5000/pipeline-worker:2.3,2.2=travis-registry:5000/pipeline-worker:2.2,2.1=travis-registry:5000/pipeline-worker:master-2019-06-17_13-45-47,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,
         lastest_worker_curatedImage_forMetrics: "2.5"
         worker_dindBase: true
         worker_globalBaseImage: "latest"
