@@ -145,6 +145,20 @@ pipeline:
         LOG_SERVICE_URL: https://pipeline-log-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
         AGENT_VERSION: "0.4.2-dev"
+pipeline-event-service:
+  replicas: 1
+  revisionHistoryLimit: 3
+  vault:
+    secretPaths:
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-event-service/pipeline-event-service_2019_11_28_20h00m32s
+  configmap:
+    data:
+      NEW_RELIC_APP_NAME: Pipeline Event Service - YS1
+      PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
+      DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
   tekton-ui:
     replicas: 1
     revisionHistoryLimit: 3
