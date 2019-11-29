@@ -127,6 +127,7 @@ pipeline:
         PIPELINE_API_URL: http://pipeline-service/pipeline
         PRIVATE_WORKER_API_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
+        PIPELINE_UI_SERVER_URL: pipeline-ui.us-south.devops.dev.cloud.ibm.com
         enableTekton: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
   private-worker-service:
