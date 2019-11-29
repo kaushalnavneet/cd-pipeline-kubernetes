@@ -125,6 +125,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Broker - YS1
         LMS_API_URL: http://lms-api/v1/messaging
         PIPELINE_API_URL: http://pipeline-service/pipeline
+        PRIVATE_WORKER_API_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         EXT_PIPELINE_API_URL: https://pipeline-service.us-south.devops.dev.cloud.ibm.com/pipeline
         enableTekton: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
