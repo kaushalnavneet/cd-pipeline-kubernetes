@@ -264,6 +264,7 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         SECRETS_API_URL: https://dev.console.test.cloud.ibm.com/devops/setup/api/v2/secrets
         ENABLE_TIMER_TRIGGER: true
+        ENABLE_TEKTON_PUBLIC_WORKERS: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
