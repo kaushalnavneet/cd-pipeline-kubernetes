@@ -1,4 +1,4 @@
-FROM websphere-liberty:microProfile2
+FROM websphere-liberty:19.0.0.9-microProfile2
 
 USER root
 RUN apt-get update && apt-get dist-upgrade -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
