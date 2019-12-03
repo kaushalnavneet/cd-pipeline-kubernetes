@@ -35,7 +35,22 @@ fi
 $(ibmcloud cs cluster-config --export ${IDS_JOB_NAME})
 
 INGRESS_SUBDOMAIN=$(ibmcloud cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
+echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
+if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then
+	INGRESS_SUBDOMAIN=$(echo "$INGRESS_SUBDOMAIN" | cut -d',' -f1)
+	echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
+fi
+
 INGRESS_SECRET=$(ibmcloud cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+if [[ ${INGRESS_SECRET} == *,* ]];then
+	INGRESS_SECRET=$(echo "$INGRESS_SECRET" | cut -d',' -f1)
+	echo "INGRESS SECRET: $INGRESS_SECRET"
+fi
+
+
+
+
+
 
 tmp=$(mktemp)
 yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
