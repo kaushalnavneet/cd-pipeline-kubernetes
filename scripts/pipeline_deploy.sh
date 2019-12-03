@@ -47,17 +47,13 @@ if [[ ${INGRESS_SECRET} == *,* ]];then
 	echo "INGRESS SECRET: $INGRESS_SECRET"
 fi
 
-
-
-
-
-
 tmp=$(mktemp)
 yq --yaml-output --arg stagename "${IDS_STAGE_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
 helm dep up ${COMPONENT_NAME}
 if ! helm list ${IDS_STAGE_NAME}; then
   deleted=$(helm list --all ${IDS_STAGE_NAME} | grep DELETED)
+  echo "DELETED HELM: $deleted"
   if [ -z $deleted ]; then
     helm delete --purge ${IDS_STAGE_NAME}
   fi
