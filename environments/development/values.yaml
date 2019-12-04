@@ -150,7 +150,7 @@ pipeline:
         S3_STORAGE_ENDPOINT: https://s3-api.us-geo.objectstorage.softlayer.net
         S3_STORAGE_REGION: us-standard
         S3_ENABLED: true
-        PUBLIC_QUEUE_ID: "e3a963a4-d377-47f3-8f5a-43301404facf"
+        PUBLIC_QUEUE_ID: "a149b42d-a7dc-4975-8468-602037130799"
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
