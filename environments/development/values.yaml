@@ -248,7 +248,7 @@ pipeline:
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
-        OTC_API_URL: http://otc-api
+        OTC_API_URL: https://otc-api.us-south.devops.dev.cloud.ibm.com/
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
