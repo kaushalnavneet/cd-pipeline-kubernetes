@@ -229,6 +229,10 @@ pipeline:
         IAM_CLIENT_ID: otc
         IAM_GLOBAL_URL: https://iam.test.cloud.ibm.com
         IS_DEV: false
+        GITHUB_SERVICES: github,githubpublic,github_integrated,githubconsolidated
+        GITLAB_SERVICES: hostedgit,gitlab
+        BITBUCKET_SERVICES: bitbucketgit
+        PRIVATE_WORKER: private_worker
         K8S_REGIONS: ''
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
         PIPELINE_URL: http://pipeline-service/pipeline
