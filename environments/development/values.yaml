@@ -232,7 +232,7 @@ pipeline:
         GITHUB_SERVICES: github,githubpublic,github_integrated,githubconsolidated
         GITLAB_SERVICES: hostedgit,gitlab
         BITBUCKET_SERVICES: bitbucketgit
-        PRIVATE_WORKER: private_worker
+        PRIVATE_WORKER_SERVICES: private_worker
         K8S_REGIONS: ''
         NEW_RELIC_APP_NAME: Pipeline UI - YS1
         PIPELINE_URL: http://pipeline-service/pipeline
