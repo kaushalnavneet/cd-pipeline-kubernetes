@@ -9,6 +9,7 @@
 FROM ibmjava:8-sdk
 
 ARG TINI_VERSION=v0.16.1
+ENV BX_VERSION='0.20.0'
 
 RUN apt-get update && apt-get upgrade -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils 
@@ -45,7 +46,7 @@ RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubuserconten
     /tmp/get_helm.sh && \
     rm -fr /tmp/get_helm.sh
 
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/0.11.0/IBM_Cloud_CLI_0.11.0_amd64.tar.gz && \
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${BX_VERSION}/IBM_Cloud_CLI_${BX_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI*
