@@ -11,6 +11,7 @@ FROM golang:1.12-alpine
 ARG JQ_VERSION=jq-1.5
 ARG OPERATOR_RELEASE_VERSION=v0.11.0
 ENV LANG=en_US.UTF-8
+ENV BX_VERSION='0.20.0'
 
 RUN apk update
 RUN apk add build-base ca-certificates openssl wget curl bash bash-completion git unzip docker
@@ -33,10 +34,10 @@ RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubuserconten
     /tmp/get_helm.sh && \ 
     rm -fr /tmp/get_helm.sh
 
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/0.11.0/IBM_Cloud_CLI_0.11.0_amd64.tar.gz && \
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${BX_VERSION}/IBM_Cloud_CLI_${BX_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
-    rm -rf /tmp/Bluemix_CLI* 
+    rm -rf /tmp/Bluemix_CLI*
 
 RUN curl -OJL https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_RELEASE_VERSION}/operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 RUN chmod +x operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu && cp operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
