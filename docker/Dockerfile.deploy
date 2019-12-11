@@ -10,7 +10,7 @@ FROM alpine
 
 ARG HELM_VERSION=v2.8.2
 ENV LANG=en_US.UTF-8
-ENV BX_VERSION='0.14.0'
+ENV BX_VERSION='0.20.0'
 
 RUN apk update
 RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq=1.6-r0 python py-pip
