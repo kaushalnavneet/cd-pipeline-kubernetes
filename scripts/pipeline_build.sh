@@ -39,7 +39,6 @@ if [ $? -ne 0 ]; then
 fi
 echo "Dockerfile: ${DOCKERFILE}"
 if [ "$OPERATOR_SDK" == true ]; then
-go mod vendor
 operator-sdk build ${IMAGE_NAME}:${APPLICATION_VERSION}
 else 
 docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
