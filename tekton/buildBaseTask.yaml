@@ -1,0 +1,82 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: build-base
+spec:
+  inputs:
+    params:
+      - name: accountApiKey1416501
+        default: ''
+      - name: crRegion
+        default: 'us-south'
+      - name: crAccountName
+        default: 'a6677d241bbad8189145cbae0c73208f'
+      - name: idsToken
+      - name: registryUrl
+        default: 'us.icr.io'
+      - name: registryNamespace
+        default: 'opentoolchain'
+      - name: imageName
+      - name: imageTag
+  steps:
+  - name: build-base
+    image: ibmcom/pipeline-base-image:latest
+    env:
+      - name: ACCOUNT_API_KEY
+        value: $(inputs.params.accountApiKey1416501)
+      - name: CR_REGION
+        value: $(inputs.params.crRegion)
+      - name: CR_ACCOUNT
+        value: $(inputs.params.crAccountName)
+      - name: IDS_TOKEN
+        value: $(inputs.params.idsToken)
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: IMAGE_TAG
+        value: $(inputs.params.imageTag)
+      - name: REGISTRY_URL
+        value: $(inputs.params.registryUrl)
+      - name: REGISTRY_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+    command: ["/bin/bash"]
+    args:
+      - | 
+        ibmcloud login -a "cloud.ibm.com" -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY} -c {$CR_ACCOUNT} 
+        ibmcloud cr info
+        ibmcloud plugin update --all
+        git clone https://$IDS_TOKEN@github.ibm.com/ids-env/devops-config.git
+        git clone https://$IDS_TOKEN@github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+   
+        echo -e "Build environment variables:"
+        echo "REGISTRY_URL=${REGISTRY_URL}"
+        echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
+        echo "IMAGE_NAME=${IMAGE_NAME}"
+        echo "IMAGE_TAG=${IMAGE_TAG}"
+      
+        echo "=========================================================="
+        echo "Checking for Dockerfile at the repository root"
+        if [ -f docker/Dockerfile.${IMAGE_TAG} ]; then 
+          echo "Dockerfile found"
+        else
+            echo "Dockerfile not found"
+            exit 1
+        fi
+
+        echo "=========================================================="
+
+        echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
+        NS=$( ibmcloud cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
+        if [ -z "${NS}" ]; then
+            echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
+            ibmcloud cr namespace-add ${REGISTRY_NAMESPACE}
+            echo "Registry namespace ${REGISTRY_NAMESPACE} created."
+        else 
+            echo "Registry namespace ${REGISTRY_NAMESPACE} found."
+        fi
+
+        echo "=========================================================="
+        echo -e "Building container image: ${IMAGE_NAME}:${IMAGE_TAG}"
+        set -x
+        ibmcloud cr build -f docker/Dockerfile.${IMAGE_TAG} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
+        set +x
+        ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}

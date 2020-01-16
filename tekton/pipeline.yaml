@@ -1,0 +1,53 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-base-pipeline
+spec:
+  params:
+    - name: imageName
+      description: the name of the output docker image
+    - name: imageTag
+      description: the tag for the output docker image
+    - name: accountApiKey1416501
+      description: api key
+    - name: crRegion
+      description: the CR region to use
+    - name: crAccountName
+      description: the CR account name to use
+    - name: idsToken
+      description: the ids token to use to clone repos
+    - name: registryUrl
+      description: the CR registry URL to use
+    - name: registryNamespace
+      description: the CR NS to use 
+  tasks:
+  - name: build-base-image          # 1. build base
+    taskRef:
+      name:  build-base
+    params:
+      - name: accountApiKey1416501
+        value:  $(params.accountApiKey1416501)
+      - name: imageName
+        value: cd-deploy-base
+      - name: imageTag
+        value:  deploy
+      - name: crRegion
+        value:  $(params.accountApiKey1416501)
+  - name: nodejs10         
+    taskRef:
+      name: build-nodej10
+    params:
+      - name: accountApiKey1416501
+        value:  $(params.accountApiKey1416501)
+      - name: imageName
+        value: cd-build-base
+      - name: imageTag
+        value:  nodejs10
+      - name: crRegion
+        value:  $(params.accountApiKey1416501)
+  - name: java           
+    taskRef:
+      name: build-java
+  - name: go            
+    taskRef:
+      name: build-go
