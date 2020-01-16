@@ -18,6 +18,8 @@ spec:
       description: The config repo url
     - name: accountApiKey1416501
       description: api key 
+    - name: idsToken
+      description: token used for github.ibm.com clones
   resourcetemplates:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
@@ -39,6 +41,8 @@ spec:
   params:
     - name: accountApiKey1416501
       value: ${params.API_KEY_1416501}
+    - name: idsToken
+      value: ${params.IDS_TOKEN}
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
