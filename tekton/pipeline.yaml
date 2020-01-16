@@ -21,7 +21,7 @@ spec:
     - name: registryNamespace
       description: the CR NS to use 
   tasks:
-  - name: build-base-image          # 1. build base
+  - name: build-base-image
     taskRef:
       name:  build-base
     params:
@@ -30,24 +30,34 @@ spec:
       - name: imageName
         value: cd-deploy-base
       - name: imageTag
-        value:  deploy
-      - name: crRegion
-        value:  $(params.accountApiKey1416501)
-  - name: nodejs10         
+        value: deploy
+  - name: nodejs10
     taskRef:
-      name: build-nodej10
+      name: build-base
     params:
       - name: accountApiKey1416501
-        value:  $(params.accountApiKey1416501)
+        value: $(params.accountApiKey1416501)
       - name: imageName
         value: cd-build-base
       - name: imageTag
-        value:  nodejs10
-      - name: crRegion
-        value:  $(params.accountApiKey1416501)
-  - name: java           
+        value: nodejs10
+  - name: java
     taskRef:
-      name: build-java
-  - name: go            
+      name: build-base
+    params:
+      - name: accountApiKey1416501
+        value: $(params.accountApiKey1416501)
+      - name: imageName
+        value: cd-build-base
+      - name: imageTag
+        value: java
+  - name: go 
     taskRef:
-      name: build-go
+      name: build-base
+    params:
+      - name: accountApiKey1416501
+        value: $(params.accountApiKey1416501)
+      - name: imageName
+        value: cd-build-base
+      - name: imageTag
+        value: go1.10
