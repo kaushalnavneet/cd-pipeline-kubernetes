@@ -39,6 +39,8 @@ spec:
     params:
       - name: accountApiKey1416501
         value: $(params.accountApiKey1416501)
+      - name: idsToken
+        value: $(params.idsToken)
       - name: imageName
         value: cd-build-base
       - name: imageTag
@@ -49,6 +51,8 @@ spec:
     params:
       - name: accountApiKey1416501
         value: $(params.accountApiKey1416501)
+      - name: idsToken
+        value: $(params.idsToken)
       - name: imageName
         value: cd-build-base
       - name: imageTag
@@ -59,6 +63,8 @@ spec:
     params:
       - name: accountApiKey1416501
         value: $(params.accountApiKey1416501)
+      - name: idsToken
+        value: $(params.idsToken)
       - name: imageName
         value: cd-build-base
       - name: imageTag
