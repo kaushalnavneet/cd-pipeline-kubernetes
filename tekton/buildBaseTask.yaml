@@ -39,6 +39,10 @@ spec:
         value: $(inputs.params.registryUrl)
       - name: REGISTRY_NAMESPACE
         value: $(inputs.params.registryNamespace)
+      - name: CHARTS_REPO
+        value: $(inputs.params.charts_repo)
+      - name: CONFIG_REPO
+        value: $(inputs.params.config_repo)
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -46,8 +50,10 @@ spec:
         ibmcloud login -a cloud.ibm.com -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY}
         ibmcloud cr info
         # ibmcloud plugin update --all
-        git clone https://$IDS_TOKEN@github.ibm.com/ids-env/devops-config.git
-        git clone https://$IDS_TOKEN@github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+        echo "echo -n $IDS_TOKEN" > token.sh
+        chmod +x token.sh
+        GIT_ASKPASS=token.sh git clone ${CONFIG_REPO}
+        GIT_ASKPASS=token.sh git clone ${CHARTS_REPO}
    
         echo -e "Build environment variables:"
         echo "REGISTRY_URL=${REGISTRY_URL}"
