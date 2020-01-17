@@ -4,15 +4,9 @@ metadata:
   name: pipeline-template
 spec:
   params:
-    - name: charts_repo_revision
-      default: master
-      description: The charts repo revision
     - name: charts_repo
       default: https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git
       description: The charts repo url
-    - name: config_repo_revision
-      default: master
-      description: The config repo revision
     - name: config_repo
       default: https://github.ibm.com/ids-env/devops-config.git
       description: The config repo url
@@ -33,6 +27,10 @@ spec:
             value: $(params.API_KEY_1416501)
           - name: idsToken
             value: $(params.IDS_TOKEN)
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: config_repo
+            value: $(params.config_repo)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding

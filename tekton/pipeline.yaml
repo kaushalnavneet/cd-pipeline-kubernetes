@@ -20,6 +20,10 @@ spec:
       description: the CR registry URL to use
     - name: registryNamespace
       description: the CR NS to use 
+    - name: charts_repo
+      description: The charts repo url
+    - name: config_repo
+      description: The config repo url    
   tasks:
   - name: build-base-image
     taskRef:
@@ -33,6 +37,10 @@ spec:
         value: cd-deploy-base
       - name: imageTag
         value: deploy
+      - name: charts_repo
+        value: $(params.charts_repo)
+      - name: config_repo
+        value: $(params.config_repo)
   - name: nodejs10
     taskRef:
       name: build-base
@@ -45,6 +53,10 @@ spec:
         value: cd-build-base
       - name: imageTag
         value: nodejs10.build
+      - name: charts_repo
+        value: $(params.charts_repo)
+      - name: config_repo
+        value: $(params.config_repo)
   - name: java
     taskRef:
       name: build-base
@@ -57,6 +69,10 @@ spec:
         value: cd-build-base
       - name: imageTag
         value: java.build
+      - name: charts_repo
+        value: $(params.charts_repo)
+      - name: config_repo
+        value: $(params.config_repo)
   - name: go 
     taskRef:
       name: build-base
@@ -69,3 +85,7 @@ spec:
         value: cd-build-base
       - name: imageTag
         value: go1.10.build
+      - name: charts_repo
+        value: $(params.charts_repo)
+      - name: config_repo
+        value: $(params.config_repo)

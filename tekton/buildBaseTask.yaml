@@ -17,6 +17,8 @@ spec:
         default: opentoolchain
       - name: imageName
       - name: imageTag
+      - name: charts_repo
+      - name: config_repo
   steps:
   - name: build-base
     image: ibmcom/pipeline-base-image:latest
@@ -43,7 +45,7 @@ spec:
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         ibmcloud login -a cloud.ibm.com -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY}
         ibmcloud cr info
-        ibmcloud plugin update --all
+        # ibmcloud plugin update --all
         git clone https://$IDS_TOKEN@github.ibm.com/ids-env/devops-config.git
         git clone https://$IDS_TOKEN@github.ibm.com/org-ids/cd-pipeline-kubernetes.git
    
