@@ -50,10 +50,10 @@ spec:
         ibmcloud login -a cloud.ibm.com -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY}
         ibmcloud cr info
         # ibmcloud plugin update --all
-        echo "echo -n $IDS_TOKEN" > token.sh
-        chmod +x token.sh
-        GIT_ASKPASS=token.sh git clone ${CONFIG_REPO}
-        GIT_ASKPASS=token.sh git clone ${CHARTS_REPO}
+        echo "echo -n $IDS_TOKEN" > ./token.sh
+        chmod +x ./token.sh
+        GIT_ASKPASS=./token.sh git clone ${CONFIG_REPO}
+        GIT_ASKPASS=./token.sh git clone ${CHARTS_REPO}
    
         echo -e "Build environment variables:"
         echo "REGISTRY_URL=${REGISTRY_URL}"
