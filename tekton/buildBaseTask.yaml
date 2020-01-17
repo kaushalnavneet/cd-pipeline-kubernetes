@@ -41,7 +41,6 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        echo  ${ACCOUNT_API_KEY}  {$CR_ACCOUNT} ${IDS_TOKEN}
         ibmcloud login -a "cloud.ibm.com" -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY} -c {$CR_ACCOUNT} 
         ibmcloud cr info
         ibmcloud plugin update --all
