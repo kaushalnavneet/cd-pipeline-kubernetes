@@ -16,10 +16,6 @@ spec:
     - name: config_repo
       default: https://github.ibm.com/ids-env/devops-config.git
       description: The config repo url
-    - name: accountApiKey1416501
-      description: api key 
-    - name: idsToken
-      description: token used for github.ibm.com clones
   resourcetemplates:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
@@ -32,6 +28,11 @@ spec:
         pipelineRef:
             name: build-base-pipeline
         serviceAccount: 'default'
+        # params:
+        #   - name: accountApiKey1416501
+        #     value: $(params.accountApiKey1416501)
+        #   - name: idsToken
+        #     value: $(params.idsToken)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
