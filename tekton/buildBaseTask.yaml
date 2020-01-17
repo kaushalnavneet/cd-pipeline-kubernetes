@@ -41,7 +41,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        echo $CR_REGION $CR_ACCOUNT $ACCOUNT_API_KEY $IDS_TOKEN
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh 
         ibmcloud login -a "cloud.ibm.com" -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY} -c {$CR_ACCOUNT} 
         ibmcloud cr info
         ibmcloud plugin update --all
