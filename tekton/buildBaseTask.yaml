@@ -6,16 +6,15 @@ spec:
   inputs:
     params:
       - name: accountApiKey1416501
-        default: ''
       - name: crRegion
-        default: 'us-south'
+        default: us-south
       - name: crAccountName
-        default: 'a6677d241bbad8189145cbae0c73208f'
+        default: a6677d241bbad8189145cbae0c73208f
       - name: idsToken
       - name: registryUrl
-        default: 'us.icr.io'
+        default: us.icr.io
       - name: registryNamespace
-        default: 'opentoolchain'
+        default: opentoolchain
       - name: imageName
       - name: imageTag
   steps:
@@ -41,8 +40,8 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh 
-        ibmcloud login -a "cloud.ibm.com" -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY} -c {$CR_ACCOUNT} 
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        ibmcloud login -a cloud.ibm.com -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY}
         ibmcloud cr info
         ibmcloud plugin update --all
         git clone https://$IDS_TOKEN@github.ibm.com/ids-env/devops-config.git
