@@ -19,9 +19,11 @@ spec:
       - name: imageTag
       - name: charts_repo
       - name: config_repo
+      - name: testImage
+        default: ibmcom/pipeline-base-image:latest
   steps:
   - name: build-base
-    image: ibmcom/pipeline-base-image:latest
+    image: $(inputs.params.testImage)
     env:
       - name: ACCOUNT_API_KEY
         value: $(inputs.params.accountApiKey1416501)
@@ -65,7 +67,7 @@ spec:
        
         basename=$(basename ${CHARTS_REPO})
         cd ${basename%.*}
-        
+
         echo "Checking for Dockerfile at the repository root"
         if [ -f docker/Dockerfile.${IMAGE_TAG} ]; then 
           echo "Dockerfile found"

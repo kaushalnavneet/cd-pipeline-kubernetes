@@ -10,6 +10,8 @@ spec:
       description: the tag for the output docker image
     - name: accountApiKey1416501
       description: api key
+    - name: accountApiKey1308775
+      description: api key for docker build machine
     - name: crRegion
       description: the CR region to use
     - name: crAccountName
