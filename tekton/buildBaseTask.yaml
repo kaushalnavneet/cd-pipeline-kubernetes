@@ -52,6 +52,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
+        set -e
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         ibmcloud login -a cloud.ibm.com -r ${CR_REGION} --apikey ${ACCOUNT_API_KEY}
         ibmcloud cr info
