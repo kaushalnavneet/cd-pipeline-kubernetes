@@ -27,7 +27,7 @@ spec:
     - name: config_repo
       description: The config repo url    
   tasks:
-  - name: build-base-image
+  - name: deploy
     taskRef:
       name:  build-base
     params:
@@ -39,6 +39,8 @@ spec:
         value: cd-deploy-base
       - name: imageTag
         value: deploy
+      - name: tagSuffix
+        value: ''
       - name: charts_repo
         value: $(params.charts_repo)
       - name: config_repo
@@ -54,7 +56,7 @@ spec:
       - name: imageName
         value: cd-build-base
       - name: imageTag
-        value: nodejs10.build
+        value: nodejs10
       - name: charts_repo
         value: $(params.charts_repo)
       - name: config_repo
@@ -70,7 +72,7 @@ spec:
       - name: imageName
         value: cd-build-base
       - name: imageTag
-        value: java.build
+        value: java
       - name: charts_repo
         value: $(params.charts_repo)
       - name: config_repo
@@ -86,7 +88,7 @@ spec:
       - name: imageName
         value: cd-build-base
       - name: imageTag
-        value: go1.10.build
+        value: go1.10
       - name: charts_repo
         value: $(params.charts_repo)
       - name: config_repo

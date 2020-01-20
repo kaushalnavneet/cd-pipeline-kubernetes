@@ -17,6 +17,8 @@ spec:
         default: opentoolchain
       - name: imageName
       - name: imageTag
+      - name: tagSuffix
+        default: '.build'
       - name: charts_repo
       - name: config_repo
       - name: testImage
@@ -37,6 +39,8 @@ spec:
         value: $(inputs.params.imageName)
       - name: IMAGE_TAG
         value: $(inputs.params.imageTag)
+      - name: TAG_SUFFIX
+        value: $(inputs.params.tagSuffix)
       - name: REGISTRY_URL
         value: $(inputs.params.registryUrl)
       - name: REGISTRY_NAMESPACE
@@ -66,10 +70,8 @@ spec:
         echo "=========================================================="
        
         basename=$(basename ${CHARTS_REPO})
-        cd ${basename%.*}
-
-        echo "Checking for Dockerfile at the repository root"
-        if [ -f docker/Dockerfile.${IMAGE_TAG} ]; then 
+        echo "Checking for Dockerfile at the root of $basename"
+        if [ -f ${basename%.*}/docker/Dockerfile.${IMAGE_TAG}.${TAG_SUFFIX} ]; then 
           echo "Dockerfile found"
         else
             echo "Dockerfile not found"
