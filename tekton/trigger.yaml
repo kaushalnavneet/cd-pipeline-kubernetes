@@ -14,18 +14,16 @@ spec:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: otc-registry
-      stringData:
-        .dockerconfigjson:
-          username: iamapikey
-          password: $(params.API_KEY_1416501)
+        name: otc-registry-secret
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
       type: kubernetes.io/dockerconfigjson
     - apiVersion: v1
       kind: ServiceAccount
       metadata:
-        name: otc
+        name: otc-sa
       imagePullSecrets:
-      - name: otc-registry
+      - name: otc-registry-secret
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
@@ -36,7 +34,7 @@ spec:
       spec:
         pipelineRef:
             name: build-base-pipeline
-        serviceAccount: 'otc'
+        serviceAccount: 'otc-sa'
         params:
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
