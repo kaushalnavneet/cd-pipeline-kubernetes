@@ -97,6 +97,8 @@ spec:
       name: run-base
     params:
       - name: accountApiKey1308775
+        value: $(params.accountApiKey1416501)
+      - name: accountApiKey1308775
         value: $(params.accountApiKey1308775)
       - name: dockerPassword
         value: $(params.accountApiKey1416501)
@@ -115,6 +117,8 @@ spec:
     taskRef:
       name: run-base
     params:
+      - name: accountApiKey1308775
+        value: $(params.accountApiKey1416501)
       - name: accountApiKey1308775
         value: $(params.accountApiKey1308775)
       - name: dockerPassword

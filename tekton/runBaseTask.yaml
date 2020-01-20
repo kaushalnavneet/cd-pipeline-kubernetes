@@ -6,6 +6,7 @@ spec:
   inputs:
     params:
       - name: accountApiKey1308775
+      - name: accountApiKey1416501
       - name: accountRegion
         default: us-south
       - name: idsToken
@@ -85,4 +86,34 @@ spec:
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd /work/cd-pipeline-kubernetes
         chmod u+x ./scripts/pipeline_build_tek.sh
+        "$_"
+  - name: 
+    image: $(inputs.params.runBaseImage)
+    env:
+      - name: API_KEY
+        value: $(inputs.params.accountApiKey1416501)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: IMAGE_REGISTRY
+        value: $(inputs.params.registryUrl)
+      - name: IMAGE_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DOCKERFILE
+        value: $(inputs.params.dockerFile)
+      - name: DOCKER_IMAGE
+        value: $(inputs.params.runBaseImage)
+      - name: DOCKER_USERNAME
+        value: $(inputs.params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(inputs.params.dockerPassword)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        cd /work/cd-pipeline-kubernetes
+        chmod u+x /work/scripts/pipeline_va_tek.sh
         "$_"
