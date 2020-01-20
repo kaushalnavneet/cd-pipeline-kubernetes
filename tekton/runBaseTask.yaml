@@ -17,8 +17,6 @@ spec:
       - name: imageName
       - name: imageTag
       - name: imageUrl
-      - name: charts_repo
-      - name: config_repo
       - name: runBaseImage
       - name: dockerFile
       - name: buildCluster
@@ -33,9 +31,13 @@ spec:
         default: idsorg
       - name: idsToken
       - name: artifactoryToken
+        default: ''
       - name: artifactoryId
+        default: ''
       - name: consoleAuthToken
+        default: ''
       - name: gitCommit
+        default: ''
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)

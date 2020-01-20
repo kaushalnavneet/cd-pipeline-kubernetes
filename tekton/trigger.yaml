@@ -25,6 +25,8 @@ spec:
         params:
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
+          - name: accountApiKey1308775
+            value: $(params.API_KEY_1308775)
           - name: idsToken
             value: $(params.IDS_TOKEN)
           - name: charts_repo
