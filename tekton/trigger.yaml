@@ -34,7 +34,11 @@ spec:
       spec:
         pipelineRef:
             name: build-base-pipeline
-        serviceAccountName: otc-sa
+        serviceAccounts:
+        - taskName: nodejs10-run 
+          serviceAccount: otc-sa
+        - taskName: websphere-liberty-run
+          serviceAccount: otc-sa
         params:
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
