@@ -34,7 +34,7 @@ spec:
       spec:
         pipelineRef:
             name: build-base-pipeline
-        serviceAccount: 'otc-sa'
+        serviceAccount: otc-sa
         params:
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
