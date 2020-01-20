@@ -5,7 +5,7 @@ metadata:
 spec:
   inputs:
     params:
-      - name: accountApiKey1416501
+      - name: accountApiKey1308775
       - name: accountRegion
         default: us-south
       - name: idsToken
@@ -27,17 +27,20 @@ spec:
       - name: dockerPassword
       - name: operatorSDK
       - name: extraDockerOpts
+        default: --no-cache
       - name: idsUser
+        default: idsorg
       - name: idsToken
       - name: artifactoryToken
       - name: artifactoryId
       - name: consoleAuthToken
+      - name: gitCommit
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
     env:
       - name: API_KEY
-        value: $(inputs.params.accountApiKey1416501)
+        value: $(inputs.params.accountApiKey1308775)
       - name: IMAGE_URL
         value: $(inputs.params.imageUrl)
       - name: IMAGE_REGISTRY
@@ -74,24 +77,12 @@ spec:
         value: $(inputs.params.dockerUsername)
       - name: DOCKER_PASSWORD
         value: $(inputs.params.dockerPassword)
-
-  
-    
-      #- name: COMPONENT_NAME
-# NEED TO FIGURE OUT GIT COMMIT
-
-
-      
+      - name: GIT_COMMIT
+        value: $(inputs.params.gitCommit)
     command: ["/bin/bash", "-c"]
     args:
       - | 
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd /work/cd-pipeline-kubernetes
-        # MOVE TO PIPELINE PARAMS FOR IBM NODE
-        export IMAGE_NAME=us.icr.io/opentoolchain/ibmnode
-        export DOCKER_IMAGE=us.icr.io/opentoolchain/cd-build-base:nodejs10
-        export DOCKERFILE=docker/Dockerfile.nodejs10.run
-        export APPLICATION_VERSION=10secure
-
-        chmod u+x ./scripts/pipeline_build.sh
+        chmod u+x ./scripts/pipeline_build_tek.sh
         "$_"
