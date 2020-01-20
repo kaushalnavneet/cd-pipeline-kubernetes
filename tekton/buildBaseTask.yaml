@@ -71,7 +71,7 @@ spec:
        
         basename=$(basename ${CHARTS_REPO})
         echo "Checking for Dockerfile at the root of $basename"
-        if [ -f ${basename%.*}/docker/Dockerfile.${IMAGE_TAG}.${TAG_SUFFIX} ]; then 
+        if [ -f ${basename%.*}/docker/Dockerfile.${IMAGE_TAG}${TAG_SUFFIX} ]; then 
           echo "Dockerfile found"
         else
             echo "Dockerfile not found"
