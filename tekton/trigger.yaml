@@ -11,6 +11,21 @@ spec:
       default: https://github.ibm.com/ids-env/devops-config.git
       description: The config repo url
   resourcetemplates:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: otc-registry
+      stringData:
+        .dockerconfigjson:
+          username: iamapikey
+          password: $(params.API_KEY_1416501)
+      type: kubernetes.io/dockerconfigjson
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: otc
+      imagePullSecrets:
+      - name: otc-registry
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
@@ -21,7 +36,7 @@ spec:
       spec:
         pipelineRef:
             name: build-base-pipeline
-        serviceAccount: 'default'
+        serviceAccount: 'otc'
         params:
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
