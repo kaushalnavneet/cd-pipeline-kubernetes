@@ -71,7 +71,8 @@ spec:
        
         basename=$(basename ${CHARTS_REPO})
         echo "Checking for Dockerfile at the root of $basename"
-        if [ -f ${basename%.*}/docker/Dockerfile.${IMAGE_TAG}${TAG_SUFFIX} ]; then 
+        DOCKERFILE=${basename%.*}/docker/Dockerfile.${IMAGE_TAG}${TAG_SUFFIX}
+        if [ -f ${DOCKERFILE} ]; then 
           echo "Dockerfile found"
         else
             echo "Dockerfile not found"
@@ -93,6 +94,6 @@ spec:
         echo "=========================================================="
         echo -e "Building container image: ${IMAGE_NAME}:${IMAGE_TAG}"
         set -x
-        ibmcloud cr build -f docker/Dockerfile.${IMAGE_TAG} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
+        ibmcloud cr build -f ${DOCKERFILE} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
         set +x
         ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
