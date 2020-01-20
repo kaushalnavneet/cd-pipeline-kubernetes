@@ -89,8 +89,7 @@ spec:
       - | 
         set -e
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
-        cd /work/cd-pipeline-kubernetes
-        chmod u+x ./scripts/pipeline_build_tek.sh
+        chmod u+x /work/scripts/pipeline_build_tek.sh
         "$_"
   - name: 
     image: $(inputs.params.runBaseImage)
@@ -120,6 +119,5 @@ spec:
       - | 
         set -e
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
-        cd /work/cd-pipeline-kubernetes
         chmod u+x /work/scripts/pipeline_va_tek.sh
         "$_"

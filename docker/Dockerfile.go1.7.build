@@ -20,4 +20,4 @@ RUN mkdir -p /work/component/export
 ADD . /work
 ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
 RUN chmod +x /work/component/export/jq
-RUN cp -a /work/scripts/cd-pipeline-kubernetes/entrypoint.go.sh /work/component/export/entrypoint.sh
+RUN cp -a /work/scripts/entrypoint.go.sh /work/component/export/entrypoint.sh

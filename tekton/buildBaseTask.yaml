@@ -59,8 +59,10 @@ spec:
         # ibmcloud plugin update --all
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
-        GIT_ASKPASS=./token.sh git clone ${CONFIG_REPO}
         GIT_ASKPASS=./token.sh git clone ${CHARTS_REPO}
+        basename=$(basename ${CHARTS_REPO})
+        cd ${basename%.*}
+        GIT_ASKPASS=../token.sh git clone ${CONFIG_REPO}
    
         echo -e "Build environment variables:"
         echo "REGISTRY_URL=${REGISTRY_URL}"
@@ -70,9 +72,9 @@ spec:
       
         echo "=========================================================="
        
-        basename=$(basename ${CHARTS_REPO})
+
         echo "Checking for Dockerfile at the root of $basename"
-        DOCKERFILE=${basename%.*}/docker/Dockerfile.${IMAGE_TAG}${TAG_SUFFIX}
+        DOCKERFILE=docker/Dockerfile.${IMAGE_TAG}${TAG_SUFFIX}
         if [ -f ${DOCKERFILE} ]; then 
           echo "Dockerfile found"
         else
