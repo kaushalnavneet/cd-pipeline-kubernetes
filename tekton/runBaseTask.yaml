@@ -1,0 +1,97 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: run-base
+spec:
+  inputs:
+    params:
+      - name: accountApiKey1416501
+      - name: accountRegion
+        default: us-south
+      - name: idsToken
+      - name: registryUrl
+        default: us.icr.io
+      - name: registryNamespace
+        default: opentoolchain
+      - name: imageName
+      - name: imageTag
+      - name: imageUrl
+      - name: charts_repo
+      - name: config_repo
+      - name: runBaseImage
+      - name: dockerFile
+      - name: buildCluster
+        default: otc-dal12-build
+      - name: dockerUsername
+        default: iamapikey
+      - name: dockerPassword
+      - name: operatorSDK
+      - name: extraDockerOpts
+      - name: idsUser
+      - name: idsToken
+      - name: artifactoryToken
+      - name: artifactoryId
+      - name: consoleAuthToken
+  steps:
+  - name: run-base
+    image: $(inputs.params.runBaseImage)
+    env:
+      - name: API_KEY
+        value: $(inputs.params.accountApiKey1416501)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: IMAGE_REGISTRY
+        value: $(inputs.params.registryUrl)
+      - name: IMAGE_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DOCKERFILE
+        value: $(inputs.params.dockerFile)
+      - name: DOCKER_IMAGE
+        value: $(inputs.params.runBaseImage)
+      - name: BUILD_CLUSTER
+        value: $(inputs.params.buildCluster)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: OPERATOR_SDK
+        value: $(inputs.params.operatorSDK)
+      - name: EXTRA_DOCKER_OPTS
+        value: $(inputs.params.extraDockerOpts)
+      - name: IDS_USER
+        value: $(inputs.params.idsUser)
+      - name: IDS_TOKEN
+        value: $(inputs.params.idsToken)
+      - name: ARTIFACTORY_TOKEN_BASE64
+        value: $(inputs.params.artifactoryToken)
+      - name: ARTIFACTORY_ID
+        value: $(inputs.params.artifactoryId)
+      - name: CONSOLE_AUTH_TOKEN
+        value: $(inputs.params.consoleAuthToken)
+      - name: ACCOUNT_REGION
+        value: $(inputs.params.accountRegion)    
+      - name: DOCKER_USERNAME
+        value: $(inputs.params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(inputs.params.dockerPassword)
+
+  
+    
+      #- name: COMPONENT_NAME
+# NEED TO FIGURE OUT GIT COMMIT
+
+
+      
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        cd /work/cd-pipeline-kubernetes
+        # MOVE TO PIPELINE PARAMS FOR IBM NODE
+        export IMAGE_NAME=us.icr.io/opentoolchain/ibmnode
+        export DOCKER_IMAGE=us.icr.io/opentoolchain/cd-build-base:nodejs10
+        export DOCKERFILE=docker/Dockerfile.nodejs10.run
+        export APPLICATION_VERSION=10secure
+
+        chmod u+x ./scripts/pipeline_build.sh
+        "$_"
