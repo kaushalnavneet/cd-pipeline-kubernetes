@@ -100,8 +100,8 @@ spec:
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
-        GIT_ASKPASS=./token.sh git clone ${CHARTS_REPO}
-        basename=$(basename ${CHARTS_REPO})
+        GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        basename=$(basename ${COMPONENT_REPO})
         cd ${basename%.*}
 
         chmod u+x /work/scripts/pipeline_build_tek.sh

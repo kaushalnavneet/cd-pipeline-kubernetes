@@ -23,13 +23,13 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        generateName: build-base-pipeline-run
+        generateName: build-component-pipeline-run
         labels:
           triggertemplated: "true"
           generatedBy: "pipeline-template"
       spec:
         pipelineRef:
-            name: build-base-pipeline
+            name: build-component-pipeline
         serviceAccount: otc-sa
         params:
           - name: accountApiKey1416501
