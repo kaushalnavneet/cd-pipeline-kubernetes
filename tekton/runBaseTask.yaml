@@ -78,7 +78,7 @@ spec:
       - name: CONSOLE_AUTH_TOKEN
         value: $(inputs.params.consoleAuthToken)
       - name: ACCOUNT_REGION
-        value: $(inputs.params.accountRegion)    
+        value: $(inputs.params.accountRegion)
       - name: DOCKER_USERNAME
         value: $(inputs.params.dockerUsername)
       - name: DOCKER_PASSWORD
@@ -103,6 +103,8 @@ spec:
     env:
       - name: API_KEY
         value: $(inputs.params.accountApiKey1416501)
+      - name: ACCOUNT_REGION
+        value: $(inputs.params.accountRegion)
       - name: IMAGE_URL
         value: $(inputs.params.imageUrl)
       - name: IMAGE_REGISTRY
