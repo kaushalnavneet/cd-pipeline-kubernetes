@@ -14,13 +14,10 @@ spec:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: otc-registry-secret
-        annotations:
-          tekton.dev/docker-0: us.icr.io
-      type: kubernetes.io/basic-auth
-      stringData:
-        username: iamapikey
-        password: $(params.API_KEY_1416501)
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
     - apiVersion: v1
       kind: ServiceAccount
       metadata:
