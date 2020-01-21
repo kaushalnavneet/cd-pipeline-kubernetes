@@ -4,10 +4,6 @@ metadata:
   name: pipeline-template
 spec:
   params:
-    - name: componentRepo
-      description: The component repo url
-    - name: componentRevision
-      description: The component revision url
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
