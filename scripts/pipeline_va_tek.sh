@@ -6,6 +6,7 @@ COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
 DOCKERFILE=${DOCKERFILE:-docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
 ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
+
 # default value for PIPELINE_IMAGE_URL -- uncomment and customize as needed
 export PIPELINE_IMAGE_URL="${IMAGE_URL}:${APPLICATION_VERSION}"
 echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"

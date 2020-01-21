@@ -90,11 +90,7 @@ spec:
       - | 
         set -e
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
-        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        ls -al
         cd /work
-        ls -al
-        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         chmod u+x /work/scripts/pipeline_build_tek.sh
         "$_"
   - name: run-va
@@ -128,9 +124,6 @@ spec:
       - | 
         set -e
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
-        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         cd /work
-        ls -al
-        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         chmod u+x /work/scripts/pipeline_va_tek.sh
         "$_"
