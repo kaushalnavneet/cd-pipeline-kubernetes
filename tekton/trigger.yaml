@@ -16,7 +16,7 @@ spec:
       metadata:
         name: otc-registry-secret
         annotations:
-          tekton.dev/docker-0: https://us.icr.io
+          tekton.dev/docker-0: us.icr.io
       type: kubernetes.io/basic-auth
       stringData:
         username: iamapikey
