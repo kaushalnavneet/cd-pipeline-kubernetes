@@ -4,6 +4,12 @@ metadata:
   name: pipeline-template
 spec:
   params:
+    - name: componentRepo
+    description: the repo for the component
+    default: " "
+    - name: componentRevision
+    description: the branch for the git repo
+    default: master
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
