@@ -22,7 +22,7 @@ spec:
       kind: ServiceAccount
       metadata:
         name: otc-sa
-      secrets:
+      imagePullSecrets:
       - name: otc-registry-secret
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
