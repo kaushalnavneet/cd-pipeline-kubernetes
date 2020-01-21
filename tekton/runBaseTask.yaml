@@ -43,6 +43,7 @@ spec:
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
+    imagePullPolicy: Always
     env:
       - name: API_KEY
         value: $(inputs.params.accountApiKey1308775)
@@ -93,6 +94,7 @@ spec:
         "$_"
   - name: 
     image: $(inputs.params.runBaseImage)
+    imagePullPolicy: Always
     env:
       - name: API_KEY
         value: $(inputs.params.accountApiKey1416501)

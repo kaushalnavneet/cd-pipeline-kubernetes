@@ -21,11 +21,10 @@ spec:
         default: '.build'
       - name: charts_repo
       - name: config_repo
-      - name: testImage
-        default: ibmcom/pipeline-base-image:latest
   steps:
   - name: build-base
-    image: $(inputs.params.testImage)
+    image: ibmcom/pipeline-base-image:latest
+    imagePullPolicy: Always
     env:
       - name: ACCOUNT_API_KEY
         value: $(inputs.params.accountApiKey1416501)
