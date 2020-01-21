@@ -14,7 +14,7 @@ spec:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: private-registry-secret
+        name: otc-registry-secret
       type: kubernetes.io/dockerconfigjson
       data:
         .dockerconfigjson: $(params.dockerconfigjson)
