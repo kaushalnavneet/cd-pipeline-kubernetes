@@ -42,8 +42,8 @@ spec:
         default: ''
       - name: environment
         default: ''
-      - name: component_repo
-      - name: component_revision
+      - name: componentRepo
+      - name: componentRevision
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
