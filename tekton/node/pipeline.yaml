@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-component-pipeline
+spec:
+  params:
+    - name: imageName
+      description: the name of the output docker image
+    - name: imageTag
+      description: the tag for the output docker image
+    - name: accountApiKey1416501
+      description: api key
+    - name: accountApiKey1308775
+      description: api key for docker build machine
+    - name: crRegion
+      description: the CR region to use
+    - name: crAccountName
+      description: the CR account name to use
+    - name: idsToken
+      description: the ids token to use to clone repos
+    - name: registryUrl
+      description: the CR registry URL to use
+    - name: registryNamespace
+      description: the CR NS to use 
+    - name: componentRepo
+      description: The component repo url
+    - name: componentRevision
+      description: The component revision
+    - name: imageUrl
+      description: The config repo url    
+  tasks:
+  - name: build
+    taskRef:
+      name:  build-component
+    params:
+      - name: accountApiKey1416501
+        value: $(params.accountApiKey1416501)
+      - name: accountApiKey1308775
+        value: $(params.accountApiKey1308775)
+      - name: dockerPassword
+        value: $(params.accountApiKey1416501)
+      - name: idsToken
+        value: $(params.idsToken)
+      - name: componentRepo
+        value: ${params.componentRepo}
+      - name: componentRevision
+        value: ${params.componentRevision}
+      - name: imageUrl
+        value: ${params.image_url}
+      - name: runBaseImage
+        value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+      - name: dockerFile
+        value: ''
+      - name: imageTag
+        value: ''

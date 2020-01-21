@@ -26,10 +26,17 @@ done
 
 export DOCKER_HOST='tcp://localhost:2375'
 
-echo ${APPLICATION_VERSION} > .pipeline_build_id
+
 if [ -z "$GIT_COMMIT" ]; then
   GIT_COMMIT=$(git rev-parse --verify HEAD)
 fi
+
+if [ -z "$APPLICATION_VERSION" ]; then
+  APPLICATION_VERSION=$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)
+fi
+
+echo ${APPLICATION_VERSION} > .pipeline_build_id
+
 echo "{\"build\": \"$(date +%Y%m%d%H%M%Z)\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}

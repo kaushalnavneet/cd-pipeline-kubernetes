@@ -1,0 +1,70 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-template
+spec:
+  params:
+    - name: componentRepo
+      description: The component repo url
+  resourcetemplates:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: otc-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: otc-sa
+      imagePullSecrets:
+      - name: otc-registry-secret
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        generateName: build-base-pipeline-run
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-template"
+      spec:
+        pipelineRef:
+            name: build-base-pipeline
+        serviceAccount: otc-sa
+        params:
+          - name: accountApiKey1416501
+            value: $(params.API_KEY_1416501)
+          - name: accountApiKey1308775
+            value: $(params.API_KEY_1308775)
+          - name: idsToken
+            value: $(params.IDS_TOKEN)
+          - name: componentRepo
+            value: $(params.componentRepo)
+          - name: componentRevision
+            value: $(params.componentRevision)
+          - name: imageUrl
+            value: $(params.imageUrl)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: log-service-pipeline-binding
+spec:
+  params:
+    - name: componentRepo
+      value: https://github.ibm.com/org-ids/pipeline-log-service.git
+    - name: componentRevision
+      value: master
+    - name: imageUrl
+      value: us.icr.io/opentoolchain/pipeline-log-service
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: manual-log-service-listener
+spec:
+  triggers:
+    - binding:
+        name: log-service-pipeline-binding
+      template:
+        name: pipeline-template
