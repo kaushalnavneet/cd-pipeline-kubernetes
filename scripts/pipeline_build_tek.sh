@@ -30,14 +30,14 @@ export DOCKER_HOST='tcp://localhost:2375'
 if [ -z "$GIT_COMMIT" ]; then
   GIT_COMMIT=$(git rev-parse --verify HEAD)
 fi
-
+TIMESTAMP=$(date +%Y%m%d%H%M%Z)
 if [ -z "$APPLICATION_VERSION" ]; then
-  APPLICATION_VERSION=$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)
+  APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}""
 fi
 
+echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
-
-echo "{\"build\": \"$(date +%Y%m%d%H%M%Z)\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
+echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
 # For some reason this doesn't get repulled in docker engine
