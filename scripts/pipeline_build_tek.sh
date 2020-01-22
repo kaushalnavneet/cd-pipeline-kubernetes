@@ -12,7 +12,7 @@ cp -a /work cd-pipeline-kubernetes
 IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 IMAGE_URL=${IMAGE_URL:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
-DOCKERFILE=${DOCKERFILE:-docker/Dockerfile.${DOCKER_IMAGE##*:}}
+DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
 ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
 
