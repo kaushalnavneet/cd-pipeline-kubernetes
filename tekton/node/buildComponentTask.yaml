@@ -52,9 +52,9 @@ spec:
       - name: API_KEY
         value: $(inputs.params.accountApiKey1308775)
       - name: COMPONENT_REPO
-        value: $(inputs.params.component_repo)
+        value: $(inputs.params.componentRepo)
       - name: COMPONENT_REVISION
-        value: $(inputs.params.component_revision)
+        value: $(inputs.params.componentRevision)
       - name: IMAGE_URL
         value: $(inputs.params.imageUrl)
       - name: IMAGE_REGISTRY
