@@ -141,7 +141,7 @@ spec:
     args:
       - | 
         set -e
-        cat /steps/appVersion
+        APPLICATION_VERSION=$(cat /steps/appVersion)
         if [ "${ENVIRONMENT}" = "development" ]; then
           exit 0
         fi

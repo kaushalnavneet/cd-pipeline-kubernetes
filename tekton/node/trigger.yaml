@@ -66,7 +66,7 @@ spec:
     - name: imageUrl
       value: us.icr.io/opentoolchain/pipeline-log-service
     - name: environment
-      value: development
+      value: development2
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
