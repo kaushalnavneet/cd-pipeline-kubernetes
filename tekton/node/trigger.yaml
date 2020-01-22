@@ -50,6 +50,8 @@ spec:
             value: $(params.componentRevision)
           - name: imageUrl
             value: $(params.imageUrl)
+          - name: environment
+            value: $(params.environment)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
