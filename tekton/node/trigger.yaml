@@ -10,6 +10,8 @@ spec:
       description: the branch for the git repo
     - name: imageUrl
       description: the image url
+    - name: environment
+      description: development / staging / production
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
@@ -52,7 +54,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: log-service-pipeline-binding
+  name: log-service-pipeline-binding-dev
 spec:
   params:
     - name: componentRepo
@@ -61,14 +63,16 @@ spec:
       value: master
     - name: imageUrl
       value: us.icr.io/opentoolchain/pipeline-log-service
+    - name: environment
+      value: development
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: manual-log-service-listener
+  name: manual-log-service-listener-dev
 spec:
   triggers:
     - binding:
-        name: log-service-pipeline-binding
+        name: log-service-pipeline-binding-dev
       template:
         name: pipeline-template

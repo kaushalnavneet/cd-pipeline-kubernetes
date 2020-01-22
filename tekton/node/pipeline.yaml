@@ -28,6 +28,8 @@ spec:
       description: The component revision
     - name: imageUrl
       description: The config repo url
+    - name: environment
+      description: build environment
   tasks:
   - name: build
     taskRef:
@@ -47,6 +49,8 @@ spec:
         value: $(params.componentRevision)
       - name: imageUrl
         value: $(params.imageUrl)
+      - name: environment
+        value: $(params.environment)
       - name: runBaseImage
         value: us.icr.io/opentoolchain/cd-build-base:nodejs10
       - name: dockerFile
