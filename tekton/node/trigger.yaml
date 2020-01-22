@@ -5,11 +5,11 @@ metadata:
 spec:
   params:
     - name: componentRepo
-    description: the repo for the component
+      description: the repo for the component
     - name: componentRevision
-    description: the branch for the git repo
+      description: the branch for the git repo
     - name: imageUrl
-    description: the image url
+      description: the image url
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
