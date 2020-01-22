@@ -138,7 +138,7 @@ spec:
     args:
       - | 
         set -e
-        if [ "${ENVIRONMENT}" == "development" ]; then
+        if [ "${ENVIRONMENT}" = "development" ]; then
           exit 0
         fi
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
