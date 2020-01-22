@@ -106,6 +106,9 @@ spec:
 
         chmod u+x /work/scripts/pipeline_build_tek.sh
         "$_"
+    volumeMounts:
+      - mountPath: /steps
+        name: steps-volume
   - name: run-va
     image: $(inputs.params.runBaseImage)
     imagePullPolicy: Always
@@ -138,6 +141,7 @@ spec:
     args:
       - | 
         set -e
+        cat /steps/appVersion
         if [ "${ENVIRONMENT}" = "development" ]; then
           exit 0
         fi
@@ -145,3 +149,9 @@ spec:
         cd /work
         chmod u+x /work/scripts/pipeline_va_tek.sh
         "$_"
+    volumeMounts:
+      - mountPath: /steps
+        name: steps-volume
+  volumes:
+    - name: steps-volume
+      emptyDir: {}

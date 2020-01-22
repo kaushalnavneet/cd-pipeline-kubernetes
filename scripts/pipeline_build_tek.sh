@@ -36,6 +36,8 @@ if [ -z "$APPLICATION_VERSION" ]; then
   APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}"
 fi
 
+ echo ${APPLICATION_VERSION} > /steps/appVersion
+
 echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
