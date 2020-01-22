@@ -7,6 +7,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+cp -a /work cd-pipeline-kubernetes
 
 IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 IMAGE_URL=${IMAGE_URL:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_NAME}}
