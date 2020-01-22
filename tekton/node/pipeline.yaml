@@ -46,7 +46,7 @@ spec:
       - name: componentRevision
         value: $(params.componentRevision)
       - name: imageUrl
-        value: $(params.image_url)
+        value: $(params.imageUrl)
       - name: runBaseImage
         value: us.icr.io/opentoolchain/cd-build-base:nodejs10
       - name: dockerFile
