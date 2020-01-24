@@ -7,6 +7,7 @@ spec:
     params:
       - name: accountApiKey1308775
       - name: accountApiKey1416501
+      - name: accountApiKey1651315
       - name: accountRegion
         default: us-south
       - name: idsToken
@@ -189,6 +190,10 @@ spec:
         value: $(inputs.params.clusterName)
       - name: CLUSTER_NAMESPACE
         value: $(inputs.params.clusterNamespace)
+      - name: DEPLOY_ACCOUNT_ID
+        value: 779c0808c946b9e15cc2e63013fded8c
+      - name: DEPLOY_API_KEY
+        value: $(inputs.params.accountApiKey1651315)
     command: ["/bin/bash", "-c"]
     args:
       - | 
