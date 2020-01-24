@@ -65,8 +65,6 @@ spec:
         value: $(params.environment)
       - name: runBaseImage
         value: us.icr.io/opentoolchain/cd-build-base:nodejs10
-      - name: deployBaseImage
-        value: us.icr.io/opentoolchain/cd-deploy-base:deploy
       - name: dockerFile
         value: ''
       - name: imageTag

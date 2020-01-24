@@ -20,6 +20,8 @@ spec:
       - name: imageTag
       - name: imageUrl
       - name: runBaseImage
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
       - name: dockerFile
       - name: buildCluster
         default: otc-dal12-build
