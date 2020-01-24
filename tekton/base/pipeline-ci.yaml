@@ -1,0 +1,129 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: pipeline-base-ci
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: imageName
+    - name: imageTag
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.charts_repo)
+        - name: branch
+          value: $(params.charts_branch)
+        - name: directoryName
+          value: $(params.charts_directory)
+    - name: clone-config-repo
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.config_repo)
+        - name: branch
+          value: $(params.config_branch)
+        - name: directoryName
+          value: $(params.config_directory)
+    - name: deploy
+      runAfter: [clone-config-repo]
+      taskRef:
+        name:  build-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-deploy-base
+        - name: imageTag
+          value: deploy
+        - name: tagSuffix
+          value: ''
+    - name: nodejs10
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: nodejs10
+    - name: java
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: java
+    - name: go
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: go1.10
+    - name: nodejs10-run
+      runAfter: [nodejs10]
+      taskRef:
+        name: run-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/ibmnode
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+        - name: dockerFile
+          value: docker/Dockerfile.nodejs10.run
+        - name: imageTag
+          value: 10secure
+    - name: websphere-liberty-run
+      runAfter: [java]
+      taskRef:
+        name: run-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/websphere-liberty
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:java
+        - name: dockerFile
+          value: docker/Dockerfile.java.run
+        - name: imageTag
+          value: secure
