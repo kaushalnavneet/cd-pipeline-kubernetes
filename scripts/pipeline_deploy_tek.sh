@@ -14,7 +14,6 @@ CLUSTER_NAMESPACE=${CLUSTER_NAMESPACE:-${IMAGE_NAMESPACE}}
 ENVIRONMENT=${ENVIRONMENT:-development}
 REGION=${REGION}
 WORKDIR=${WORKDIR:-/work}
-ACCOUNT_ID=${DEPLOY_ACCOUNT_ID:-${ACCOUNT_ID}}
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 
 printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}.\n"
@@ -22,8 +21,7 @@ printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnames
 cp -a ${WORKDIR} cd-pipeline-kubernetes
 mv cd-pipeline-kubernetes/devops-config .
 
-ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
-
+ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${API_KEY}
 if [[ ! -z "${REGION}" ]]; then
  ibmcloud cs region-set ${REGION}
 fi
