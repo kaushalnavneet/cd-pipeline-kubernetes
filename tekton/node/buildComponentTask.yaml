@@ -156,7 +156,7 @@ spec:
     volumeMounts:
       - mountPath: /steps
         name: steps-volume
-   - name: run-deploy
+  - name: run-deploy
     image: $(inputs.params.deployBaseImage)
     imagePullPolicy: Always
     env:
