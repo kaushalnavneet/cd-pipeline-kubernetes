@@ -100,11 +100,11 @@ spec:
     - name: clusterNamespace
       value: opentoolchain
     - name: skipBuild
-      value: false
+      value: "false"
     - name: skipVA
-      value: true
+      value: "true"
     - name: skipDeploy
-      value: false
+      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

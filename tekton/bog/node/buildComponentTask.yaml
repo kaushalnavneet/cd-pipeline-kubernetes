@@ -51,11 +51,11 @@ spec:
       - name: clusterName
       - name: clusterNamespace
       - name: skipBuild
-        default: true
+        default: "true"
       - name: skipVA
-        default: true
+        default: "true"
       - name: skipDeploy
-        default: true
+        default: "true"
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
@@ -221,7 +221,7 @@ spec:
       - | 
         set -e
         if [ "${SKIP}" == true ]; then
-          echo "Skipping VA"
+          echo "Skipping Deploy"
           exit 0
         fi
         if [  -z "${APPLICATION_VERSION}" ]; then
