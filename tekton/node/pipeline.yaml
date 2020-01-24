@@ -9,9 +9,11 @@ spec:
     - name: imageTag
       description: the tag for the output docker image
     - name: accountApiKey1416501
-      description: api key
+      description: api key for prod cluster / CR
     - name: accountApiKey1308775
       description: api key for docker build machine
+    - name: accountApiKey1651315
+      description: api key for dev cluster
     - name: crRegion
       description: the CR region to use
     - name: crAccountName
@@ -45,6 +47,8 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: accountApiKey1308775
         value: $(params.accountApiKey1308775)
+      - name: accountApiKey1651315
+        value: $(params.accountApiKey1651315)
       - name: dockerPassword
         value: $(params.accountApiKey1416501)
       - name: idsToken
