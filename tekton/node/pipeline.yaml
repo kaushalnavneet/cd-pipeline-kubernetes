@@ -26,6 +26,12 @@ spec:
       description: The component repo url
     - name: componentRevision
       description: The component revision
+    - name: componentName
+      description: The component name
+    - name: clusterName
+      description: The cluster name
+    - name: clusterNamespace
+      description: The cluster namespace
     - name: imageUrl
       description: The config repo url
     - name: environment
@@ -47,12 +53,20 @@ spec:
         value: $(params.componentRepo)
       - name: componentRevision
         value: $(params.componentRevision)
+      - name: componentName
+        value: $(params.componentName)
+      - name: clusterName
+        value: $(params.clusterName)
+      - name: clusterNamespace
+        value: $(params.clusterNamespace)
       - name: imageUrl
         value: $(params.imageUrl)
       - name: environment
         value: $(params.environment)
       - name: runBaseImage
         value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+      - name: deployBaseImage
+        value: us.icr.io/opentoolchain/cd-deploy-base:deploy
       - name: dockerFile
         value: ''
       - name: imageTag

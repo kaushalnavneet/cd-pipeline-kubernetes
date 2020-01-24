@@ -44,6 +44,9 @@ spec:
         default: ''
       - name: componentRepo
       - name: componentRevision
+      - name: componentName
+      - name: clusterName
+      - name: clusterNamespace
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
@@ -148,6 +151,52 @@ spec:
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd /work
         chmod u+x /work/scripts/pipeline_va_tek.sh
+        "$_"
+    volumeMounts:
+      - mountPath: /steps
+        name: steps-volume
+   - name: run-deploy
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: API_KEY
+        value: $(inputs.params.accountApiKey1416501)
+      - name: ACCOUNT_REGION
+        value: $(inputs.params.accountRegion)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: IMAGE_REGISTRY
+        value: $(inputs.params.registryUrl)
+      - name: IMAGE_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DOCKERFILE
+        value: $(inputs.params.dockerFile)
+      - name: DOCKER_IMAGE
+        value: $(inputs.params.runBaseImage)
+      - name: DOCKER_USERNAME
+        value: $(inputs.params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(inputs.params.dockerPassword)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+      - name: COMPONENT_NAME
+        value: $(inputs.params.componentName)
+      - name: CLUSTER_NAME
+        value: $(inputs.params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(inputs.params.clusterNamespace)
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        set -e
+        APPLICATION_VERSION=$(cat /steps/appVersion)
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        cd /work
+        chmod u+x /work/scripts/pipeline_deploy_tek.sh
         "$_"
     volumeMounts:
       - mountPath: /steps

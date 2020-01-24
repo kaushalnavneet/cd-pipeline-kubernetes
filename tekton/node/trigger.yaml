@@ -8,6 +8,12 @@ spec:
       description: the repo for the component
     - name: componentRevision
       description: the branch for the git repo
+    - name: componentName
+      description: the name of the component
+    - name: clusterName
+      description: the name of the cluster to deploy component to
+    - name: clusterNamespace
+      description: the name of the cluster namespace to use
     - name: imageUrl
       description: the image url
     - name: environment
@@ -66,7 +72,13 @@ spec:
     - name: imageUrl
       value: us.icr.io/opentoolchain/pipeline-log-service
     - name: environment
-      value: development2
+      value: development
+    - name: componentName
+      value: pipeline-log-service
+    - name: clusterName
+      value: otc-us-south-dev
+    - name: clusterNamespace
+      value: opentoolchain
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
