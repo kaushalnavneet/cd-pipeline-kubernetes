@@ -62,6 +62,10 @@ spec:
             value: $(params.imageUrl)
           - name: environment
             value: $(params.environment)
+          - name: clusterName
+            value: $(params.clusterName)
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
