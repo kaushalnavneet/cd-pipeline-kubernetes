@@ -200,7 +200,21 @@ spec:
     args:
       - | 
         set -e
-        APPLICATION_VERSION=$(cat /steps/appVersion)
+        if [  -z "${APPLICATION_VERSION}" ]; then
+          APPLICATION_VERSION=$(cat /steps/appVersion)
+        fi
+
+        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+          ibmcloud cr login
+          ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+          APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
+        fi
+
+        if [ -z "${APPLICATION_VERSION}" ]; then
+          echo "IMAGE_TAG not specified"
+          exit 1
+        fi
+
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd ${COMPONENT_NAME}
         chmod u+x /work/scripts/pipeline_deploy_tek.sh
