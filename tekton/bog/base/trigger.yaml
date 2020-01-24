@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-template
+spec:
+  params:
+    - name: charts_repo
+      default: https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+      description: The charts repo url
+    - name: config_repo
+      default: https://github.ibm.com/ids-env/devops-config.git
+      description: The config repo url
+  resourcetemplates:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: otc-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: otc-sa
+      imagePullSecrets:
+      - name: otc-registry-secret
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        generateName: build-base-pipeline-run
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-template"
+      spec:
+        pipelineRef:
+            name: build-base-pipeline
+        serviceAccount: otc-sa
+        params:
+          - name: accountApiKey1416501
+            value: $(params.API_KEY_1416501)
+          - name: accountApiKey1308775
+            value: $(params.API_KEY_1308775)
+          - name: idsToken
+            value: $(params.IDS_TOKEN)
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: config_repo
+            value: $(params.config_repo)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: pipeline-binding
+spec:
+  params:
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: listener
+spec:
+  triggers:
+    - binding:
+        name: pipeline-binding
+      template:
+        name: pipeline-template
