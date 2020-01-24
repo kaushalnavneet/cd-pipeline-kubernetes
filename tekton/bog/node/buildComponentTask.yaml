@@ -50,6 +50,12 @@ spec:
       - name: componentName
       - name: clusterName
       - name: clusterNamespace
+      - name: skipBuild
+        default: true
+      - name: skipVA
+        default: true
+      - name: skipDeploy
+        default: true
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
@@ -99,10 +105,16 @@ spec:
         value: $(inputs.params.dockerPassword)
       - name: GIT_COMMIT
         value: $(inputs.params.gitCommit)
+      - name: SKIP
+        value: $(inputs.params.skipBuild)
     command: ["/bin/bash", "-c"]
     args:
       - | 
         set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping build"
+          exit 0
+        fi
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
@@ -143,10 +155,16 @@ spec:
         value: $(inputs.params.imageTag)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
+      - name: SKIP
+        value: $(inputs.params.skipVA)
     command: ["/bin/bash", "-c"]
     args:
       - | 
         set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping VA"
+          exit 0
+        fi
         APPLICATION_VERSION=$(cat /steps/appVersion)
         if [ "${ENVIRONMENT}" = "development" ]; then
           exit 0
@@ -196,10 +214,16 @@ spec:
         value: 779c0808c946b9e15cc2e63013fded8c
       - name: DEPLOY_API_KEY
         value: $(inputs.params.accountApiKey1651315)
+      - name: SKIP
+        value: $(inputs.params.skipDeploy)
     command: ["/bin/bash", "-c"]
     args:
       - | 
         set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping VA"
+          exit 0
+        fi
         if [  -z "${APPLICATION_VERSION}" ]; then
           APPLICATION_VERSION=$(cat /steps/appVersion)
         fi

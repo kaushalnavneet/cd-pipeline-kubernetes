@@ -38,6 +38,12 @@ spec:
       description: The config repo url
     - name: environment
       description: build environment
+    - name: skipBuild
+      description: skip build flag
+    - name: skipVA
+      description: skip VA flag
+    - name: skipDeploy
+      description: skip deploy flag
   tasks:
   - name: build
     taskRef:
@@ -73,3 +79,9 @@ spec:
         value: ''
       - name: imageTag
         value: ''
+      - name: skipBuild
+        value: $(params.skipBuild)
+      - name: skipVA
+        value: $(params.skipVA)
+      - name: skipDeploy
+        value: $(params.skipDeploy)

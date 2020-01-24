@@ -18,6 +18,12 @@ spec:
       description: the image url
     - name: environment
       description: development / staging / production
+    - name: skipBuild
+      description: skipBuild flag
+    - name: skipVA
+      description: skipVA flag
+    - name: skipDeploy
+      description: skipDeploy flag
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
@@ -66,6 +72,12 @@ spec:
             value: $(params.clusterName)
           - name: clusterNamespace
             value: $(params.clusterNamespace)
+          - name: skipBuild
+            value: $(params.skipBuild)
+          - name: skipVA
+            value: $(params.skipVA)
+          - name: skipDeploy
+            value: $(params.skipDeploy)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -87,6 +99,12 @@ spec:
       value: otc-us-south-dev
     - name: clusterNamespace
       value: opentoolchain
+    - name: skipBuild
+      value: false
+    - name: skipVA
+      value: true
+    - name: skipDeploy
+      value: false
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
