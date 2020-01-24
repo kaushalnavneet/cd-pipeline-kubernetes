@@ -52,6 +52,8 @@ spec:
             value: $(params.API_KEY_1651315)
           - name: idsToken
             value: $(params.IDS_TOKEN)
+          - name: componentName
+            value: $(params.componentName)
           - name: componentRepo
             value: $(params.componentRepo)
           - name: componentRevision
