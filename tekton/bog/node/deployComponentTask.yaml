@@ -1,0 +1,123 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-component
+spec:
+  inputs:
+    params:
+      - name: accountApiKey1308775
+      - name: accountApiKey1416501
+      - name: accountApiKey1651315
+      - name: accountRegion
+        default: us-south
+      - name: idsToken
+      - name: registryUrl
+        default: us.icr.io
+      - name: registryNamespace
+        default: opentoolchain
+      - name: imageName
+        default: ''
+      - name: imageTag
+      - name: imageUrl
+      - name: runBaseImage
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: dockerFile
+      - name: buildCluster
+        default: otc-dal12-build
+      - name: dockerUsername
+        default: iamapikey
+      - name: dockerPassword
+      - name: operatorSDK
+        default: ''
+      - name: extraDockerOpts
+        default: --no-cache
+      - name: idsUser
+        default: idsorg
+      - name: idsToken
+      - name: artifactoryToken
+        default: ''
+      - name: artifactoryId
+        default: ''
+      - name: consoleAuthToken
+        default: ''
+      - name: gitCommit
+        default: ''
+      - name: environment
+        default: ''
+      - name: componentRepo
+      - name: componentRevision
+      - name: componentName
+      - name: clusterName
+      - name: clusterNamespace
+      - name: skipBuild
+        default: "true"
+      - name: skipVA
+        default: "true"
+      - name: skipDeploy
+        default: "true"
+  steps:
+  - name: deploy
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: API_KEY
+        value: $(inputs.params.accountApiKey1416501)
+      - name: ACCOUNT_REGION
+        value: $(inputs.params.accountRegion)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: IMAGE_REGISTRY
+        value: $(inputs.params.registryUrl)
+      - name: IMAGE_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DOCKERFILE
+        value: $(inputs.params.dockerFile)
+      - name: DOCKER_IMAGE
+        value: $(inputs.params.runBaseImage)
+      - name: DOCKER_USERNAME
+        value: $(inputs.params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(inputs.params.dockerPassword)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+      - name: COMPONENT_NAME
+        value: $(inputs.params.componentName)
+      - name: CLUSTER_NAME
+        value: $(inputs.params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(inputs.params.clusterNamespace)
+      - name: DEPLOY_ACCOUNT_ID
+        value: 779c0808c946b9e15cc2e63013fded8c
+      - name: DEPLOY_API_KEY
+        value: $(inputs.params.accountApiKey1651315)
+      - name: SKIP
+        value: $(inputs.params.skipDeploy)
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping Deploy"
+          exit 0
+        fi
+     
+        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+          ibmcloud cr login
+          ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+          APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
+        fi
+
+        if [ -z "${APPLICATION_VERSION}" ]; then
+          echo "IMAGE_TAG not specified"
+          exit 1
+        fi
+
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        cd ${COMPONENT_NAME}
+        chmod u+x /work/scripts/pipeline_deploy_tek.sh
+        "$_"

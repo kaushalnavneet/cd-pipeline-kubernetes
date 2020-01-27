@@ -85,3 +85,44 @@ spec:
         value: $(params.skipVA)
       - name: skipDeploy
         value: $(params.skipDeploy)
+  - name: deploy
+    runAfter: [build-component]
+    taskRef:
+      name:  deploy-component
+    params:
+      - name: accountApiKey1416501
+        value: $(params.accountApiKey1416501)
+      - name: accountApiKey1308775
+        value: $(params.accountApiKey1308775)
+      - name: accountApiKey1651315
+        value: $(params.accountApiKey1651315)
+      - name: dockerPassword
+        value: $(params.accountApiKey1416501)
+      - name: idsToken
+        value: $(params.idsToken)
+      - name: componentRepo
+        value: $(params.componentRepo)
+      - name: componentRevision
+        value: $(params.componentRevision)
+      - name: componentName
+        value: $(params.componentName)
+      - name: clusterName
+        value: $(params.clusterName)
+      - name: clusterNamespace
+        value: $(params.clusterNamespace)
+      - name: imageUrl
+        value: $(params.imageUrl)
+      - name: environment
+        value: $(params.environment)
+      - name: runBaseImage
+        value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+      - name: dockerFile
+        value: ''
+      - name: imageTag
+        value: ''
+      - name: skipBuild
+        value: $(params.skipBuild)
+      - name: skipVA
+        value: $(params.skipVA)
+      - name: skipDeploy
+        value: $(params.skipDeploy)
