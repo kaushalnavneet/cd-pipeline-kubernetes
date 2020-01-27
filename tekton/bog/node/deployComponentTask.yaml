@@ -73,6 +73,8 @@ spec:
         value: $(inputs.params.registryNamespace)
       - name: IMAGE_NAME
         value: $(inputs.params.imageName)
+      - name: IDS_TOKEN
+        value: $(inputs.params.idsToken)
       - name: DOCKERFILE
         value: $(inputs.params.dockerFile)
       - name: DOCKER_IMAGE
