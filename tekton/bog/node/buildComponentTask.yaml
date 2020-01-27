@@ -179,3 +179,6 @@ spec:
   volumes:
     - name: steps-volume
       emptyDir: {}
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
