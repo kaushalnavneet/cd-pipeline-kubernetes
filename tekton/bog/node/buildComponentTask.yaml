@@ -176,8 +176,6 @@ spec:
     volumeMounts:
       - mountPath: /steps
         name: steps-volume
-      - mountPath: /artifacts
-        name: task-volume
 
   volumes:
     - name: steps-volume
