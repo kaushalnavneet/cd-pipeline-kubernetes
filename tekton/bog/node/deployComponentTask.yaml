@@ -89,6 +89,10 @@ spec:
         value: $(inputs.params.componentName)
       - name: CLUSTER_NAME
         value: $(inputs.params.clusterName)
+      - name: COMPONENT_REPO
+        value: $(inputs.params.componentRepo)
+      - name: COMPONENT_REVISION
+        value: $(inputs.params.componentRevision)
       - name: CLUSTER_NAMESPACE
         value: $(inputs.params.clusterNamespace)
       - name: DEPLOY_ACCOUNT_ID
@@ -117,6 +121,13 @@ spec:
           echo "IMAGE_TAG not specified"
           exit 1
         fi
-      
+
+        if [ ! -d "${COMPONENT_NAME}" ]; then
+          echo "echo -n $IDS_TOKEN" > ./token.sh
+          chmod +x ./token.sh
+          GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        fi
+
+        cd ${COMPONENT_NAME}
         chmod u+x /work/scripts/pipeline_deploy_tek.sh
         "$_"
