@@ -312,27 +312,6 @@ pipeline:
         PAYLOAD_ENCRYPT: true
         CLOUDANT_DATABASE: ars-staging
         ORG_URI: https://api.stage1.ng.bluemix.net/v2/organizations
-  test-report-service:
-    replicas: 1
-    revisionHistoryLimit: 3
-    ingress:
-        annotations:
-            ingress.bluemix.net/client-max-body-size: "size=5m"
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/test-report-service/test-report-service-20181123
-    configmap:
-      data:
-        CIPHER_ALGORITHM: aes-128-cbc
-        CLOUDANT_DB: pipeline-tests
-        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
-        HMAC_ALGORITHM: sha1
-        HTTPS_PORT: ''
-        HTTP_PORT: ''
-        IS_CF: true
-        JSON_LIMIT: 5mb
-        NEW_RELIC_APP_NAME: Pipeline Test Report Service - YS1
   pipeline-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -411,7 +390,6 @@ pipeline:
         com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
         com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
         com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
-        test_service_client_ribbon_listOfServers: test-report-service.us-south.devops.dev.cloud.ibm.com:443
         scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
         log_service_client_ribbon_listOfServers: pipeline-log-service
         log_service_client_ribbon_IsSecure: false
