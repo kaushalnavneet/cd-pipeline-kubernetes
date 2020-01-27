@@ -10,7 +10,6 @@ spec:
       - name: accountApiKey1651315
       - name: accountRegion
         default: us-south
-      - name: idsToken
       - name: registryUrl
         default: us.icr.io
       - name: registryNamespace
