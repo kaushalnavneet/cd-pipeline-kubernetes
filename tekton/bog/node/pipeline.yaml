@@ -86,7 +86,7 @@ spec:
       - name: skipDeploy
         value: $(params.skipDeploy)
   - name: deploy
-    runAfter: [build-component]
+    runAfter: [build]
     taskRef:
       name:  deploy-component
     params:
