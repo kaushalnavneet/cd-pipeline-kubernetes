@@ -117,6 +117,6 @@ spec:
           echo "IMAGE_TAG not specified"
           exit 1
         fi
-        cd ${COMPONENT_NAME}
+      
         chmod u+x /work/scripts/pipeline_deploy_tek.sh
         "$_"
