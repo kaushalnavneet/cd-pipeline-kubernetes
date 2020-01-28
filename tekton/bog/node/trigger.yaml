@@ -24,8 +24,6 @@ spec:
       description: skipVA flag
     - name: skipDeploy
       description: skipDeploy flag
-    - name: pipelinePVC
-      description: name of pipeline pvc
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
@@ -81,7 +79,7 @@ spec:
           - name: skipDeploy
             value: $(params.skipDeploy)
           - name: pipelinePVC
-            value: $(params.pipelinePVC)
+            value: pipeline-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -109,8 +107,6 @@ spec:
       value: "true"
     - name: skipDeploy
       value: "false"
-    - name: pipelinePVC
-      value: pipeline-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
