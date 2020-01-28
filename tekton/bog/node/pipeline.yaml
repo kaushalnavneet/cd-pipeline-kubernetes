@@ -44,6 +44,8 @@ spec:
       description: skip VA flag
     - name: skipDeploy
       description: skip deploy flag
+    - name: pipelinePVC
+      description: name of the pipeline pvc
   tasks:
   - name: build
     taskRef:
@@ -85,6 +87,8 @@ spec:
         value: $(params.skipVA)
       - name: skipDeploy
         value: $(params.skipDeploy)
+      - name: pipelinePVC
+        value: $(params.pipelinePVC)
   - name: deploy
     runAfter: [build]
     taskRef:
@@ -126,3 +130,5 @@ spec:
         value: $(params.skipVA)
       - name: skipDeploy
         value: $(params.skipDeploy)
+      - name: pipelinePVC
+        value: $(params.pipelinePVC)
