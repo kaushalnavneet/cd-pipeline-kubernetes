@@ -110,10 +110,44 @@ spec:
           value: docker/Dockerfile.nodejs10.run
         - name: imageTag
           value: 10secure
+    - name: nodejs10-va
+      runAfter: [nodejs10-run]
+      taskRef:
+        name: run-va
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/ibmnode
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+        - name: dockerFile
+          value: docker/Dockerfile.nodejs10.run
+        - name: imageTag
+          value: 10secure
     - name: websphere-liberty-run
       runAfter: [java]
       taskRef:
         name: run-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/websphere-liberty
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:java
+        - name: dockerFile
+          value: docker/Dockerfile.java.run
+        - name: imageTag
+          value: secure
+    - name: websphere-liberty-va
+      runAfter: [websphere-liberty-run]
+      taskRef:
+        name: run-va
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
