@@ -17,6 +17,8 @@ spec:
     - name: imageUrl
     - name: imageName
     - name: imageTag
+    - name: environment
+    - name: skipVA
   tasks:
     - name: clone-source-repo
       taskRef:
@@ -73,6 +75,8 @@ spec:
           value: ''
         - name: imageTag
           value: ''
+        - name: environment
+          value: $(params.environment)
     - name: build-va
       runAfter: [build]
       taskRef:
@@ -90,3 +94,7 @@ spec:
           value: ''
         - name: imageTag
           value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipVA
+          value: $(params.skipVA)

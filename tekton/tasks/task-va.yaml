@@ -28,6 +28,10 @@ spec:
         default: otc-dal12-build
       - name: extraDockerOpts
         default: --no-cache
+      - name: environment
+        default: 'development'
+      - name: skipVA
+        default: 'false'
   stepTemplate:
     env:
       - name: API
@@ -86,6 +90,8 @@ spec:
         value: $(inputs.params.registryRegion)
       - name: SOURCE_DIRECTORY
         value: $(inputs.params.source_directory)
+      - name: SKIP
+        value: $(inputs.params.skipVA)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -93,6 +99,10 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping VA"
+          exit 0
+        fi
         cd "${SOURCE_DIRECTORY}"
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry

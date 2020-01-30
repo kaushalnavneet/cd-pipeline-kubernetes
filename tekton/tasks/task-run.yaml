@@ -26,6 +26,8 @@ spec:
       - name: runBaseImage
       - name: extraDockerOpts
         default: --no-cache
+      - name: environment
+        default: 'development'
   stepTemplate:
     env:
       - name: API

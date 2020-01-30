@@ -102,6 +102,8 @@ spec:
             value: $(params.config_directory)
           - name: imageUrl
             value: $(params.imageUrl)
+          - name: skipVA
+            value: $(params.skipVA)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -129,6 +131,10 @@ spec:
       value: "pipeline-log-service/devops-config"
     - name: imageUrl
       value: "us.icr.io/opentoolchain/pipeline-log-service"
+    - name: environment
+      value: "development"
+    - name: skipVA
+      value: "true"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

@@ -18,6 +18,8 @@ spec:
       - name: imageTag
       - name: tagSuffix
         default: '.build'
+      - name: environment
+        default: 'development'
   stepTemplate:
     env:
       - name: API
