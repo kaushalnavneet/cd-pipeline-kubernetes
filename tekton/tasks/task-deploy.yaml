@@ -51,7 +51,7 @@ spec:
             name: cd-config
             key: TOOLCHAIN_ID
   steps:
-  - name: run-va
+  - name: deploy
     image: $(inputs.params.deployBaseImage)
     imagePullPolicy: Always
     env:

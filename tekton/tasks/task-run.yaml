@@ -117,6 +117,8 @@ spec:
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
         cd "${SOURCE_DIRECTORY}"
+        [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
+        cp -a /work cd-pipeline-kubernetes
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud plugin install -f kubernetes-service
