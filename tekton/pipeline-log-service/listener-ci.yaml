@@ -51,6 +51,7 @@ spec:
         API_KEY: $(params.API_KEY_1416501)
         API_KEY_1308775: $(params.API_KEY_1308775)
         API_KEY_1651315: $(params.API_KEY_1651315)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
