@@ -24,8 +24,6 @@ spec:
       - name: dockerUsername
         default: iamapikey
       - name: runBaseImage
-      - name: buildCluster
-        default: otc-dal12-build
       - name: extraDockerOpts
         default: --no-cache
   stepTemplate:
