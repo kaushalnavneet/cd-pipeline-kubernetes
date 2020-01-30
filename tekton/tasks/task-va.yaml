@@ -103,6 +103,14 @@ spec:
         DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
         [ -f build.properties ] && source build.properties
 
+        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+          APPLICATION_VERSION=$( cat /workspace/appVersion )
+          if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+            ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+            APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
+          fi
+        fi
+
         export PIPELINE_IMAGE_URL="${IMAGE_URL}:${APPLICATION_VERSION}"
         echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
 

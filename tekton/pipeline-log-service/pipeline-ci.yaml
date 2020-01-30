@@ -73,3 +73,20 @@ spec:
           value: ''
         - name: imageTag
           value: ''
+    - name: build-va
+      runAfter: [build]
+      taskRef:
+        name: run-va
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+        - name: dockerFile
+          value: ''
+        - name: imageTag
+          value: ''
