@@ -102,8 +102,16 @@ spec:
             value: $(params.config_directory)
           - name: imageUrl
             value: $(params.imageUrl)
+          - name: clusterName
+            value: $(params.clusterName)
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
+          - name: skipBuild
+            value: $(params.skipBuild)
           - name: skipVA
             value: $(params.skipVA)
+          - name: skipDeploy
+            value: $(params.skipDeploy)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -133,8 +141,16 @@ spec:
       value: "us.icr.io/opentoolchain/pipeline-log-service"
     - name: environment
       value: "development"
+    - name: clusterName
+      value: otc-us-south-dev
+    - name: clusterNamespace
+      value: opentoolchain
+    - name: skipBuild
+      value: "false"
     - name: skipVA
       value: "true"
+    - name: skipDeploy
+      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

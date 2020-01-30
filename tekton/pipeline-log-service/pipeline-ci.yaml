@@ -18,7 +18,12 @@ spec:
     - name: imageName
     - name: imageTag
     - name: environment
+    - name: clusterName
+    - name: clusterNamespace
+    - name: skipBuild
     - name: skipVA
+    - name: skipDeploy
+
   tasks:
     - name: clone-source-repo
       taskRef:
@@ -98,3 +103,24 @@ spec:
           value: $(params.environment)
         - name: skipVA
           value: $(params.skipVA)
+    - name: deploy
+      runAfter: [build-va]
+      taskRef:
+        name: deploy
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy)
+        - name: clusterName
+          value: $(params.clusterName)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
