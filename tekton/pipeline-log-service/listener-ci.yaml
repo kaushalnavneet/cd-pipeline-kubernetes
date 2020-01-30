@@ -137,6 +137,6 @@ metadata:
 spec:
   triggers:
     - binding:
-        name: log-service-dev
+        name: log-service-binding-dev
       template:
         name: log-service-template-ci
