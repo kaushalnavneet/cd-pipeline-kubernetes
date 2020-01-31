@@ -110,7 +110,7 @@ spec:
 
         [ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
         [ -d /work ] && cp -a /work cd-pipeline-kubernetes
-        mv cd-pipeline-kubernetes/devops-config .
+        #cp cd-pipeline-kubernetes/devops-config .
 
         $(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
 
