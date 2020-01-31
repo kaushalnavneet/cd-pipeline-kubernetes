@@ -111,6 +111,10 @@ spec:
         #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
         #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
         #[ ! -d devops-config ] && cp cd-pipeline-kubernetes/devops-config .
+        echo directory status
+        pwd
+        ls -F
+        ls -F cd-pipeline-kubernetes
 
         $(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
 
@@ -131,6 +135,7 @@ spec:
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
         helm dep up ${COMPONENT_NAME}
+        set -x
         if ! helm list ${COMPONENT_NAME}; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
@@ -141,6 +146,7 @@ spec:
         else
           helm upgrade --force ${COMPONENT_NAME} ${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
+        set +x
 
     volumeMounts:
       - mountPath: /workspace
