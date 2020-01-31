@@ -68,6 +68,8 @@ spec:
         value: $(inputs.params.registryRegion)
       - name: SOURCE_DIRECTORY
         value: $(inputs.params.source_directory)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

@@ -96,6 +96,8 @@ spec:
         value: $(inputs.params.extraDockerOpts)
       - name: BUILD_CLUSTER
         value: $(inputs.params.buildCluster)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
       # can we get rid of these?
       - name: IDS_USER
         value: ''

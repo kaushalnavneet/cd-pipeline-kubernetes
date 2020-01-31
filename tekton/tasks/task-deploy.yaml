@@ -77,6 +77,8 @@ spec:
         value: $(inputs.params.clusterName)
       - name: CLUSTER_NAMESPACE
         value: $(inputs.params.clusterNamespace)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
