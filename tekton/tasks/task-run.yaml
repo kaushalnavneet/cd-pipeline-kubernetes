@@ -65,6 +65,16 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: IDS_USER
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IDS_USER
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
