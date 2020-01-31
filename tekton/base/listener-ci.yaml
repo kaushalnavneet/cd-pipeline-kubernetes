@@ -39,6 +39,7 @@ spec:
         REGION: $(params.toolchainRegion)
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -47,6 +48,7 @@ spec:
       stringData:
         API_KEY: $(params.API_KEY_1416501)
         API_KEY_1308775: $(params.API_KEY_1308775)
+        IDS_TOKEN: $(params.IDS_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
