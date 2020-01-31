@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: pipeline-log-service-ci
+  name: pipeline-ci
 spec:
   params:
     - name: pipeline-pvc
