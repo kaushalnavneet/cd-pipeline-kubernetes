@@ -108,9 +108,9 @@ spec:
 
         printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_URL}:${APPLICATION_VERSION}.\n"
 
-        [ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
-        [ -d /work ] && cp -a /work cd-pipeline-kubernetes
-        #cp cd-pipeline-kubernetes/devops-config .
+        #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
+        #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
+        #[ ! -d devops-config ] && cp cd-pipeline-kubernetes/devops-config .
 
         $(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
 
