@@ -51,7 +51,7 @@ spec:
         - name: directoryName
           value: $(params.charts_directory)
     - name: clone-config-repo
-      runAfter: [clone-source-repo]
+      runAfter: [clone-charts-repo]
       taskRef:
         name: clone-repo-task
       params:

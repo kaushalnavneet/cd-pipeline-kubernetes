@@ -109,6 +109,8 @@ spec:
             value: $(params.clusterNamespace)
           - name: skipBuild
             value: $(params.skipBuild)
+          - name: environment
+            value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
           - name: skipDeploy
