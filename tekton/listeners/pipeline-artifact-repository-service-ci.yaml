@@ -73,7 +73,7 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        name: $(params.source_branch)-pipeline-artifact-repository-$(uid)
+        name: $(params.source_branch)-ars-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "pipeline-artifact-repository-service-trigger-dev"
@@ -83,7 +83,7 @@ spec:
         serviceAccount: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-pipeline-artifact-repository-$(uid)-pvc
+            value: $(params.source_branch)-ars-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
