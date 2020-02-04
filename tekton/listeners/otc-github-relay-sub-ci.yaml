@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: otc-github-relay-pub-trigger-dev
+  name: otc-github-relay-sub-trigger-dev
 spec:
   params:
     - name: source_repo
@@ -73,17 +73,17 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        name: $(params.source_branch)-relay-pub-$(uid)
+        name: $(params.source_branch)-relay-sub-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "otc-github-relay-pub-trigger-dev"
+          generatedBy: "otc-github-relay-sub-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-ci
         serviceAccount: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-relay-pub-$(uid)-pvc
+            value: $(params.source_branch)-relay-sub-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -120,29 +120,29 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: otc-github-relay-pub-binding-dev
+  name: otc-github-relay-sub-binding-dev
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/otc-github-relay-pub.git"
+      value: "https://github.ibm.com/org-ids/otc-github-relay-sub.git"
     - name: source_branch
       value: "master"
     - name: source_directory
-      value: "otc-github-relay-pub"
+      value: "otc-github-relay-sub"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "otc-github-relay-pub/cd-pipeline-kubernetes"
+      value: "otc-github-relay-sub/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "otc-github-relay-pub/devops-config"
+      value: "otc-github-relay-sub/devops-config"
     - name: imageUrl
-      value: "us.icr.io/opentoolchain/otc-github-relay-pub"
+      value: "us.icr.io/opentoolchain/otc-github-relay-sub"
     - name: environment
       value: "development"
     - name: clusterName
@@ -159,10 +159,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: otc-github-relay-pub-dev
+  name: otc-github-relay-sub-dev
 spec:
   triggers:
     - binding:
-        name: otc-github-relay-pub-binding-dev
+        name: otc-github-relay-sub-binding-dev
       template:
-        name: otc-github-relay-pub-trigger-dev
+        name: otc-github-relay-sub-trigger-dev
