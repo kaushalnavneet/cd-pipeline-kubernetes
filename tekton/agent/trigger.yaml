@@ -4,26 +4,8 @@ metadata:
   name: pipeline-template
 spec:
   params:
-    - name: componentRepo
-      description: the repo for the component
     - name: componentRevision
       description: the branch for the git repo
-    - name: componentName
-      description: the name of the component
-    - name: clusterName
-      description: the name of the cluster to deploy component to
-    - name: clusterNamespace
-      description: the name of the cluster namespace to use
-    - name: imageUrl
-      description: the image url
-    - name: environment
-      description: development / staging / production
-    - name: skipBuild
-      description: skipBuild flag
-    - name: skipVA
-      description: skipVA flag
-    - name: skipDeploy
-      description: skipDeploy flag
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
@@ -50,36 +32,23 @@ spec:
             name: build-component-pipeline
         serviceAccount: otc-sa
         params:
-          - name: accountApiKey1416501
-            value: $(params.API_KEY_1416501)
-          - name: accountApiKey1308775
-            value: $(params.API_KEY_1308775)
-          - name: accountApiKey1651315
-            value: $(params.API_KEY_1651315)
-          - name: idsToken
-            value: $(params.IDS_TOKEN)
-          - name: componentName
-            value: $(params.componentName)
           - name: componentRepo
-            value: $(params.componentRepo)
+            value: https://github.ibm.com/org-ids/private-worker-agent.git
           - name: componentRevision
             value: $(params.componentRevision)
+          - name: idsToken
+            value: $(params.IDS_TOKEN)
           - name: imageUrl
-            value: $(params.imageUrl)
-          - name: environment
-            value: $(params.environment)
-          - name: clusterName
-            value: $(params.clusterName)
-          - name: clusterNamespace
-            value: $(params.clusterNamespace)
-          - name: skipBuild
-            value: $(params.skipBuild)
-          - name: skipVA
-            value: $(params.skipVA)
-          - name: skipDeploy
-            value: $(params.skipDeploy)
+            value: us.icr.io/opentoolchain/private-worker-agent
+          - name: accountApiKey1308775
+            value: $(params.API_KEY_1308775)
+          - name: accountApiKey1416501
+            value: $(params.API_KEY_1416501)
+          - name: dockerhubPassword
+            value: $(params.DOCKERHUB_PASSWORD)
           - name: pipelinePVC
             value: pipeline-$(uid)-pvc
+
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -87,26 +56,8 @@ metadata:
   name: agent-0.7.0-pipeline-binding-dev
 spec:
   params:
-    - name: componentRepo
-      value: https://github.ibm.com/org-ids/pipeline-log-service.git
     - name: componentRevision
       value: master
-    - name: imageUrl
-      value: us.icr.io/opentoolchain/pipeline-log-service
-    - name: environment
-      value: development
-    - name: componentName
-      value: pipeline-log-service
-    - name: clusterName
-      value: otc-us-south-dev
-    - name: clusterNamespace
-      value: opentoolchain
-    - name: skipBuild
-      value: "true"
-    - name: skipVA
-      value: "true"
-    - name: skipDeploy
-      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -114,26 +65,8 @@ metadata:
   name: agent-0.10.1-pipeline-binding-dev
 spec:
   params:
-    - name: componentRepo
-      value: https://github.ibm.com/org-ids/pipeline-log-service.git
     - name: componentRevision
-      value: master
-    - name: imageUrl
-      value: us.icr.io/opentoolchain/pipeline-log-service
-    - name: environment
-      value: development
-    - name: componentName
-      value: pipeline-log-service
-    - name: clusterName
-      value: otc-us-south-dev
-    - name: clusterNamespace
-      value: opentoolchain
-    - name: skipBuild
-      value: "true"
-    - name: skipVA
-      value: "true"
-    - name: skipDeploy
-      value: "false"
+      value: 0.10.1-dev
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
@@ -142,7 +75,7 @@ metadata:
 spec:
   triggers:
     - binding:
-        name: log-service-pipeline-binding-dev
+        name: agent-0.7.0-pipeline-binding-dev
       template:
         name: pipeline-template
 ---
@@ -153,6 +86,6 @@ metadata:
 spec:
   triggers:
     - binding:
-        name: log-service-pipeline-binding-dev
+        name: agent-0.10.1-pipeline-binding-dev
       template:
         name: pipeline-template

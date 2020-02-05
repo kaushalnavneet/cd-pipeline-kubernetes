@@ -5,11 +5,9 @@ metadata:
 spec:
   inputs:
     params:
-      - name: accountApiKey1308775
-      - name: accountApiKey1416501
-      - name: accountApiKey1651315
-      - name: accountRegion
-        default: us-south
+ 
+     
+      
       - name: idsToken
       - name: registryUrl
         default: us.icr.io
@@ -18,35 +16,19 @@ spec:
       - name: imageName
         default: ''
       - name: imageTag
-      - name: imageUrl
+  
       - name: runBaseImage
       - name: deployBaseImage
         default: us.icr.io/opentoolchain/cd-deploy-base:deploy
       - name: dockerFile
-      - name: buildCluster
-        default: otc-dal12-build
-      - name: dockerUsername
-        default: iamapikey
-      - name: dockerPassword
-      - name: operatorSDK
-        default: ''
-      - name: extraDockerOpts
-        default: --no-cache
-      - name: idsUser
-        default: idsorg
-      - name: idsToken
-      - name: artifactoryToken
-        default: ''
-      - name: artifactoryId
-        default: ''
-      - name: consoleAuthToken
-        default: ''
+
+
+
+
       - name: gitCommit
         default: ''
       - name: environment
         default: ''
-      - name: componentRepo
-      - name: componentRevision
       - name: componentName
       - name: clusterName
       - name: clusterNamespace
@@ -57,54 +39,75 @@ spec:
       - name: skipDeploy
         default: "true"
       - name: pipelinePVC
+
+      - name: componentRepo
+      - name: componentRevision
+      - name: idsToken
+      - name: accountRegion
+        default: us-south
+      - name: imageUrl
+      - name: accountApiKey1308775
+      - name: buildCluster
+        default: otc-dal12-build
+      - name: dockerUsername
+        default: iamapikey
+      - name: accountApiKey1416501
+      - name: dockerImage
+        default: us.icr.io/opentoolchain/cd-build-base:go1.10
+      - name: extraDockerOpts
+        default: --no-cache
+      - name: idsUser
+        default: idsorg
+      - name: artifactoryToken
+        default: ''
+      - name: artifactoryId
+        default: ''
+      - name: consoleAuthToken
+        default: ''
+      - name: dockerhubPassword
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
     imagePullPolicy: Always
     env:
-      - name: API_KEY
-        value: $(inputs.params.accountApiKey1308775)
+      - name: IDS_TOKEN
+        value: $(inputs.params.idsToken)
       - name: COMPONENT_REPO
         value: $(inputs.params.componentRepo)
       - name: COMPONENT_REVISION
         value: $(inputs.params.componentRevision)
       - name: IMAGE_URL
         value: $(inputs.params.imageUrl)
-      - name: IMAGE_REGISTRY
-        value: $(inputs.params.registryUrl)
-      - name: IMAGE_NAMESPACE
-        value: $(inputs.params.registryNamespace)
-      - name: IMAGE_NAME
-        value: $(inputs.params.imageName)
-      - name: DOCKERFILE
-        value: $(inputs.params.dockerFile)
-      - name: DOCKER_IMAGE
-        value: $(inputs.params.runBaseImage)
+      - name: API_KEY
+        value: $(inputs.params.accountApiKey1308775)
+      - name: ACCOUNT_REGION
+        value: $(inputs.params.accountRegion)
       - name: BUILD_CLUSTER
         value: $(inputs.params.buildCluster)
-      - name: APPLICATION_VERSION
-        value: $(inputs.params.imageTag)
+      - name: DOCKER_USERNAME
+        value: $(inputs.params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(inputs.params.accountApiKey1416501)
+      - name: DOCKER_IMAGE
+        value: $(inputs.params.dockerImage)
       - name: OPERATOR_SDK
-        value: $(inputs.params.operatorSDK)
+        value: "true"
       - name: EXTRA_DOCKER_OPTS
         value: $(inputs.params.extraDockerOpts)
       - name: IDS_USER
         value: $(inputs.params.idsUser)
-      - name: IDS_TOKEN
-        value: $(inputs.params.idsToken)
       - name: ARTIFACTORY_TOKEN_BASE64
         value: $(inputs.params.artifactoryToken)
       - name: ARTIFACTORY_ID
         value: $(inputs.params.artifactoryId)
       - name: CONSOLE_AUTH_TOKEN
         value: $(inputs.params.consoleAuthToken)
-      - name: ACCOUNT_REGION
-        value: $(inputs.params.accountRegion)
-      - name: DOCKER_USERNAME
-        value: $(inputs.params.dockerUsername)
-      - name: DOCKER_PASSWORD
-        value: $(inputs.params.dockerPassword)
-
+      - name: DOCKERHUB_USERNAME
+        value: thebog
+      - name: DOCKERHUB_PASSWORD
+        value: $(inputs.params.dockerhubPassword)
+      - name: DOCKERHUB_IMAGE_NAME
+        value: ibmcom/pipeline-private-worker
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -128,8 +131,16 @@ spec:
         source /work/scripts/pipeline_build.sh
 
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
-
+        echo ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
         #docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
 
         #docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
         #docker push $DOCKERHUB_IMAGE_NAME:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+    volumeMounts:
+      - mountPath: /artifacts
+        name: task-volume
+
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.pipelinePVC)
