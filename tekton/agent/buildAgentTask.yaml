@@ -5,47 +5,15 @@ metadata:
 spec:
   inputs:
     params:
- 
-     
-      
-      - name: idsToken
-      - name: registryUrl
-        default: us.icr.io
-      - name: registryNamespace
-        default: opentoolchain
-      - name: imageName
-        default: ''
-      - name: imageTag
-  
-      - name: runBaseImage
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: dockerFile
-
-
-
-
-      - name: gitCommit
-        default: ''
-      - name: environment
-        default: ''
-      - name: componentName
-      - name: clusterName
-      - name: clusterNamespace
-      - name: skipBuild
-        default: "true"
-      - name: skipVA
-        default: "true"
-      - name: skipDeploy
-        default: "true"
       - name: pipelinePVC
-
       - name: componentRepo
       - name: componentRevision
       - name: idsToken
       - name: accountRegion
         default: us-south
       - name: imageUrl
+      - name: imageName
+        default: ''
       - name: accountApiKey1308775
       - name: buildCluster
         default: otc-dal12-build
@@ -139,7 +107,6 @@ spec:
     volumeMounts:
       - mountPath: /artifacts
         name: task-volume
-
   volumes:
     - name: task-volume
       persistentVolumeClaim:

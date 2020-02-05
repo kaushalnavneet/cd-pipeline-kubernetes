@@ -41,4 +41,3 @@ spec:
         value: $(params.dockerhubPassword)
       - name: pipelinePVC
         value: $(params.pipelinePVC)
-    

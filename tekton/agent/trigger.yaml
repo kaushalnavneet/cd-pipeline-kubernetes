@@ -48,7 +48,6 @@ spec:
             value: $(params.DOCKERHUB_PASSWORD)
           - name: pipelinePVC
             value: pipeline-$(uid)-pvc
-
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
