@@ -28,6 +28,12 @@ spec:
         default: --no-cache
       - name: environment
         default: 'development'
+      - name: artifactoryTokenBas64
+        default: ''
+      - name: artifactoryId
+        default: ''
+      - name: consoleAuthToken
+        default: ''
   stepTemplate:
     env:
       - name: API
@@ -109,16 +115,12 @@ spec:
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
       # can we get rid of these?
-      - name: IDS_USER
-        value: ''
-      - name: IDS_TOKEN
-        value: ''
       - name: ARTIFACTORY_TOKEN_BASE64
-        value: ''
+        value: $(inputs.params.artifactoryTokenBas64)
       - name: ARTIFACTORY_ID
-        value: ''
+        value: $(inputs.params.artifactoryId)
       - name: CONSOLE_AUTH_TOKEN
-        value: ''
+        value: $(inputs.params.consoleAuthToken)
       - name: OPERATOR_SDK
         value: ''
     workingDir: /workspace
@@ -177,8 +179,8 @@ spec:
         else 
           docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg \
             COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
-            --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} \
-            --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
+            --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" \
+            --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}"
         fi
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"

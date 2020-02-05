@@ -23,6 +23,12 @@ spec:
     - name: skipBuild
     - name: skipVA
     - name: skipDeploy
+    - name: artifactoryTokenBas64
+      default: ''
+    - name: artifactoryId
+      default: ''
+    - name: consoleAuthToken
+      default: ''
 
   tasks:
     - name: clone-source-repo
@@ -82,6 +88,12 @@ spec:
           value: ''
         - name: environment
           value: $(params.environment)
+        - name: artifactoryTokenBas64
+          value: $(params.artifactoryTokenBas64)
+        - name: artifactoryId
+          value: $(params.artifactoryId)
+        - name: consoleAuthToken
+          value: $(params.consoleAuthToken)
     - name: build-va
       runAfter: [build]
       taskRef:
