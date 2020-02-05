@@ -15,7 +15,7 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
-    - name: runBuildImage
+    - name: runBaseImage
 
     # CD integration
     - name: api
@@ -117,8 +117,8 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
-          - name: runBuildImage
-            value: $(params.runBuildImage)
+          - name: runBaseImage
+            value: $(params.runBaseImage)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -158,7 +158,7 @@ spec:
       value: "true"
     - name: skipDeploy
       value: "false"
-    - name: runBuildImage
+    - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:java
 ---
 apiVersion: tekton.dev/v1alpha1
