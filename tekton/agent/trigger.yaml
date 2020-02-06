@@ -23,7 +23,7 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        name: pipeline-$(uid)
+        name: agentbuild-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "pipeline-template"
@@ -47,16 +47,7 @@ spec:
           - name: dockerhubPassword
             value: $(params.DOCKERHUB_PASSWORD)
           - name: pipelinePVC
-            value: pipeline-$(uid)-pvc
----
-apiVersion: tekton.dev/v1alpha1
-kind: TriggerBinding
-metadata:
-  name: agent-0.7.0-pipeline-binding-dev
-spec:
-  params:
-    - name: componentRevision
-      value: master
+            value: agentbuild-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -65,18 +56,7 @@ metadata:
 spec:
   params:
     - name: componentRevision
-      value: 0.10.1-dev
----
-apiVersion: tekton.dev/v1alpha1
-kind: EventListener
-metadata:
-  name: manual-agent-0.7.0-listener-dev
-spec:
-  triggers:
-    - binding:
-        name: agent-0.7.0-pipeline-binding-dev
-      template:
-        name: pipeline-template
+      value: master
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
