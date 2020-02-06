@@ -92,6 +92,8 @@ spec:
         value: $(inputs.params.imageName)
       - name: IMAGE_TAG
         value: $(inputs.params.imageTag)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
       - name: IMAGE_URL
         value: $(inputs.params.imageUrl)
       - name: REGISTRY_URL
