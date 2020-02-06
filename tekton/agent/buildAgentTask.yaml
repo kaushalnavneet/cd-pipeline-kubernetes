@@ -96,8 +96,8 @@ spec:
         ls -al
         #export GO111MODULE=on
 
-        chmod u+x /work/scripts/pipeline_build.sh
-        source /work/scripts/pipeline_build.sh
+        chmod u+x /work/scripts/pipeline_build_tek.sh
+        source /work/scripts/pipeline_build_tek.sh
 
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
         echo ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
