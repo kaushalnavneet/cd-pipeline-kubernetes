@@ -117,6 +117,8 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
+          - name: dockerFile
+            value: $(params.dockerFile)
           - name: runBaseImage
             value: $(params.runBaseImage)
 ---
