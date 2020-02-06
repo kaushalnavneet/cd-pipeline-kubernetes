@@ -158,6 +158,8 @@ spec:
       value: "true"
     - name: skipDeploy
       value: "false"
+    - name: dockerFile
+      value: "Dockerfile.travis-worker"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.10
 ---

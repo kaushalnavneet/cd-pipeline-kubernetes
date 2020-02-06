@@ -23,6 +23,8 @@ spec:
     - name: skipBuild
     - name: skipVA
     - name: skipDeploy
+    - name: dockerFile
+      default: ''
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
     - name: artifactoryTokenBas64
@@ -85,7 +87,7 @@ spec:
         - name: runBaseImage
           value: $(params.runBaseImage)
         - name: dockerFile
-          value: ''
+          value: $(params.dockerFile)
         - name: imageTag
           value: ''
         - name: environment
