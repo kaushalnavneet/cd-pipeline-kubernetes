@@ -33,6 +33,7 @@ spec:
       - name: consoleAuthToken
         default: ''
       - name: dockerhubPassword
+      - name: envTag
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
@@ -76,6 +77,8 @@ spec:
         value: $(inputs.params.dockerhubPassword)
       - name: DOCKERHUB_IMAGE_NAME
         value: ibmcom/pipeline-private-worker
+      - name: ENV_TAG
+        value: $(inputs.params.envTag)
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -101,11 +104,11 @@ spec:
 
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
         echo "###########################################"
-        echo ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
-        docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        echo ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION} ${ENV_TAG}
+        docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION} ${ENV_TAG}
 
         docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-        docker push ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        docker push ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION} ${ENV_TAG}
         echo "###########################################"
     volumeMounts:
       - mountPath: /artifacts

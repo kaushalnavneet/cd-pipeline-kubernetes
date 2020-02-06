@@ -6,6 +6,8 @@ spec:
   params:
     - name: componentRevision
       description: the branch for the git repo
+    - name: envTag
+      description: tag for the final dockerhub image
   resourcetemplates:
     - apiVersion: v1
       kind: Secret
@@ -46,6 +48,8 @@ spec:
             value: $(params.API_KEY_1416501)
           - name: dockerhubPassword
             value: $(params.DOCKERHUB_PASSWORD)
+          - name: envTag
+            value: $(params.envTag)
           - name: pipelinePVC
             value: agentbuild-$(uid)-pvc
 ---
@@ -57,6 +61,8 @@ spec:
   params:
     - name: componentRevision
       value: master
+    - name: envTag
+      value: -dev
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

@@ -20,6 +20,8 @@ spec:
       description: name of the pipeline pvc
     - name: dockerhubPassword
       description: password for docker hub
+    - name: envTag
+      description: tag for the final dockerhub image
   tasks:
   - name: build
     taskRef:
@@ -41,3 +43,5 @@ spec:
         value: $(params.dockerhubPassword)
       - name: pipelinePVC
         value: $(params.pipelinePVC)
+      - name: envTag
+        value: $(params.envTag)
