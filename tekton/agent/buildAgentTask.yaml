@@ -82,16 +82,17 @@ spec:
         set -e
        
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+        
+        export GOPATH=`pwd`
+        mkdir -p src/github.ibm.com/org-ids
+        cd src/github.ibm.com/org-ids
+
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
         GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
         basename=$(basename ${COMPONENT_REPO})
         cd ${basename%.*}
-
-        mkdir -p src/github.ibm.com/org-ids/private-worker-agent
-        cp -rf * src/github.ibm.com/org-ids/private-worker-agent
-        export GOPATH=`pwd`
-        cd src/github.ibm.com/org-ids/private-worker-agent
+        
         ls -al
         #export GO111MODULE=on
 
