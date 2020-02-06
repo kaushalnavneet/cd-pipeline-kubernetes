@@ -100,11 +100,13 @@ spec:
         source /work/scripts/pipeline_build_tek.sh
 
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
+        echo "###########################################"
         echo ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
-        #docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
 
-        #docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-        #docker push $DOCKERHUB_IMAGE_NAME:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
+        docker push $DOCKERHUB_IMAGE_NAME:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        echo "###########################################"
     volumeMounts:
       - mountPath: /artifacts
         name: task-volume
