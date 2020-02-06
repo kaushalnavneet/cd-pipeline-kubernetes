@@ -57,7 +57,7 @@ spec:
       - name: DOCKER_PASSWORD
         value: $(inputs.params.accountApiKey1416501)
       - name: DOCKER_IMAGE
-        value: $(inputs.params.dockerImage)
+        value: $(inputs.params.runBaseImage)
       - name: OPERATOR_SDK
         value: "true"
       - name: EXTRA_DOCKER_OPTS
