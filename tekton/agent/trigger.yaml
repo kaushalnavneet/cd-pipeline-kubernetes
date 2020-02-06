@@ -29,7 +29,7 @@ spec:
           generatedBy: "pipeline-template"
       spec:
         pipelineRef:
-            name: build-component-pipeline
+            name: build-agent-pipeline
         serviceAccount: otc-sa
         params:
           - name: componentRepo
