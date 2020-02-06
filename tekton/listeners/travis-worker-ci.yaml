@@ -147,7 +147,7 @@ spec:
     - name: config_directory
       value: "travis-worker-go/devops-config"
     - name: imageUrl
-      value: "us.icr.io/opentoolchain/travis-worker-go"
+      value: "us.icr.io/opentoolchain/travis-worker"
     - name: environment
       value: "development"
     - name: clusterName
