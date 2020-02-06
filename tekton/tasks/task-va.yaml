@@ -98,7 +98,7 @@ spec:
       - | 
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
-        set -e
+        #set -e
         if [ "${SKIP}" == true ]; then
           echo "Skipping VA"
           exit 0
@@ -123,6 +123,7 @@ spec:
 
         export PIPELINE_IMAGE_URL="${IMAGE_URL}:${APPLICATION_VERSION}"
         echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
+        set -x
 
         for iteration in {1..30}
         do
