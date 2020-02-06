@@ -101,11 +101,11 @@ spec:
 
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
         echo "###########################################"
-        echo ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
-        docker tag ${IMAGE_NAME}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        echo ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
 
         docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-        docker push $DOCKERHUB_IMAGE_NAME:${COMPONENT_REVISION}-$AGENT_VERSION-dev
+        docker push ${DOCKERHUB_IMAGE_NAME}:${COMPONENT_REVISION}-$AGENT_VERSION-dev
         echo "###########################################"
     volumeMounts:
       - mountPath: /artifacts
