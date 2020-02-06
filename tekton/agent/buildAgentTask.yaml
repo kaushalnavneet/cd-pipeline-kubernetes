@@ -20,7 +20,7 @@ spec:
       - name: dockerUsername
         default: iamapikey
       - name: accountApiKey1416501
-      - name: dockerImage
+      - name: runBaseImage
         default: us.icr.io/opentoolchain/cd-build-base:go1.10
       - name: extraDockerOpts
         default: --no-cache
