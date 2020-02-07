@@ -42,7 +42,7 @@ spec:
         - name: directoryName
           value: $(params.pii_directory)
     - name: pii-drop
-      runAfter: [clone-config-repo,clone-charts-repo]
+      runAfter: [clone-pii-repo]
       taskRef:
         name:  run-pii
       params:
