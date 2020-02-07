@@ -9,7 +9,7 @@
 ###############################################################################
 cp -a /work cd-pipeline-kubernetes
 
-IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
+IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_NAME##*/}}
 DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}

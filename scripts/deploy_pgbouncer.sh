@@ -2,7 +2,7 @@
 #
 
 
-IBM_CLOUD_API=${IBM_CLOUD_API:-api.ng.bluemix.net}
+IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
 TARGET=${TARGET:-gitlab}
 ENVIRONMENT=${ENVIRONMENT:-development}
