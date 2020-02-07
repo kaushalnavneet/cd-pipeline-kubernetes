@@ -80,7 +80,7 @@ spec:
           generatedBy: "pipeline-log-service-trigger-mocha"
       spec:
         pipelineRef:
-          name: pipeline-ci
+          name: pipeline-mocha
         serviceAccount: docker-build-sa
         params:
           - name: pipeline-pvc
