@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: pipeline-pii
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: pii_repo
+    - name: pii_branch
+    - name: pii_directory
+    - name: environment
+    - name: runBaseImage
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
+
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+        - name: directoryName
+          value: $(params.source_directory)
+    - name: clone-pii-repo
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.pii_repo)
+        - name: branch
+          value: $(params.pii_branch)
+        - name: directoryName
+          value: $(params.pii_directory)
+    - name: pii-drop
+      runAfter: [clone-config-repo,clone-charts-repo]
+      taskRef:
+        name:  run-pii
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: runBaseImage
+          value: $(params.runBaseImage)
+        - name: environment
+          value: $(params.environment)

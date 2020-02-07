@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: run-pii
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: runBaseImage
+      - name: environment
+        default: 'development'
+  steps:
+  - name: run-pii
+    image: $(inputs.params.runBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: SKIP
+        value: "false"
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        #set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping PII"
+          exit 0
+        fi
+        cd "${SOURCE_DIRECTORY}"
+        pii/run
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
