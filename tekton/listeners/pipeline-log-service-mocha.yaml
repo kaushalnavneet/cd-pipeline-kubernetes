@@ -74,7 +74,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-log-service-$(uid)
+        name: $(params.source_branch)-log-mocha-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "pipeline-log-service-trigger-mocha"
@@ -84,7 +84,7 @@ spec:
         serviceAccount: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-log-service-$(uid)-pvc
+            value: $(params.source_branch)-log-mocha-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
