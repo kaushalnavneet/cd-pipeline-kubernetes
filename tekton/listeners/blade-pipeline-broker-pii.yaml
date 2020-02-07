@@ -1,0 +1,122 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: blade-pipeline-broker-trigger-pii
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: pii_repo
+    - name: pii_branch
+    - name: pii_directory
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        name: $(params.source_branch)-blade-pii-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "blade-pipeline-broker-trigger-pii"
+      spec:
+        pipelineRef:
+          name: pipeline-pii
+        serviceAccount: docker-build-sa
+        params:
+          - name: pipeline-pvc
+            value: $(params.source_branch)-blade-pii-$(uid)-pvc
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: source_directory
+            value: $(params.source_directory)
+          - name: pii_repo
+            value: $(params.pii_repo)
+          - name: pii_branch
+            value: $(params.pii_branch)
+          - name: pii_directory
+            value: $(params.pii_directory)
+          - name: environment
+            value: $(params.environment)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: blade-pipeline-broker-binding-pii
+spec:
+  params:
+    - name: source_repo
+      value: "https://github.ibm.com/org-ids/blade-pipeline-broker.git"
+    - name: source_branch
+      value: "master"
+    - name: source_directory
+      value: "blade-pipeline-broker"
+    - name: pii_repo
+      value: "https://github.ibm.com/org-ids/pii.git"
+    - name: pii_branch
+      value: "master"
+    - name: pii_directory
+      value: "blade-pipeline-broker/pii"
+    - name: environment
+      value: "development"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: blade-pipeline-broker-pii
+spec:
+  triggers:
+    - binding:
+        name: blade-pipeline-broker-binding-pii
+      template:
+        name: blade-pipeline-broker-trigger-pii
