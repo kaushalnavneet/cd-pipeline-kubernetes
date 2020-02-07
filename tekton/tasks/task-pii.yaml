@@ -11,6 +11,8 @@ spec:
       - name: runBaseImage
       - name: environment
         default: 'development'
+      - name: javaPattern
+        default: 'false'
   steps:
   - name: run-pii
     image: $(inputs.params.runBaseImage)
@@ -22,6 +24,8 @@ spec:
         value: $(inputs.params.source_directory)
       - name: SKIP
         value: "false"
+      - name: JAVA_PATTERN
+        value: $(inputs.params.javaPattern)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -33,6 +37,10 @@ spec:
           exit 0
         fi
         cd "${SOURCE_DIRECTORY}"
+        if [ "$JAVA_PATTERN" = true ]; then
+          export NLS_FOLDER_PATTERN=resources
+          export NLS_FILE_PATTERN=Language_en.properties
+        fi
         pii/run
     volumeMounts:
       - mountPath: /workspace

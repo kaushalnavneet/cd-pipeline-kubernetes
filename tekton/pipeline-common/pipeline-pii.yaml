@@ -14,6 +14,8 @@ spec:
     - name: environment
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
+    - name: javaPattern
+      default: 'false'
 
   tasks:
     - name: clone-source-repo
@@ -54,3 +56,5 @@ spec:
           value: $(params.runBaseImage)
         - name: environment
           value: $(params.environment)
+        - name: javaPattern
+          value: $(params.javaPattern)
