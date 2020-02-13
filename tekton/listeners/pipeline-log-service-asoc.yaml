@@ -19,6 +19,11 @@ spec:
         APPSCAN_NAME: $(params.APPSCAN_NAME)
         APPSCAN_APP_ID: $(params.APPSCAN_APP_ID)
         APPSCAN_APP_KEY_ID: $(params.APPSCAN_APP_KEY_ID)
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
       metadata:
