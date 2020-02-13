@@ -9,6 +9,20 @@ spec:
     - name: source_directory
     - name: componentDockerImage
     - name: componentName
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
     - apiVersion: v1
