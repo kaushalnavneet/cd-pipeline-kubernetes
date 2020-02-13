@@ -1,0 +1,97 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-log-service-trigger-asoc
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: componentDockerImage
+    - name: componentName
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        APPSCAN_NAME: $(params.APPSCAN_NAME)
+        APPSCAN_APP_ID: $(params.APPSCAN_APP_ID)
+        APPSCAN_APP_KEY_ID: $(params.APPSCAN_APP_KEY_ID)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        APPSCAN_API_KEY_SECRET: $(params.APPSCAN_API_KEY_SECRET)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.source_branch)-log-asoc-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-log-service-trigger-asoc"
+      spec:
+        pipelineRef:
+          name: pipeline-asoc
+        serviceAccount: docker-build-sa
+        params:
+          - name: pipeline-pvc
+            value: $(params.source_branch)-log-asoc-$(uid)-pvc
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: source_directory
+            value: $(params.source_directory)
+          - name: componentDockerImage
+            value: $(params.componentDockerImage)
+          - name: componentName
+            value: $(params.componentName)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: pipeline-log-service-binding-asoc
+spec:
+  params:
+    - name: source_repo
+      value: "https://github.ibm.com/org-ids/otc-deploy.git"
+    - name: source_branch
+      value: "master"
+    - name: source_directory
+      value: "otc-deploy"
+    - name: componentDockerImage
+      value: "us.icr.io/opentoolchain/pipeline-log-service:latest"
+    - name: componentName
+      value: "pipeline-log-service"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: pipeline-log-service-asoc
+spec:
+  triggers:
+    - binding:
+        name: pipeline-log-service-binding-asoc
+      template:
+        name: pipeline-log-service-trigger-asoc

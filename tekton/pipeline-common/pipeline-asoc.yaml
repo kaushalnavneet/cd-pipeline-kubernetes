@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: pipeline-asoc
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: componentDockerImage
+    - name: componentName
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+        - name: directoryName
+          value: $(params.source_directory)
+    - name: build
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: asoc-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: componentDockerImage
+          value: $(params.componentDockerImage)
+        - name: componentName
+          value: $(params.componentName

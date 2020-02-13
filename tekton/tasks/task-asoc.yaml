@@ -1,0 +1,68 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: asoc-task
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the clone repository is stored
+      - name: componentDockerImage
+        description: name of the component latest docker image
+      - name: componentName
+        description: the name of the component/broker
+  stepTemplate:
+    env:
+      - name: APPSCAN_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-config
+            key: APPSCAN_APP_ID
+      - name: APPSCAN_APP_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-config
+            key: APPSCAN_APP_KEY_ID
+      - name: APPSCAN_API_KEY_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: APPSCAN_API_KEY_SECRET
+      - name: APPSCAN_NAME
+        valueFrom:
+          secretKeyRef:
+            name: cd-config
+            key: APPSCAN_NAME
+  steps:
+    - name: asoc
+      image: $(inputs.params.componentDockerImage)
+      env:
+        - name: HOME
+          value: "/home/node"
+        - name: WORKSPACE
+          value: "/workspace"
+        - name: APPSCAN_NAME
+          value: $(inputs.params.componentName)
+      workingDir: /workspace
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          source $PROPERTIES_FILE
+          export $(cut -d= -f1 build.properties)
+          #########################################
+          cd ~
+          cp -R /workspace/otc-deploy .
+          ls -la .
+          set +x
+          export API_KEY_ID="$APPSCAN_API_KEY_ID"
+          export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
+          export APPSCAN_APP_ID="$APPSCAN_APP_ID"
+          export SCAN_NAME="$APPSCAN_NAME"
+          ./otc-deploy/k8s/scripts/asoc/run_static_code_scan.sh
+      volumeMounts:
+        - mountPath: /workspace
+          name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
