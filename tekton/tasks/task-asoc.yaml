@@ -15,24 +15,24 @@ spec:
     env:
       - name: APPSCAN_APP_ID
         valueFrom:
-          secretKeyRef:
+          configMapKeyRef:
             name: cd-config
             key: APPSCAN_APP_ID
       - name: APPSCAN_APP_KEY_ID
         valueFrom:
-          secretKeyRef:
+          configMapKeyRef:
             name: cd-config
             key: APPSCAN_APP_KEY_ID
+      - name: APPSCAN_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: APPSCAN_NAME
       - name: APPSCAN_API_KEY_SECRET
         valueFrom:
           secretKeyRef:
             name: cd-secret
             key: APPSCAN_API_KEY_SECRET
-      - name: APPSCAN_NAME
-        valueFrom:
-          secretKeyRef:
-            name: cd-config
-            key: APPSCAN_NAME
   steps:
     - name: asoc
       image: $(inputs.params.componentDockerImage)
