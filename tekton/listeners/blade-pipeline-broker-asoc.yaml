@@ -67,7 +67,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.branchName)-blade-pipeline-broker-asoc-$(uid)
+        name: $(params.branchName)-asoc-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "blade-pipeline-broker-trigger-asoc"
@@ -77,7 +77,7 @@ spec:
         serviceAccount: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.branchName)-blade-pipeline-broker-asoc-$(uid)-pvc
+            value: $(params.branchName)-asoc-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
