@@ -34,3 +34,15 @@ spec:
           value: $(params.componentDockerImage)
         - name: componentName
           value: $(params.componentName)
+    - name: send-slack
+      runAfter: [build]
+      taskRef:
+        name: asoc-send-slack-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: componentDockerImage
+          value: $(params.componentDockerImage)
+        - name: componentName
+          value: $(params.componentName)
+    
