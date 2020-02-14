@@ -37,7 +37,6 @@ spec:
         REGION: $(params.toolchainRegion)
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
-        IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -45,6 +44,7 @@ spec:
       type: Opaque
       stringData:
         APPSCAN_API_KEY_SECRET: $(params.APPSCAN_API_KEY_SECRET)
+        API_KEY: $(params.API_KEY_1416501)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
@@ -109,12 +109,6 @@ spec:
       value: "us.icr.io/opentoolchain/pipeline-log-service:latest"
     - name: componentName
       value: "pipeline-log-service"
-    - name: environment
-      value: "development"
-    - name: clusterName
-      value: otc-us-south-dev
-    - name: clusterNamespace
-      value: opentoolchain
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
