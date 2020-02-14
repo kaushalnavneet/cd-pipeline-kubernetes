@@ -86,12 +86,6 @@ spec:
             value: $(params.componentDockerImage)
           - name: componentName
             value: $(params.componentName)
-          - name: clusterName
-            value: $(params.clusterName)
-          - name: clusterNamespace
-            value: $(params.clusterNamespace)
-          - name: environment
-            value: $(params.environment)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding

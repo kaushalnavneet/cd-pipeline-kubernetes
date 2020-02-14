@@ -33,4 +33,4 @@ spec:
         - name: componentDockerImage
           value: $(params.componentDockerImage)
         - name: componentName
-          value: $(params.componentName
+          value: $(params.componentName)
