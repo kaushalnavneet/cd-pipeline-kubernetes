@@ -45,6 +45,7 @@ spec:
       stringData:
         APPSCAN_API_KEY_SECRET: $(params.APPSCAN_API_KEY_SECRET)
         API_KEY: $(params.API_KEY_1416501)
+        SLACK_WEBHOOK: $(params.SLACK_WEBHOOK)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
