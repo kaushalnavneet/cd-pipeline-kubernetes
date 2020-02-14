@@ -61,7 +61,6 @@ spec:
           export HOME=/root
           cd $HOME
           cp -R /workspace/otc-deploy .
-          echo $BRANCH_NAME
           export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
