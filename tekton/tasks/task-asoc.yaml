@@ -46,11 +46,10 @@ spec:
           export HOME=/home/node
           cd $HOME
           cp -R /workspace/otc-deploy .
-          apt update && apt install wget zip unzip
+          apt update && apt install -qq wget zip unzip
           mkdir /workspace/tmp
           export TMPDIR=/workspace/tmp
           set +x
-          ls -la .
           export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"

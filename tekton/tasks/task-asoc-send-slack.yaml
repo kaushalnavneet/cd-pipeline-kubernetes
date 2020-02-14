@@ -18,6 +18,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: APPSCAN_APP_ID
+      - name: BRANCH_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: BRANCH_NAME
       - name: APPSCAN_APP_KEY_ID
         valueFrom:
           configMapKeyRef:
@@ -57,8 +62,8 @@ spec:
           export HOME=/root
           cd $HOME
           cp -R /workspace/otc-deploy .
+          echo $BRANCH_NAME
           export WORKSPACE=$HOME
-          export BRANCH_NAME="integration"
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"

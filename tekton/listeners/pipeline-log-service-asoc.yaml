@@ -37,6 +37,7 @@ spec:
         REGION: $(params.toolchainRegion)
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
+        BRANCH_NAME: $(params.BRANCH_NAME)
     - apiVersion: v1
       kind: Secret
       metadata:
