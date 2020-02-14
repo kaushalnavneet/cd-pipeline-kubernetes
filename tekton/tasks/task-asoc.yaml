@@ -23,11 +23,6 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: APPSCAN_APP_KEY_ID
-      - name: APPSCAN_NAME
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: APPSCAN_NAME
       - name: APPSCAN_API_KEY_SECRET
         valueFrom:
           secretKeyRef:
@@ -36,6 +31,7 @@ spec:
   steps:
     - name: asoc
       image: $(inputs.params.componentDockerImage)
+      imagePullPolicy: Always
       env:
         - name: HOME
           value: "/home/node"
