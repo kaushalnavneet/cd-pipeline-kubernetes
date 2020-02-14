@@ -11,6 +11,8 @@ spec:
         description: name of the component latest docker image
       - name: componentName
         description: the name of the component/broker
+      - name: branchName
+        description: the name of the branch being scanned
   stepTemplate:
     env:
       - name: APPSCAN_APP_ID
@@ -18,11 +20,6 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: APPSCAN_APP_ID
-      - name: BRANCH_NAME
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: BRANCH_NAME
       - name: APPSCAN_APP_KEY_ID
         valueFrom:
           configMapKeyRef:
@@ -54,6 +51,8 @@ spec:
           value: "/workspace"
         - name: APPSCAN_NAME
           value: $(inputs.params.componentName)
+        - name: BRANCH_NAME
+          value: $(inputs.params.branchName)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:
@@ -62,6 +61,7 @@ spec:
           export HOME=/root
           cd $HOME
           cp -R /workspace/otc-deploy .
+          echo $BRANCH_NAME
           export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
