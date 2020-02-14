@@ -43,7 +43,8 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - |
-          cd ~
+          export HOME=/home/node
+          cd /home/node
           cp -R /workspace/otc-deploy .
           apt update && apt install wget zip unzip
           mkdir /workspace/tmp
