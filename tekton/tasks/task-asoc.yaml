@@ -49,6 +49,8 @@ spec:
           mkdir /workspace/tmp
           export TMPDIR=/workspace/tmp
           set +x
+          ls -la .
+          export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_API_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"
