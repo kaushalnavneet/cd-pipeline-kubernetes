@@ -44,7 +44,7 @@ spec:
       imagePullPolicy: Always
       env:
         - name: HOME
-          value: "/home/node"
+          value: "/root"
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
@@ -54,8 +54,8 @@ spec:
       args:
         - |
           #!/bin/bash
-          export HOME=/home/node
-          cd /home/node
+          export HOME=/root
+          cd $HOME
           cp -R /workspace/otc-deploy .
           export WORKSPACE=$HOME
           export BRANCH_NAME="integration"
