@@ -32,7 +32,7 @@ spec:
       spec:
         pipelineRef:
             name: build-agent-pipeline
-        serviceAccountName: otc-sa
+        serviceAccount: otc-sa
         params:
           - name: componentRepo
             value: https://github.ibm.com/org-ids/private-worker-agent.git
