@@ -11,6 +11,9 @@ spec:
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: config_repo
     - name: config_branch
     - name: config_directory
@@ -60,8 +63,21 @@ spec:
           value: $(params.charts_branch)
         - name: directoryName
           value: $(params.charts_directory)
-    - name: clone-config-repo
+    - name: clone-script-repo
       runAfter: [clone-charts-repo]
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directoryName
+          value: $(params.script_directory)
+    - name: clone-config-repo
+      runAfter: [clone-script-repo]
       taskRef:
         name: clone-repo-task
       params:
@@ -74,7 +90,7 @@ spec:
         - name: directoryName
           value: $(params.config_directory)
     - name: build
-      runAfter: [clone-config-repo,clone-charts-repo]
+      runAfter: [clone-config-repo,clone-charts-repo,clone-script-repo]
       taskRef:
         name:  run-base
       params:

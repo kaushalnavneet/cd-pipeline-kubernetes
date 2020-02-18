@@ -10,6 +10,9 @@ spec:
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: config_repo
     - name: config_branch
     - name: config_directory
@@ -97,6 +100,12 @@ spec:
             value: $(params.charts_branch)
           - name: charts_directory
             value: $(params.charts_directory)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
           - name: config_repo
             value: $(params.config_repo)
           - name: config_branch
@@ -136,6 +145,12 @@ spec:
       value: "master"
     - name: charts_directory
       value: "pipeline-log-service/devops-int"
+    - name: script_repo
+      value: "https://github.ibm.com/ids-env/cd-pipeline-kubernetes.git"
+    - name: script_branch
+      value: "master"
+    - name: script_directory
+      value: "pipeline-log-service/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
