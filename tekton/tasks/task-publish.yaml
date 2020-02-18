@@ -91,6 +91,7 @@ spec:
           echo "Skipping Publish"
           exit 0
         fi
+        set -x
         cd "${SOURCE_DIRECTORY}"
         WORKDIR=${WORKDIR:-/work}
 
