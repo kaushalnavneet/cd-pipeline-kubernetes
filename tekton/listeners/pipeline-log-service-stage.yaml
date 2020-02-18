@@ -146,7 +146,7 @@ spec:
     - name: charts_directory
       value: "pipeline-log-service/devops-int"
     - name: script_repo
-      value: "https://github.ibm.com/ids-env/cd-pipeline-kubernetes.git"
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
