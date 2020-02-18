@@ -1,0 +1,231 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: publish
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: charts_repo
+      - name: registryUrl
+        default: us.icr.io
+      - name: registryNamespace
+        default: opentoolchain
+      - name: registryRegion
+        default: us-south
+      - name: imageName
+        default: ''
+      - name: imageTag
+      - name: imageUrl
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: environment
+        default: 'development'
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+      - name: DRY_RUN_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DRY_RUN_API_KEY
+      - name: DRY_RUN_CLUSTER
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: DRY_RUN_CLUSTER
+  steps:
+  - name: deploy
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: REGISTRY_URL
+        value: $(inputs.params.registryUrl)
+      - name: REGISTRY_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: CHART_REPO
+        value: $(inputs.params.charts_repo)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping Publish"
+          exit 0
+        fi
+        cd "${SOURCE_DIRECTORY}"
+        WORKDIR=${WORKDIR:-/work}
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+        
+        IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
+        COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
+
+        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+          APPLICATION_VERSION=$( cat /workspace/appVersion )
+          if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+            ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+            APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
+          fi
+        fi
+        git config --global user.email "idsorg@us.ibm.com"
+        git config --global user.name "IDS Organization"
+        git config --global push.default matching
+
+        CHART_REPO_ABS=$(pwd)/${CHART_REPO}
+        CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${COMPONENT_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
+        CHART_VERSION=${CHART_VERSION:=1.0.0}
+
+        printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for cluster ${DRY_RUN_CLUSTER},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
+
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
+
+        $(ibmcloud cs cluster-config --export ${DRY_RUN_CLUSTER})
+
+        if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
+          echo "Major & minor version and chart repo vars need to be set"
+          exit 1
+        fi
+
+
+        #specific tag
+        tmp=$(mktemp)
+        yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+
+        #specific image
+        yq --yaml-output --arg image "${IMAGE_NAME}" '.pipeline.image.repository=$image' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+
+        yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${COMPONENT_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/Chart.yaml
+
+        helm init -c
+        helm dep up ${COMPONENT_NAME}
+        echo "=========================================================="
+        echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
+        if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run; then
+          echo "helm upgrade --dry-run done"
+        else
+          echo "helm upgrade --dry-run failed"
+          exit 1
+        fi
+
+        echo "Packaging Helm Chart"
+
+        #turn off local enviroments, use umbrella published environment
+        rm -fr ${COMPONENT_NAME}/requirements.lock ${COMPONENT_NAME}/charts
+        yq --yaml-output 'del(.. | select(path(.tags? // empty | .[] | select(test("environment")))))' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml
+
+        # Move common dependency to unqiue name
+
+        yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '.name=$chartver' cd-pipeline-kubernetes/helm/pipeline-deployment/Chart.yaml > "$tmp" && mv "$tmp" cd-pipeline-kubernetes/helm/pipeline-deployment/Chart.yaml
+
+        mv cd-pipeline-kubernetes/helm/pipeline-deployment cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common
+
+        yq --yaml-output --arg chartver "file://../cd-pipeline-kubernetes/helm/${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline-deployment") | .repository ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+        yq --yaml-output '(.dependencies[] | select(.name=="pipeline-deployment") | .alias ) |= "pipeline"' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+        yq --yaml-output --arg chartver "${COMPONENT_NAME}-common" '(.dependencies[] | select(.name=="pipeline-deployment") | .name ) |= $chartver' ${COMPONENT_NAME}/requirements.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/requirements.yaml 
+
+        helm dep up ${COMPONENT_NAME}
+
+        cd ${CHART_REPO_APS}
+        git remote -v | grep push
+        exit 0
+
+        n=0
+        rc=0
+        ORIG_DIR=$(pwd)
+        until [ $n -ge 5 ]
+        do
+          git -C $CHART_REPO_ABS pull --no-edit
+          mkdir -p $CHART_REPO_ABS/charts
+          helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
+
+          cd $CHART_REPO_ABS
+          echo "Updating Helm Chart Repository index"
+          touch charts/index.yaml
+
+          if [ "$PRUNE_CHART_REPO" == "true" ]; then
+            NUMBER_OF_VERSION_KEPT=${NUMBER_OF_VERSION_KEPT:-3}
+            echo "Keeping last ${NUMBER_OF_VERSION_KEPT} versions of ${COMPONENT_NAME} component"
+            ls -v charts/${COMPONENT_NAME}* | head -n -${NUMBER_OF_VERSION_KEPT} | xargs rm
+          fi
+
+          helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
+
+          git add -A .
+          git commit -m "${APPLICATION_VERSION}"
+          git push
+          rc=$?
+          if [[ $rc == 0 ]]; then 
+            break;
+          fi
+          n=$[$n+1]
+          cd $ORIG_DIR
+          rm -fr $CHART_REPO_ABS
+          mkdir -p $CHART_REPO_ABS
+          git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        done
+
+        if [[ $rc != 0 ]]; then exit $rc; fi
+
+        if [ -n "$TRIGGER_BRANCH" ]; then
+          echo "Triggering CD pipeline ..."
+          mkdir trigger
+          cd trigger
+          git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO -b $TRIGGER_BRANCH
+          rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+          cd $CHART_REPO_ABS 
+          printf "On $(date), published helm chart for $COMPONENT_NAME ($CHART_VERSION)" > trigger.txt
+          git add .
+          git commit -m "Published $COMPONENT_NAME ($CHART_VERSION)"
+          git push
+          rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+          echo "CD pipeline triggered"
+        fi
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)

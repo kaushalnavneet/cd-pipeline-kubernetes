@@ -25,7 +25,6 @@ spec:
     - name: clusterNamespace
     - name: skipBuild
     - name: skipVA
-    - name: skipDeploy
     - name: dockerFile
       default: ''
     - name: runBaseImage
@@ -135,3 +134,20 @@ spec:
           value: $(params.environment)
         - name: skipVA
           value: $(params.skipVA)
+    - name: publish
+      runAfter: [build-va]
+      taskRef:
+        name: publish
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: charts_repo
+          value: $(params.charts_repo)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
