@@ -180,7 +180,7 @@ spec:
 
         helm dep up ${COMPONENT_NAME}
 
-        cd ${CHART_REPO_APS}
+        cd ${CHART_REPO_ABS}
         git remote -v | grep push
         exit 0
 
