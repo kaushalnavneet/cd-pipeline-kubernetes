@@ -9,6 +9,8 @@ spec:
         description: the output pvc - this is where the cloned repository will be stored
       - name: source_directory
       - name: charts_repo
+      - name: chartNamespace
+        default: 'opentoolchain'
       - name: registryUrl
         default: us.icr.io
       - name: registryNamespace
@@ -82,6 +84,8 @@ spec:
         value: $(inputs.params.source_directory)
       - name: CHART_REPO
         value: $(inputs.params.charts_repo)
+      - name: CHART_NAMESPACE
+        value: $(inputs.params.chartNamespace)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
       - name: MAJOR_VERSION

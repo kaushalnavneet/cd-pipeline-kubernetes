@@ -21,8 +21,6 @@ spec:
     - name: imageName
     - name: imageTag
     - name: environment
-    - name: clusterName
-    - name: clusterNamespace
     - name: skipBuild
     - name: skipVA
     - name: dockerFile
