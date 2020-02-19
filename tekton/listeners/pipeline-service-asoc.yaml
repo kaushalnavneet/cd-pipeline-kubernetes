@@ -10,6 +10,7 @@ spec:
     - name: component_source_repo
     - name: component_directory
     - name: component_branch
+    - name: componentName
     # CD integration
     - name: api
       description: the ibmcloud api
@@ -90,6 +91,8 @@ spec:
             value: $(params.component_directory)
           - name: component_branch
             value: $(params.component_branch)
+          - name: componentName
+            value: $(params.componentName)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -109,6 +112,8 @@ spec:
       value: "pipeline-service"
     - name: component_branch
       value: "master"
+    - name: componentName
+      value: "pipeline-service"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
