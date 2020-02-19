@@ -55,6 +55,7 @@ spec:
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"
           export SCAN_NAME="$APPSCAN_NAME"
           cd pipeline-service
+          ls -la .
           chmod +x ../otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
           ../otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
       volumeMounts:
