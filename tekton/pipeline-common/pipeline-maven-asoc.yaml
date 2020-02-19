@@ -38,7 +38,7 @@ spec:
         - name: directoryName
           value: $(params.component_directory)
     - name: build
-      runAfter: [clone-source-repo]
+      runAfter: [clone-otc-deploy-repo, clone-component-repo]
       taskRef:
         name: maven-asoc-task
       params:
