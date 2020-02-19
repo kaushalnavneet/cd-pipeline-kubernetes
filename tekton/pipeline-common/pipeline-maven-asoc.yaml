@@ -8,11 +8,12 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
-    - name: componentDockerImage
+    - name: component_source_repo
+    - name: component_directory
+    - name: component_branch
     - name: componentName
-    - name: branchName
   tasks:
-    - name: clone-source-repo
+    - name: clone-otc-deploy-repo
       taskRef:
         name: clone-repo-task
       params:
@@ -24,15 +25,25 @@ spec:
           value: $(params.source_branch)
         - name: directoryName
           value: $(params.source_directory)
-    - name: build
-      runAfter: [clone-source-repo]
+    - name: clone-component-repo
       taskRef:
-        name: asoc-task
+        name: clone-repo-task
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
-        - name: componentDockerImage
-          value: $(params.componentDockerImage)
+        - name: repository
+          value: $(params.component_source_repo)
+        - name: branch
+          value: $(params.component_branch)
+        - name: directoryName
+          value: $(params.component_directory)
+    - name: build
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: maven-asoc-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
         - name: componentName
           value: $(params.componentName)
     - name: send-slack
@@ -45,5 +56,5 @@ spec:
         - name: componentName
           value: $(params.componentName)
         - name: branchName
-          value: $(params.branchName)
+          value: $(params.component_branch)
     

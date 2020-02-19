@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: asoc-send-slack-task
+  name: maven-asoc-task
 spec:
   inputs:
     params:
@@ -9,8 +9,6 @@ spec:
         description: the output pvc - this is where the clone repository is stored
       - name: componentName
         description: the name of the component/broker
-      - name: branchName
-        description: the name of the branch being scanned
   stepTemplate:
     env:
       - name: APPSCAN_APP_ID
@@ -28,18 +26,8 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: APPSCAN_API_KEY_SECRET
-      - name: APPSCAN_API_KEY_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: APPSCAN_API_KEY_SECRET
-      - name: SLACK_WEBHOOK
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: SLACK_WEBHOOK
   steps:
-    - name: slack
+    - name: asoc
       image: ibmcom/pipeline-base-image:2.6
       imagePullPolicy: Always
       env:
@@ -49,26 +37,26 @@ spec:
           value: "/workspace"
         - name: APPSCAN_NAME
           value: $(inputs.params.componentName)
-        - name: BRANCH_NAME
-          value: $(inputs.params.branchName)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:
         - |
-          #!/bin/bash
           export HOME=/root
           cd $HOME
           cp -R /workspace/otc-deploy .
+          cp -R /workspace/pipeline-service .
+          ls -la .
+          apt update && apt install -qq wget zip unzip
+          mkdir /workspace/tmp
+          export TMPDIR=/workspace/tmp
+          set +x
           export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"
           export SCAN_NAME="$APPSCAN_NAME"
-          export SLACK_WEBHOOK="$SLACK_WEBHOOK"
-          set +x
-
-          chmod +x ./otc-deploy/k8s/scripts/asoc/send_report_to_slack.sh
-          ./otc-deploy/k8s/scripts/asoc/send_report_to_slack.sh
+          chmod +x ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
+          ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
       volumeMounts:
         - mountPath: /workspace
           name: task-volume
