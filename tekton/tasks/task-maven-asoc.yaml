@@ -49,15 +49,13 @@ spec:
           mkdir /workspace/tmp
           export TMPDIR=/workspace/tmp
           set +x
-          export WORKSPACE=$HOME
+          export WORKSPACE=$HOME/pipeline-service
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
           export API_KEY_SECRET="$APPSCAN_API_KEY_SECRET"
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"
           export SCAN_NAME="$APPSCAN_NAME"
-          cd pipeline-service
-          ls -la .
-          chmod +x ../otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
-          ../otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
+          chmod +x ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
+          ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
       volumeMounts:
         - mountPath: /workspace
           name: task-volume
