@@ -45,7 +45,6 @@ spec:
           cd $HOME
           cp -R /workspace/otc-deploy .
           cp -R /workspace/pipeline-service .
-          ls -la .
           apt update && apt install -qq wget zip unzip
           mkdir /workspace/tmp
           export TMPDIR=/workspace/tmp
