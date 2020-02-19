@@ -51,6 +51,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
       - name: DRY_RUN_API_KEY
         valueFrom:
           secretKeyRef:
@@ -180,9 +185,9 @@ spec:
 
         helm dep up ${COMPONENT_NAME}
 
-        cd ${CHART_REPO_ABS}
-        git remote -v | grep push
-        exit 0
+        pushd ${CHART_REPO_ABS}
+        CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
+        popd
 
         n=0
         rc=0
