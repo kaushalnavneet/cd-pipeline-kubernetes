@@ -139,7 +139,7 @@ spec:
 
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
-        $(ibmcloud cs cluster-config --export ${DRY_RUN_CLUSTER})
+        $(ibmcloud ks cluster config --export --cluster ${DRY_RUN_CLUSTER})
 
         if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
           echo "Major & minor version and chart repo vars need to be set"

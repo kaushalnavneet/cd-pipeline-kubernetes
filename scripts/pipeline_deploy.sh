@@ -1,7 +1,7 @@
 #!/bin/bash
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017, 2019. All Rights Reserved.
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -22,26 +22,27 @@ printf "Deploying release ${IDS_STAGE_NAME} into cluster ${IDS_JOB_NAME},\nnames
 cp -a ${WORKDIR} cd-pipeline-kubernetes
 mv cd-pipeline-kubernetes/devops-config .
 
-ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
 if [[ ! -z "${REGION}" ]]; then
- ibmcloud cs region-set ${REGION}
+ ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY} -r ${REGION}
+else
+ ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 fi
 
 if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
 
-$(ibmcloud cs cluster-config --export ${IDS_JOB_NAME})
+$(ibmcloud ks cluster config --export  --cluster ${IDS_JOB_NAME})
 
-INGRESS_SUBDOMAIN=$(ibmcloud cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
+INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
 echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
 if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then
 	INGRESS_SUBDOMAIN=$(echo "$INGRESS_SUBDOMAIN" | cut -d',' -f1)
 	echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
 fi
 
-INGRESS_SECRET=$(ibmcloud cs cluster-get -s ${IDS_JOB_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+INGRESS_SECRET=$(ibmcloud ks cluster get -s --cluster ${IDS_JOB_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
 if [[ ${INGRESS_SECRET} == *,* ]];then
 	INGRESS_SECRET=$(echo "$INGRESS_SECRET" | cut -d',' -f1)
 	echo "INGRESS SECRET: $INGRESS_SECRET"

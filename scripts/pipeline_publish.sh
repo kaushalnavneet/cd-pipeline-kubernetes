@@ -1,4 +1,12 @@
 #!/bin/bash
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 
 IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 IMAGE_NAME=${IMAGE_NAME:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IDS_STAGE_NAME}}
@@ -26,7 +34,7 @@ printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for clu
 
 ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
-$(ibmcloud cs cluster-config --export ${DRY_RUN_CLUSTER})
+$(ibmcloud ks cluster config --export --cluster ${DRY_RUN_CLUSTER})
 
 if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${CHART_REPO}" ]; then
   echo "Major & minor version and chart repo vars need to be set"

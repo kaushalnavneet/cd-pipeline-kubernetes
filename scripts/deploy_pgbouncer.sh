@@ -1,6 +1,12 @@
 #!/bin/bash
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
 #
-
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 
 IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
 CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
@@ -36,15 +42,16 @@ export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
 export PG_USERNAME=admin
 
-ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 if [[ ! -z "${REGION}" ]]; then
- ibmcloud cs region-set ${REGION}
+ ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY} -r ${REGION}
+else
+ ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 fi
 
 if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
-$(ibmcloud cs cluster-config --export ${CLUSTER_NAME})
+$(ibmcloud ks cluster config --export --cluster ${CLUSTER_NAME})
 
 
 kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret

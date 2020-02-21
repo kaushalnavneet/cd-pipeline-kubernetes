@@ -1,7 +1,7 @@
 #!/bin/bash
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017, 2019. All Rights Reserved.
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -24,8 +24,8 @@ CODE_BASE=${4:-nodejs6}
 PULL_BUILDER=${5:-true}
 CLUSTER_NAME=${6:-otc-us-south-dev}
 
-#export INGRESS_SUBDOMAIN=$(ibmcloud cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
-#export INGRESS_SECRET=$(ibmcloud cs cluster-get -s ${CLUSTER_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+#export INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s  --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
+#export INGRESS_SECRET=$(ibmcloud ks cluster get -s  --cluster ${CLUSTER_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
 
 
 cat <<END > build_info.json

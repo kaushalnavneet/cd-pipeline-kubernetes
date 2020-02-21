@@ -1,6 +1,6 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017, 2019. All Rights Reserved.
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -10,7 +10,7 @@ FROM ubuntu:xenial
 
 ARG TINI_VERSION=v0.16.1
 ARG JQ_VERSION=jq-1.6
-ENV NODE_VERSION 10.16.3
+ENV NODE_VERSION 10.19.0
 ENV ARCH x64
 ENV BX_VERSION='0.20.0'
 
