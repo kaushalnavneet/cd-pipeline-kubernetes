@@ -36,7 +36,7 @@ spec:
           secretName: {{ template "common.fullname" . }}
       initContainers:
       - name: vault-sidekick
-        image: registry.ng.bluemix.net/opentoolchain/vault-sidekick:latest
+        image: us.icr.io/opentoolchain/vault-sidekick:latest
         args:
         - -logtostderr=true
         - -ca-cert=/var/run/certs/vault.pem
