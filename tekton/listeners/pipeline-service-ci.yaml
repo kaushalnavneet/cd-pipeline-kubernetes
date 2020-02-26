@@ -70,7 +70,17 @@ spec:
         name: docker-build-sa
       imagePullSecrets:
         - name: private-registry-secret
-
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.source_branch)-pipeline-service-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
