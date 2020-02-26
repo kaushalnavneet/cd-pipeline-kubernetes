@@ -22,6 +22,17 @@ spec:
         name: otc-sa
       imagePullSecrets:
       - name: otc-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: agentbuild-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
