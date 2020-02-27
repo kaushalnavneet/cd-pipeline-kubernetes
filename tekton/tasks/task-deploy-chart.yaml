@@ -17,6 +17,7 @@ spec:
       - name: imageName
         default: ''
       - name: imageTag
+        default: ''
       - name: imageUrl
       - name: clusterName
         default: otc-us-south-dev
