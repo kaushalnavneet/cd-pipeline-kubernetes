@@ -87,6 +87,7 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
+        set -x
         if [ "${SKIP}" == true ]; then
           echo "Skipping Deploy for $CLUSTER_NAME"
           exit 0
@@ -133,9 +134,8 @@ spec:
           echo "INGRESS SECRET: $INGRESS_SECRET"
         fi
 
-        CHART_PATH=$( ls charts/"${COMPONENT_NAME}"*.tgz | sort --version-sort | tail -n 1 )
+        CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
 
-        set -x
         set +e
         if ! helm list ${COMPONENT_NAME}; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
