@@ -145,11 +145,13 @@ spec:
             helm delete --purge ${COMPONENT_NAME}
           fi
           helm install --name ${COMPONENT_NAME} ${CHART_PATH} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false \
-            --set ${ENVIRONMENT}.enabled=true --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+            --set ${ENVIRONMENT}.enabled=true --set pipeline.image.repository=${IMAGE_URL} \
+            --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
           helm upgrade --force ${COMPONENT_NAME} ${CHART_PATH} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false \
-            --set ${ENVIRONMENT}.enabled=true --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+            --set ${ENVIRONMENT}.enabled=true --set pipeline.image.repository=${IMAGE_URL} \
+            --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
         set +x
 
