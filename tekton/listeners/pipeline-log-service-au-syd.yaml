@@ -127,7 +127,7 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: imageUrl
-      value: "us.icr.io/opentoolchain/pipeline-log-service"
+      value: "us.icr.io/devopsotc/pipeline-log-service"
     - name: environment
       value: "au-syd"
     - name: clusterName
