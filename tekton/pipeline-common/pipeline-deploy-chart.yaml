@@ -1,0 +1,70 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: pipeline-stage
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: imageUrl
+    - name: imageName
+    - name: imageTag
+    - name: environment
+    - name: clusterName
+    - name: clusterNamespace
+      default: 'opentoolchain'
+    - name: runBaseImage
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
+
+  tasks:
+    - name: clone-charts-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.charts_repo)
+        - name: branch
+          value: $(params.charts_branch)
+        - name: directoryName
+          value: $(params.charts_directory)
+    - name: clone-config-repo
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: clone-charts-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.config_repo)
+        - name: branch
+          value: $(params.config_branch)
+        - name: directoryName
+          value: $(params.config_directory)
+    - name: deploy-cluster-1
+      runAfter: [clone-config-repo,clone-charts-repo]
+      taskRef:
+        name:  deploy-chart
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_repo)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: 'false'
+        - name: clusterName
+          value: $(params.clusterName)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
