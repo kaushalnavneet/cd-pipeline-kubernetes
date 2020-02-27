@@ -18,8 +18,6 @@ spec:
     - name: clusterName
     - name: clusterNamespace
       default: 'opentoolchain'
-    - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
 
   tasks:
     - name: clone-charts-repo
@@ -35,9 +33,9 @@ spec:
         - name: directoryName
           value: $(params.charts_directory)
     - name: clone-config-repo
-      runAfter: [clone-script-repo]
+      runAfter: [clone-charts-repo]
       taskRef:
-        name: clone-charts-task
+        name: clone-repo-task
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
