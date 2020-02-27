@@ -53,7 +53,7 @@ spec:
         - name: task-pvc
           value: $(params.pipeline-pvc)
         - name: source_directory
-          value: $(params.charts_repo)
+          value: $(params.charts_directory)
         - name: imageUrl
           value: $(params.imageUrl)
         - name: imageTag
