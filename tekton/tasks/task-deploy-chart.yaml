@@ -11,7 +11,7 @@ spec:
       - name: registryUrl
         default: us.icr.io
       - name: registryNamespace
-        default: opentoolchain
+        default: devopsotc
       - name: registryRegion
         default: us-south
       - name: imageName
@@ -105,7 +105,7 @@ spec:
         if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
           [ -r /workspace/appVersion ] && APPLICATION_VERSION=$( cat /workspace/appVersion )
           if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-            ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+            ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${COMPONENT_NAME} > _allImages
             APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
           fi
         fi
