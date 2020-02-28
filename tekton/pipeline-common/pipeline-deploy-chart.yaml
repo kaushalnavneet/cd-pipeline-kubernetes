@@ -15,7 +15,12 @@ spec:
     - name: imageName
     - name: imageTag
     - name: environment
-    - name: clusterName
+    - name: clusterName1
+    - name: skipDeploy1
+    - name: clusterName2
+    - name: skipDeploy2
+    - name: clusterName3
+    - name: skipDeploy3
     - name: clusterNamespace
       default: 'opentoolchain'
 
@@ -61,8 +66,50 @@ spec:
         - name: environment
           value: $(params.environment)
         - name: skipDeploy
-          value: 'false'
+          value: $(params.skipDeploy1)
         - name: clusterName
-          value: $(params.clusterName)
+          value: $(params.clusterName1)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
+    - name: deploy-cluster-2
+      runAfter: [deploy-cluster-1]
+      taskRef:
+        name:  deploy-chart
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy2)
+        - name: clusterName
+          value: $(params.clusterName2)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
+    - name: deploy-cluster-3
+      runAfter: [deploy-cluster-2]
+      taskRef:
+        name:  deploy-chart
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy3)
+        - name: clusterName
+          value: $(params.clusterName3)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
