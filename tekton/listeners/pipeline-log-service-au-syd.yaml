@@ -85,7 +85,7 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
-        serviceAccount: docker-build-sa
+        serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
             value: $(params.charts_branch)-log-au-syd-$(uid)-pvc

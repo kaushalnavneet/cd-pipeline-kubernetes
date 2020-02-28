@@ -86,7 +86,7 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-base-ci
-        serviceAccount: docker-build-sa
+        serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
             value: $(params.charts_branch)-base-run-$(uid)-pvc

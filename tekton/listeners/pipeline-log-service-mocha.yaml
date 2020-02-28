@@ -91,7 +91,7 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-mocha
-        serviceAccount: docker-build-sa
+        serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
             value: $(params.source_branch)-log-mocha-$(uid)-pvc

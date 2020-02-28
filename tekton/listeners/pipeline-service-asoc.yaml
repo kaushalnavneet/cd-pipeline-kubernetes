@@ -85,7 +85,7 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-maven-asoc
-        serviceAccount: docker-build-sa
+        serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
             value: $(params.component_branch)-asoc-$(uid)-pvc

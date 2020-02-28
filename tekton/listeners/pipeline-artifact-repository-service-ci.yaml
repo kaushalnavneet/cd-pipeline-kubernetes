@@ -90,7 +90,7 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-ci
-        serviceAccount: docker-build-sa
+        serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
             value: $(params.source_branch)-ars-$(uid)-pvc
