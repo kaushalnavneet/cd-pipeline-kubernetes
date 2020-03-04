@@ -274,8 +274,9 @@ pipeline:
         ENABLE_RG_ENTITLEMENT: true
         ENABLE_REDUX_DEBUG: true
         TEKTON_UI: true
-        ENABLE_SECRET_BY_REF: true
-        SECRETS_API_URL: https://dev.console.test.cloud.ibm.com/devops/setup/api/v2/secrets
+        ENABLE_SECRET_BY_REF: false
+        ENABLE_SECRET_PICKER: true
+        SECRETS_API_URL: https://dev.console.test.cloud.ibm.com/devops/api/v2/secrets
         ENABLE_TIMER_TRIGGER: true
         ENABLE_TEKTON_PUBLIC_WORKERS: true
         ENABLE_MULTI_REPO: true
