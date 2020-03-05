@@ -136,3 +136,24 @@ spec:
           value: $(params.clusterName3)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
+    - name: close-cr
+      runAfter: [deploy-cluster-3]
+      taskRef:
+        name:  close-cr
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy1)
+        - name: deployClusters
+          value: $(params.deployClusters)
+        - name: snUrl
+          value: $(param.snUrl)
