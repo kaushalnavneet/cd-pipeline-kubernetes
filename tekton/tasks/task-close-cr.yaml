@@ -1,0 +1,258 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: close-cr
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: registryUrl
+        default: us.icr.io
+      - name: registryNamespace
+        default: devopsotc
+      - name: registryRegion
+        default: us-south
+      - name: imageName
+        default: ''
+      - name: imageTag
+        default: ''
+      - name: imageUrl
+      - name: clusterName
+        default: otc-us-south-dev
+      - name: clusterNamespace
+        default: opentoolchain
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: environment
+        default: 'development'
+      - name: skipDeploy
+        default: 'false'
+      - name: snUrl
+        default: 'https://watson.service-now.com'
+      - name: deployClusters
+        default: ''
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+      - name: SN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SN_TOKEN
+      - name: SLACK_DEPLOY_HOOK
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SLACK_DEPLOY_HOOK
+      - name: SLACK_TOC_HOOK
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SLACK_TOC_HOOK
+  steps:
+  - name: close-cr
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DEPLOY_TARGET
+        value: $(inputs.params.environment)
+      - name: DEPLOY_CLUSTERS
+        value: $(inputs.params.deployClusters)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: SN_URL
+        value: $(inputs.params.snUrl)
+      - name: REGISTRY_URL
+        value: $(inputs.params.registryUrl)
+      - name: REGISTRY_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: CLUSTER_NAME
+        value: $(inputs.params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(inputs.params.clusterNamespace)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        set -x
+        cd "${SOURCE_DIRECTORY}"
+        ID_FILE=cr/$ENVIRONMENT/cr_id
+        if [ ! -r cr/$ENVIRONMENT/cr_id ]; then
+          echo "No open CR for $ENVIRONMENT"
+          exit 1
+        fi
+        CR_CLOSE_CATEGORY=successful
+        #CR_CLOSE_CATEGORY=unsuccessful
+        IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
+        COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
+        APP_NAME="${COMPONENT_NAME}"
+
+        logh "Closing ServiceNow change request..."
+
+        PAYLOAD=$(jq --null-input "$(cat <<HERE
+        {
+            closecategory: "$CR_CLOSE_CATEGORY",
+            closenotes: "DEPLOYMENT finished.",
+            actualendtime: "now"
+        }
+        HERE
+        )")
+
+        CR_ID=$(cat $ID_FILE)
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "$PAYLOAD" "$SN_URL/api/ibmwc/change/$CR_ID/close" \
+            --silent --show-error)
+
+        RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
+
+        if [[ ! "$RESULT" ]]; then
+            loge "$RESPONSE"
+            exit 1
+        fi
+
+        log "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
+        git rm $ID_FILE
+        git commit -m "$CR_ID closed"
+        n=0
+        rc=0
+        until [ $n -ge 5 ]
+        do
+          git push
+          rc=$?
+          if [[ $rc == 0 ]]; then 
+            break;
+          fi
+          n=$[$n+1]
+          git pull
+        done
+        set +x
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  - name: notify-slack
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: IMAGE_NAME
+        value: $(inputs.params.imageName)
+      - name: DEPLOY_TARGET
+        value: $(inputs.params.environment)
+      - name: DEPLOY_CLUSTERS
+        value: $(inputs.params.deployClusters)
+      - name: URL
+        value: $(inputs.params.snUrl)
+      - name: APPLICATION_VERSION
+        value: $(inputs.params.imageTag)
+      - name: IMAGE_URL
+        value: $(inputs.params.imageUrl)
+      - name: REGISTRY_URL
+        value: $(inputs.params.registryUrl)
+      - name: REGISTRY_NAMESPACE
+        value: $(inputs.params.registryNamespace)
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: CLUSTER_NAME
+        value: $(inputs.params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(inputs.params.clusterNamespace)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        set -x
+        cd "${SOURCE_DIRECTORY}"
+        
+        IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
+        COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
+        APP_NAME="${COMPONENT_NAME}"
+        SYSTEM="continuous-delivery"
+        CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
+        NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The ${COMPONENT_NAME} deployment in ${ENVIRONMENT} has concluded."}
+
+        ICON=${SN_ICON:=":-cloud-:"}
+        SLACK_DEPLOY_CHANNEL="#devops-otc-deployment"
+        SLACK_TOC_CHANNEL="#devops-otc-deployment"
+        #SLACK_TOC_CHANNEL="#devops-cd-cie"
+        SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
+
+        cat << EOF > message.json
+        {
+          "channel": "${SLACK_DEPLOY_CHANNEL}",
+          "username": "${SLACK_USERNAME}",
+          "icon_emoji": "${ICON}",
+          "text": "${NOTICE_TEXT} \n\nThe TOC has been notified in the *#devops-cd-cie* channel."
+        }
+        EOF
+        #Post to slack deployment channel
+        curl -X POST -H "Content-Type: application/json" \
+            -d @message.json \
+            ${SLACK_DEPLOY_HOOK}
+
+        #Post to swat channel. The <!subteam^S1SLXH3PE> string below sends the message to the user group @toc that the deployment has concluded
+        cat << EOF > message.json
+        {
+          "channel": "${SLACK_TOC_CHANNEL}",
+          "username": "${SLACK_USERNAME}",
+          "icon_emoji": "${ICON}",
+          "text": "<!subteam^S1SLXH3PE> : ${NOTICE_TEXT}"
+        }
+        EOF
+        curl -X POST -H "Content-Type: application/json" \
+            -d @message.json \
+            ${SLACK_TOC_HOOK}
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)

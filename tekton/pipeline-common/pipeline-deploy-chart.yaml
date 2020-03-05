@@ -15,6 +15,8 @@ spec:
     - name: imageName
     - name: imageTag
     - name: environment
+    - name: deployClusters
+    - name: snUrl
     - name: clusterName1
     - name: skipDeploy1
     - name: clusterName2
@@ -50,8 +52,29 @@ spec:
           value: $(params.config_branch)
         - name: directoryName
           value: $(params.config_directory)
-    - name: deploy-cluster-1
+    - name: open-cr
       runAfter: [clone-config-repo,clone-charts-repo]
+      taskRef:
+        name:  open-cr
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy1)
+        - name: deployClusters
+          value: $(params.deployClusters)
+        - name: snUrl
+          value: $(param.snUrl)
+    - name: deploy-cluster-1
+      runAfter: [open-cr]
       taskRef:
         name:  deploy-chart
       params:
