@@ -94,6 +94,7 @@ spec:
         fi
         cd "${SOURCE_DIRECTORY}"
         WORKDIR=${WORKDIR:-/work}
+        VALUES_OPT=""
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
@@ -135,6 +136,8 @@ spec:
         fi
 
         CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
+        # pick up the environment values fresh if available
+        [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
 
         set +e
         if ! helm list ${COMPONENT_NAME}; then
@@ -144,13 +147,13 @@ spec:
           if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
           fi
-          helm install --name ${COMPONENT_NAME} ${CHART_PATH} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false \
-            --set ${ENVIRONMENT}.enabled=true  \
+          helm install --name ${COMPONENT_NAME} ${CHART_PATH} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+            --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
-          helm upgrade --force ${COMPONENT_NAME} ${CHART_PATH} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false \
-            --set ${ENVIRONMENT}.enabled=true \
+          helm upgrade --force ${COMPONENT_NAME} ${CHART_PATH} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+            --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
         set +x
