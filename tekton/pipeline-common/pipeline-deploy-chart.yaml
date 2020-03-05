@@ -16,10 +16,13 @@ spec:
     - name: imageTag
     - name: environment
     - name: clusterName1
+      default: 'none'
     - name: skipDeploy1
     - name: clusterName2
+      default: 'none'
     - name: skipDeploy2
     - name: clusterName3
+      default: 'none'
     - name: skipDeploy3
     - name: clusterNamespace
       default: 'opentoolchain'
@@ -50,7 +53,7 @@ spec:
           value: $(params.config_branch)
         - name: directoryName
           value: $(params.config_directory)
-    - name: deploy-cluster-1
+    - name: deploy-cluster-$(params.clusterName1)
       runAfter: [clone-config-repo,clone-charts-repo]
       taskRef:
         name:  deploy-chart
@@ -71,8 +74,8 @@ spec:
           value: $(params.clusterName1)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-    - name: deploy-cluster-2
-      runAfter: [deploy-cluster-1]
+    - name: deploy-cluster-$(params.clusterName2)
+      runAfter: [deploy-cluster-$(params.clusterName1)]
       taskRef:
         name:  deploy-chart
       params:
@@ -92,8 +95,8 @@ spec:
           value: $(params.clusterName2)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-    - name: deploy-cluster-3
-      runAfter: [deploy-cluster-2]
+    - name: deploy-cluster-$(params.clusterName3)
+      runAfter: [deploy-cluster-$(params.clusterName2)]
       taskRef:
         name:  deploy-chart
       params:
