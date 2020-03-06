@@ -178,6 +178,9 @@ spec:
 
         echo "ServiceNow change request opened: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
         echo $CR_ID > $ID_FILE
+        git config --global user.email "idsorg@us.ibm.com"
+        git config --global user.name "IDS Organization"
+        git config --global push.default matching
         git add -A $ID_FILE
         git commit -m "${PURPOSE}"
 

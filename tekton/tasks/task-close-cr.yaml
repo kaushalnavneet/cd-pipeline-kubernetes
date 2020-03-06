@@ -128,7 +128,7 @@ spec:
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
         APP_NAME="${COMPONENT_NAME}"
 
-        logh "Closing ServiceNow change request..."
+        echo "Closing ServiceNow change request..."
 
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
@@ -149,11 +149,15 @@ spec:
         RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$RESULT" ]]; then
-            loge "$RESPONSE"
+            echo "$RESPONSE"
             exit 1
         fi
 
-        log "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
+        echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
+
+        git config --global user.email "idsorg@us.ibm.com"
+        git config --global user.name "IDS Organization"
+        git config --global push.default matching
         git rm $ID_FILE
         git commit -m "$CR_ID closed"
         n=0
