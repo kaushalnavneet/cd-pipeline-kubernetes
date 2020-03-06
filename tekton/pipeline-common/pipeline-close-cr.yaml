@@ -61,8 +61,6 @@ spec:
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy1)
         - name: deployClusters
           value: $(params.deployClusters)
         - name: snUrl
