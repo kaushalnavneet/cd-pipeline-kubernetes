@@ -214,7 +214,7 @@ pipeline:
         AMQP_MSG_EXP_TIME: "3000"
         ARS_URL: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
-        BLUEMIX_URL: https://dev-console.stage1.bluemix.net
+        BLUEMIX_URL: https://dev.console.test.cloud.ibm.com
         BSS_CHECKED: true
         BSS_ENFORCED: true
         CF_DOMAIN: stage1.ng.bluemix.net
