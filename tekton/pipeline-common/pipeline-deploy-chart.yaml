@@ -76,11 +76,11 @@ spec:
         - name: deployClusters
           value: $(params.deployClusters)
         - name: snUrl
-          value: $(param.snUrl)
+          value: $(params.snUrl)
         - name: deployChannel
-          value: $(param.deployChannel)
+          value: $(params.deployChannel)
         - name: tocChannel
-          value: $(param.tocChannel)
+          value: $(params.tocChannel)
     - name: deploy-cluster-1
       runAfter: [open-cr]
       taskRef:
@@ -164,8 +164,8 @@ spec:
         - name: deployClusters
           value: $(params.deployClusters)
         - name: snUrl
-          value: $(param.snUrl)
+          value: $(params.snUrl)
         - name: deployChannel
-          value: $(param.deployChannel)
+          value: $(params.deployChannel)
         - name: tocChannel
-          value: $(param.tocChannel)
+          value: $(params.tocChannel)
