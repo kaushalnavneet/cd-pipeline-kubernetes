@@ -141,6 +141,8 @@ spec:
             ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
         fi
 
+        NEW_DATE=$(( $(date +%s) + 900 ))
+
         # tag message adds link to ServiceNow query using deploy commit hash in the description field
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
@@ -154,7 +156,7 @@ spec:
             description: "$PURPOSE\nDescription/Plan: $DEPLOY_PACKAGE",
             backoutplan: "Revert changes and re-deploy.",
             plannedstart: "$(date -u "+%Y-%m-%d %H:%M:%S")",
-            plannedend: "$(date -u -d '15mins' "+%Y-%m-%d %H:%M:%S")", 
+            plannedend: "$(date -u -d@${NEW_DATE} "+%Y-%m-%d %H:%M:%S")", 
             deploymentready: "yes",
             type: "standard"
         }
