@@ -154,7 +154,7 @@ spec:
             description: "$PURPOSE\nDescription/Plan: $DEPLOY_PACKAGE",
             backoutplan: "Revert changes and re-deploy.",
             plannedstart: "$(date -u "+%Y-%m-%d %H:%M:%S")",
-            plannedend: "$(date -u -d '+15mins' "+%Y-%m-%d %H:%M:%S")", 
+            plannedend: "$(date -u -d '15mins' "+%Y-%m-%d %H:%M:%S")", 
             deploymentready: "yes",
             type: "standard"
         }
