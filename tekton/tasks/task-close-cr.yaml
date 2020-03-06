@@ -33,6 +33,10 @@ spec:
         default: 'https://watson.service-now.com'
       - name: deployClusters
         default: ''
+      - name: deployChannel
+        default: '#devops-otc-deployment'
+      - name: tocChannel
+        default: '#devops-cd-cie'
   stepTemplate:
     env:
       - name: API
@@ -201,6 +205,10 @@ spec:
         value: $(inputs.params.clusterNamespace)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
+      - name: SLACK_DEPLOY_CHANNEL
+        value: $(inputs.params.deployChannel)
+      - name: SLACK_TOC_CHANNEL
+        value: $(inputs.params.tocChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -219,9 +227,6 @@ spec:
         NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The ${COMPONENT_NAME} deployment in ${ENVIRONMENT} has concluded."}
 
         ICON=${SN_ICON:=":-cloud-:"}
-        SLACK_DEPLOY_CHANNEL="#devops-otc-deployment"
-        SLACK_TOC_CHANNEL="#devops-otc-deployment"
-        #SLACK_TOC_CHANNEL="#devops-cd-cie"
         SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
 
         cat << EOF > message.json

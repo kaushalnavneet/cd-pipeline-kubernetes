@@ -21,6 +21,8 @@ spec:
     - name: skipDeploy3
     - name: deployClusters
     - name: snUrl
+    - name: tocChannel
+    - name: deployChannel
 
     # CD integration
     - name: api
@@ -139,6 +141,10 @@ spec:
             value: $(params.deployClusters)
           - name: snUrl
             value: $(params.snUrl)
+          - name: tocChannel
+            value: $(params.tocChannel)
+          - name: deployChannel
+            value: $(params.deployChannel)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -180,6 +186,10 @@ spec:
       value: 'otc-syd01-prod,otc-au-syd-prod'
     - name: snUrl
       value: 'https://watsontest.service-now.com'
+    - name: tocChannel
+      value: '#devops-otc-deployment'
+    - name: deployChannel
+      value: '#devops-otc-deployment'
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

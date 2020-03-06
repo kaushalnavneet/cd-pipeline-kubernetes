@@ -25,6 +25,10 @@ spec:
     - name: skipDeploy3
     - name: clusterNamespace
       default: 'opentoolchain'
+    - name: deployChannel
+      default: '#devops-otc-deployment'
+    - name: tocChannel
+      default: '#devops-cd-cie'
 
   tasks:
     - name: clone-charts-repo
@@ -73,6 +77,10 @@ spec:
           value: $(params.deployClusters)
         - name: snUrl
           value: $(param.snUrl)
+        - name: deployChannel
+          value: $(param.deployChannel)
+        - name: tocChannel
+          value: $(param.tocChannel)
     - name: deploy-cluster-1
       runAfter: [open-cr]
       taskRef:
@@ -157,3 +165,7 @@ spec:
           value: $(params.deployClusters)
         - name: snUrl
           value: $(param.snUrl)
+        - name: deployChannel
+          value: $(param.deployChannel)
+        - name: tocChannel
+          value: $(param.tocChannel)
