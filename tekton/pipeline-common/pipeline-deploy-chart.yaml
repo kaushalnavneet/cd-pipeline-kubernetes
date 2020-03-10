@@ -15,8 +15,6 @@ spec:
     - name: imageName
     - name: imageTag
     - name: environment
-    - name: deployClusters
-    - name: snUrl
     - name: clusterName1
     - name: skipDeploy1
     - name: clusterName2
@@ -25,10 +23,6 @@ spec:
     - name: skipDeploy3
     - name: clusterNamespace
       default: 'opentoolchain'
-    - name: deployChannel
-      default: '#devops-otc-deployment'
-    - name: tocChannel
-      default: '#devops-cd-cie'
 
   tasks:
     - name: clone-charts-repo
@@ -56,33 +50,8 @@ spec:
           value: $(params.config_branch)
         - name: directoryName
           value: $(params.config_directory)
-    - name: open-cr
-      runAfter: [clone-config-repo,clone-charts-repo]
-      taskRef:
-        name:  open-cr
-      params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: imageTag
-          value: ''
-        - name: environment
-          value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy1)
-        - name: deployClusters
-          value: $(params.deployClusters)
-        - name: snUrl
-          value: $(params.snUrl)
-        - name: deployChannel
-          value: $(params.deployChannel)
-        - name: tocChannel
-          value: $(params.tocChannel)
     - name: deploy-cluster-1
-      runAfter: [open-cr]
+      runAfter: [clone-config-repo,clone-charts-repo]
       taskRef:
         name:  deploy-chart
       params:
@@ -144,28 +113,3 @@ spec:
           value: $(params.clusterName3)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-    - name: close-cr
-      runAfter: [deploy-cluster-3]
-      taskRef:
-        name:  close-cr
-      params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: imageTag
-          value: ''
-        - name: environment
-          value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy1)
-        - name: deployClusters
-          value: $(params.deployClusters)
-        - name: snUrl
-          value: $(params.snUrl)
-        - name: deployChannel
-          value: $(params.deployChannel)
-        - name: tocChannel
-          value: $(params.tocChannel)

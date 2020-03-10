@@ -1,20 +1,18 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: close-au-syd-trigger-dev
+  name: open-au-syd-trigger-dev
 spec:
   params:
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
-    - name: config_repo
-    - name: config_branch
-    - name: config_directory
-    - name: imageUrl
     - name: environment
-    - name: clusterNamespace
     - name: deployClusters
     - name: snUrl
+    - name: tocChannel
+    - name: deployChannel
+    - name: prodRepos
 
     # CD integration
     - name: api
@@ -38,10 +36,6 @@ spec:
       metadata:
         name: cd-config
       data:
-        API: $(params.api)
-        REGION: $(params.toolchainRegion)
-        RESOURCE_GROUP: $(params.resourceGroup)
-        TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
@@ -49,10 +43,6 @@ spec:
         name: cd-secret
       type: Opaque
       stringData:
-        API_KEY: $(params.API_KEY_1416501)
-        API_KEY_1308775: $(params.API_KEY_1308775)
-        API_KEY_1651315: $(params.API_KEY_1651315)
-        DEPLOY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
         SN_TOKEN: $(params.SN_TOKEN_TEST)
         SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
@@ -75,7 +65,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-close-au-syd-$(uid)-pvc
+        name: $(params.charts_branch)-open-au-syd-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -88,44 +78,40 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-close-au-syd-$(uid)
+        name: $(params.charts_branch)-open-au-syd-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "close-au-syd-trigger-dev"
+          generatedBy: "open-au-syd-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-close-cr
+          name: pipeline-open-cr
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.charts_branch)-close-au-syd-$(uid)-pvc
+            value: $(params.charts_branch)-open-au-syd-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch
             value: $(params.charts_branch)
           - name: charts_directory
             value: $(params.charts_directory)
-          - name: config_repo
-            value: $(params.config_repo)
-          - name: config_branch
-            value: $(params.config_branch)
-          - name: config_directory
-            value: $(params.config_directory)
-          - name: imageUrl
-            value: $(params.imageUrl)
-          - name: clusterNamespace
-            value: $(params.clusterNamespace)
           - name: environment
             value: $(params.environment)
           - name: deployClusters
             value: $(params.deployClusters)
           - name: snUrl
             value: $(params.snUrl)
+          - name: tocChannel
+            value: $(params.tocChannel)
+          - name: deployChannel
+            value: $(params.deployChannel)
+          - name: prodRepos
+            value: $(params.prodRepos)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: close-au-syd-binding-dev
+  name: open-au-syd-binding-dev
 spec:
   params:
     - name: charts_repo
@@ -134,30 +120,26 @@ spec:
       value: "master"
     - name: charts_directory
       value: "pipeline-config"
-    - name: config_repo
-      value: "https://github.ibm.com/ids-env/devops-config.git"
-    - name: config_branch
-      value: "master"
-    - name: config_directory
-      value: "devops-config"
-    - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-log-service"
     - name: environment
       value: "au-syd"
-    - name: clusterNamespace
-      value: opentoolchain
     - name: deployClusters
       value: 'otc-syd01-prod,otc-au-syd-prod'
     - name: snUrl
       value: 'https://watsontest.service-now.com'
+    - name: tocChannel
+      value: '#devops-otc-deployment'
+    - name: deployChannel
+      value: '#devops-otc-deployment'
+    - name: prodRepos
+      value: 'pipeline-log-service'
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: close-au-syd-dev
+  name: open-au-syd-dev
 spec:
   triggers:
     - binding:
-        name: close-au-syd-binding-dev
+        name: open-au-syd-binding-dev
       template:
-        name: close-au-syd-trigger-dev
+        name: open-au-syd-trigger-dev

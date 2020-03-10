@@ -1,0 +1,72 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deployment-information
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: environment
+        default: 'development'
+      - name: prodRepos
+        default: 'None'
+  stepTemplate:
+    env:
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
+  steps:
+  - name: get-deployment-information
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: PROD_REPOS
+        value: $(inputs.params.prodRepos)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        mkdir -p tmp_info ; cd tmp_info
+        FILE=/workspace/deployment.txt
+
+        if [ "$PROD_REPOS" = None ]; then
+            echo "Pipeline microservice configuration updates" >$FILE
+            exit 0
+        fi
+
+        printf 'Delivering changes for:\\n' >$FILE
+
+        IFS=',' read -ra REPOS <<<$PROD_REPOS
+        for REPO in ${REPOS[@]}; do
+            REPO_URL=https://github.ibm.com/org-ids/${REPO}
+            REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
+            git clone -b integration "$REPO_URL_AUTH"
+            pushd $REPO
+            LAST_TAG=$( git tag --list 'prod-*' | tail -1 )
+            REV=$( git rev-list -n 1 HEAD )
+            RESULT=$( git diff --stat ${LAST_TAG}..${REV} )
+            if [ -z "$RESULT" ] ; then
+                printf "$REPO : no deployment"'\\n' >>$FILE
+            else
+                printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\\n' >>$FILE
+            fi
+            popd
+        done
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
