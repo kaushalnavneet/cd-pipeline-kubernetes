@@ -28,6 +28,8 @@ spec:
     env:
       - name: HOME
         value: "/root"
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
       - name: PROD_REPOS
         value: $(inputs.params.prodRepos)
     workingDir: /workspace
@@ -56,7 +58,7 @@ spec:
             REV=$( git rev-list -n 1 HEAD )
             RESULT=$( git diff --stat ${LAST_TAG}..${REV} )
             if [ -z "$RESULT" ] ; then
-                printf "$REPO : no deployment"'\\n' >>$FILE
+                printf "$REPO : Configuration update only"'\\n' >>$FILE
             else
                 printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\\n' >>$FILE
             fi

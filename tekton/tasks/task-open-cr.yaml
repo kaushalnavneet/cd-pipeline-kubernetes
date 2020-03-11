@@ -211,7 +211,7 @@ spec:
         cat << EOF > message.json
         {
           "channel": "${SLACK_DEPLOY_CHANNEL}",
-          "text": "${NOTICE_TEXT}",
+          "text": "${NOTICE_TEXT} \n\nThe TOC has been notified in the *#devops-cd-cie* channel.",
           "username": "${SLACK_USERNAME}", 
           "icon_emoji": "${ICON}",
           "attachments": [
