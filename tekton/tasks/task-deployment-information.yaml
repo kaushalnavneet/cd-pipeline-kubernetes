@@ -38,6 +38,11 @@ spec:
       - | 
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+
+        if [ -r $SOURCE_DIRECTORY/cr/components.txt ]; then
+          PROD_REPOS="$( <$SOURCE_DIRECTORY/cr/components.txt )"
+        fi
+        
         mkdir -p tmp_info ; cd tmp_info
         FILE=/workspace/deployment.txt
 
