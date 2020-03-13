@@ -138,6 +138,7 @@ spec:
         CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
         mkdir tmp ; cd tmp
         tar zxf ../$CHART_PATH
+        cd ..
         # pick up the environment values fresh if available
         #[ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
         [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
