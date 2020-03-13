@@ -136,13 +136,15 @@ spec:
         fi
 
         CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
-        mkdir tmp ; cd tmp
-        tar zxf ../$CHART_PATH
-        cd ..
-        # pick up the environment values fresh if available
-        #[ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
-        [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
-          cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+        if [ ! -e tmp/${COMPONENT_NAME} ]; then
+          mkdir -p tmp ; cd tmp
+          tar zxf ../$CHART_PATH
+          cd ..
+          # pick up the environment values fresh if available
+          #[ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
+          [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
+            cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+        fi
 
         set +e
         if ! helm list ${COMPONENT_NAME}; then
