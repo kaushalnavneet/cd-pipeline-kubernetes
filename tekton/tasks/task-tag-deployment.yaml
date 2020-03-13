@@ -1,0 +1,73 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: tag-deployment
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: environment
+        default: 'development'
+      - name: prodRepos
+        default: 'None'
+  stepTemplate:
+    env:
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
+  steps:
+  - name: tag-deployment
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: PROD_REPOS
+        value: $(inputs.params.prodRepos)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+
+        if [ -r $SOURCE_DIRECTORY/cr/components.txt ]; then
+          PROD_REPOS="$( <$SOURCE_DIRECTORY/cr/components.txt )"
+        fi
+        
+        mkdir -p tmp_info ; cd tmp_info
+
+        if [ "$PROD_REPOS" = None ]; then
+            echo "Pipeline microservice configuration updates" 
+            exit 0
+        fi
+
+        TAG=prod-$( date +%Y%m%d-%H%M )
+        echo 'tagging with' $TAG
+
+        IFS=',' read -ra REPOS <<<$PROD_REPOS
+        for REPO in ${REPOS[@]}; do
+            REPO_URL=https://github.ibm.com/org-ids/${REPO}
+            REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
+            git clone -b integration "$REPO_URL_AUTH"
+            pushd $REPO
+            git tag "$TAG"
+            git push --tags
+            popd
+        done
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)

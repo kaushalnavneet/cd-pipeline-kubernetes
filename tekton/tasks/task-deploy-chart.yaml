@@ -136,8 +136,12 @@ spec:
         fi
 
         CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
+        mkdir tmp ; cd tmp
+        tar zxf ../$CHART_PATH
         # pick up the environment values fresh if available
-        [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
+        #[ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
+        [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
+          cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
 
         set +e
         if ! helm list ${COMPONENT_NAME}; then
@@ -147,12 +151,12 @@ spec:
           if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
           fi
-          helm install --name ${COMPONENT_NAME} ${CHART_PATH} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+          helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
-          helm upgrade --force ${COMPONENT_NAME} ${CHART_PATH} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+          helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
