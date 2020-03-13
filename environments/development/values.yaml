@@ -152,7 +152,7 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         S3_ENABLED: true
         PUBLIC_QUEUE_ID: "a149b42d-a7dc-4975-8468-602037130799"
-        DISABLE_TRIGGER_ENDPOINT: false
+        DISABLE_TRIGGER_ENDPOINT: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -168,7 +168,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENABLE_RATE_LIMIT: false
-        ENABLE_RUN_ENDPOINT: false
+        ENABLE_RUN_ENDPOINT: true
   tekton-ui:
     replicas: 1
     revisionHistoryLimit: 3
@@ -284,7 +284,7 @@ pipeline:
         TEKTON_OPENAPI_ENABLED: true
         ENABLE_GENERIC_WEBHOOK: true
         TEKTON_CUSTOM_PIPELINE_RUNS: true
-        ENABLE_EVENT_SERVICE: false
+        ENABLE_EVENT_SERVICE: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
