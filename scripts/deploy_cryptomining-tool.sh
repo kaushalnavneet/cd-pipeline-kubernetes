@@ -7,6 +7,5 @@ VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/cryptomining_values.yaml
 helm upgrade cryptomining-detector helm/cryptomining-detector \
   --install \
   --namespace "${CHART_NAMESPACE}" \
-  --values=${VALUES}
-  --timeout 600 \
+  --values=${VALUES} \
   --debug
