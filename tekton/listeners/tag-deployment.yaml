@@ -1,0 +1,134 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: tag-deployment-trigger-dev
+spec:
+  params:
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: environment
+    - name: prodRepos
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        IDS_USER: $(params.IDS_USER)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN)
+        SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
+        SLACK_TOC_HOOK: $(params.SLACK_TOC_HOOK)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.charts_branch)-tag-deployment-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.charts_branch)-tag-deployment-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "tag-deployment-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-tag-deployment
+        serviceAccountName: docker-build-sa
+        params:
+          - name: pipeline-pvc
+            value: $(params.charts_branch)-tag-deployment-$(uid)-pvc
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
+          - name: environment
+            value: $(params.environment)
+          - name: deployClusters
+            value: $(params.deployClusters)
+          - name: snUrl
+            value: $(params.snUrl)
+          - name: tocChannel
+            value: $(params.tocChannel)
+          - name: deployChannel
+            value: $(params.deployChannel)
+          - name: prodRepos
+            value: $(params.prodRepos)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: tag-deployment-binding-dev
+spec:
+  params:
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: charts_branch
+      value: "master"
+    - name: charts_directory
+      value: "pipeline-config"
+    - name: environment
+      value: "us-south"
+    - name: prodRepos
+      value: 'pipeline-log-service'
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: tag-deployment-dev
+spec:
+  triggers:
+    - binding:
+        name: tag-deployment-binding-dev
+      template:
+        name: tag-deployment-trigger-dev
