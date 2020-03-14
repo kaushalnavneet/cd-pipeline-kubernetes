@@ -107,7 +107,7 @@ spec:
     - name: charts_directory
       value: "pipeline-config"
     - name: environment
-      value: "jp-tok"
+      value: "us-south"
     - name: prodRepos
       value: 'pipeline-log-service'
 ---
