@@ -44,7 +44,7 @@ spec:
           value: /home/vault/secrets
         - name: VAULT_COMPONENT
           value: {{ template "common.fullname" . }}
-        image: us.icr.io/opentoolchain/vault-sidekick:latest
+        image: us.icr.io/opentoolchain/vault-sidekick:ae9e26f4a5083765159054eac8b605e78689c8d6-202002261819UTC
         name: vault-sidekick
         volumeMounts:
         - mountPath: /var/run/certs
