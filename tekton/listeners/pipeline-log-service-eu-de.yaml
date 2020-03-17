@@ -53,7 +53,7 @@ spec:
         name: cd-secret
       type: Opaque
       stringData:
-        API_KEY: $(params.API_KEY_1416501)
+        API_KEY: $(params.API_KEY_1562047)
         DEPLOY_API_KEY: $(params.API_KEY_1562047)
         IDS_TOKEN: $(params.IDS_TOKEN)
 
