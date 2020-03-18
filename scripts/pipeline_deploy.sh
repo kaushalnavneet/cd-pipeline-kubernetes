@@ -33,7 +33,7 @@ if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
 
-$(ibmcloud ks cluster config --export  --cluster ${IDS_JOB_NAME})
+ibmcloud ks cluster config --cluster ${IDS_JOB_NAME}
 
 INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${IDS_JOB_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
 echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
