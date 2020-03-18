@@ -55,6 +55,7 @@ spec:
       stringData:
         API_KEY: $(params.API_KEY_1561947)
         DEPLOY_API_KEY: $(params.API_KEY_1562047)
+        REGISTRY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
