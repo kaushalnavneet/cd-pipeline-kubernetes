@@ -35,6 +35,10 @@ pipeline:
       secretPaths:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging_2019_04_30_16h50m37s
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq-icd_2019_04_23_07h59m20s
+    probes:
+      enabled: false
+    preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
+    terminationGracePeriodSeconds: 4000  
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
@@ -45,4 +49,4 @@ pipeline:
         POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
-        PAYLOAD_ENCRYPT: true
+        PAYLOAD_ENCRYPT: false
