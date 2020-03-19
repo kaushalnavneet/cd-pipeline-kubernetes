@@ -51,7 +51,7 @@ fi
 if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
-$(ibmcloud ks cluster config --export --cluster ${CLUSTER_NAME})
+ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
 
 kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
