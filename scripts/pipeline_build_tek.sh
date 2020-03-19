@@ -16,7 +16,12 @@ DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE
 
 ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
 
-ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
+ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
+if [ "$ksversion" -eq "0"  ]; then
+    $(ibmcloud ks cluster config --export --cluster ${BUILD_CLUSTER})
+else
+    ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
+fi
 
 kubectl --namespace otc-dev get pods 
 kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &

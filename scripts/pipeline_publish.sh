@@ -34,7 +34,12 @@ printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for clu
 
 ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY}
 
-ibmcloud ks cluster config --cluster ${DRY_RUN_CLUSTER}
+ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
+if [ "$ksversion" -eq "0"  ]; then
+    $(ibmcloud ks cluster config --export --cluster ${DRY_RUN_CLUSTER})
+else
+    ibmcloud ks cluster config --cluster ${DRY_RUN_CLUSTER}
+fi
 
 if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_ORG}" ] ||  [ -z "${CHART_REPO}" ]; then
   echo "Major & minor version and chart repo vars need to be set"

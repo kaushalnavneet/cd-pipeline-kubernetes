@@ -30,7 +30,12 @@ if [[ ! -z "${RESOURCE_GROUP}" ]]; then
   ibmcloud target -g "${RESOURCE_GROUP}"
 fi
 
-ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
+ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
+if [ "$ksversion" -eq "0"  ]; then
+    $(ibmcloud ks cluster config --export --cluster ${CLUSTER_NAME})
+else
+    ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
+fi
 
 INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
 echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
