@@ -218,8 +218,8 @@ pipeline:
         BSS_CHECKED: true
         BSS_ENFORCED: true
         CF_DOMAIN: stage1.ng.bluemix.net
-        CLOUDANT_URL: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix.cloudant.com
-        CLOUDANT_USER: d25e7500-788e-4f5e-9c1d-4e8d2780b98a-bluemix
+        CLOUDANT_URL: 4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudant.com
+        CLOUDANT_USER: 4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix
         CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
         CONSUMPTION_MONITOR_HOST: http://pipeline-consumption
         CS_VERSION: "2"
