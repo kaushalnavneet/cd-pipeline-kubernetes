@@ -169,16 +169,6 @@ pipeline:
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENABLE_RATE_LIMIT: false
         ENABLE_RUN_ENDPOINT: true
-  tekton-ui:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/tekton-ui/tekton-ui_2019_08_08_16h00m00s
-    configmap:
-      data:
-        NEW_RELIC_APP_NAME: Tekton UI - YS1
-        IAM_URL: https://iam.test.cloud.ibm.com
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
