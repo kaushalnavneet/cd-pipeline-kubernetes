@@ -184,7 +184,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption-20181123
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2020_03_20_15h59m42s
     probes:
       readiness:
         path: "/version"
