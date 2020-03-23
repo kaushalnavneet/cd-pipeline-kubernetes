@@ -80,7 +80,6 @@ spec:
         - name: vault-secrets
           mountPath: /etc/secrets
           readOnly: false
-        volumeMounts:
         - name: at-events
           mountPath: /var/log/at-no-rotate
           readOnly: false
