@@ -30,8 +30,8 @@ spec:
           - key: vault.pem
             path: vault.pem
       - name: at-events
-          hostPath:
-            path: /var/log/at-no-rotate
+        hostPath:
+          path: /var/log/at-no-rotate
       - name: vault-secrets  
         secret:
           defaultMode: 420
