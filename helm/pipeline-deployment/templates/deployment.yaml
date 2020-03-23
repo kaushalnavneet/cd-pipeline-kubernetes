@@ -83,6 +83,7 @@ spec:
         volumeMounts:
         - name: at-events
           mountPath: /var/log/at-no-rotate
+          readOnly: false
 {{- end -}}
 {{- define "pipeline.deployment.container" -}}
 # Define overrides for your Container here, e.g.
