@@ -29,6 +29,9 @@ spec:
           items:
           - key: vault.pem
             path: vault.pem
+      - name: at-events
+          hostPath:
+            path: /var/log/at-no-rotate
       - name: vault-secrets  
         secret:
           defaultMode: 420
@@ -76,7 +79,10 @@ spec:
         volumeMounts:
         - name: vault-secrets
           mountPath: /etc/secrets
-          readOnly: false 
+          readOnly: false
+        - name: at-events
+          mountPath: /var/log/at-no-rotate
+          readOnly: false
 {{- end -}}
 {{- define "pipeline.deployment.container" -}}
 # Define overrides for your Container here, e.g.
