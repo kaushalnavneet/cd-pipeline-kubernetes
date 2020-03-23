@@ -118,7 +118,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker-20181123
-      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant__2020_03_20_12h55m35s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2020_03_20_12h55m35s
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
@@ -137,7 +137,7 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
-       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant__2020_03_20_12h55m35s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2020_03_20_12h55m35s
        - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_01_30_21h14m27s
     configmap:
       data:
