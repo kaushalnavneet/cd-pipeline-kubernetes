@@ -22,6 +22,10 @@ spec:
         default: '#devops-cd-cie'
   stepTemplate:
     env:
+      - name: PIPELINE_TRIGGERING_USER
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
       - name: SN_TOKEN
         valueFrom:
           secretKeyRef:
