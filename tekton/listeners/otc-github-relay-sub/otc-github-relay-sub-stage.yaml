@@ -145,7 +145,7 @@ spec:
     - name: source_branch
       value: "integration_charts"
     - name: short_source_branch
-      value: "int_charts"
+      value: "int-charts"
     - name: source_directory
       value: "otc-github-relay-sub"
     - name: charts_repo
