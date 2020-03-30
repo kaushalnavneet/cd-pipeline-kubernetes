@@ -90,7 +90,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.short_source_branch)-private-worker-service-$(uid)
+        name: $(params.short_source_branch)-pws-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "private-worker-service-trigger-stage"
