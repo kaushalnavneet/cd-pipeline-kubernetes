@@ -6,6 +6,7 @@ spec:
   params:
     - name: source_repo
     - name: source_branch
+    - name: short_source_branch
     - name: source_directory
     - name: charts_repo
     - name: charts_branch
@@ -77,7 +78,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-pub-$(uid)-pvc
+        name: $(params.short_source_branch)-pub-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -88,8 +89,8 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-pub-$(uid)
+        #generateName: $(params.short_source_branch)-base-run
+        name: $(params.short_source_branch)-pub-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "otc-github-relay-pub-trigger-stage"
@@ -99,7 +100,7 @@ spec:
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-pub-$(uid)-pvc
+            value: $(params.short_source_branch)-pub-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -143,6 +144,8 @@ spec:
       value: "https://github.ibm.com/org-ids/otc-github-relay-pub.git"
     - name: source_branch
       value: "integration_charts"
+    - name: short_source_branch
+      value: "int_charts"
     - name: source_directory
       value: "otc-github-relay-pub"
     - name: charts_repo
