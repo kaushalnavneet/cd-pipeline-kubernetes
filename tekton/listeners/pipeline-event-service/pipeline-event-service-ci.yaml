@@ -126,7 +126,7 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
-          - name: artifactoryTokenBas64
+          - name: artifactoryTokenBase64
             value: $(params.ARTIFACTORY_TOKEN_BASE64)
           - name: artifactoryId
             value: $(params.ARTIFACTORY_ID)

@@ -25,7 +25,7 @@ spec:
       default: ''
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
-    - name: artifactoryTokenBas64
+    - name: artifactoryTokenBase64
       default: ''
     - name: artifactoryId
       default: ''
@@ -90,8 +90,8 @@ spec:
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBas64
-          value: $(params.artifactoryTokenBas64)
+        - name: artifactoryTokenBase64
+          value: $(params.artifactoryTokenBase64)
         - name: artifactoryId
           value: $(params.artifactoryId)
         - name: consoleAuthToken

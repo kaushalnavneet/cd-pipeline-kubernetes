@@ -133,7 +133,7 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
-          - name: artifactoryTokenBas64
+          - name: artifactoryTokenBase64
             value: $(params.ARTIFACTORY_TOKEN_BASE64)
           - name: artifactoryId
             value: $(params.ARTIFACTORY_ID)

@@ -28,7 +28,7 @@ spec:
         default: --no-cache
       - name: environment
         default: 'development'
-      - name: artifactoryTokenBas64
+      - name: artifactoryTokenBase64
         default: ''
       - name: artifactoryId
         default: ''
@@ -118,7 +118,7 @@ spec:
         value: $(inputs.params.environment)
       # used for pipeline-ui build
       - name: ARTIFACTORY_TOKEN_BASE64
-        value: $(inputs.params.artifactoryTokenBas64)
+        value: $(inputs.params.artifactoryTokenBase64)
       - name: ARTIFACTORY_ID
         value: $(inputs.params.artifactoryId)
       - name: CONSOLE_AUTH_TOKEN
