@@ -1,0 +1,187 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-artifact-repository-service-trigger-stage
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: short_source_branch
+    - name: source_directory
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: imageName
+    - name: imageTag
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
+        DRY_RUN_CLUSTER: otc-us-south-dal13-stage
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        API_KEY_1308775: $(params.API_KEY_1308775)
+        API_KEY_1651315: $(params.API_KEY_1651315)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        DRY_RUN_API_KEY: $(params.API_KEY_1308775)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.short_source_branch)-pipeline-artifact-repository-service-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.short_source_branch)-pipeline-artifact-repository-service-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-artifact-repository-service-trigger-stage"
+      spec:
+        pipelineRef:
+          name: pipeline-stage
+        serviceAccountName: docker-build-sa
+        params:
+          - name: pipeline-pvc
+            value: $(params.short_source_branch)-pipeline-artifact-repository-service-$(uid)-pvc
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: source_directory
+            value: $(params.source_directory)
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
+          - name: config_repo
+            value: $(params.config_repo)
+          - name: config_branch
+            value: $(params.config_branch)
+          - name: config_directory
+            value: $(params.config_directory)
+          - name: imageUrl
+            value: $(params.imageUrl)
+          - name: skipBuild
+            value: $(params.skipBuild)
+          - name: environment
+            value: $(params.environment)
+          - name: skipVA
+            value: $(params.skipVA)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: pipeline-artifact-repository-service-binding-stage
+spec:
+  params:
+    - name: source_repo
+      value: "https://github.ibm.com/org-ids/pipeline-artifact-repository-service.git"
+    - name: source_branch
+      value: "integration_charts"
+    - name: short_source_branch
+      value: "int-charts"
+    - name: source_directory
+      value: "pipeline-artifact-repository-service"
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: charts_branch
+      value: "master"
+    - name: charts_directory
+      value: "pipeline-artifact-repository-service/pipeline-config"
+    - name: script_repo
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: script_branch
+      value: "master"
+    - name: script_directory
+      value: "pipeline-artifact-repository-service/cd-pipeline-kubernetes"
+    - name: config_repo
+      value: "https://github.ibm.com/ids-env/devops-config.git"
+    - name: config_branch
+      value: "master"
+    - name: config_directory
+      value: "pipeline-artifact-repository-service/devops-config"
+    - name: imageUrl
+      value: "us.icr.io/devopsotc/pipeline-artifact-repository-service"
+    - name: environment
+      value: "staging"
+    - name: skipBuild
+      value: "false"
+    - name: skipVA
+      value: "false"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: pipeline-artifact-repository-service-stage
+spec:
+  triggers:
+    - binding:
+        name: pipeline-artifact-repository-service-binding-stage
+      template:
+        name: pipeline-artifact-repository-service-trigger-stage
