@@ -20,6 +20,8 @@ spec:
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
+    - name: helmVersion
+    - name: chartNamespace
 
     # CD integration
     - name: api
