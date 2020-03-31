@@ -85,10 +85,8 @@ spec:
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
-        ibmcloud login -a ${API} -r ${REGION} --apikey ${REGISTRY_API_KEY}
-
         set +x
-        ibmcloud login --apikey ${API_KEY}
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${REGISTRY_API_KEY}
         set -x
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
         set +e
@@ -96,6 +94,7 @@ spec:
         chmod a+x cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
 
         bash cd-pipeline-kubernetes/scripts/install_helm.sh
+        ls -la .
         bash cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
     volumeMounts:
       - mountPath: /workspace
