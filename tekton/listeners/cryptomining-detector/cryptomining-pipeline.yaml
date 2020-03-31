@@ -82,3 +82,5 @@ spec:
           value: $(params.source_directory)
         - name: helmVersion
           value: $(params.helmVersion)
+        - name: config_directory
+          value: $(params.config_directory)

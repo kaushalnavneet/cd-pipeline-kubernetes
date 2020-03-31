@@ -18,6 +18,7 @@ spec:
       - name: chartNamespace
         default: opentoolchain
       - name: helmVersion
+      - name: config_directory
   stepTemplate:
     env:
       - name: API
@@ -64,6 +65,10 @@ spec:
         value: $(inputs.params.helmVersion)
       - name: CHART_NAMESPACE
         value: $(inputs.params.chartNamespace)
+      - name: SCRIPT_DIRECTORY
+        value: $(inputs.params.script_directory)
+      - name: DEVOPS_CONFIG
+        value: $(inputs.params.config_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -90,12 +95,19 @@ spec:
         set -x
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
         set +e
-        chmod a+x cd-pipeline-kubernetes/scripts/install_helm.sh
-        chmod a+x cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
+        chmod a+x ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
 
-        bash cd-pipeline-kubernetes/scripts/install_helm.sh
-        cd cryptomining-detector
-        bash ../cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
+        bash ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
+        CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
+        ENVIRONMENT=${ENVIRONMENT:-dev}
+        DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
+        VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/cryptomining_values.yaml
+
+        helm upgrade cryptomining-detector ${SOURCE_DIRECTORY}/helm/cryptomining-detector \
+          --install \
+          --namespace "${CHART_NAMESPACE}" \
+          --values=${VALUES} \
+          --debug
     volumeMounts:
       - mountPath: /workspace
         name: task-volume
