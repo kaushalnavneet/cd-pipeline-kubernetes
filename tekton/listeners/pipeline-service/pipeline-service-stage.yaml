@@ -146,6 +146,8 @@ spec:
       value: "https://github.ibm.com/org-ids/pipeline-service.git"
     - name: source_branch
       value: "integration_charts"
+    - name: short_source_branch
+      value: "int-charts"
     - name: source_directory
       value: "pipeline-service"
     - name: charts_repo
