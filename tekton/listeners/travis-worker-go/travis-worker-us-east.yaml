@@ -154,7 +154,7 @@ spec:
     - name: environment
       value: "us-east"
     - name: clusterNamespace
-      value: opentoolchain
+      value: devopsotc
     - name: clusterName1
       value: otc-pw-wdc04-prod
     - name: skipDeploy1
