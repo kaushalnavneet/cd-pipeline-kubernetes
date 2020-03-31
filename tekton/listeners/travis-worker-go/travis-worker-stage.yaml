@@ -153,11 +153,11 @@ spec:
     - name: source_directory
       value: "travis-worker-go"
     - name: charts_repo
-      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "travis-worker-go/cd-pipeline-kubernetes"
+      value: "travis-worker-go/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
@@ -170,7 +170,6 @@ spec:
       value: "master"
     - name: config_directory
       value: "travis-worker-go/devops-config"
-
     - name: imageUrl
       value: "us.icr.io/devopsotc/travis-worker"
     - name: environment
