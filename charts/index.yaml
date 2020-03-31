@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  travis-worker:
+  - created: 2020-03-31T16:22:09.21205816Z
+    description: Pipeline Travis Worker
+    digest: ec2bbc602d382e0265ff6a7808fb79a25f1b8ce4de553f404007f659208755e2
+    home: https://github.ibm.com/org-ids/travis-worker
+    name: travis-worker
+    sources:
+    - https://github.ibm.com/org-ids/travis-worker
+    urls:
+    - https://f93190bb13d151dd41b80e268baefa7b6f967f3b@raw.github.ibm.com/org-ids/cd-pipeline-kubernetes/master/charts/travis-worker-1.0.0.tgz
+    version: 1.0.0
+generated: 2020-03-31T16:22:09.201106075Z
