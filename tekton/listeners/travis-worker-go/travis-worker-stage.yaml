@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: travis-worker-go-trigger-dev
+  name: travis-worker-go-trigger-stage
 spec:
   params:
     - name: source_repo
@@ -88,7 +88,7 @@ spec:
         name: $(params.short_source_branch)-travis-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "travis-worker-go-trigger-dev"
+          generatedBy: "travis-worker-go-trigger-stage"
       spec:
         pipelineRef:
           name: pipeline-stage
@@ -132,7 +132,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: travis-worker-go-binding-dev
+  name: travis-worker-go-binding-stage
 spec:
   params:
     - name: source_repo
@@ -171,10 +171,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: travis-worker-go-dev
+  name: travis-worker-go-stage
 spec:
   triggers:
     - binding:
-        name: travis-worker-go-binding-dev
+        name: travis-worker-go-binding-stage
       template:
-        name: travis-worker-go-trigger-dev
+        name: travis-worker-go-trigger-stage
