@@ -8,8 +8,6 @@ spec:
       - name: task-pvc
         description: the output pvc - this is where the cloned repository will be stored
       - name: source_directory
-      - name: registryRegion
-        default: us-south
       - name: clusterName
       - name: deployBaseImage
         default: us.icr.io/opentoolchain/cd-deploy-base:deploy
@@ -54,8 +52,6 @@ spec:
     env:
       - name: HOME
         value: "/root"
-      - name: REGISTRY_REGION
-        value: $(inputs.params.registryRegion)
       - name: SOURCE_DIRECTORY
         value: $(inputs.params.source_directory)
       - name: SKIP
@@ -89,7 +85,7 @@ spec:
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
-        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${REGISTRY_API_KEY}
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${REGISTRY_API_KEY}
 
         set +x
         ibmcloud login --apikey ${API_KEY}
