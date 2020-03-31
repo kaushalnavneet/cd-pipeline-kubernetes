@@ -7,9 +7,9 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: config_repo
     - name: config_branch
     - name: config_directory
@@ -109,12 +109,12 @@ spec:
             value: $(params.source_branch)
           - name: source_directory
             value: $(params.source_directory)
-          - name: charts_repo
-            value: $(params.charts_repo)
-          - name: charts_branch
-            value: $(params.charts_branch)
-          - name: charts_directory
-            value: $(params.charts_directory)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
           - name: config_repo
             value: $(params.config_repo)
           - name: config_branch
