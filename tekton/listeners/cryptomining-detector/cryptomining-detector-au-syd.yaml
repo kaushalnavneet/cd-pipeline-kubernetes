@@ -144,11 +144,11 @@ metadata:
   name: cryptomining-detector-au-syd-binding-dev
 spec:
   params:
-    - name: charts_repo
+    - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
-    - name: charts_branch
+    - name: script_branch
       value: "master"
-    - name: charts_directory
+    - name: script_directory
       value: "cd-pipeline-kubernetes"
     - name: source_repo
       value: "https://github.ibm.com/org-ids/cryptomining-detector.git"
