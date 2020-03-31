@@ -94,8 +94,8 @@ spec:
         chmod a+x cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
 
         bash cd-pipeline-kubernetes/scripts/install_helm.sh
-        ls -la .
-        bash cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
+        cd cryptomining-detector
+        bash ../cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
     volumeMounts:
       - mountPath: /workspace
         name: task-volume
