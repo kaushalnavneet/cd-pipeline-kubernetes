@@ -134,7 +134,7 @@ spec:
           - name: skipVA
             value: $(params.skipVA)
           - name: runBaseImage
-            value: us.icr.io/opentoolchain/cd-build-base:java
+            value: $(params.runBaseImage)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
