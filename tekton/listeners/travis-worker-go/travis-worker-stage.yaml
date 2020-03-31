@@ -108,6 +108,12 @@ spec:
             value: $(params.charts_branch)
           - name: charts_directory
             value: $(params.charts_directory)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
           - name: config_repo
             value: $(params.config_repo)
           - name: config_branch
