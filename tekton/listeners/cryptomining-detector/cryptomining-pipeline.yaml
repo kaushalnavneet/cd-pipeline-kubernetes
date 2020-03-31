@@ -1,0 +1,79 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: cryptomining-pipeline
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: environment
+    - name: chartNamespace
+
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+        - name: directoryName
+          value: $(params.source_directory)
+    - name: clone-script-repo
+      runAfter: [clone-charts-repo]
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directoryName
+          value: $(params.script_directory)
+    - name: clone-config-repo
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.config_repo)
+        - name: branch
+          value: $(params.config_branch)
+        - name: directoryName
+          value: $(params.config_directory)
+    - name: deploy-cluster-1
+      runAfter: [clone-config-repo,clone-charts-repo]
+      taskRef:
+        name:  deploy-cryptomining
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy1)
+        - name: clusterName
+          value: $(params.clusterName1)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: registryRegion
+          value: $(params.registryRegion)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: helmVersion
+          value: $(params.helmVersion)

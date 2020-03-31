@@ -1,0 +1,107 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-cryptomining
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: source_directory
+      - name: registryRegion
+        default: us-south
+      - name: clusterName
+      - name: deployBaseImage
+        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+      - name: environment
+        default: 'development'
+      - name: skipDeploy
+        default: 'true'
+      - name: chartNamespace
+        default: opentoolchain
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: REGISTRY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: REGISTRY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+  steps:
+  - name: deploy
+    image: $(inputs.params.deployBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
+      - name: SOURCE_DIRECTORY
+        value: $(inputs.params.source_directory)
+      - name: SKIP
+        value: $(inputs.params.skipDeploy)
+      - name: CLUSTER_NAME
+        value: $(inputs.params.clusterName)
+      - name: ENVIRONMENT
+        value: $(inputs.params.environment)
+      - name: HELM_VERSION
+        value: $(inputs.params.helmVersion)
+      - name: CHART_NAMESPACE
+        value: $(inputs.params.chartNamespace)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        set -x
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping Deploy for $CLUSTER_NAME"
+          exit 0
+        fi
+
+        if [ -z "$REGISTRY_API_KEY" ]; then
+          REGISTRY_API_KEY=$API_KEY
+        fi
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${REGISTRY_API_KEY}
+
+        ibmcloud login --apikey ${API_KEY}
+        ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
+        set +e
+        chmod a+x cd-pipeline-kubernetes/scripts/install_helm.sh
+        chmod a+x cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
+
+        bash cd-pipeline-kubernetes/scripts/install_helm.sh
+        bash cd-pipeline-kubernetes/scripts/deploy_cryptomining-tool.sh
+        set +x
+
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
