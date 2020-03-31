@@ -19,6 +19,7 @@ spec:
         default: 'true'
       - name: chartNamespace
         default: opentoolchain
+      - name: helmVersion
   stepTemplate:
     env:
       - name: API
