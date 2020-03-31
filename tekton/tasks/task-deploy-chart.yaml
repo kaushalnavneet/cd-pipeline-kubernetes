@@ -101,10 +101,11 @@ spec:
         WORKDIR=${WORKDIR:-/work}
         VALUES_OPT=""
 
+        set +x
         if [ -z "$REGISTRY_API_KEY" ]; then
           REGISTRY_API_KEY=$API_KEY
         fi
-
+        set -x
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${REGISTRY_API_KEY}
@@ -129,7 +130,10 @@ spec:
         pwd
         ls -F
 
+        set +x
         ibmcloud login --apikey ${API_KEY}
+        set -x
+
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
 
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
