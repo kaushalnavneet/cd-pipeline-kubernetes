@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: pgbouncer-au-syd-trigger-dev
+  name: pgbouncer-dev-trigger-dev
 spec:
   params:
     - name: source_repo
@@ -58,7 +58,7 @@ spec:
         API_KEY: $(params.API_KEY_1416501)
         API_KEY_1308775: $(params.API_KEY_1308775)
         API_KEY_1651315: $(params.API_KEY_1651315)
-        DEPLOY_API_KEY: $(params.API_KEY_1416501)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
         REGISTRY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
 
@@ -79,7 +79,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-pgbouncer-au-syd-$(uid)-pvc
+        name: $(params.source_branch)-crypto-dev-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -91,17 +91,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-pgbouncer-au-syd-$(uid)
+        name: $(params.source_branch)-crypto-dev-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "pgbouncer-au-syd-trigger-dev"
+          generatedBy: "pgbouncer-dev-trigger-dev"
       spec:
         pipelineRef:
-          name: pgbouncer-pipeline
+          name: cryptomining-pipeline
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-pgbouncer-au-syd-$(uid)-pvc
+            value: $(params.source_branch)-crypto-dev-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -140,7 +140,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: pgbouncer-au-syd-binding-dev
+  name: pgbouncer-dev-binding-dev
 spec:
   params:
     - name: script_repo
@@ -152,7 +152,7 @@ spec:
     - name: source_repo
       value: "https://gitlab.com/org-ids/gitlab.git"
     - name: source_branch
-      value: "cd-production"
+      value: "cd-development"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
@@ -160,17 +160,17 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: environment
-      value: "au-syd"
+      value: "development"
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-pw-syd01-prod
+      value: otc-pw-us-south-dev
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-pw-au-syd-prod
+      value: 'none'
     - name: skipDeploy2
-      value: "false"
+      value: "true"
     - name: clusterName3
       value: 'none'
     - name: skipDeploy3
@@ -181,10 +181,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: pgbouncer-au-syd-dev
+  name: pgbouncer-dev-dev
 spec:
   triggers:
     - binding:
-        name: pgbouncer-au-syd-binding-dev
+        name: pgbouncer-dev-binding-dev
       template:
-        name: pgbouncer-au-syd-trigger-dev
+        name: pgbouncer-dev-trigger-dev
