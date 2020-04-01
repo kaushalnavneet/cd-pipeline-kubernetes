@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: pgbouncer-au-syd-trigger-dev
+  name: pgbouncer-jp-tok-trigger-dev
 spec:
   params:
     - name: source_repo
@@ -80,7 +80,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-pgb-au-syd-$(uid)-pvc
+        name: $(params.source_branch)-pgb-jp-tok-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -92,17 +92,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-pgb-au-syd-$(uid)
+        name: $(params.source_branch)-pgb-jp-tok-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "pgbouncer-au-syd-trigger-dev"
+          generatedBy: "pgbouncer-jp-tok-trigger-dev"
       spec:
         pipelineRef:
           name: pgbouncer-pipeline
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-pgb-au-syd-$(uid)-pvc
+            value: $(params.source_branch)-pgb-jp-tok-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -139,7 +139,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: pgbouncer-au-syd-binding-dev
+  name: pgbouncer-jp-tok-binding-dev
 spec:
   params:
     - name: script_repo
@@ -159,29 +159,29 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: environment
-      value: "au-syd"
+      value: "jp-tok"
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-syd01-prod
+      value: otc-tok02-prod
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-au-syd-prod
+      value: otc-tok04-prod
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: 'none'
+      value: otc-tok05-prod
     - name: skipDeploy3
-      value: "true"
+      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: pgbouncer-au-syd-dev
+  name: pgbouncer-jp-tok-dev
 spec:
   triggers:
     - binding:
-        name: pgbouncer-au-syd-binding-dev
+        name: pgbouncer-jp-tok-binding-dev
       template:
-        name: pgbouncer-au-syd-trigger-dev
+        name: pgbouncer-jp-tok-trigger-dev
