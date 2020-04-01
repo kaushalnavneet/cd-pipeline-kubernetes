@@ -163,7 +163,7 @@ spec:
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-pw-us-south-dev
+      value: otc-us-south-dev
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
