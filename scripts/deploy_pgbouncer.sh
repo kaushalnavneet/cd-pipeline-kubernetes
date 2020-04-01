@@ -42,6 +42,7 @@ export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
 export PG_USERNAME=admin
 
+set -e
 if [[ ! -z "${REGION}" ]]; then
  ibmcloud login -a ${IBM_CLOUD_API} -c ${ACCOUNT_ID} --apikey ${API_KEY} -r ${REGION}
 else
