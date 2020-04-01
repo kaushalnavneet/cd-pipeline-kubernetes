@@ -87,7 +87,7 @@ spec:
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-2
-      runAfter: [clone-config-repo]
+      runAfter: [deploy-cluster-1]
       taskRef:
         name:  deploy-cryptomining
       params:
@@ -110,7 +110,7 @@ spec:
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-3
-      runAfter: [clone-config-repo]
+      runAfter: [deploy-cluster-2]
       taskRef:
         name:  deploy-cryptomining
       params:
