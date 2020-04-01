@@ -86,4 +86,49 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
-
+    - name: deploy-cluster-2
+      runAfter: [clone-config-repo]
+      taskRef:
+        name:  deploy-cryptomining
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy2)
+        - name: clusterName
+          value: $(params.clusterName2)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: helmVersion
+          value: $(params.helmVersion)
+        - name: config_directory
+          value: $(params.config_directory)
+        - name: script_directory
+          value: $(params.script_directory)
+    - name: deploy-cluster-3
+      runAfter: [clone-config-repo]
+      taskRef:
+        name:  deploy-cryptomining
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy3)
+        - name: clusterName
+          value: $(params.clusterName3)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: helmVersion
+          value: $(params.helmVersion)
+        - name: config_directory
+          value: $(params.config_directory)
+        - name: script_directory
+          value: $(params.script_directory)
