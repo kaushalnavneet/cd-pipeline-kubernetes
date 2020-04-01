@@ -97,7 +97,7 @@ spec:
           generatedBy: "pgbouncer-dev-trigger-dev"
       spec:
         pipelineRef:
-          name: cryptomining-pipeline
+          name: pgbouncer-pipeline
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
