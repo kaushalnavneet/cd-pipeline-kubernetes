@@ -14,14 +14,12 @@ DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/pgbouncer_values.yaml
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 
-
+set -x
 # install vault
 curl -o v.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_linux_amd64.zip
 unzip v.zip
 rm v.zip
 
-
-set -e
 export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
 
 # must set base64 encoded VAULT_SIDEKICK_ROLE_ID and VAULT_SIDEKICK_SECRET_ID
