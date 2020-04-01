@@ -21,7 +21,6 @@ spec:
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
-    - name: helmVersion
 
   tasks:
     - name: clone-source-repo
@@ -75,8 +74,6 @@ spec:
           value: $(params.clusterName1)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: helmVersion
-          value: $(params.helmVersion)
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-2
@@ -94,8 +91,6 @@ spec:
           value: $(params.clusterName2)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: helmVersion
-          value: $(params.helmVersion)
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-3
@@ -113,7 +108,5 @@ spec:
           value: $(params.clusterName3)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: helmVersion
-          value: $(params.helmVersion)
         - name: script_directory
           value: $(params.script_directory)
