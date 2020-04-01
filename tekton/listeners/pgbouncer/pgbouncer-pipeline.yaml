@@ -1,13 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: cryptomining-pipeline
+  name: pgbouncer-pipeline
 spec:
   params:
     - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
-    - name: source_directory
     - name: script_repo
     - name: script_branch
     - name: script_directory
@@ -64,7 +63,7 @@ spec:
     - name: deploy-cluster-1
       runAfter: [clone-config-repo]
       taskRef:
-        name:  deploy-cryptomining
+        name:  deploy-pgbouncer
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
@@ -76,18 +75,14 @@ spec:
           value: $(params.clusterName1)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: source_directory
-          value: $(params.source_directory)
         - name: helmVersion
           value: $(params.helmVersion)
-        - name: config_directory
-          value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-2
       runAfter: [deploy-cluster-1]
       taskRef:
-        name:  deploy-cryptomining
+        name:  deploy-pgbouncer
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
@@ -99,18 +94,14 @@ spec:
           value: $(params.clusterName2)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: source_directory
-          value: $(params.source_directory)
         - name: helmVersion
           value: $(params.helmVersion)
-        - name: config_directory
-          value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
     - name: deploy-cluster-3
       runAfter: [deploy-cluster-2]
       taskRef:
-        name:  deploy-cryptomining
+        name:  deploy-pgbouncer
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)

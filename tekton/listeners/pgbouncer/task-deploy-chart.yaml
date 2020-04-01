@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: deploy-cryptomining
+  name: deploy-pgbouncer
 spec:
   inputs:
     params:
@@ -16,7 +16,6 @@ spec:
         default: 'true'
       - name: chartNamespace
         default: opentoolchain
-      - name: helmVersion
       - name: script_directory
   stepTemplate:
     env:
@@ -45,6 +44,16 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: VAULT_SIDEKICK_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_ROLE_ID
+      - name: VAULT_SIDEKICK_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_SECRET_ID
   steps:
   - name: deploy
     image: $(inputs.params.deployBaseImage)
@@ -52,22 +61,16 @@ spec:
     env:
       - name: HOME
         value: "/root"
-      - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
       - name: SKIP
         value: $(inputs.params.skipDeploy)
       - name: CLUSTER_NAME
         value: $(inputs.params.clusterName)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
-      - name: HELM_VERSION
-        value: $(inputs.params.helmVersion)
       - name: CHART_NAMESPACE
         value: $(inputs.params.chartNamespace)
       - name: SCRIPT_DIRECTORY
         value: $(inputs.params.script_directory)
-      - name: DEVOPS_CONFIG
-        value: $(inputs.params.config_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -94,11 +97,7 @@ spec:
         set -x
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
         set +e
-        chmod a+x ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
-        chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
-
-        bash ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
-        bash ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
+        bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer.sh
     volumeMounts:
       - mountPath: /workspace
         name: task-volume

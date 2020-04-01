@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: cryptomining-detector-us-south-trigger-dev
+  name: pgbouncer-au-syd-trigger-dev
 spec:
   params:
     - name: source_repo
@@ -79,7 +79,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-crypto-us-south-$(uid)-pvc
+        name: $(params.source_branch)-pgbouncer-au-syd-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -91,17 +91,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-crypto-us-south-$(uid)
+        name: $(params.source_branch)-pgbouncer-au-syd-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "cryptomining-detector-us-south-trigger-dev"
+          generatedBy: "pgbouncer-au-syd-trigger-dev"
       spec:
         pipelineRef:
-          name: cryptomining-pipeline
+          name: pgbouncer-pipeline
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-crypto-us-south-$(uid)-pvc
+            value: $(params.source_branch)-pgbouncer-au-syd-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -140,7 +140,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: cryptomining-detector-us-south-binding-dev
+  name: pgbouncer-au-syd-binding-dev
 spec:
   params:
     - name: script_repo
@@ -150,7 +150,7 @@ spec:
     - name: script_directory
       value: "cd-pipeline-kubernetes"
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/cryptomining-detector.git"
+      value: "https://github.ibm.com/org-ids/pgbouncer.git"
     - name: source_branch
       value: "master"
     - name: config_repo
@@ -160,31 +160,31 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: environment
-      value: "us-south"
+      value: "au-syd"
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-pw-dal10-prod
+      value: otc-pw-syd01-prod
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-pw-dal12-prod
+      value: otc-pw-au-syd-prod
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: otc-pw-dal13-prod
+      value: 'none'
     - name: skipDeploy3
-      value: "false"
+      value: "true"
     - name: helmVersion
       value: "v2.14.3"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: cryptomining-detector-us-south-dev
+  name: pgbouncer-au-syd-dev
 spec:
   triggers:
     - binding:
-        name: cryptomining-detector-us-south-binding-dev
+        name: pgbouncer-au-syd-binding-dev
       template:
-        name: cryptomining-detector-us-south-trigger-dev
+        name: pgbouncer-au-syd-trigger-dev
