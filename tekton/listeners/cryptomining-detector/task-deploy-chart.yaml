@@ -18,6 +18,7 @@ spec:
         default: opentoolchain
       - name: helmVersion
       - name: script_directory
+      - name: config_directory
   stepTemplate:
     env:
       - name: API
