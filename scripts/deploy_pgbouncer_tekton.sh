@@ -14,7 +14,6 @@ DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/pgbouncer_values.yaml
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 
-set -x
 # install vault
 curl -o v.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_linux_amd64.zip
 unzip v.zip
