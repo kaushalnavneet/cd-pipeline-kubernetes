@@ -159,7 +159,7 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: environment
-      value: "development"
+      value: "dev"
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
