@@ -7,7 +7,6 @@ spec:
     - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
-    - name: source_directory
     - name: script_repo
     - name: script_branch
     - name: script_directory
@@ -76,8 +75,6 @@ spec:
           value: $(params.clusterName1)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: source_directory
-          value: $(params.source_directory)
         - name: helmVersion
           value: $(params.helmVersion)
         - name: config_directory
@@ -99,8 +96,6 @@ spec:
           value: $(params.clusterName2)
         - name: chartNamespace
           value: $(params.chartNamespace)
-        - name: source_directory
-          value: $(params.source_directory)
         - name: helmVersion
           value: $(params.helmVersion)
         - name: config_directory

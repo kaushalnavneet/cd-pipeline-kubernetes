@@ -52,8 +52,6 @@ spec:
     env:
       - name: HOME
         value: "/root"
-      - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
       - name: SKIP
         value: $(inputs.params.skipDeploy)
       - name: CLUSTER_NAME
