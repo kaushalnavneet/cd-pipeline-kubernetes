@@ -90,8 +90,9 @@ spec:
         ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
         set -x
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
-        set +e
-        bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer.sh
+        set -e
+        chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
+        bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
     volumeMounts:
       - mountPath: /workspace
         name: task-volume
