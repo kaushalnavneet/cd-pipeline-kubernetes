@@ -44,6 +44,9 @@ spec:
         default: ''
       - name: imageTag
       - name: dockerFile
+        value: ''
+      - name: imageTag
+        value: ''
       - name: environment
         default: ''
   steps:
@@ -148,7 +151,7 @@ spec:
       - name: DOCKER_USERNAME
         value: $(inputs.params.dockerUsername)
       - name: DOCKER_PASSWORD
-        value: $(inputs.params.dockerPassword)
+        value: $(inputs.params.accountApiKey1416501)
       - name: APPLICATION_VERSION
         value: $(inputs.params.imageTag)
       - name: ENVIRONMENT
