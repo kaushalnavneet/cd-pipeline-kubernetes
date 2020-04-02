@@ -35,6 +35,16 @@ spec:
       - name: dockerhubPassword
       - name: envTag
       - name: skipVA
+      - name: registryUrl
+        default: us.icr.io
+      - name: registryNamespace
+        default: opentoolchain
+      - name: imageName
+        default: ''
+      - name: imageTag
+      - name: dockerFile
+      - name: environment
+        default: ''
   steps:
   - name: run-base
     image: $(inputs.params.runBaseImage)
