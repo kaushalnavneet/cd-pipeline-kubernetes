@@ -63,6 +63,8 @@ spec:
             value: $(params.envTag)
           - name: pipelinePVC
             value: agentbuild-$(uid)-pvc
+          - name: skipVA
+            value: $(params.skipVA)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -74,6 +76,8 @@ spec:
       value: master
     - name: envTag
       value: -dev
+    - name: skipVA
+      value: "true"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
