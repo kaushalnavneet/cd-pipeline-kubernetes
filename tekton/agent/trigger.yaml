@@ -77,7 +77,7 @@ spec:
     - name: envTag
       value: -dev
     - name: skipVA
-      value: "true"
+      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener

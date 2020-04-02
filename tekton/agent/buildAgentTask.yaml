@@ -164,6 +164,7 @@ spec:
           echo "Skipping VA"
           exit 0
         fi
+        env
         APPLICATION_VERSION=$(cat /artifacts/appVersion)
         if [ "${ENVIRONMENT}" = "development" ]; then
           exit 0
