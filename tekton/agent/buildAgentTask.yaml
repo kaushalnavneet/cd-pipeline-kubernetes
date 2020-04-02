@@ -44,9 +44,9 @@ spec:
         default: ''
       - name: imageTag
       - name: dockerFile
-        value: ''
+        default: ''
       - name: imageTag
-        value: ''
+        default: ''
       - name: environment
         default: ''
   steps:
