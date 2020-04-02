@@ -42,7 +42,6 @@ spec:
         default: opentoolchain
       - name: imageName
         default: ''
-      - name: imageTag
       - name: dockerFile
         default: ''
       - name: imageTag
