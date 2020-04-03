@@ -56,6 +56,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: HELM_OPTIONS
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: HELM_OPTIONS
   steps:
   - name: deploy
     image: $(inputs.params.deployBaseImage)
@@ -168,12 +173,12 @@ spec:
           if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
           fi
-          helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+          helm install ${HELM_OPTIONS}  --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
-          helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+          helm upgrade ${HELM_OPTIONS} --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
