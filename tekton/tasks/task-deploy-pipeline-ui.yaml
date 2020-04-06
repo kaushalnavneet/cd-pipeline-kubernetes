@@ -98,6 +98,7 @@ spec:
         cd "${SOURCE_DIRECTORY}"
         WORKDIR=${WORKDIR:-/work}
 
+        echo -n "e59b814d758df12e52abe58b85cc47c9694c78d5-202004061940UTC" > /workspace/appVersion
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
