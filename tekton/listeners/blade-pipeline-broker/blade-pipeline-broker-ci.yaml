@@ -30,6 +30,9 @@ spec:
       default: default
     - name: toolchainId
       description: The IBM Cloud Kubernetes cluster region
+    - name: HELM_OPTIONS
+      description: extra helm options used for helm deployment
+      default: ""
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
@@ -43,6 +46,8 @@ spec:
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
+        HELM_OPTIONS: $(params.HELM_OPTIONS)
+
     - apiVersion: v1
       kind: Secret
       metadata:
