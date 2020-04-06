@@ -98,10 +98,14 @@ spec:
         cd "${SOURCE_DIRECTORY}"
         WORKDIR=${WORKDIR:-/work}
 
+        set -x
         echo -n "e59b814d758df12e52abe58b85cc47c9694c78d5-202004061940UTC" > /workspace/appVersion
+        cat /workspace/appVersion
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
+        set +x
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+        set -x
         
         IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
