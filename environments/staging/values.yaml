@@ -230,7 +230,6 @@ pipeline:
         apiTest__monitorInterval: "60000"
         auth__ibmId: pipeauto@us.ibm.com
         log4js_logmet_component: pipeline-consumption-k8s-ys1-int
-        slack__webhookUrl: https://hooks.slack.com/services/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
   pipeline-ui:
     vault:
       secretPaths:
