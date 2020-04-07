@@ -99,8 +99,9 @@ spec:
         WORKDIR=${WORKDIR:-/work}
 
         set -x
-        echo -n "e59b814d758df12e52abe58b85cc47c9694c78d5-202004061940UTC" > /workspace/appVersion
+        echo -n "e59b814d758df12e52abe58b85cc47c9694c78d5-202004070106UTC" > /workspace/appVersion
         cat /workspace/appVersion
+        echo ""
 
         export HELM_VERSION=2.14.3
         export BASE_URL="https://get.helm.sh"
