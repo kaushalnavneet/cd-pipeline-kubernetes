@@ -117,8 +117,7 @@ spec:
 livenessProbe:
 {{- if .Values.probes.liveness.exec }}
   exec:
-    command:
-    {{.Values.probes.liveness.exec.command}}
+    command: {{.Values.probes.liveness.exec.command}}
 {{- else }}
   httpGet:
     path: {{.Values.probes.liveness.path | default "/version"}}
