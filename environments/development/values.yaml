@@ -24,6 +24,7 @@ pipeline:
         periodSeconds: 15
         timeoutSeconds: 5
       readiness:
+        enabled: true
         initialDelay: 5
         periodSeconds: 15
         timeoutSeconds: 10
@@ -521,7 +522,15 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
-      enabled: false
+      enabled: true
+      readiness:
+        enabled: false
+      liveness:
+        exec:
+          command:
+          - service
+          - travis-worker
+          - status
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
     terminationGracePeriodSeconds: 4000
     configmap:
