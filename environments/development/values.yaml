@@ -527,7 +527,7 @@ pipeline:
         enabled: false
       liveness:
         exec:
-          command: "[service, travis-worker, status]"
+          command: "[/bin/sh, \"-c\", \"service travis-worker status\"]"
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
     terminationGracePeriodSeconds: 4000
     configmap:
