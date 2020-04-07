@@ -127,6 +127,8 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
+          - name: helmOptions
+            value: $(params.helmOptions)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
