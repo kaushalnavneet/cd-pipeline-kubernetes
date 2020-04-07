@@ -101,6 +101,14 @@ spec:
         set -x
         echo -n "e59b814d758df12e52abe58b85cc47c9694c78d5-202004061940UTC" > /workspace/appVersion
         cat /workspace/appVersion
+
+        export HELM_VERSION=2.14.3
+        export BASE_URL="https://get.helm.sh"
+        export ENV TAR_FILE="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
+        curl -L ${BASE_URL}/${TAR_FILE} | tar xvz
+        mv linux-amd64/helm .
+        chmod +x ./helm
+        rm -rf linux-amd64
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         set +x
@@ -146,21 +154,21 @@ spec:
         tmp=$(mktemp)
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
-        helm dep up ${COMPONENT_NAME}
+        ./helm dep up ${COMPONENT_NAME}
         set -x
-        helm version
+        ./helm version
         set +e
-        if ! helm list ${COMPONENT_NAME}; then
-          deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
+        if ! ./helm list ${COMPONENT_NAME}; then
+          deleted=$(./helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
           set -e
           if [ ! -z "$deleted" ]; then
-            helm delete --purge ${COMPONENT_NAME}
+            ./helm delete --purge ${COMPONENT_NAME}
           fi
-          helm install ${HELM_OPTIONS} --name ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+          ./helm install ${HELM_OPTIONS} --name ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
-          helm upgrade ${HELM_OPTIONS} --force ${COMPONENT_NAME} ${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+          ./helm upgrade ${HELM_OPTIONS} --force ${COMPONENT_NAME} ${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
         set +x
 
