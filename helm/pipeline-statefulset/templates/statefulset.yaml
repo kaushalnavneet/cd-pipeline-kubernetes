@@ -82,18 +82,12 @@ spec:
 # Define overrides for your Container here, e.g.
 {{- if .Values.probes.enabled }}
 livenessProbe:
-{{- if .Values.probes.liveness.exec }}
-  exec:
-    {{.Values.probes.liveness.exec}}
-{{- else }}
   httpGet:
     path: {{.Values.probes.liveness.path | default "/version"}}
     port: 80
-{{- end }}
   initialDelaySeconds: {{.Values.probes.liveness.initialDelay | default 30}}
   timeoutSeconds: {{.Values.probes.liveness.timeoutSeconds | default 3}}
   periodSeconds: {{.Values.probes.liveness.periodSeconds | default 30}}
-{{- if .Values.probes.readiness.enabled }}
 readinessProbe:
   httpGet:
     path: {{.Values.probes.readiness.path | default "/status"}}
@@ -101,7 +95,6 @@ readinessProbe:
   initialDelaySeconds: {{.Values.probes.readiness.initialDelay | default 30}}
   timeoutSeconds: {{.Values.probes.readiness.timeoutSeconds | default 3}}
   periodSeconds: {{.Values.probes.readiness.periodSeconds | default 30}}
-{{- end }}
 {{- end }}
 env:
 {{ $fullname := include "common.fullname" . }}
