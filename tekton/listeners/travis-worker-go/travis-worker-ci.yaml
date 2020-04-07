@@ -131,6 +131,8 @@ spec:
             value: $(params.dockerFile)
           - name: runBaseImage
             value: $(params.runBaseImage)
+          - name: helmOptions
+            value: $(params.helmOptions)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding

@@ -28,6 +28,8 @@ spec:
         default: 'development'
       - name: skipDeploy
         default: 'false'
+      - name: helmOptions
+        default: ''
   stepTemplate:
     env:
       - name: API
@@ -79,6 +81,8 @@ spec:
         value: $(inputs.params.clusterNamespace)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
+      - name: HELM_OPTIONS
+        value: $(inputs.params.helmOptions)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
