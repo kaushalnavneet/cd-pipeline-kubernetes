@@ -528,8 +528,8 @@ pipeline:
       liveness:
         exec:
           command: "[/bin/sh, \"-c\", \"service travis-worker status\"]"
-        initialDelay: 120
-        periodSeconds: 60
+        initialDelay: 300
+        periodSeconds: 300
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
     terminationGracePeriodSeconds: 4000
     configmap:
