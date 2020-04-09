@@ -52,7 +52,7 @@ spec:
           - name: idsToken
             value: $(params.IDS_TOKEN)
           - name: imageUrl
-            value: us.icr.io/opentoolchain/private-worker-agent
+            value: us.icr.io/devopsotc/private-worker-agent
           - name: accountApiKey1308775
             value: $(params.API_KEY_1308775)
           - name: accountApiKey1416501
