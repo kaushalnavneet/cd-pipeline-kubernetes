@@ -38,7 +38,7 @@ spec:
       - name: registryUrl
         default: us.icr.io
       - name: registryNamespace
-        default: opentoolchain
+        default: devopsotc
       - name: imageName
         default: ''
       - name: dockerFile
