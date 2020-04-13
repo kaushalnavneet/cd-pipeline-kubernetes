@@ -1,0 +1,129 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: build-vbi-trigger-dev
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: imageName
+    - name: imageTag
+    - name: dockerFile
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        API_KEY_1308775: $(params.API_KEY_1308775)
+        API_KEY_1651315: $(params.API_KEY_1651315)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        DOCKER_PASSWORD: $(params.DOCKER_PASSWORD)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.source_branch)-travis-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineRun
+      metadata:
+        name: $(params.source_branch)-travis-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "build-vbi-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-vbi
+        serviceAccountName: docker-build-sa
+        params:
+          - name: pipeline-pvc
+            value: $(params.source_branch)-travis-$(uid)-pvc
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: imageName
+            value: $(params.imageName)
+          - name: imageTag
+            value: $(params.imageTag)
+          - name: dockerFile
+            value: $(params.dockerFile)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: build-vbi-binding-dev
+spec:
+  params:
+    - name: source_repo
+      value: "https://github.ibm.com/org-ids/pipeline-docker-base-image"
+    - name: source_branch
+      value: "master"
+    - name: imageName
+      value: "ibmcom/pipeline-base-image"
+    - name: imageTag
+      value: "2.7"
+    - name: dockerFile
+      value: "2x_Dockerfile"
+---
+apiVersion: tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: build-vbi-dev
+spec:
+  triggers:
+    - binding:
+        name: build-vbi-binding-dev
+      template:
+        name: build-vbi-trigger-dev

@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: pipeline-vbi
+spec:
+  params:
+    - name: pipeline-pvc
+    - name: source_repo
+    - name: source_branch
+    - name: imageName
+    - name: imageTag
+    - name: dockerFile
+    - name: runBaseImage
+      default: 'ibmcom/pipeline-base-image:latest'
+
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: clone-repo-task
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+    - name: build
+      runAfter: [clone-source-repo]
+      taskRef:
+        name:  run-vbi
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: imageName
+          value: $(params.imageName)
+        - name: imageTag
+          value: $(params.imageTag)
+        - name: dockerFile
+          value: $(params.dockerFile)
+        - name: runBaseImage
+          value: $(params.runBaseImage)
