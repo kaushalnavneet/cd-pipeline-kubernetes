@@ -17,6 +17,8 @@ spec:
       - name: extraDockerOpts
         default: --no-cache
       - name: dockerUsername
+      - name: registryRegion
+        default: us-south
   stepTemplate:
     env:
       - name: API
@@ -83,6 +85,8 @@ spec:
         value: $(inputs.params.extraDockerOpts)
       - name: BUILD_CLUSTER
         value: $(inputs.params.buildCluster)
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -93,7 +97,7 @@ spec:
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud plugin install -f kubernetes-service
-        ibmcloud login -a ${API} --apikey ${BUILD_CLUSTER_KEY}
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
         
         IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
         DOCKERFILE=${DOCKERFILE}
