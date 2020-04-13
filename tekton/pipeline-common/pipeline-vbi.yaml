@@ -11,7 +11,7 @@ spec:
     - name: imageTag
     - name: dockerFile
     - name: runBaseImage
-      default: 'ibmcom/pipeline-base-image:latest'
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
     - name: dockerUsername
 
   tasks:
