@@ -125,7 +125,7 @@ spec:
 
         exit 0
         ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${API_KEY}
-
+        ibmcloud cr login
         docker push ${IMAGE_NAME}:${IMAGE_TAG}
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker push command\"
