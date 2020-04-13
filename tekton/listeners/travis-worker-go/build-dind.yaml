@@ -37,6 +37,7 @@ spec:
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
         IMAGE_NAME: $(params.IMAGE_NAME)
+        EXTRA_DOCKER_OPTS: $(params.EXTRA_DOCKER_OPTS)
     - apiVersion: v1
       kind: Secret
       metadata:

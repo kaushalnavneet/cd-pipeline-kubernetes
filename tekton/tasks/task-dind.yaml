@@ -11,8 +11,6 @@ spec:
         default: otc-dal12-build
       - name: dockerFile
       - name: runBaseImage
-      - name: extraDockerOpts
-        default: --no-cache
       - name: registryRegion
         default: us-south
   stepTemplate:
@@ -52,6 +50,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: EXTRA_DOCKER_OPTS
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: EXTRA_DOCKER_OPTS
       - name: IDS_USER
         valueFrom:
           configMapKeyRef:
@@ -76,8 +79,6 @@ spec:
         value: "/root"
       - name: DOCKERFILE
         value: $(inputs.params.dockerFile)
-      - name: EXTRA_DOCKER_OPTS
-        value: $(inputs.params.extraDockerOpts)
       - name: BUILD_CLUSTER
         value: $(inputs.params.buildCluster)
       - name: REGISTRY_REGION
