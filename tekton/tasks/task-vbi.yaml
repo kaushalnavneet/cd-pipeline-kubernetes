@@ -61,6 +61,16 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: IDS_USER
+      - name: IMAGE_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IMAGE_NAME
+      - name: IMAGE_TAG
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IMAGE_TAG
       - name: IDS_TOKEN
         valueFrom:
           secretKeyRef:
@@ -73,10 +83,6 @@ spec:
     env:
       - name: HOME
         value: "/root"
-      - name: IMAGE_NAME
-        value: $(inputs.params.imageName)
-      - name: IMAGE_TAG
-        value: $(inputs.params.imageTag)
       - name: DOCKERFILE
         value: $(inputs.params.dockerFile)
       - name: DOCKER_USERNAME

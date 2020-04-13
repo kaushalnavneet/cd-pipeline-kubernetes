@@ -7,8 +7,6 @@ spec:
     - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
-    - name: imageName
-    - name: imageTag
     - name: dockerFile
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
@@ -32,10 +30,6 @@ spec:
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
-        - name: imageName
-          value: $(params.imageName)
-        - name: imageTag
-          value: $(params.imageTag)
         - name: dockerFile
           value: $(params.dockerFile)
         - name: runBaseImage

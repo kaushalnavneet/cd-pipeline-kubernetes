@@ -6,8 +6,6 @@ spec:
   params:
     - name: source_repo
     - name: source_branch
-    - name: imageName
-    - name: imageTag
     - name: dockerFile
     - name: dockerUsername
 
@@ -38,6 +36,8 @@ spec:
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
+        IMAGE_NAME: $(params.IMAGE_NAME)
+        IMAGE_TAG: $(params.IMAGE_TAG)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -94,10 +94,6 @@ spec:
             value: $(params.source_repo)
           - name: source_branch
             value: $(params.source_branch)
-          - name: imageName
-            value: $(params.imageName)
-          - name: imageTag
-            value: $(params.imageTag)
           - name: dockerFile
             value: $(params.dockerFile)
           - name: dockerUsername
@@ -113,10 +109,6 @@ spec:
       value: "https://github.ibm.com/org-ids/pipeline-docker-base-image"
     - name: source_branch
       value: "master"
-    - name: imageName
-      value: "ibmcom/pipeline-base-image"
-    - name: imageTag
-      value: "2.7"
     - name: dockerFile
       value: "2x_Dockerfile"
     - name: dockerUsername
