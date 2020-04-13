@@ -17,6 +17,7 @@ spec:
       - name: runBaseImage
       - name: extraDockerOpts
         default: --no-cache
+      - name: dockerUsername
   stepTemplate:
     env:
       - name: API

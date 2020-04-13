@@ -9,6 +9,7 @@ spec:
     - name: imageName
     - name: imageTag
     - name: dockerFile
+    - name: dockerUsername
 
     # CD integration
     - name: api
@@ -99,6 +100,8 @@ spec:
             value: $(params.imageTag)
           - name: dockerFile
             value: $(params.dockerFile)
+          - name: dockerUsername
+            value: $(params.dockerUsername)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -116,6 +119,8 @@ spec:
       value: "2.7"
     - name: dockerFile
       value: "2x_Dockerfile"
+    - name: dockerUsername
+      value: "idsorg"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
