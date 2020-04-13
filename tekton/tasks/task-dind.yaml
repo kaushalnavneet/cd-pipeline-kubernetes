@@ -1,0 +1,140 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: run-dind
+spec:
+  inputs:
+    params:
+      - name: task-pvc
+        description: the output pvc - this is where the cloned repository will be stored
+      - name: buildCluster
+        default: otc-dal12-build
+      - name: dockerFile
+      - name: runBaseImage
+      - name: extraDockerOpts
+        default: --no-cache
+      - name: registryRegion
+        default: us-south
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY
+      - name: DOCKER_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DOCKER_PASSWORD
+      - name: API_KEY_1308775
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY_1308775
+      - name: BUILD_CLUSTER_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY_1308775
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+      - name: IDS_USER
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IDS_USER
+      - name: IMAGE_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IMAGE_NAME
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
+  steps:
+  - name: build-dind
+    image: $(inputs.params.runBaseImage)
+    imagePullPolicy: Always
+    env:
+      - name: HOME
+        value: "/root"
+      - name: DOCKERFILE
+        value: $(inputs.params.dockerFile)
+      - name: EXTRA_DOCKER_OPTS
+        value: $(inputs.params.extraDockerOpts)
+      - name: BUILD_CLUSTER
+        value: $(inputs.params.buildCluster)
+      - name: REGISTRY_REGION
+        value: $(inputs.params.registryRegion)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-registry
+        ibmcloud plugin install -f kubernetes-service
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
+        
+        TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+        if [ -z "$GIT_COMMIT" ]; then
+          GIT_COMMIT=$(git rev-parse --verify HEAD)
+        fi
+
+        IMAGE_TAG=${GIT_BRANCH}-${TIMESTAMP}
+        IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
+        DOCKERFILE=${DOCKERFILE}
+
+        ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
+
+        kubectl --namespace otc-dev get pods 
+        kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
+
+        while ! nc -z localhost 2375; do   
+          sleep 0.1
+        done
+
+        export DOCKER_HOST='tcp://localhost:2375'
+
+        echo "Dockerfile: ${DOCKERFILE}"
+
+        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
+
+        if [ $? -ne 0 ]; then
+            echo \"Failed during execution of docker build command\"
+            exit 1
+        fi
+
+        exit 0
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${API_KEY}
+
+        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+        if [ $? -ne 0 ]; then
+            echo \"Failed during execution of docker push command\"
+            exit 1
+        fi
+    volumeMounts:
+      - mountPath: /workspace
+        name: task-volume
+  volumes:
+    - name: task-volume
+      persistentVolumeClaim:
+        claimName: $(inputs.params.task-pvc)
