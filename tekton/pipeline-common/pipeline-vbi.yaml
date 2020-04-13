@@ -12,6 +12,7 @@ spec:
     - name: dockerFile
     - name: runBaseImage
       default: 'ibmcom/pipeline-base-image:latest'
+    - name: dockerUsername
 
   tasks:
     - name: clone-source-repo
@@ -39,3 +40,5 @@ spec:
           value: $(params.dockerFile)
         - name: runBaseImage
           value: $(params.runBaseImage)
+        - name: dockerUsername
+          value: $(params.dockerUsername)

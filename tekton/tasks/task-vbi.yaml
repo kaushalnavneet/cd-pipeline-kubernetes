@@ -7,7 +7,6 @@ spec:
     params:
       - name: task-pvc
         description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
       - name: imageName
         default: ''
       - name: imageTag
