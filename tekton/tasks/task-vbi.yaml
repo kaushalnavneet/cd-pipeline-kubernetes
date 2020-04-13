@@ -83,7 +83,6 @@ spec:
         value: $(inputs.params.extraDockerOpts)
       - name: BUILD_CLUSTER
         value: $(inputs.params.buildCluster)
-        value: ''
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
