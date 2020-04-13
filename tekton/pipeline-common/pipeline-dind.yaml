@@ -33,3 +33,5 @@ spec:
           value: $(params.dockerFile)
         - name: runBaseImage
           value: $(params.runBaseImage)
+        - name: branch
+          value: $(params.source_branch)

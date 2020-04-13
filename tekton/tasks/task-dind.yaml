@@ -10,6 +10,7 @@ spec:
       - name: buildCluster
         default: otc-dal12-build
       - name: dockerFile
+      - name: branch
       - name: runBaseImage
       - name: registryRegion
         default: us-south
@@ -83,6 +84,8 @@ spec:
         value: $(inputs.params.buildCluster)
       - name: REGISTRY_REGION
         value: $(inputs.params.registryRegion)
+      - name: GIT_BRANCH
+        value: $(inputs.params.branch)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -96,10 +99,6 @@ spec:
         ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
         
         TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-        if [ -z "$GIT_COMMIT" ]; then
-          GIT_COMMIT=$(git rev-parse --verify HEAD)
-        fi
-
         IMAGE_TAG=${GIT_BRANCH}-${TIMESTAMP}
         IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
         DOCKERFILE=${DOCKERFILE}
