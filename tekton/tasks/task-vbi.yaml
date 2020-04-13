@@ -7,9 +7,6 @@ spec:
     params:
       - name: task-pvc
         description: the output pvc - this is where the cloned repository will be stored
-      - name: imageName
-        default: ''
-      - name: imageTag
       - name: buildCluster
         default: otc-dal12-build
       - name: dockerFile
