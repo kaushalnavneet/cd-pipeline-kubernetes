@@ -93,6 +93,19 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: go1.10
+    - name: go1.14
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: go1.14
     - name: nodejs10-run
       runAfter: [nodejs10]
       taskRef:
