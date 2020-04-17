@@ -92,7 +92,7 @@ spec:
         - name: imageName
           value: cd-build-base
         - name: imageTag
-          value: go1.10
+          value: go1.14
     - name: nodejs10-run
       runAfter: [nodejs10]
       taskRef:
