@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: otc-github-relay-blade-trigger-chart
+  name: blade-pipeline-broker-trigger-chart
 spec:
   params:
     - name: source_repo
@@ -93,7 +93,7 @@ spec:
         name: $(params.short_source_branch)-blade-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "otc-github-relay-blade-trigger-chart"
+          generatedBy: "blade-pipeline-broker-trigger-chart"
       spec:
         pipelineRef:
           name: pipeline-chart
@@ -137,7 +137,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: otc-github-relay-blade-binding-chart
+  name: blade-pipeline-broker-binding-chart
 spec:
   params:
     - name: source_repo
@@ -178,10 +178,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: otc-github-relay-blade-chart
+  name: blade-pipeline-broker-chart
 spec:
   triggers:
     - binding:
-        name: otc-github-relay-blade-binding-chart
+        name: blade-pipeline-broker-binding-chart
       template:
-        name: otc-github-relay-blade-trigger-chart
+        name: blade-pipeline-broker-trigger-chart
