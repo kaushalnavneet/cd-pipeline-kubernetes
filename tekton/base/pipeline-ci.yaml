@@ -13,7 +13,6 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
-    - name: extraDockerOpts
   tasks:
     - name: clone-source-repo
       taskRef:
@@ -55,8 +54,6 @@ spec:
           value: deploy
         - name: tagSuffix
           value: ''
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: nodejs10
       runAfter: [clone-config-repo]
       taskRef:
@@ -70,8 +67,6 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: nodejs10
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: java
       runAfter: [clone-config-repo]
       taskRef:
@@ -85,8 +80,6 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: java
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: go
       runAfter: [clone-config-repo]
       taskRef:
@@ -100,8 +93,6 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: go1.14
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: nodejs10-run
       runAfter: [nodejs10]
       taskRef:
@@ -119,8 +110,6 @@ spec:
           value: docker/Dockerfile.nodejs10.run
         - name: imageTag
           value: 10secure
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: nodejs10-va
       runAfter: [nodejs10-run]
       taskRef:
@@ -155,8 +144,6 @@ spec:
           value: docker/Dockerfile.java.run
         - name: imageTag
           value: secure
-        - name: extraDockerOpts
-          value: $(params.extraDockerOpts)
     - name: websphere-liberty-va
       runAfter: [websphere-liberty-run]
       taskRef:
