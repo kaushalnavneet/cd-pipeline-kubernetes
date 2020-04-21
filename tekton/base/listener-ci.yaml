@@ -27,6 +27,8 @@ spec:
       default: default
     - name: toolchainId
       description: The IBM Cloud Kubernetes cluster region
+    - name: extraDockerOpts
+      default: --no-cache
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
@@ -102,6 +104,8 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
+          - name: extraDockerOpts
+            value: $(params.extraDockerOpts)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
