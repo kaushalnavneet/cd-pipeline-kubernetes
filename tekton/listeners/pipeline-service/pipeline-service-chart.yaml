@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: otc-github-relay-pub-trigger-stage
+  name: pipeline-service-trigger-chart
 spec:
   params:
     - name: source_repo
@@ -78,7 +78,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.short_source_branch)-pub-$(uid)-pvc
+        name: $(params.short_source_branch)-pservice-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -89,18 +89,18 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.short_source_branch)-base-run
-        name: $(params.short_source_branch)-pub-$(uid)
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.short_source_branch)-pservice-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "otc-github-relay-pub-trigger-stage"
+          generatedBy: "pipeline-service-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-stage
+          name: pipeline-chart
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.short_source_branch)-pub-$(uid)-pvc
+            value: $(params.short_source_branch)-pservice-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -133,55 +133,59 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
+          - name: runBaseImage
+            value: $(params.runBaseImage)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: otc-github-relay-pub-binding-stage
+  name: pipeline-service-binding-chart
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/otc-github-relay-pub.git"
+      value: "https://github.ibm.com/org-ids/pipeline-service.git"
     - name: source_branch
       value: "integration"
     - name: short_source_branch
       value: "int-charts"
     - name: source_directory
-      value: "otc-github-relay-pub"
+      value: "pipeline-service"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "otc-github-relay-pub/pipeline-config"
+      value: "pipeline-service/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
-      value: "otc-github-relay-pub/cd-pipeline-kubernetes"
+      value: "pipeline-service/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "otc-github-relay-pub/devops-config"
+      value: "pipeline-service/devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/otc-github-relay-pub"
+      value: "us.icr.io/devopsotc/pipeline-service"
     - name: environment
       value: "staging"
     - name: skipBuild
       value: "false"
     - name: skipVA
       value: "false"
+    - name: runBaseImage
+      value: us.icr.io/opentoolchain/cd-build-base:java
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: otc-github-relay-pub-stage
+  name: pipeline-service-chart
 spec:
   triggers:
     - binding:
-        name: otc-github-relay-pub-binding-stage
+        name: pipeline-service-binding-chart
       template:
-        name: otc-github-relay-pub-trigger-stage
+        name: pipeline-service-trigger-chart

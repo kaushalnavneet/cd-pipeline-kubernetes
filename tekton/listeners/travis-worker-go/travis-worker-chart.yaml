@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: otc-github-relay-blade-trigger-stage
+  name: travis-worker-go-trigger-chart
 spec:
   params:
     - name: source_repo
@@ -19,6 +19,7 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+    - name: runBaseImage
 
     # CD integration
     - name: api
@@ -78,7 +79,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.short_source_branch)-blade-$(uid)-pvc
+        name: $(params.short_source_branch)-travis-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -89,18 +90,17 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.source_branch)-base-run
-        name: $(params.short_source_branch)-blade-$(uid)
+        name: $(params.short_source_branch)-travis-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "otc-github-relay-blade-trigger-stage"
+          generatedBy: "travis-worker-go-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-stage
+          name: pipeline-chart
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.short_source_branch)-blade-$(uid)-pvc
+            value: $(params.short_source_branch)-travis-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -133,55 +133,63 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
+          - name: dockerFile
+            value: $(params.dockerFile)
+          - name: runBaseImage
+            value: $(params.runBaseImage)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: otc-github-relay-blade-binding-stage
+  name: travis-worker-go-binding-chart
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/blade-pipeline-broker.git"
+      value: "https://github.ibm.com/org-ids/travis-worker-go.git"
     - name: source_branch
       value: "integration"
     - name: short_source_branch
       value: "int-charts"
     - name: source_directory
-      value: "blade-pipeline-broker"
+      value: "travis-worker-go"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "blade-pipeline-broker/pipeline-config"
+      value: "travis-worker-go/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
-      value: "blade-pipeline-broker/cd-pipeline-kubernetes"
+      value: "travis-worker-go/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "blade-pipeline-broker/devops-config"
+      value: "travis-worker-go/devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/blade-pipeline-broker"
+      value: "us.icr.io/devopsotc/travis-worker"
     - name: environment
       value: "staging"
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "false"
+      value: "true"
+    - name: dockerFile
+      value: "Dockerfile.travis-worker"
+    - name: runBaseImage
+      value: us.icr.io/opentoolchain/cd-build-base:go1.10
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: otc-github-relay-blade-stage
+  name: travis-worker-go-chart
 spec:
   triggers:
     - binding:
-        name: otc-github-relay-blade-binding-stage
+        name: travis-worker-go-binding-chart
       template:
-        name: otc-github-relay-blade-trigger-stage
+        name: travis-worker-go-trigger-chart

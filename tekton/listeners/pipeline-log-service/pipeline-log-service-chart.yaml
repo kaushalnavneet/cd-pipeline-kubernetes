@@ -1,12 +1,11 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: private-worker-service-trigger-stage
+  name: pipeline-log-service-trigger-chart
 spec:
   params:
     - name: source_repo
     - name: source_branch
-    - name: short_source_branch
     - name: source_directory
     - name: charts_repo
     - name: charts_branch
@@ -78,7 +77,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.short_source_branch)-pws-$(uid)-pvc
+        name: $(params.source_branch)-log-service-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -90,17 +89,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.short_source_branch)-pws-$(uid)
+        name: $(params.source_branch)-log-service-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "private-worker-service-trigger-stage"
+          generatedBy: "pipeline-log-service-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-stage
+          name: pipeline-chart
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.short_source_branch)-pws-$(uid)-pvc
+            value: $(params.source_branch)-log-service-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -133,47 +132,39 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
-          - name: artifactoryTokenBase64
-            value: $(params.ARTIFACTORY_TOKEN_BASE64)
-          - name: artifactoryId
-            value: $(params.ARTIFACTORY_ID)
-          - name: consoleAuthToken
-            value: $(params.CONSOLE_AUTH_TOKEN)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: private-worker-service-binding-stage
+  name: pipeline-log-service-binding-chart
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/private-worker-service.git"
+      value: "https://github.ibm.com/org-ids/pipeline-log-service.git"
     - name: source_branch
       value: "integration"
-    - name: short_source_branch
-      value: "int-charts"
     - name: source_directory
-      value: "private-worker-service"
+      value: "pipeline-log-service"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "private-worker-service/pipeline-config"
+      value: "pipeline-log-service/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
-      value: "private-worker-service/cd-pipeline-kubernetes"
+      value: "pipeline-log-service/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "private-worker-service/devops-config"
+      value: "pipeline-log-service/devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/private-worker-service"
+      value: "us.icr.io/devopsotc/pipeline-log-service"
     - name: environment
       value: "staging"
     - name: skipBuild
@@ -184,10 +175,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: private-worker-service-stage
+  name: pipeline-log-service-chart
 spec:
   triggers:
     - binding:
-        name: private-worker-service-binding-stage
+        name: pipeline-log-service-binding-chart
       template:
-        name: private-worker-service-trigger-stage
+        name: pipeline-log-service-trigger-chart

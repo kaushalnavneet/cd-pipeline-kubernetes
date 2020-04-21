@@ -1,11 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: pipeline-log-service-trigger-stage
+  name: pipeline-artifact-repository-service-trigger-chart
 spec:
   params:
     - name: source_repo
     - name: source_branch
+    - name: short_source_branch
     - name: source_directory
     - name: charts_repo
     - name: charts_branch
@@ -77,7 +78,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-log-service-$(uid)-pvc
+        name: $(params.short_source_branch)-ars-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -89,17 +90,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-log-service-$(uid)
+        name: $(params.short_source_branch)-ars-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "pipeline-log-service-trigger-stage"
+          generatedBy: "pipeline-artifact-repository-service-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-stage
+          name: pipeline-chart
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.source_branch)-log-service-$(uid)-pvc
+            value: $(params.short_source_branch)-ars-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -136,35 +137,37 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: pipeline-log-service-binding-stage
+  name: pipeline-artifact-repository-service-binding-chart
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/pipeline-log-service.git"
+      value: "https://github.ibm.com/org-ids/pipeline-artifact-repository-service.git"
     - name: source_branch
       value: "integration"
+    - name: short_source_branch
+      value: "int-charts"
     - name: source_directory
-      value: "pipeline-log-service"
+      value: "pipeline-artifact-repository-service"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "pipeline-log-service/pipeline-config"
+      value: "pipeline-artifact-repository-service/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
-      value: "pipeline-log-service/cd-pipeline-kubernetes"
+      value: "pipeline-artifact-repository-service/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "pipeline-log-service/devops-config"
+      value: "pipeline-artifact-repository-service/devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-log-service"
+      value: "us.icr.io/devopsotc/pipeline-artifact-repository-service"
     - name: environment
       value: "staging"
     - name: skipBuild
@@ -175,10 +178,10 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: pipeline-log-service-stage
+  name: pipeline-artifact-repository-service-chart
 spec:
   triggers:
     - binding:
-        name: pipeline-log-service-binding-stage
+        name: pipeline-artifact-repository-service-binding-chart
       template:
-        name: pipeline-log-service-trigger-stage
+        name: pipeline-artifact-repository-service-trigger-chart

@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: travis-worker-go-trigger-stage
+  name: pipeline-ui-trigger-chart
 spec:
   params:
     - name: source_repo
@@ -19,7 +19,6 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
-    - name: runBaseImage
 
     # CD integration
     - name: api
@@ -79,7 +78,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.short_source_branch)-travis-$(uid)-pvc
+        name: $(params.short_source_branch)-pu-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -90,17 +89,18 @@ spec:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
-        name: $(params.short_source_branch)-travis-$(uid)
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.short_source_branch)-pu-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "travis-worker-go-trigger-stage"
+          generatedBy: "pipeline-ui-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-stage
+          name: pipeline-chart
         serviceAccountName: docker-build-sa
         params:
           - name: pipeline-pvc
-            value: $(params.short_source_branch)-travis-$(uid)-pvc
+            value: $(params.short_source_branch)-pu-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -133,63 +133,61 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
-          - name: dockerFile
-            value: $(params.dockerFile)
-          - name: runBaseImage
-            value: $(params.runBaseImage)
+          - name: artifactoryTokenBase64
+            value: $(params.ARTIFACTORY_TOKEN_BASE64)
+          - name: artifactoryId
+            value: $(params.ARTIFACTORY_ID)
+          - name: consoleAuthToken
+            value: $(params.CONSOLE_AUTH_TOKEN)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: travis-worker-go-binding-stage
+  name: pipeline-ui-binding-chart
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/travis-worker-go.git"
+      value: "https://github.ibm.com/org-ids/pipeline-ui.git"
     - name: source_branch
       value: "integration"
     - name: short_source_branch
       value: "int-charts"
     - name: source_directory
-      value: "travis-worker-go"
+      value: "pipeline-ui"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "travis-worker-go/pipeline-config"
+      value: "pipeline-ui/pipeline-config"
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
       value: "master"
     - name: script_directory
-      value: "travis-worker-go/cd-pipeline-kubernetes"
+      value: "pipeline-ui/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "travis-worker-go/devops-config"
+      value: "pipeline-ui/devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/travis-worker"
+      value: "us.icr.io/devopsotc/pipeline-ui"
     - name: environment
       value: "staging"
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "true"
-    - name: dockerFile
-      value: "Dockerfile.travis-worker"
-    - name: runBaseImage
-      value: us.icr.io/opentoolchain/cd-build-base:go1.10
+      value: "false"
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: travis-worker-go-stage
+  name: pipeline-ui-chart
 spec:
   triggers:
     - binding:
-        name: travis-worker-go-binding-stage
+        name: pipeline-ui-binding-chart
       template:
-        name: travis-worker-go-trigger-stage
+        name: pipeline-ui-trigger-chart
