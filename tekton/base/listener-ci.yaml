@@ -12,6 +12,7 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+    - name: extraDockerOpts
 
     # CD integration
     - name: api
@@ -26,9 +27,6 @@ spec:
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
     - name: toolchainId
-      description: The IBM Cloud Kubernetes cluster region
-    - name: extraDockerOpts
-      default: --no-cache
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
