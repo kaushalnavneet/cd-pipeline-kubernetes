@@ -20,6 +20,8 @@ spec:
         default: '.build'
       - name: environment
         default: 'development'
+      - name: extraDockerOpts
+        default: '--no-cache'
   stepTemplate:
     env:
       - name: API
@@ -70,6 +72,8 @@ spec:
         value: $(inputs.params.source_directory)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
+      - name: EXTRA_DOCKER_OPTS
+        value: $(inputs.params.extraDockerOpts)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
