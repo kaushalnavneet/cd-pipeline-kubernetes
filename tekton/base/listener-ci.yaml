@@ -10,9 +10,6 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: imageName
-    - name: imageTag
-    - name: extraDockerOpts
 
     # CD integration
     - name: api
@@ -102,8 +99,6 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
-          - name: extraDockerOpts
-            value: $(params.extraDockerOpts)
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
