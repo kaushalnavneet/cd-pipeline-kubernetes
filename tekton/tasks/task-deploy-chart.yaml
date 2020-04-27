@@ -169,7 +169,7 @@ spec:
           if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
           fi
-          helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+          helm install --dry-run --debug --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
