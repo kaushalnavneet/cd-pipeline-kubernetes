@@ -161,6 +161,7 @@ spec:
         fi
 
         set +e
+        helm version
         if ! helm list ${COMPONENT_NAME}; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
