@@ -154,7 +154,7 @@ spec:
     - name: environment
       value: "us-south"
     - name: clusterNamespace
-      value: devopsotc
+      value: opentoolchain
     - name: clusterName1
       value: otc-pw-dal10-prod
     - name: skipDeploy1

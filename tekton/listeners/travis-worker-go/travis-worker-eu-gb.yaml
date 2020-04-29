@@ -154,7 +154,7 @@ spec:
     - name: environment
       value: "eu-gb"
     - name: clusterNamespace
-      value: devopsotc
+      value: opentoolchain
     - name: clusterName1
       value: otc-pw-lon04-prod
     - name: skipDeploy1

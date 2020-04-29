@@ -154,7 +154,7 @@ spec:
     - name: environment
       value: "au-syd"
     - name: clusterNamespace
-      value: devopsotc
+      value: opentoolchain
     - name: clusterName1
       value: otc-pw-syd01-prod
     - name: skipDeploy1
