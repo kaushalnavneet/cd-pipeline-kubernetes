@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: pipeline-template
@@ -33,7 +33,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: agentbuild-$(uid)
@@ -66,7 +66,7 @@ spec:
           - name: skipVA
             value: $(params.skipVA)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: agent-0.10.1-pipeline-binding-dev
@@ -79,7 +79,7 @@ spec:
     - name: skipVA
       value: "true"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: manual-agent-0.10.1-listener-dev
@@ -90,7 +90,7 @@ spec:
       template:
         name: pipeline-template
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: agent-0.11.2-pipeline-binding-prod
@@ -103,7 +103,7 @@ spec:
     - name: skipVA
       value: "false"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: manual-agent-0.11.2-listener-prod
@@ -114,7 +114,7 @@ spec:
       template:
         name: pipeline-template
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: agent-0.11.2-pipeline-binding-dev
@@ -127,7 +127,7 @@ spec:
     - name: skipVA
       value: "true"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: manual-agent-0.11.2-listener-dev

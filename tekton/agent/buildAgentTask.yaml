@@ -1,97 +1,96 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: build-agent
 spec:
-  inputs:
-    params:
-      - name: pipelinePVC
-      - name: componentRepo
-      - name: componentRevision
-      - name: idsToken
-      - name: accountRegion
-        default: us-south
-      - name: imageUrl
-      - name: imageName
-        default: ''
-      - name: accountApiKey1308775
-      - name: buildCluster
-        default: otc-dal12-build
-      - name: dockerUsername
-        default: iamapikey
-      - name: accountApiKey1416501
-      - name: runBaseImage
-        default: us.icr.io/opentoolchain/cd-build-base:go1.14
-      - name: extraDockerOpts
-        default: --no-cache --pull
-      - name: idsUser
-        default: idsorg
-      - name: artifactoryToken
-        default: ''
-      - name: artifactoryId
-        default: ''
-      - name: consoleAuthToken
-        default: ''
-      - name: dockerhubPassword
-      - name: envTag
-      - name: skipVA
-      - name: registryUrl
-        default: us.icr.io
-      - name: registryNamespace
-        default: devopsotc
-      - name: imageName
-        default: ''
-      - name: dockerFile
-        default: ''
-      - name: imageTag
-        default: ''
-      - name: environment
-        default: ''
+  params:
+    - name: pipelinePVC
+    - name: componentRepo
+    - name: componentRevision
+    - name: idsToken
+    - name: accountRegion
+      default: us-south
+    - name: imageUrl
+    - name: imageName
+      default: ''
+    - name: accountApiKey1308775
+    - name: buildCluster
+      default: otc-dal12-build
+    - name: dockerUsername
+      default: iamapikey
+    - name: accountApiKey1416501
+    - name: runBaseImage
+      default: us.icr.io/opentoolchain/cd-build-base:go1.14
+    - name: extraDockerOpts
+      default: --no-cache --pull
+    - name: idsUser
+      default: idsorg
+    - name: artifactoryToken
+      default: ''
+    - name: artifactoryId
+      default: ''
+    - name: consoleAuthToken
+      default: ''
+    - name: dockerhubPassword
+    - name: envTag
+    - name: skipVA
+    - name: registryUrl
+      default: us.icr.io
+    - name: registryNamespace
+      default: devopsotc
+    - name: imageName
+      default: ''
+    - name: dockerFile
+      default: ''
+    - name: imageTag
+      default: ''
+    - name: environment
+      default: ''
   steps:
   - name: run-base
-    image: $(inputs.params.runBaseImage)
+    image: $(params.runBaseImage)
     imagePullPolicy: Always
     env:
       - name: IDS_TOKEN
-        value: $(inputs.params.idsToken)
+        value: $(params.idsToken)
       - name: COMPONENT_REPO
-        value: $(inputs.params.componentRepo)
+        value: $(params.componentRepo)
       - name: COMPONENT_REVISION
-        value: $(inputs.params.componentRevision)
+        value: $(params.componentRevision)
       - name: IMAGE_URL
-        value: $(inputs.params.imageUrl)
+        value: $(params.imageUrl)
       - name: API_KEY
-        value: $(inputs.params.accountApiKey1308775)
+        value: $(params.accountApiKey1308775)
       - name: ACCOUNT_REGION
-        value: $(inputs.params.accountRegion)
+        value: $(params.accountRegion)
       - name: BUILD_CLUSTER
-        value: $(inputs.params.buildCluster)
+        value: $(params.buildCluster)
       - name: DOCKER_USERNAME
-        value: $(inputs.params.dockerUsername)
+        value: $(params.dockerUsername)
       - name: DOCKER_PASSWORD
-        value: $(inputs.params.accountApiKey1416501)
+        value: $(params.accountApiKey1416501)
       - name: DOCKER_IMAGE
-        value: $(inputs.params.runBaseImage)
+        value: $(params.runBaseImage)
       - name: OPERATOR_SDK
         value: "true"
       - name: EXTRA_DOCKER_OPTS
-        value: $(inputs.params.extraDockerOpts)
+        value: $(params.extraDockerOpts)
       - name: IDS_USER
-        value: $(inputs.params.idsUser)
+        value: $(params.idsUser)
       - name: ARTIFACTORY_TOKEN_BASE64
-        value: $(inputs.params.artifactoryToken)
+        value: $(params.artifactoryToken)
       - name: ARTIFACTORY_ID
-        value: $(inputs.params.artifactoryId)
+        value: $(params.artifactoryId)
       - name: CONSOLE_AUTH_TOKEN
-        value: $(inputs.params.consoleAuthToken)
+        value: $(params.consoleAuthToken)
       - name: DOCKERHUB_USERNAME
         value: thebog
       - name: DOCKERHUB_PASSWORD
-        value: $(inputs.params.dockerhubPassword)
+        value: $(params.dockerhubPassword)
       - name: DOCKERHUB_IMAGE_NAME
         value: ibmcom/pipeline-private-worker
       - name: ENV_TAG
-        value: $(inputs.params.envTag)
+        value: $(params.envTag)
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -127,35 +126,35 @@ spec:
       - mountPath: /artifacts
         name: task-volume
   - name: run-va
-    image: $(inputs.params.runBaseImage)
+    image: $(params.runBaseImage)
     imagePullPolicy: Always
     env:
       - name: API_KEY
-        value: $(inputs.params.accountApiKey1416501)
+        value: $(params.accountApiKey1416501)
       - name: ACCOUNT_REGION
-        value: $(inputs.params.accountRegion)
+        value: $(params.accountRegion)
       - name: IMAGE_URL
-        value: $(inputs.params.imageUrl)
+        value: $(params.imageUrl)
       - name: IMAGE_REGISTRY
-        value: $(inputs.params.registryUrl)
+        value: $(params.registryUrl)
       - name: IMAGE_NAMESPACE
-        value: $(inputs.params.registryNamespace)
+        value: $(params.registryNamespace)
       - name: IMAGE_NAME
-        value: $(inputs.params.imageName)
+        value: $(params.imageName)
       - name: DOCKERFILE
-        value: $(inputs.params.dockerFile)
+        value: $(params.dockerFile)
       - name: DOCKER_IMAGE
-        value: $(inputs.params.runBaseImage)
+        value: $(params.runBaseImage)
       - name: DOCKER_USERNAME
-        value: $(inputs.params.dockerUsername)
+        value: $(params.dockerUsername)
       - name: DOCKER_PASSWORD
-        value: $(inputs.params.accountApiKey1416501)
+        value: $(params.accountApiKey1416501)
       - name: APPLICATION_VERSION
-        value: $(inputs.params.imageTag)
+        value: $(params.imageTag)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: SKIP
-        value: $(inputs.params.skipVA)
+        value: $(params.skipVA)
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -175,4 +174,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.pipelinePVC)
+        claimName: $(params.pipelinePVC)
