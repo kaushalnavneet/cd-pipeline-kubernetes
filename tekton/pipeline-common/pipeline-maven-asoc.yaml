@@ -23,7 +23,7 @@ spec:
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
     - name: clone-component-repo
       taskRef:
@@ -35,7 +35,7 @@ spec:
           value: $(params.component_source_repo)
         - name: branch
           value: $(params.component_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.component_directory)
     - name: build
       runAfter: [clone-otc-deploy-repo, clone-component-repo]

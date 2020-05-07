@@ -44,7 +44,7 @@ spec:
           value: $(params.script_repo)
         - name: branch
           value: $(params.script_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.script_directory)
     - name: clone-config-repo
       runAfter: [clone-script-repo]
@@ -57,7 +57,7 @@ spec:
           value: $(params.config_repo)
         - name: branch
           value: $(params.config_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.config_directory)
     - name: deploy-cluster-1
       runAfter: [clone-config-repo]

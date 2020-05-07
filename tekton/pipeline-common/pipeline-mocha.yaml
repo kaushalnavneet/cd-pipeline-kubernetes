@@ -43,7 +43,7 @@ spec:
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
     - name: clone-charts-repo
       runAfter: [clone-source-repo]
@@ -56,7 +56,7 @@ spec:
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.charts_directory)
     - name: clone-config-repo
       runAfter: [clone-charts-repo]
@@ -69,7 +69,7 @@ spec:
           value: $(params.config_repo)
         - name: branch
           value: $(params.config_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.config_directory)
     - name: mocha
       runAfter: [clone-config-repo,clone-charts-repo]

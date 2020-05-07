@@ -29,7 +29,7 @@ spec:
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.charts_directory)
     - name: get-deployment-info
       runAfter: [clone-charts-repo]
