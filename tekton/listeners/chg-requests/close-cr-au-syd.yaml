@@ -129,9 +129,9 @@ spec:
     - name: snUrl
       value: 'https://watsontest.service-now.com'
     - name: tocChannel
-      value: '#devops-otc-deployment'
+      value: '#devops-deploy-syd'
     - name: deployChannel
-      value: '#devops-otc-deployment'
+      value: '#devops-deploy-syd'
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
