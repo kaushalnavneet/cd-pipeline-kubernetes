@@ -114,30 +114,29 @@ spec:
         E_DATE=$(( $(date +%s) + 900 ))
 
         # tag message adds link to ServiceNow query using deploy commit hash in the description field
-        PAYLOAD=$(jq --null-input "$(cat <<HERE
+        cat - >/tmp/tmp_$$.json <<HERE
         {
-            assignedto: "$ASSIGNED_TO",
-            system: "$SYSTEM",
-            impact: "N/A",
-            outageduration: "0 00:00:00",
-            priority: "moderate",
-            environment: "$CRN",
-            purpose: "$PURPOSE",
-            description: "$PURPOSE\nDescription/Plan: Delivering changes for:\n$DEPLOY_PACKAGE",
-            backoutplan: "Revert changes and re-deploy.",
-            plannedstart: "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
-            plannedend: "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
-            deploymentready: "yes",
-            type: "standard"
+          "assignedto": "$ASSIGNED_TO",
+          "system": "$SYSTEM",
+          "impact": "N/A",
+          "outageduration": "0 00:00:00",
+          "priority": "moderate",
+          "environment": "$CRN",
+          "purpose": "$PURPOSE",
+          "description": "$PURPOSE\nDescription/Plan: Delivering changes for:\n$DEPLOY_PACKAGE",
+          "backoutplan": "Revert changes and re-deploy.",
+          "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
+          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
+          "deploymentready": "yes",
+          "type": "standard"
         }
         HERE
-        )")
 
         RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
-            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/create" \
+            --data @/tmp/tmp_$$.json "$SN_URL/api/ibmwc/v2/change/create" \
             --silent --show-error)
 
         CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
@@ -201,22 +200,21 @@ spec:
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true" \
           -H  "accept: */*" \
-          -H "Authorization: $BEARER" | jq '. | tojson' )
-        PAYLOAD=$(jq --null-input "$(cat <<HERE
+          -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
+        cat - >/tmp/tmp2_$$.json <<HERE
         {
-            required: "required",
-            system: "$SYSTEM",
-            shortdescription: "Staging test results",
-            description: "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\n",
-            data: $SUMMARY
+          "required": "required",
+          "system": "$SYSTEM",
+          "shortdescription": "Staging test results",
+          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnv: $ENVIRONMENT",
+          "data": $SUMMARY
         }
         HERE
-        )")
         RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
-            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
+            --data @/tmp/tmp2_$$.json "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
             --silent --show-error)
 
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
