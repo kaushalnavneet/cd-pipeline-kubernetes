@@ -172,6 +172,7 @@ spec:
         echo "Checking ServiceNow change request state..."
 
         RESPONSE=$(curl -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
             "$SN_URL/api/ibmwc/v2/change/$CR_ID/read" \
