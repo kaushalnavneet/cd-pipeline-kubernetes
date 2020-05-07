@@ -123,7 +123,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: blade-pipeline-broker-asoc
+  name: blade-pipeline-broker-dedicated-asoc
 spec:
   triggers:
     - binding:
