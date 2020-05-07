@@ -200,7 +200,7 @@ spec:
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json
         BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep integration | tail -1 )
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
-        SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true" \
+        SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$ENVIRONMENT" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
         cat - >"$TMP" <<HERE
@@ -208,7 +208,7 @@ spec:
           "required": "required",
           "system": "$SYSTEM",
           "shortdescription": "Staging test results",
-          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnv: $ENVIRONMENT",
+          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnvironment: $ENVIRONMENT",
           "data": $SUMMARY
         }
         HERE
