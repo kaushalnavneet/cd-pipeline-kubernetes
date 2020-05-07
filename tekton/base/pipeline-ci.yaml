@@ -4,7 +4,6 @@ metadata:
   name: pipeline-base-ci
 spec:
   params:
-    - name: pipeline-pvc
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
@@ -13,39 +12,41 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
         - name: directory-name
           value: $(params.charts_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: clone-config-repo
       runAfter: [clone-source-repo]
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.config_repo)
         - name: branch
           value: $(params.config_branch)
         - name: directory-name
           value: $(params.config_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: deploy
       runAfter: [clone-config-repo]
       taskRef:
         name:  build-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageName
@@ -54,52 +55,56 @@ spec:
           value: deploy
         - name: tagSuffix
           value: ''
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: nodejs10
       runAfter: [clone-config-repo]
       taskRef:
         name: build-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageName
           value: cd-build-base
         - name: imageTag
           value: nodejs10
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: java
       runAfter: [clone-config-repo]
       taskRef:
         name: build-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageName
           value: cd-build-base
         - name: imageTag
           value: java
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: go
       runAfter: [clone-config-repo]
       taskRef:
         name: build-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageName
           value: cd-build-base
         - name: imageTag
           value: go1.14
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: nodejs10-run
       runAfter: [nodejs10]
       taskRef:
         name: run-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
@@ -110,13 +115,14 @@ spec:
           value: docker/Dockerfile.nodejs10.run
         - name: imageTag
           value: 10secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: nodejs10-va
       runAfter: [nodejs10-run]
       taskRef:
         name: run-va
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
@@ -127,13 +133,14 @@ spec:
           value: docker/Dockerfile.nodejs10.run
         - name: imageTag
           value: 10secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: websphere-liberty-run
       runAfter: [java]
       taskRef:
         name: run-base
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
@@ -144,13 +151,14 @@ spec:
           value: docker/Dockerfile.java.run
         - name: imageTag
           value: secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: websphere-liberty-va
       runAfter: [websphere-liberty-run]
       taskRef:
         name: run-va
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
@@ -161,3 +169,6 @@ spec:
           value: docker/Dockerfile.java.run
         - name: imageTag
           value: secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

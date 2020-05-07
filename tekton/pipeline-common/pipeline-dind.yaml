@@ -4,34 +4,36 @@ metadata:
   name: pipeline-dind
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: dockerFile
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: build
       runAfter: [clone-source-repo]
       taskRef:
         name:  run-dind
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: dockerFile
           value: $(params.dockerFile)
         - name: runBaseImage
           value: $(params.runBaseImage)
         - name: branch
           value: $(params.source_branch)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

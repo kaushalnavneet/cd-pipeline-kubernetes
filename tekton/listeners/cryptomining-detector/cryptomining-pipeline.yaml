@@ -4,7 +4,6 @@ metadata:
   name: cryptomining-pipeline
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: script_repo
@@ -22,51 +21,53 @@ spec:
     - name: clusterName3
     - name: skipDeploy3
     - name: helmVersion
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: clone-script-repo
       runAfter: [clone-source-repo]
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.script_repo)
         - name: branch
           value: $(params.script_branch)
         - name: directory-name
           value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: clone-config-repo
       runAfter: [clone-script-repo]
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.config_repo)
         - name: branch
           value: $(params.config_branch)
         - name: directory-name
           value: $(params.config_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: deploy-cluster-1
       runAfter: [clone-config-repo]
       taskRef:
         name:  deploy-cryptomining
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: environment
           value: $(params.environment)
         - name: skipDeploy
@@ -81,13 +82,14 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: deploy-cluster-2
       runAfter: [deploy-cluster-1]
       taskRef:
         name:  deploy-cryptomining
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: environment
           value: $(params.environment)
         - name: skipDeploy
@@ -102,13 +104,14 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: deploy-cluster-3
       runAfter: [deploy-cluster-2]
       taskRef:
         name:  deploy-cryptomining
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: environment
           value: $(params.environment)
         - name: skipDeploy
@@ -123,3 +126,6 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

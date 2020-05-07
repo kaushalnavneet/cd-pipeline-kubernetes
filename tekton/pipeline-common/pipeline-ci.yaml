@@ -41,8 +41,6 @@ spec:
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch

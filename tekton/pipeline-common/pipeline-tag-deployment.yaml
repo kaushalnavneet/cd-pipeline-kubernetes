@@ -4,35 +4,37 @@ metadata:
   name: pipeline-tag-deployment
 spec:
   params:
-    - name: pipeline-pvc
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
     - name: environment
     - name: prodRepos
       default: 'None'
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-charts-repo
       taskRef:
         name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
         - name: directory-name
           value: $(params.charts_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: tag-deployment
       runAfter: [clone-charts-repo]
       taskRef:
         name: tag-deployment
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: prodRepos
           value: $(params.prodRepos)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
