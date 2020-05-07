@@ -113,8 +113,10 @@ spec:
         S_DATE=$(( $(date +%s) + 5 ))
         E_DATE=$(( $(date +%s) + 900 ))
 
+        export TMP=/tmp/tmp_$$.json
+
         # tag message adds link to ServiceNow query using deploy commit hash in the description field
-        cat - >/tmp/tmp_$$.json <<HERE
+        cat - >"$TMP" <<HERE
         {
           "assignedto": "$ASSIGNED_TO",
           "system": "$SYSTEM",
@@ -136,7 +138,7 @@ spec:
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
-            --data @/tmp/tmp_$$.json "$SN_URL/api/ibmwc/v2/change/create" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/create" \
             --silent --show-error)
 
         CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
@@ -201,7 +203,7 @@ spec:
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
-        cat - >/tmp/tmp2_$$.json <<HERE
+        cat - >"$TMP" <<HERE
         {
           "required": "required",
           "system": "$SYSTEM",
@@ -214,7 +216,7 @@ spec:
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
-            --data @/tmp/tmp2_$$.json "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
             --silent --show-error)
 
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
