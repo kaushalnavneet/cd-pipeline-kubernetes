@@ -20,7 +20,7 @@ spec:
   tasks:
     - name: clone-source-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
@@ -33,7 +33,7 @@ spec:
     - name: clone-pii-repo
       runAfter: [clone-source-repo]
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)

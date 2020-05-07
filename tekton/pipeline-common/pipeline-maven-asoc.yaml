@@ -15,7 +15,7 @@ spec:
   tasks:
     - name: clone-otc-deploy-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
@@ -27,7 +27,7 @@ spec:
           value: $(params.source_directory)
     - name: clone-component-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
         - name: task-pvc
           value: $(params.pipeline-pvc)
