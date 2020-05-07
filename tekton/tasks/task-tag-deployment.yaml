@@ -1,19 +1,18 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: tag-deployment
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: prodRepos
-        default: 'None'
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: source_directory
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: prodRepos
+      default: 'None'
   stepTemplate:
     env:
       - name: IDS_TOKEN
@@ -23,15 +22,15 @@ spec:
             key: IDS_TOKEN
   steps:
   - name: tag-deployment
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: PROD_REPOS
-        value: $(inputs.params.prodRepos)
+        value: $(params.prodRepos)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -70,4 +69,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

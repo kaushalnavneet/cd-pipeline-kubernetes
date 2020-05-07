@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: close-eu-de-trigger-dev
@@ -78,7 +78,7 @@ spec:
         accessModes:
           - ReadWriteOnce
 
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -110,7 +110,7 @@ spec:
           - name: tocChannel
             value: $(params.tocChannel)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: close-eu-de-binding-dev
@@ -133,7 +133,7 @@ spec:
     - name: deployChannel
       value: '#devops-otc-deployment'
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: close-eu-de-dev

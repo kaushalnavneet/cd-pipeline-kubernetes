@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: blade-pipeline-broker-trigger-pii
@@ -70,7 +70,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: $(params.source_branch)-blade-pii-$(uid)
@@ -99,7 +99,7 @@ spec:
           - name: environment
             value: $(params.environment)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: blade-pipeline-broker-binding-pii
@@ -120,7 +120,7 @@ spec:
     - name: environment
       value: "development"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: blade-pipeline-broker-pii

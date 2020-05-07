@@ -1,21 +1,20 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: run-vbi
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: buildCluster
-        default: otc-dal12-build
-      - name: dockerFile
-      - name: runBaseImage
-      - name: extraDockerOpts
-        default: --no-cache
-      - name: dockerUsername
-      - name: registryRegion
-        default: us-south
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: buildCluster
+      default: otc-dal12-build
+    - name: dockerFile
+    - name: runBaseImage
+    - name: extraDockerOpts
+      default: --no-cache
+    - name: dockerUsername
+    - name: registryRegion
+      default: us-south
   stepTemplate:
     env:
       - name: API
@@ -75,21 +74,21 @@ spec:
             key: IDS_TOKEN
   steps:
   - name: run-base
-    image: $(inputs.params.runBaseImage)
+    image: $(params.runBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DOCKERFILE
-        value: $(inputs.params.dockerFile)
+        value: $(params.dockerFile)
       - name: DOCKER_USERNAME
-        value: $(inputs.params.dockerUsername)
+        value: $(params.dockerUsername)
       - name: EXTRA_DOCKER_OPTS
-        value: $(inputs.params.extraDockerOpts)
+        value: $(params.extraDockerOpts)
       - name: BUILD_CLUSTER
-        value: $(inputs.params.buildCluster)
+        value: $(params.buildCluster)
       - name: REGISTRY_REGION
-        value: $(inputs.params.registryRegion)
+        value: $(params.registryRegion)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -144,4 +143,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: vault-sidekick-trigger-stage
@@ -64,7 +64,7 @@ spec:
       imagePullSecrets:
         - name: private-registry-secret
 
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -96,7 +96,7 @@ spec:
           - name: dockerFile
             value: $(params.dockerFile)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: vault-sidekick-binding-stage
@@ -119,7 +119,7 @@ spec:
     - name: dockerFile
       value: "docker/Dockerfile.vault"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: vault-sidekick-stage

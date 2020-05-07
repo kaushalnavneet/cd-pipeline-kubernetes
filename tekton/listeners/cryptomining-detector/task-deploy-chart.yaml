@@ -1,24 +1,23 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy-cryptomining
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: clusterName
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: skipDeploy
-        default: 'true'
-      - name: chartNamespace
-        default: opentoolchain
-      - name: helmVersion
-      - name: script_directory
-      - name: config_directory
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: clusterName
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'true'
+    - name: chartNamespace
+      default: opentoolchain
+    - name: helmVersion
+    - name: script_directory
+    - name: config_directory
   stepTemplate:
     env:
       - name: API
@@ -48,25 +47,25 @@ spec:
             key: TOOLCHAIN_ID
   steps:
   - name: deploy
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SKIP
-        value: $(inputs.params.skipDeploy)
+        value: $(params.skipDeploy)
       - name: CLUSTER_NAME
-        value: $(inputs.params.clusterName)
+        value: $(params.clusterName)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: HELM_VERSION
-        value: $(inputs.params.helmVersion)
+        value: $(params.helmVersion)
       - name: CHART_NAMESPACE
-        value: $(inputs.params.chartNamespace)
+        value: $(params.chartNamespace)
       - name: SCRIPT_DIRECTORY
-        value: $(inputs.params.script_directory)
+        value: $(params.script_directory)
       - name: DEVOPS_CONFIG
-        value: $(inputs.params.config_directory)
+        value: $(params.config_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -98,4 +97,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

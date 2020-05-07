@@ -1,34 +1,33 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: publish
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: charts_repo
-      - name: chartNamespace
-        default: 'opentoolchain'
-      - name: registryUrl
-        default: us.icr.io
-      - name: registryNamespace
-        default: opentoolchain
-      - name: registryRegion
-        default: us-south
-      - name: imageName
-        default: ''
-      - name: imageTag
-      - name: imageUrl
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: majorVersion
-        default: '1'
-      - name: minorVersion
-        default: '0'
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: source_directory
+    - name: charts_repo
+    - name: chartNamespace
+      default: 'opentoolchain'
+    - name: registryUrl
+      default: us.icr.io
+    - name: registryNamespace
+      default: opentoolchain
+    - name: registryRegion
+      default: us-south
+    - name: imageName
+      default: ''
+    - name: imageTag
+    - name: imageUrl
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: majorVersion
+      default: '1'
+    - name: minorVersion
+      default: '0'
   stepTemplate:
     env:
       - name: API
@@ -68,35 +67,35 @@ spec:
             key: DRY_RUN_CLUSTER
   steps:
   - name: publish
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(inputs.params.imageName)
+        value: $(params.imageName)
       - name: APPLICATION_VERSION
-        value: $(inputs.params.imageTag)
+        value: $(params.imageTag)
       - name: IMAGE_URL
-        value: $(inputs.params.imageUrl)
+        value: $(params.imageUrl)
       - name: REGISTRY_URL
-        value: $(inputs.params.registryUrl)
+        value: $(params.registryUrl)
       - name: REGISTRY_NAMESPACE
-        value: $(inputs.params.registryNamespace)
+        value: $(params.registryNamespace)
       - name: REGISTRY_REGION
-        value: $(inputs.params.registryRegion)
+        value: $(params.registryRegion)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: CHART_REPO
-        value: $(inputs.params.charts_repo)
+        value: $(params.charts_repo)
       - name: CHART_NAMESPACE
-        value: $(inputs.params.chartNamespace)
+        value: $(params.chartNamespace)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: MAJOR_VERSION
-        value: $(inputs.params.majorVersion)
+        value: $(params.majorVersion)
       - name: MINOR_VERSION
-        value: $(inputs.params.minorVersion)
+        value: $(params.minorVersion)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -247,4 +246,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

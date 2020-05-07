@@ -1,25 +1,24 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: open-cr
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: snUrl
-        default: 'https://watson.service-now.com'
-      - name: deployClusters
-        default: ''
-      - name: deployChannel
-        default: '#devops-otc-deployment'
-      - name: tocChannel
-        default: '#devops-cd-cie'
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: source_directory
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: snUrl
+      default: 'https://watson.service-now.com'
+    - name: deployClusters
+      default: ''
+    - name: deployChannel
+      default: '#devops-otc-deployment'
+    - name: tocChannel
+      default: '#devops-cd-cie'
   stepTemplate:
     env:
       - name: PIPELINE_TRIGGERING_USER
@@ -43,21 +42,21 @@ spec:
             key: SLACK_TOC_HOOK
   steps:
   - name: open-cr
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(inputs.params.deployClusters)
+        value: $(params.deployClusters)
       - name: SN_URL
-        value: $(inputs.params.snUrl)
+        value: $(params.snUrl)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -175,25 +174,25 @@ spec:
       - mountPath: /workspace
         name: task-volume
   - name: notify-slack
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(inputs.params.deployClusters)
+        value: $(params.deployClusters)
       - name: URL
-        value: $(inputs.params.snUrl)
+        value: $(params.snUrl)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: SLACK_DEPLOY_CHANNEL
-        value: $(inputs.params.deployChannel)
+        value: $(params.deployChannel)
       - name: SLACK_TOC_CHANNEL
-        value: $(inputs.params.tocChannel)
+        value: $(params.tocChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -258,4 +257,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: open-jp-tok-trigger-dev
@@ -75,7 +75,7 @@ spec:
         accessModes:
           - ReadWriteOnce
 
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -109,7 +109,7 @@ spec:
           - name: prodRepos
             value: $(params.prodRepos)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: open-jp-tok-binding-dev
@@ -134,7 +134,7 @@ spec:
     - name: prodRepos
       value: 'pipeline-log-service'
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: open-jp-tok-dev

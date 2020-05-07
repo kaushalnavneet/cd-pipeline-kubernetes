@@ -1,19 +1,18 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: run-dind
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: buildCluster
-        default: otc-dal12-build
-      - name: dockerFile
-      - name: branch
-      - name: runBaseImage
-      - name: registryRegion
-        default: us-south
+  params:
+    - name: task-pvc
+      description: the output pvc - this is where the cloned repository will be stored
+    - name: buildCluster
+      default: otc-dal12-build
+    - name: dockerFile
+    - name: branch
+    - name: runBaseImage
+    - name: registryRegion
+      default: us-south
   stepTemplate:
     env:
       - name: API
@@ -73,19 +72,19 @@ spec:
             key: IDS_TOKEN
   steps:
   - name: build-dind
-    image: $(inputs.params.runBaseImage)
+    image: $(params.runBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DOCKERFILE
-        value: $(inputs.params.dockerFile)
+        value: $(params.dockerFile)
       - name: BUILD_CLUSTER
-        value: $(inputs.params.buildCluster)
+        value: $(params.buildCluster)
       - name: REGISTRY_REGION
-        value: $(inputs.params.registryRegion)
+        value: $(params.registryRegion)
       - name: GIT_BRANCH
-        value: $(inputs.params.branch)
+        value: $(params.branch)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -137,4 +136,4 @@ spec:
   volumes:
     - name: task-volume
       persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+        claimName: $(params.task-pvc)

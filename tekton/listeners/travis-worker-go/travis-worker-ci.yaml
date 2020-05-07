@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: travis-worker-go-trigger-dev
@@ -81,7 +81,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: $(params.source_branch)-travis-$(uid)
@@ -134,7 +134,7 @@ spec:
           - name: helmOptions
             value: $(params.helmOptions)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: travis-worker-go-binding-dev
@@ -177,7 +177,7 @@ spec:
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.10
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: travis-worker-go-dev
