@@ -110,7 +110,7 @@ spec:
             ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
         fi
 
-        S_DATE=$(( $(date +%s) + 60 ))
+        S_DATE=$(( $(date +%s) + 5 ))
         E_DATE=$(( $(date +%s) + 900 ))
 
         # tag message adds link to ServiceNow query using deploy commit hash in the description field
@@ -251,6 +251,8 @@ spec:
         }
         HERE
         )")
+
+        sleep 4
 
         RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
