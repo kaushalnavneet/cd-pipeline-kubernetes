@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: pipeline-service-trigger-chart
@@ -86,7 +86,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -97,10 +97,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-chart
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.short_source_branch)-pservice-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.short_source_branch)-pservice-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -136,7 +138,7 @@ spec:
           - name: runBaseImage
             value: $(params.runBaseImage)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: pipeline-service-binding-chart
@@ -179,7 +181,7 @@ spec:
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:java
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: pipeline-service-chart

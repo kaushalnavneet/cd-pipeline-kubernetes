@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: cryptomining-detector-jp-tok-trigger-dev
@@ -87,7 +87,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -98,10 +98,12 @@ spec:
       spec:
         pipelineRef:
           name: cryptomining-pipeline
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-crypto-jp-tok-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.source_branch)-crypto-jp-tok-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -137,7 +139,7 @@ spec:
           - name: chartNamespace
             value: $(params.chartNamespace)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: cryptomining-detector-jp-tok-binding-dev
@@ -178,7 +180,7 @@ spec:
     - name: helmVersion
       value: "v2.14.3"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: cryptomining-detector-jp-tok-dev

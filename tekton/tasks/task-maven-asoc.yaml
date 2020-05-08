@@ -1,14 +1,11 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: maven-asoc-task
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the clone repository is stored
-      - name: componentName
-        description: the name of the component/broker
+  params:
+    - name: componentName
+      description: the name of the component/broker
   stepTemplate:
     env:
       - name: APPSCAN_APP_ID
@@ -26,6 +23,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: APPSCAN_API_KEY_SECRET
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
     - name: asoc
       image: ibmcom/pipeline-base-image:2.6
@@ -36,7 +36,7 @@ spec:
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
-          value: $(inputs.params.componentName)
+          value: $(params.componentName)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:
@@ -56,10 +56,3 @@ spec:
           export SCAN_NAME="$APPSCAN_NAME"
           chmod +x ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
           ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
-      volumeMounts:
-        - mountPath: /workspace
-          name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)

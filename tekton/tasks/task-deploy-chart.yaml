@@ -1,34 +1,31 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy-chart
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: registryUrl
-        default: us.icr.io
-      - name: registryNamespace
-        default: devopsotc
-      - name: registryRegion
-        default: us-south
-      - name: imageName
-        default: ''
-      - name: imageTag
-        default: ''
-      - name: imageUrl
-      - name: clusterName
-        default: otc-us-south-dev
-      - name: clusterNamespace
-        default: opentoolchain
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: skipDeploy
-        default: 'false'
+  params:
+    - name: source_directory
+    - name: registryUrl
+      default: us.icr.io
+    - name: registryNamespace
+      default: devopsotc
+    - name: registryRegion
+      default: us-south
+    - name: imageName
+      default: ''
+    - name: imageTag
+      default: ''
+    - name: imageUrl
+    - name: clusterName
+      default: otc-us-south-dev
+    - name: clusterNamespace
+      default: opentoolchain
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'false'
   stepTemplate:
     env:
       - name: PIPELINE_RUN_URL
@@ -60,35 +57,38 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: deploy
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(inputs.params.imageName)
+        value: $(params.imageName)
       - name: APPLICATION_VERSION
-        value: $(inputs.params.imageTag)
+        value: $(params.imageTag)
       - name: IMAGE_URL
-        value: $(inputs.params.imageUrl)
+        value: $(params.imageUrl)
       - name: REGISTRY_URL
-        value: $(inputs.params.registryUrl)
+        value: $(params.registryUrl)
       - name: REGISTRY_NAMESPACE
-        value: $(inputs.params.registryNamespace)
+        value: $(params.registryNamespace)
       - name: REGISTRY_REGION
-        value: $(inputs.params.registryRegion)
+        value: $(params.registryRegion)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: SKIP
-        value: $(inputs.params.skipDeploy)
+        value: $(params.skipDeploy)
       - name: CLUSTER_NAME
-        value: $(inputs.params.clusterName)
+        value: $(params.clusterName)
       - name: CLUSTER_NAMESPACE
-        value: $(inputs.params.clusterNamespace)
+        value: $(params.clusterNamespace)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -211,10 +211,3 @@ spec:
           git pull
         done
 
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)

@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: otc-github-relay-pub-trigger-dev
@@ -80,7 +80,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: $(params.source_branch)-relay-pub-$(uid)
@@ -90,10 +90,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-ci
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-relay-pub-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.source_branch)-relay-pub-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -129,7 +131,7 @@ spec:
           - name: helmOptions
             value: $(params.helmOptions)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: otc-github-relay-pub-binding-dev
@@ -168,7 +170,7 @@ spec:
     - name: skipDeploy
       value: "false"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: otc-github-relay-pub-dev

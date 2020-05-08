@@ -1,31 +1,31 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: run-pii
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: runBaseImage
-      - name: environment
-        default: 'development'
-      - name: javaPattern
-        default: 'false'
+  params:
+    - name: source_directory
+    - name: runBaseImage
+    - name: environment
+      default: 'development'
+    - name: javaPattern
+      default: 'false'
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: run-pii
-    image: $(inputs.params.runBaseImage)
+    image: $(params.runBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: SKIP
         value: "false"
       - name: JAVA_PATTERN
-        value: $(inputs.params.javaPattern)
+        value: $(params.javaPattern)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -42,10 +42,3 @@ spec:
           export NLS_FILE_PATTERN=Language_en.properties
         fi
         pii/run
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)

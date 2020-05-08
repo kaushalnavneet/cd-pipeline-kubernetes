@@ -1,10 +1,9 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-open-cr
 spec:
   params:
-    - name: pipeline-pvc
     - name: charts_repo
     - name: charts_branch
     - name: charts_directory
@@ -17,38 +16,39 @@ spec:
       default: '#devops-otc-deployment'
     - name: tocChannel
       default: '#devops-cd-cie'
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-charts-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.charts_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: get-deployment-info
       runAfter: [clone-charts-repo]
       taskRef:
         name: deployment-information
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: prodRepos
           value: $(params.prodRepos)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: open-cr
       runAfter: [get-deployment-info]
       taskRef:
         name:  open-cr
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.charts_directory)
         - name: environment
@@ -61,3 +61,6 @@ spec:
           value: $(params.deployChannel)
         - name: tocChannel
           value: $(params.tocChannel)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

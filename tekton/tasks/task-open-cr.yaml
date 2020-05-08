@@ -1,31 +1,28 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: open-cr
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: source_directory
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: snUrl
-        default: 'https://watson.service-now.com'
-      - name: deployClusters
-        default: ''
-      - name: deployChannel
-        default: '#devops-otc-deployment'
-      - name: tocChannel
-        default: '#devops-cd-cie'
-      - name: e2eToolchainId
-        default: ''
-      - name: e2eApplication
-        default: 'Pipeline'
-      - name: e2eBuildId
-        default: ''
+  params:
+    - name: source_directory
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: snUrl
+      default: 'https://watson.service-now.com'
+    - name: deployClusters
+      default: ''
+    - name: deployChannel
+      default: '#devops-otc-deployment'
+    - name: tocChannel
+      default: '#devops-cd-cie'
+    - name: e2eToolchainId
+      default: ''
+    - name: e2eApplication
+      default: 'Pipeline'
+    - name: e2eBuildId
+      default: ''
   stepTemplate:
     env:
       - name: PIPELINE_TRIGGERING_USER
@@ -52,29 +49,32 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SLACK_TOC_HOOK
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: open-cr
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(inputs.params.deployClusters)
+        value: $(params.deployClusters)
       - name: SN_URL
-        value: $(inputs.params.snUrl)
+        value: $(params.snUrl)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: E2E_TOOLCHAIN_ID
-        value: $(inputs.params.e2eToolchainId)
+        value: $(params.e2eToolchainId)
       - name: E2E_APPLICATION
-        value: $(inputs.params.e2eApplication)
+        value: $(params.e2eApplication)
       - name: E2E_BUILD_ID
-        value: $(inputs.params.e2eBuildId)
+        value: $(params.e2eBuildId)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -274,29 +274,26 @@ spec:
         CR_STATE=$(jq --raw-output ".result.state | select (.!=null)" <<< "$RESPONSE")
         echo "ServiceNow change request is in $CR_STATE state."
 
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
   - name: notify-slack
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(inputs.params.deployClusters)
+        value: $(params.deployClusters)
       - name: URL
-        value: $(inputs.params.snUrl)
+        value: $(params.snUrl)
       - name: SOURCE_DIRECTORY
-        value: $(inputs.params.source_directory)
+        value: $(params.source_directory)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: SLACK_DEPLOY_CHANNEL
-        value: $(inputs.params.deployChannel)
+        value: $(params.deployChannel)
       - name: SLACK_TOC_CHANNEL
-        value: $(inputs.params.tocChannel)
+        value: $(params.tocChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -355,10 +352,3 @@ spec:
             -d @message.json \
             ${SLACK_TOC_HOOK}
 
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)

@@ -1,22 +1,19 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy-pgbouncer
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the cloned repository will be stored
-      - name: clusterName
-      - name: deployBaseImage
-        default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-      - name: environment
-        default: 'development'
-      - name: skipDeploy
-        default: 'true'
-      - name: chartNamespace
-        default: opentoolchain
-      - name: script_directory
+  params:
+    - name: clusterName
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'true'
+    - name: chartNamespace
+      default: opentoolchain
+    - name: script_directory
   stepTemplate:
     env:
       - name: API
@@ -54,23 +51,26 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: VAULT_SIDEKICK_SECRET_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: deploy
-    image: $(inputs.params.deployBaseImage)
+    image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SKIP
-        value: $(inputs.params.skipDeploy)
+        value: $(params.skipDeploy)
       - name: CLUSTER_NAME
-        value: $(inputs.params.clusterName)
+        value: $(params.clusterName)
       - name: ENVIRONMENT
-        value: $(inputs.params.environment)
+        value: $(params.environment)
       - name: CHART_NAMESPACE
-        value: $(inputs.params.chartNamespace)
+        value: $(params.chartNamespace)
       - name: SCRIPT_DIRECTORY
-        value: $(inputs.params.script_directory)
+        value: $(params.script_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -93,10 +93,3 @@ spec:
         set -e
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)

@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-asoc
@@ -11,39 +11,43 @@ spec:
     - name: componentDockerImage
     - name: componentName
     - name: branchName
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc
     - name: build
       runAfter: [clone-source-repo]
       taskRef:
         name: asoc-task
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: componentDockerImage
           value: $(params.componentDockerImage)
         - name: componentName
           value: $(params.componentName)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: send-slack
       runAfter: [build]
       taskRef:
         name: asoc-send-slack-task
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: componentName
           value: $(params.componentName)
         - name: branchName
           value: $(params.branchName)
-    
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc

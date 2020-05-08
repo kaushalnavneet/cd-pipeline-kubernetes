@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: pipeline-ui-trigger-pii
@@ -70,7 +70,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: $(params.source_branch)-ui-pii-$(uid)
@@ -80,10 +80,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-pii
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-ui-pii-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.source_branch)-ui-pii-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -99,7 +101,7 @@ spec:
           - name: environment
             value: $(params.environment)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: pipeline-ui-binding-pii
@@ -120,7 +122,7 @@ spec:
     - name: environment
       value: "development"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: pipeline-ui-pii

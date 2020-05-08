@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: pipeline-log-service-trigger-asoc
@@ -73,7 +73,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -84,10 +84,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-asoc
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.branchName)-log-asoc-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.branchName)-log-asoc-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch
@@ -101,7 +103,7 @@ spec:
           - name: branchName
             value: $(params.branchName)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: pipeline-log-service-binding-asoc
@@ -120,7 +122,7 @@ spec:
     - name: branchName
       value: "master"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: pipeline-log-service-asoc

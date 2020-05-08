@@ -1,10 +1,9 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-pii
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: source_directory
@@ -16,40 +15,41 @@ spec:
       default: us.icr.io/opentoolchain/cd-build-base:nodejs10
     - name: javaPattern
       default: 'false'
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: clone-pii-repo
       runAfter: [clone-source-repo]
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.pii_repo)
         - name: branch
           value: $(params.pii_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.pii_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: pii-drop
       runAfter: [clone-pii-repo]
       taskRef:
         name:  run-pii
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.source_directory)
         - name: runBaseImage
@@ -58,3 +58,6 @@ spec:
           value: $(params.environment)
         - name: javaPattern
           value: $(params.javaPattern)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

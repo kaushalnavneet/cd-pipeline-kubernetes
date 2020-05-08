@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: travis-worker-eu-de-trigger-dev
@@ -83,7 +83,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -94,10 +94,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-travis-eu-de-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.charts_branch)-travis-eu-de-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch
@@ -129,7 +131,7 @@ spec:
           - name: skipDeploy3
             value: $(params.skipDeploy3)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: travis-worker-eu-de-binding-dev
@@ -166,7 +168,7 @@ spec:
     - name: skipDeploy3
       value: "false"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: travis-worker-eu-de-dev

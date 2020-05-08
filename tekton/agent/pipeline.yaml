@@ -16,14 +16,14 @@ spec:
       description: the ids token to use to clone repos
     - name: imageUrl
       description: The config repo url
-    - name: pipelinePVC
-      description: name of the pipeline pvc
     - name: dockerhubPassword
       description: password for docker hub
     - name: envTag
       description: tag for the final dockerhub image
     - name: skipVA
-      description: skip VA step
+      description: skip VA 
+  workspaces:
+  - name: pipeline-pvc
   tasks:
   - name: build
     taskRef:
@@ -43,10 +43,11 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: dockerhubPassword
         value: $(params.dockerhubPassword)
-      - name: pipelinePVC
-        value: $(params.pipelinePVC)
       - name: envTag
         value: $(params.envTag)
       - name: skipVA
         value: $(params.skipVA)
+    workspaces:
+    - name: task-pvc
+      workspace: pipeline-pvc 
   

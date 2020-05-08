@@ -1,10 +1,9 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-maven-asoc
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: source_directory
@@ -12,49 +11,56 @@ spec:
     - name: component_directory
     - name: component_branch
     - name: componentName
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-otc-deploy-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: clone-component-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
+
         - name: repository
           value: $(params.component_source_repo)
         - name: branch
           value: $(params.component_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.component_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: build
       runAfter: [clone-otc-deploy-repo, clone-component-repo]
       taskRef:
         name: maven-asoc-task
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: componentName
           value: $(params.componentName)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: send-slack
       runAfter: [build]
       taskRef:
         name: asoc-send-slack-task
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: componentName
           value: $(params.componentName)
         - name: branchName
           value: $(params.component_branch)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     

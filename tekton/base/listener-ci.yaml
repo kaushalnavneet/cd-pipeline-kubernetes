@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: trigger-template-ci
@@ -72,7 +72,7 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.charts_branch)-base-run
@@ -83,10 +83,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-base-ci
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-base-run-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.charts_branch)-base-run-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch
@@ -100,7 +102,7 @@ spec:
           - name: config_directory
             value: $(params.config_directory)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: trigger-binding-dev
@@ -119,7 +121,7 @@ spec:
     - name: config_directory
       value: "cd-pipeline-kubernetes/devops-config"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: pipeline-base-dev

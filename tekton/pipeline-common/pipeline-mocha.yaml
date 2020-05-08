@@ -1,10 +1,9 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-mocha
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: source_directory
@@ -31,53 +30,55 @@ spec:
       default: ''
     - name: consoleAuthToken
       default: ''
-
+  workspaces:
+  - name: pipeline-pvc
   tasks:
     - name: clone-source-repo
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.source_repo)
         - name: branch
           value: $(params.source_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.source_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: clone-charts-repo
       runAfter: [clone-source-repo]
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.charts_repo)
         - name: branch
           value: $(params.charts_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.charts_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: clone-config-repo
       runAfter: [clone-charts-repo]
       taskRef:
-        name: clone-repo-task
+        name: git-clone-repo
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: repository
           value: $(params.config_repo)
         - name: branch
           value: $(params.config_branch)
-        - name: directoryName
+        - name: directory-name
           value: $(params.config_directory)
+      workspaces:
+      - name: workspace
+        workspace: pipeline-pvc 
     - name: mocha
       runAfter: [clone-config-repo,clone-charts-repo]
       taskRef:
         name:  run-mocha
       params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
         - name: source_directory
           value: $(params.source_directory)
         - name: imageUrl
@@ -98,3 +99,6 @@ spec:
           value: $(params.consoleAuthToken)
         - name: skipMocha
           value: $(params.skipMocha)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 

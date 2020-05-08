@@ -1,16 +1,13 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: asoc-send-slack-task
 spec:
-  inputs:
-    params:
-      - name: task-pvc
-        description: the output pvc - this is where the clone repository is stored
-      - name: componentName
-        description: the name of the component/broker
-      - name: branchName
-        description: the name of the branch being scanned
+  params:
+    - name: componentName
+      description: the name of the component/broker
+    - name: branchName
+      description: the name of the branch being scanned
   stepTemplate:
     env:
       - name: APPSCAN_APP_ID
@@ -38,6 +35,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SLACK_WEBHOOK
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
     - name: slack
       image: ibmcom/pipeline-base-image:2.6
@@ -48,9 +48,9 @@ spec:
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
-          value: $(inputs.params.componentName)
+          value: $(params.componentName)
         - name: BRANCH_NAME
-          value: $(inputs.params.branchName)
+          value: $(params.branchName)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:
@@ -70,10 +70,5 @@ spec:
           chmod +x ./otc-deploy/k8s/scripts/asoc/send_report_to_slack.sh
           cd ./otc-deploy/k8s/scripts/asoc/
           ./send_report_to_slack_pipeline_apps.sh
-      volumeMounts:
-        - mountPath: /workspace
-          name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(inputs.params.task-pvc)
+
+

@@ -43,6 +43,10 @@ spec:
       spec:
         pipelineRef:
             name: build-agent-pipeline
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: agentbuild-$(uid)-pvc
         serviceAccountName: otc-sa
         params:
           - name: componentRepo
@@ -61,8 +65,6 @@ spec:
             value: $(params.DOCKERHUB_PASSWORD)
           - name: envTag
             value: $(params.envTag)
-          - name: pipelinePVC
-            value: agentbuild-$(uid)-pvc
           - name: skipVA
             value: $(params.skipVA)
 ---

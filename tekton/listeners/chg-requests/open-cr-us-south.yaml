@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: open-us-south-trigger-dev
@@ -75,7 +75,7 @@ spec:
         accessModes:
           - ReadWriteOnce
 
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
@@ -86,10 +86,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-open-cr
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-open-us-south-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.charts_branch)-open-us-south-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch
@@ -109,7 +111,7 @@ spec:
           - name: prodRepos
             value: $(params.prodRepos)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: open-us-south-binding-dev
@@ -134,7 +136,7 @@ spec:
     - name: prodRepos
       value: 'pipeline-log-service'
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: open-us-south-dev
