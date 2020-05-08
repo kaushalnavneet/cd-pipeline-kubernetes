@@ -11,12 +11,6 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: chg_repo
-      default: 'https://github.ibm.com/org-ids/pipeline-config.git'
-    - name: chg_branch
-      default: 'master'
-    - name: chg_directory
-      default: 'pipeline-config'
     - name: imageUrl
     - name: imageName
     - name: imageTag
@@ -56,21 +50,8 @@ spec:
           value: $(params.config_branch)
         - name: directoryName
           value: $(params.config_directory)
-    - name: clone-chg-repo
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: clone-repo-task
-      params:
-        - name: task-pvc
-          value: $(params.pipeline-pvc)
-        - name: repository
-          value: $(params.chg_repo)
-        - name: branch
-          value: $(params.chg_branch)
-        - name: directoryName
-          value: $(params.chg_directory)
     - name: deploy-cluster-1
-      runAfter: [clone-config-repo,clone-charts-repo,clone-chg-repo]
+      runAfter: [clone-config-repo,clone-charts-repo]
       taskRef:
         name:  deploy-chart
       params:
@@ -90,8 +71,6 @@ spec:
           value: $(params.clusterName1)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-        - name: chgDirectory
-          value: $(params.chg_directory)
     - name: deploy-cluster-2
       runAfter: [deploy-cluster-1]
       taskRef:
@@ -113,8 +92,6 @@ spec:
           value: $(params.clusterName2)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-        - name: chgDirectory
-          value: $(params.chg_directory)
     - name: deploy-cluster-3
       runAfter: [deploy-cluster-2]
       taskRef:
@@ -136,5 +113,3 @@ spec:
           value: $(params.clusterName3)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-        - name: chgDirectory
-          value: $(params.chg_directory)
