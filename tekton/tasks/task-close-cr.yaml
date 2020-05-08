@@ -20,8 +20,23 @@ spec:
         default: '#devops-otc-deployment'
       - name: tocChannel
         default: '#devops-cd-cie'
+      - name: e2eToolchainId
+        default: ''
+      - name: e2eApplication
+        default: 'Pipeline'
+      - name: e2eBuildId
+        default: ''
   stepTemplate:
     env:
+      - name: PIPELINE_TRIGGERING_USER
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY
       - name: SN_TOKEN
         valueFrom:
           secretKeyRef:
@@ -54,6 +69,12 @@ spec:
         value: $(inputs.params.source_directory)
       - name: ENVIRONMENT
         value: $(inputs.params.environment)
+      - name: E2E_TOOLCHAIN_ID
+        value: $(inputs.params.e2eToolchainId)
+      - name: E2E_APPLICATION
+        value: $(inputs.params.e2eApplication)
+      - name: E2E_BUILD_ID
+        value: $(inputs.params.e2eBuildId)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -69,25 +90,162 @@ spec:
           echo "No open CR for $ENVIRONMENT"
           exit 1
         fi
+        DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
+        export TMP=/tmp/tmp_$$.txt
+
+        ibmcloud config --check-version=false
+        ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
+        BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
+
+        # download any logs from the deployment runs
+        export TMP_LOGS=/tmp/logs.csv
+        rm -f $TMP_LOGS
+        [ -r "$DEPLOYS_FILE" ] && cat "$DEPLOYS_FILE" | cut -f5 -d, | sort -u | while read url ; do
+          RUN=$( echo "$url" \
+              | cut -f7-9 -d/ | cut -f1 -d\? )
+          RUN_ID=$( echo "$RUN" | cut -f3 -d/ )
+          curl -s "https://devops-api.us-south.devops.cloud.ibm.com/v1/tekton-pipelines/${RUN}"   \
+                  -H  "accept: */*"   -H "Authorization: $BEARER" >/tmp/${RUN_ID}.json
+
+          jq '.resources[] | select ( .kind == "TaskRun" ) | select ( .metadata.labels["tekton.dev/task"] == "deploy-chart" ) ' /tmp/${RUN_ID}.json >/tmp/t1.json
+
+
+          jq -r '.spec.inputs.params[] | select ( .name == "clusterName" ).value' /tmp/t1.json \
+          |  grep -v none | while read cluster; do
+            echo Processing $cluster
+            jq '. | select ( any(.spec.inputs.params[] ; .value == "'$cluster'" ) ) ' /tmp/t1.json >/tmp/t2.json
+            COMPONENT=$( jq -r '.spec.inputs.params[] | select ( .name == "imageUrl" ).value' /tmp/t2.json | cut -f3 -d/ )
+            echo For ${COMPONENT}:${cluster}
+            LOG_ID=$( jq '.metadata.annotations["devops.cloud.ibm.com/tekton-logs"]' /tmp/t2.json | jq '. | fromjson ' | jq -r '.[]'  )
+            curl -s "https://devops-api.us-south.devops.cloud.ibm.com/v1/tekton-pipelines/${RUN}/${LOG_ID}/logs"   \
+                -H  "accept: */*"   -H "Authorization: $BEARER" >/tmp/${RUN_ID}-${COMPONENT}-${cluster}.log
+            echo "$COMPONENT,$cluster,${RUN_ID},${RUN_ID}-${COMPONENT}-${cluster}.log" >>$TMP_LOGS
+          done
+        done
+
+        # create log CTASKS
+        [ -r "$TMP_LOGS" ] && cat "$TMP_LOGS" | while read csv_line ; do
+          COMPONENT=$( echo "$csv_line" | cut -f1 -d, )
+          CLUSTER=$( echo "$csv_line" | cut -f2 -d, )
+          RUN_ID=$( echo "$csv_line" | cut -f3 -d, )
+          FILE=$( echo "$csv_line" | cut -f4 -d, )
+
+          SUMMARY=$( cat /tmp/"$FILE" |  python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
+          cat - >"$TMP" <<HERE
+          {
+            "required": "required",
+            "system": "$SYSTEM",
+            "shortdescription": "$COMPONENT:$CLUSTER logs",
+            "description": "Deploy Logs for PipelineRun ${RUN_ID}\nComponent: $COMPONENT\nCluster: $CLUSTER\nEnvironment: $ENVIRONMENT",
+            "data": $SUMMARY
+          }
+          HERE
+          RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
+              -H "updated_by: $ASSIGNED_TO" \
+              -H "Accept:application/json" \
+              -H "Content-Type:application/json" \
+              --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
+              --silent --show-error)
+
+          CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+
+          if [[ ! "$CTASK_ID" ]]; then
+              echo "$RESPONSE"
+              exit 1
+          fi
+          PAYLOAD=$(jq --null-input "$(cat <<HERE
+          {
+              state: "Closed"
+          }
+          HERE
+          )")
+
+          RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+              -H "updated_by: $ASSIGNED_TO" \
+              -H "Accept:application/json" \
+              -H "Content-Type:application/json" \
+              --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/$CTASK_ID/update" \
+              --silent --show-error)
+
+          CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+
+          if [[ ! "$CTASK_ID" ]]; then
+              echo "$RESPONSE"
+              exit 1
+          fi
+        done
+
+        # create E2E test CTASK
+        E2E_TOOLCHAIN_ID=${E2E_TOOLCHAIN_ID:-d5c0676c-55ed-4c25-b763-60b7afd64c87}
+        curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=500" \
+          -H  "accept: */*" \
+          -H "Authorization: $BEARER" >/workspace/tmp_doi.json
+        BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep integration | tail -1 )
+        E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
+        SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$ENVIRONMENT" \
+          -H  "accept: */*" \
+          -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
+        cat - >"$TMP" <<HERE
+        {
+          "required": "required",
+          "system": "$SYSTEM",
+          "shortdescription": "Staging test results",
+          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnvironment: $ENVIRONMENT",
+          "data": $SUMMARY
+        }
+        HERE
+        RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/create" \
+            --silent --show-error)
+
+        CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+
+        if [[ ! "$CTASK_ID" ]]; then
+            echo "$RESPONSE"
+            exit 1
+        fi
+        PAYLOAD=$(jq --null-input "$(cat <<HERE
+        {
+            state: "Closed"
+        }
+        HERE
+        )")
+
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/task/$CTASK_ID/update" \
+            --silent --show-error)
+
+        CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+
+        if [[ ! "$CTASK_ID" ]]; then
+            echo "$RESPONSE"
+            exit 1
+        fi
+
         CR_CLOSE_CATEGORY=successful
         #CR_CLOSE_CATEGORY=unsuccessful
 
         echo "Closing ServiceNow change request..."
 
-        PAYLOAD=$(jq --null-input "$(cat <<HERE
+        cat - >"$TMP" <<HERE
         {
-            closecategory: "$CR_CLOSE_CATEGORY",
-            closenotes: "DEPLOYMENT finished.",
-            actualendtime: "now"
+            "closecategory": "$CR_CLOSE_CATEGORY",
+            "closenotes": "DEPLOYMENT finished.",
+            "actualendtime": "now"
         }
         HERE
-        )")
 
         CR_ID=$(cat $ID_FILE)
         RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
-            --data "$PAYLOAD" "$SN_URL/api/ibmwc/change/$CR_ID/close" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/change/$CR_ID/close" \
             --silent --show-error)
 
         RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
@@ -103,6 +261,7 @@ spec:
         git config --global user.name "IDS Organization"
         git config --global push.default matching
         git rm $ID_FILE
+        git rm $DEPLOYS_FILE
         git commit -m "$CR_ID closed"
         n=0
         rc=0
