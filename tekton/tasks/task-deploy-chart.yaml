@@ -29,8 +29,14 @@ spec:
         default: 'development'
       - name: skipDeploy
         default: 'false'
+      - name: chgDirectory
+        default: 'pipeline-config'
   stepTemplate:
     env:
+      - name: PIPELINE_RUN_URL
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
       - name: API
         valueFrom:
           configMapKeyRef:
@@ -77,6 +83,8 @@ spec:
         value: $(inputs.params.registryRegion)
       - name: SOURCE_DIRECTORY
         value: $(inputs.params.source_directory)
+      - name: CHG_DIRECTORY
+        value: $(inputs.params.chgDirectory)
       - name: SKIP
         value: $(inputs.params.skipDeploy)
       - name: CLUSTER_NAME
@@ -179,6 +187,40 @@ spec:
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
         set +x
+
+        # save information for CR
+        APP_VERSION=$( kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
+          | jq -r '.spec.template.spec.containers[] \
+          | select(.name == "pipeline").image' \
+          | cut -f2 -d: )
+        cd "../${CHG_DIRECTORY}"
+        cat - >"cr/$ENVIRONMENT/${COMPONENT_NAME}-${CLUSTER_NAME}.json" <<EOF
+        {
+          "build_id": "${COMPONENT_NAME}:${APP_VERSION}",
+          "pipelinerun": "$PIPELINE_RUN_URL",
+          "cluster": "${CLUSTER_NAME}"
+        }
+        EOF
+
+        git config --global user.email "idsorg@us.ibm.com"
+        git config --global user.name "IDS Organization"
+        git config --global push.default matching
+        git add -A $ID_FILE
+        git commit -m "${PURPOSE}"
+
+        n=0
+        rc=0
+        ORIG_DIR=$(pwd)
+        until [ $n -ge 5 ]
+        do
+          git push
+          rc=$?
+          if [[ $rc == 0 ]]; then 
+            break;
+          fi
+          n=$[$n+1]
+          git pull
+        done
 
     volumeMounts:
       - mountPath: /workspace
