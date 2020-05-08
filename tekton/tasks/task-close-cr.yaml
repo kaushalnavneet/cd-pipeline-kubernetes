@@ -94,6 +94,12 @@ spec:
         DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
         export TMP=/tmp/tmp_$$.txt
 
+        if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
+            ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
+        else
+            ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
+        fi
+
         ibmcloud config --check-version=false
         ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
         BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
