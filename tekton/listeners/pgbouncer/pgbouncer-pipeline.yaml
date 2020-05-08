@@ -32,7 +32,7 @@ spec:
         - name: branch
           value: $(params.source_branch)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc
     - name: clone-script-repo
       runAfter: [clone-source-repo]
@@ -46,7 +46,7 @@ spec:
         - name: directory-name
           value: $(params.script_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc
     - name: clone-config-repo
       runAfter: [clone-script-repo]
@@ -60,7 +60,7 @@ spec:
         - name: directory-name
           value: $(params.config_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc         
     - name: deploy-cluster-1
       runAfter: [clone-config-repo]

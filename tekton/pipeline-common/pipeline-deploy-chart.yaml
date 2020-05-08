@@ -36,7 +36,7 @@ spec:
         - name: directory-name
           value: $(params.charts_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: clone-config-repo
       runAfter: [clone-charts-repo]
@@ -50,7 +50,7 @@ spec:
         - name: directory-name
           value: $(params.config_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: deploy-cluster-1
       runAfter: [clone-config-repo,clone-charts-repo]

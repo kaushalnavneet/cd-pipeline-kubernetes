@@ -21,7 +21,7 @@ spec:
         - name: branch
           value: $(params.source_branch)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: build
       runAfter: [clone-source-repo]

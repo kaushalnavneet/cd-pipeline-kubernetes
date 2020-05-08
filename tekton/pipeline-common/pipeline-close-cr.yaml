@@ -28,7 +28,7 @@ spec:
         - name: directory-name
           value: $(params.charts_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: close-cr
       runAfter: [clone-charts-repo]

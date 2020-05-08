@@ -46,7 +46,7 @@ spec:
         - name: directory-name
           value: $(params.source_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: clone-charts-repo
       runAfter: [clone-source-repo]
@@ -60,7 +60,7 @@ spec:
         - name: directory-name
           value: $(params.charts_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: clone-script-repo
       runAfter: [clone-charts-repo]
@@ -74,7 +74,7 @@ spec:
         - name: directory-name
           value: $(params.script_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: clone-config-repo
       runAfter: [clone-script-repo]
@@ -88,7 +88,7 @@ spec:
         - name: directory-name
           value: $(params.config_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: build
       runAfter: [clone-config-repo,clone-charts-repo,clone-script-repo]

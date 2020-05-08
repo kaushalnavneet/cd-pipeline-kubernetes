@@ -29,7 +29,7 @@ spec:
         - name: directory-name
           value: $(params.source_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: clone-pii-repo
       runAfter: [clone-source-repo]
@@ -43,7 +43,7 @@ spec:
         - name: directory-name
           value: $(params.pii_directory)
       workspaces:
-      - name: task-pvc
+      - name: workspace
         workspace: pipeline-pvc 
     - name: pii-drop
       runAfter: [clone-pii-repo]
