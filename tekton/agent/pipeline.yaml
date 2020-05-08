@@ -43,8 +43,6 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: dockerhubPassword
         value: $(params.dockerhubPassword)
-      - name: pipelinePVC
-        value: $(params.pipelinePVC)
       - name: envTag
         value: $(params.envTag)
       - name: skipVA
