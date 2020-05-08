@@ -90,6 +90,7 @@ spec:
           echo "No open CR for $ENVIRONMENT"
           exit 1
         fi
+        CR_ID=$(cat $ID_FILE)
         DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
         export TMP=/tmp/tmp_$$.txt
 
@@ -241,7 +242,6 @@ spec:
         }
         HERE
 
-        CR_ID=$(cat $ID_FILE)
         RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
             -H "Accept:application/json" \
             -H "Content-Type:application/json" \
