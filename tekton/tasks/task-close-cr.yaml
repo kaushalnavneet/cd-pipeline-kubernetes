@@ -132,14 +132,14 @@ spec:
 
           SUMMARY=$( cat /tmp/"$FILE" |  python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
           cat - >"$TMP" <<HERE
-          {
-            "required": "required",
-            "system": "$SYSTEM",
-            "shortdescription": "$COMPONENT:$CLUSTER logs",
-            "description": "Deploy Logs for PipelineRun ${RUN_ID}\nComponent: $COMPONENT\nCluster: $CLUSTER\nEnvironment: $ENVIRONMENT",
-            "data": $SUMMARY
-          }
-          HERE
+        {
+          "required": "required",
+          "system": "$SYSTEM",
+          "shortdescription": "$COMPONENT:$CLUSTER logs",
+          "description": "Deploy Logs for PipelineRun ${RUN_ID}\nComponent: $COMPONENT\nCluster: $CLUSTER\nEnvironment: $ENVIRONMENT",
+          "data": $SUMMARY
+        }
+        HERE
           RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
               -H "updated_by: $ASSIGNED_TO" \
               -H "Accept:application/json" \
@@ -154,10 +154,10 @@ spec:
               exit 1
           fi
           PAYLOAD=$(jq --null-input "$(cat <<HERE
-          {
-              state: "Closed"
-          }
-          HERE
+        {
+            state: "Closed"
+        }
+        HERE
           )")
 
           RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
