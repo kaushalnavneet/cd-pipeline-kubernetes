@@ -261,7 +261,7 @@ spec:
         git config --global user.name "IDS Organization"
         git config --global push.default matching
         git rm $ID_FILE
-        git rm $DEPLOYS_FILE
+        [ -r "$DEPLOYS_FILE" ] && git rm $DEPLOYS_FILE
         git commit -m "$CR_ID closed"
         n=0
         rc=0
