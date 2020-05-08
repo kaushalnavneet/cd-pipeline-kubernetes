@@ -185,9 +185,9 @@ spec:
         set -x
 
         # save information for CR
+        #kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson
         APP_VERSION=$( kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
-          | jq -r '.spec.template.spec.containers[] \
-          | select(.name == "pipeline").image' \
+          | jq -r '.spec.template.spec.containers[] | select(.name == "pipeline").image' \
           | cut -f2 -d: )
         echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/deploys.csv"
 
