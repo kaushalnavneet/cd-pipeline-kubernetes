@@ -4,8 +4,6 @@ metadata:
   name: close-cr
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: source_directory
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
@@ -36,6 +34,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SLACK_TOC_HOOK
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: close-cr
     image: $(params.deployBaseImage)
@@ -117,9 +118,6 @@ spec:
         done
         set +x
 
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
   - name: notify-slack
     image: $(params.deployBaseImage)
     imagePullPolicy: Always
@@ -180,11 +178,3 @@ spec:
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_TOC_HOOK}
-
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)

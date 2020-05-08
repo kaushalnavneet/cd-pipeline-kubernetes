@@ -4,8 +4,6 @@ metadata:
   name: deployment-information
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: source_directory
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
@@ -20,6 +18,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: get-deployment-information
     image: $(params.deployBaseImage)
@@ -69,10 +70,3 @@ spec:
             popd
         done
 
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)

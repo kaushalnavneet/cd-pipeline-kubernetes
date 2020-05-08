@@ -4,8 +4,6 @@ metadata:
   name: maven-asoc-task
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the clone repository is stored
     - name: componentName
       description: the name of the component/broker
   stepTemplate:
@@ -25,6 +23,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: APPSCAN_API_KEY_SECRET
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
     - name: asoc
       image: ibmcom/pipeline-base-image:2.6
@@ -55,10 +56,3 @@ spec:
           export SCAN_NAME="$APPSCAN_NAME"
           chmod +x ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
           ./otc-deploy/k8s/scripts/asoc/run_static_code_scan_maven.sh
-      volumeMounts:
-        - mountPath: /workspace
-          name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)

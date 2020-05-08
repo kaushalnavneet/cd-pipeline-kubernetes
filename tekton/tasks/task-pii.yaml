@@ -4,14 +4,15 @@ metadata:
   name: run-pii
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: source_directory
     - name: runBaseImage
     - name: environment
       default: 'development'
     - name: javaPattern
       default: 'false'
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: run-pii
     image: $(params.runBaseImage)
@@ -41,10 +42,3 @@ spec:
           export NLS_FILE_PATTERN=Language_en.properties
         fi
         pii/run
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)

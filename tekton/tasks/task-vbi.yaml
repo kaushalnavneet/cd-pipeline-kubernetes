@@ -4,8 +4,6 @@ metadata:
   name: run-vbi
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: buildCluster
       default: otc-dal12-build
     - name: dockerFile
@@ -72,6 +70,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: run-base
     image: $(params.runBaseImage)
@@ -137,10 +138,4 @@ spec:
             echo \"Failed during execution of docker push command for latest tag\"
             exit 1
         fi
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)
+
