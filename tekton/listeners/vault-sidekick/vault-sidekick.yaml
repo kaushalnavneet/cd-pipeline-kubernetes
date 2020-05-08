@@ -75,10 +75,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-vault
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-vault-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.source_branch)-vault-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch

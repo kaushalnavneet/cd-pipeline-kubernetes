@@ -4,8 +4,6 @@ metadata:
   name: deploy-pgbouncer
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: clusterName
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
@@ -53,6 +51,9 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: VAULT_SIDEKICK_SECRET_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: deploy
     image: $(params.deployBaseImage)
@@ -92,10 +93,3 @@ spec:
         set -e
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)

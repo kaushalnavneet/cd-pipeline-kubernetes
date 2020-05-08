@@ -99,10 +99,12 @@ spec:
       spec:
         pipelineRef:
           name: pgbouncer-pipeline
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-pgb-eu-gb-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.source_branch)-pgb-eu-gb-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch

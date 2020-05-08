@@ -84,10 +84,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-asoc
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.branchName)-log-asoc-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.branchName)-log-asoc-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch

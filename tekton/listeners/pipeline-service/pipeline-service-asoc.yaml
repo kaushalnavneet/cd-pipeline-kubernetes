@@ -85,10 +85,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-maven-asoc
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.component_branch)-asoc-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.component_branch)-asoc-$(uid)-pvc
           - name: source_repo
             value: $(params.source_repo)
           - name: source_branch

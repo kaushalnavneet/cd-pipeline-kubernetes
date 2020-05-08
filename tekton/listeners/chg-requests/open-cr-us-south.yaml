@@ -86,10 +86,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-open-cr
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-open-us-south-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.charts_branch)-open-us-south-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch

@@ -96,10 +96,12 @@ spec:
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-consumption-au-syd-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: pipeline-pvc
-            value: $(params.charts_branch)-consumption-au-syd-$(uid)-pvc
           - name: charts_repo
             value: $(params.charts_repo)
           - name: charts_branch

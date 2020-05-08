@@ -4,8 +4,6 @@ metadata:
   name: deploy-cryptomining
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: clusterName
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
@@ -45,6 +43,9 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
   steps:
   - name: deploy
     image: $(params.deployBaseImage)
@@ -91,10 +92,4 @@ spec:
 
         bash ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
-    volumeMounts:
-      - mountPath: /workspace
-        name: task-volume
-  volumes:
-    - name: task-volume
-      persistentVolumeClaim:
-        claimName: $(params.task-pvc)
+
