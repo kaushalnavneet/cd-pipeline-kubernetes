@@ -189,7 +189,7 @@ spec:
         {
           "required": "required",
           "system": "$SYSTEM",
-          "shortdescription": "PROD build results for $ENVIRONMENT",
+          "shortdescription": "PROD test results for $ENVIRONMENT",
           "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnvironment: $ENVIRONMENT",
           "data": $SUMMARY
         }
