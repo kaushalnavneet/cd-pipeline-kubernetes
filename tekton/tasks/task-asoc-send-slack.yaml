@@ -69,7 +69,7 @@ spec:
 
           chmod +x ./otc-deploy/k8s/scripts/asoc/send_report_to_slack.sh
           cd ./otc-deploy/k8s/scripts/asoc/
-          ./send_report_to_slack.sh
+          ./send_report_to_slack_pipeline_apps.sh
       volumeMounts:
         - mountPath: /workspace
           name: task-volume

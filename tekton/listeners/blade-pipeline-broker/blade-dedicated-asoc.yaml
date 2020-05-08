@@ -110,7 +110,7 @@ spec:
     - name: source_repo
       value: "https://github.ibm.com/org-ids/otc-deploy.git"
     - name: source_branch
-      value: "asoc"
+      value: "master"
     - name: source_directory
       value: "otc-deploy"
     - name: componentDockerImage
