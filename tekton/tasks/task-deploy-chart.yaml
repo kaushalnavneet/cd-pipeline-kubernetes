@@ -183,6 +183,7 @@ spec:
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
         set -x
+        set +e
 
         # save information for CR
         #kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson
