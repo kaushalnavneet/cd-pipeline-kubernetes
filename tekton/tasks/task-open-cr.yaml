@@ -18,7 +18,7 @@ spec:
     - name: tocChannel
       default: '#devops-cd-cie'
     - name: e2eToolchainId
-      default: ''
+      default: 'd5c0676c-55ed-4c25-b763-60b7afd64c87'
     - name: e2eApplication
       default: 'Pipeline'
     - name: e2eBuildId
@@ -194,7 +194,6 @@ spec:
         fi
         
         # add au-syd E2E tests via a CTASK
-        E2E_TOOLCHAIN_ID=${E2E_TOOLCHAIN_ID:-d5c0676c-55ed-4c25-b763-60b7afd64c87}
         curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=500" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json

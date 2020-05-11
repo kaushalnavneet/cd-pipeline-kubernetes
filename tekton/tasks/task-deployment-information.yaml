@@ -70,3 +70,14 @@ spec:
             popd
         done
 
+        # add devops config commit
+        REPO=devops-config
+        REPO_URL=https://github.ibm.com/ids-env/${REPO}
+        REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/ids-env/${REPO}.git
+        git clone "$REPO_URL_AUTH"
+        pushd $REPO
+        REV=$( git rev-list -n 1 HEAD )
+        printf "config repo $REPO : ${REPO_URL}/commits/${REV}"'\\n' >>$FILE
+        popd
+
+

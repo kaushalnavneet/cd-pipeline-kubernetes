@@ -18,9 +18,9 @@ spec:
     - name: tocChannel
       default: '#devops-cd-cie'
     - name: e2eToolchainId
-      default: ''
+      default: 'd5c0676c-55ed-4c25-b763-60b7afd64c87'
     - name: e2eApplication
-      default: 'Pipeline'
+      default: 'CD-OTC'
     - name: e2eBuildId
       default: ''
   stepTemplate:
@@ -183,11 +183,10 @@ spec:
         done
 
         # create E2E test CTASK
-        E2E_TOOLCHAIN_ID=${E2E_TOOLCHAIN_ID:-d5c0676c-55ed-4c25-b763-60b7afd64c87}
         curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=500" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json
-        BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep integration | tail -1 )
+        BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep umbrella-prod | tail -1 )
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$ENVIRONMENT" \
           -H  "accept: */*" \

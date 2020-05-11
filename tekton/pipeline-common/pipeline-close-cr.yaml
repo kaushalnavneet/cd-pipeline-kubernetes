@@ -14,6 +14,7 @@ spec:
       default: '#devops-otc-deployment'
     - name: tocChannel
       default: '#devops-cd-cie'
+    - name: e2eBuildId
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -47,6 +48,8 @@ spec:
           value: $(params.deployChannel)
         - name: tocChannel
           value: $(params.tocChannel)
+        - name: e2eBuildId
+          value: $(params.e2eBuildId)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
