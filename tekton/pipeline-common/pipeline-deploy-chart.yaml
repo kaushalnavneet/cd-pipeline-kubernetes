@@ -107,12 +107,9 @@ spec:
           value: $(params.clusterName2)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-<<<<<<< 6d5c2a9e7f4f766c208847ce13176a88ce21da44
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-=======
->>>>>>> already in pipeline-config
     - name: deploy-cluster-3
       runAfter: [deploy-cluster-2]
       taskRef:
@@ -132,10 +129,7 @@ spec:
           value: $(params.clusterName3)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
-<<<<<<< 6d5c2a9e7f4f766c208847ce13176a88ce21da44
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
 
-=======
->>>>>>> already in pipeline-config
