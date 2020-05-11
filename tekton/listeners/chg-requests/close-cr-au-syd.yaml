@@ -11,6 +11,7 @@ spec:
     - name: deployClusters
     - name: snUrl
     - name: e2eBuildId
+    - name: e2eApplicationId
 
     # CD integration
     - name: api
@@ -112,6 +113,8 @@ spec:
             value: $(params.deployChannel)
           - name: tocChannel
             value: $(params.tocChannel)
+          - name: e2eApplicationId
+            value: $(params.e2eApplicationId)
           - name: e2eBuildId
             value: $(params.e2eBuildId)
 ---
@@ -139,6 +142,8 @@ spec:
       value: '#devops-deploy-syd'
     - name: e2eBuildId
       value: ''
+    - name: e2eApplicationId
+      value: 'Pipeline'
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
