@@ -52,20 +52,6 @@ spec:
       workspaces:
       - name: workspace
         workspace: pipeline-pvc 
-    - name: clone-chg-repo
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: clone-repo-task
-      params:
-        - name: repository
-          value: $(params.chg_repo)
-        - name: branch
-          value: $(params.chg_branch)
-        - name: directoryName
-          value: $(params.chg_directory)
-      workspaces:
-      - name: workspace
-        workspace: pipeline-pvc 
     - name: deploy-cluster-1
       runAfter: [clone-config-repo,clone-charts-repo]
       taskRef:
