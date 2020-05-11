@@ -117,11 +117,11 @@ spec:
           jq '.resources[] | select ( .kind == "TaskRun" ) | select ( .metadata.labels["tekton.dev/task"] == "deploy-chart" ) ' /tmp/${RUN_ID}.json >/tmp/t1.json
 
 
-          jq -r '.spec.inputs.params[] | select ( .name == "clusterName" ).value' /tmp/t1.json \
+          jq -r '.spec.params[] | select ( .name == "clusterName" ).value' /tmp/t1.json \
           |  grep -v none | while read cluster; do
             echo Processing $cluster
-            jq '. | select ( any(.spec.inputs.params[] ; .value == "'$cluster'" ) ) ' /tmp/t1.json >/tmp/t2.json
-            COMPONENT=$( jq -r '.spec.inputs.params[] | select ( .name == "imageUrl" ).value' /tmp/t2.json | cut -f3 -d/ )
+            jq '. | select ( any(.spec.params[] ; .value == "'$cluster'" ) ) ' /tmp/t1.json >/tmp/t2.json
+            COMPONENT=$( jq -r '.spec.params[] | select ( .name == "imageUrl" ).value' /tmp/t2.json | cut -f3 -d/ )
             echo For ${COMPONENT}:${cluster}
             LOG_ID=$( jq '.metadata.annotations["devops.cloud.ibm.com/tekton-logs"]' /tmp/t2.json | jq '. | fromjson ' | jq -r '.[]'  )
             curl -s "https://devops-api.us-south.devops.cloud.ibm.com/v1/tekton-pipelines/${RUN}/${LOG_ID}/logs"   \
