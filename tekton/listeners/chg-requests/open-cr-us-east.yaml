@@ -13,6 +13,7 @@ spec:
     - name: tocChannel
     - name: deployChannel
     - name: prodRepos
+    - name: e2eBuildId
 
     # CD integration
     - name: api
@@ -110,6 +111,8 @@ spec:
             value: $(params.deployChannel)
           - name: prodRepos
             value: $(params.prodRepos)
+          - name: e2eBuildId
+            value: $(params.e2eBuildId)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -135,6 +138,8 @@ spec:
       value: '#devops-otc-deployment'
     - name: prodRepos
       value: 'pipeline-log-service'
+    - name: e2eBuildId
+      value: ''
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
