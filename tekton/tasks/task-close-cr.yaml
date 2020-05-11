@@ -93,7 +93,7 @@ spec:
         CR_ID=$(cat $ID_FILE)
         
         DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
-        cat cr/$ENVIRONMENT/*.csv $DEPLOYS_FILE
+        cat cr/$ENVIRONMENT/*.csv > $DEPLOYS_FILE
         export TMP=/tmp/tmp_$$.txt
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
