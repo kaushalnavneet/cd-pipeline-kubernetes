@@ -111,7 +111,7 @@ spec:
         fi
 
         S_DATE=$(( $(date +%s) + 5 ))
-        E_DATE=$(( $(date +%s) + 900 ))
+        E_DATE=$(( $(date +%s) + 3600 ))
 
         export TMP=/tmp/tmp_$$.json
 
@@ -155,6 +155,7 @@ spec:
         git config --global push.default matching
         git add -A $ID_FILE
         git commit -m "${PURPOSE}"
+        set +e
 
         n=0
         rc=0

@@ -267,6 +267,7 @@ spec:
         git config --global user.email "idsorg@us.ibm.com"
         git config --global user.name "IDS Organization"
         git config --global push.default matching
+        set +e
         git rm $ID_FILE
         [ -r "$DEPLOYS_FILE" ] && git rm $DEPLOYS_FILE
         git commit -m "$CR_ID closed"
