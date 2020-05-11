@@ -91,7 +91,9 @@ spec:
           exit 1
         fi
         CR_ID=$(cat $ID_FILE)
+        
         DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
+        cat cr/$ENVIRONMENT/*.csv $DEPLOYS_FILE
         export TMP=/tmp/tmp_$$.txt
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
@@ -264,12 +266,14 @@ spec:
 
         echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
 
+        set +e
         git config --global user.email "idsorg@us.ibm.com"
         git config --global user.name "IDS Organization"
         git config --global push.default matching
         set +e
         git rm $ID_FILE
-        [ -r "$DEPLOYS_FILE" ] && git rm $DEPLOYS_FILE
+        rm -f "$DEPLOYS_FILE"
+        git rm cr/$ENVIRONMENT/*.csv
         git commit -m "$CR_ID closed"
         n=0
         rc=0

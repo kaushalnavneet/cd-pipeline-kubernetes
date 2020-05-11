@@ -187,10 +187,13 @@ spec:
 
         # save information for CR
         #kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson
+        RUN=$( echo "${PIPELINE_RUN_URL}" \
+              | cut -f7-9 -d/ | cut -f1 -d\? )
+        RUN_ID=$( echo "$RUN" | cut -f3 -d/ )
         APP_VERSION=$( kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
           | jq -r '.spec.template.spec.containers[] | select(.name == "pipeline").image' \
           | cut -f2 -d: )
-        echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/deploys.csv"
+        echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
 
         git config --global user.email "idsorg@us.ibm.com"
         git config --global user.name "IDS Organization"
