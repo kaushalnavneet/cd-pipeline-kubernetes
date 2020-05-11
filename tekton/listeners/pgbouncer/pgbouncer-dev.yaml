@@ -80,7 +80,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-pgbouncer-dev-$(uid)-pvc
+        name: $(params.source_branch)-pg-dev-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -92,7 +92,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-pgbouncer-dev-$(uid)
+        name: $(params.source_branch)-pg-dev-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "pgbouncer-dev-trigger-dev"
@@ -102,7 +102,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-pgbouncer-dev-$(uid)-pvc
+              claimName: $(params.source_branch)-pg-dev-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: source_repo
