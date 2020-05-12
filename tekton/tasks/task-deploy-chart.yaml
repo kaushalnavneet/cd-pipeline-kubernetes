@@ -105,13 +105,12 @@ spec:
         WORKDIR=${WORKDIR:-/work}
         VALUES_OPT=""
 
-        set +x
         if [ -z "$REGISTRY_API_KEY" ]; then
           REGISTRY_API_KEY=$API_KEY
         fi
-        set -x
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
+        echo "Logging in to us.icr.io"
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${REGISTRY_API_KEY}
         
         IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
@@ -127,16 +126,10 @@ spec:
 
         printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_URL}:${APPLICATION_VERSION}.\n"
 
-        #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
-        #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
-        #[ ! -d devops-config ] && cp cd-pipeline-kubernetes/devops-config .
-        echo directory status
-        pwd
-        ls -F
+        echo Current Directory: $(pwd)
 
-        set +x
+        echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY}
-        set -x
 
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
 
@@ -154,12 +147,12 @@ spec:
         fi
 
         CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
+        echo Expanding "$CHART_PATH"
         if [ ! -e tmp/${COMPONENT_NAME} ]; then
           mkdir -p tmp ; cd tmp
           tar zxf ../$CHART_PATH
           cd ..
           # pick up the environment values fresh if available
-          #[ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && VALUES_OPT="--values ../devops-config/environments/${ENVIRONMENT}/values.yaml"
           [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
             cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
         fi
@@ -169,30 +162,36 @@ spec:
         if ! helm list ${COMPONENT_NAME}; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
-          set -e
           if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
           fi
+          set -e
+          echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+            --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
+            --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
           helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         else
           set -e
+          echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+            --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
+            --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
           helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
             --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
             --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
         fi
-        set -x
         set +e
 
         # save information for CR
-        #kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson
+        echo "Saving deploy info for CR"
         RUN=$( echo "${PIPELINE_RUN_URL}" \
               | cut -f7-9 -d/ | cut -f1 -d\? )
         RUN_ID=$( echo "$RUN" | cut -f3 -d/ )
         APP_VERSION=$( kubectl get -n${CLUSTER_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
           | jq -r '.spec.template.spec.containers[] | select(.name == "pipeline").image' \
           | cut -f2 -d: )
+        echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}"
         echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
 
         git config --global user.email "idsorg@us.ibm.com"

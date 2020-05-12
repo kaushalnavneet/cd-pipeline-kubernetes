@@ -82,16 +82,16 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-        set -x
         cd "${SOURCE_DIRECTORY}"
         mkdir -p cr/$ENVIRONMENT
         ID_FILE=cr/$ENVIRONMENT/cr_id
-        if [ ! -r cr/$ENVIRONMENT/cr_id ]; then
+        if [ ! -r $ID_FILE ]; then
           echo "No open CR for $ENVIRONMENT"
           exit 1
         fi
         CR_ID=$(cat $ID_FILE)
         
+        echo "Creating deploys file"
         DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
         cat cr/$ENVIRONMENT/*.csv > $DEPLOYS_FILE
         export TMP=/tmp/tmp_$$.txt
@@ -103,16 +103,19 @@ spec:
         fi
 
         ibmcloud config --check-version=false
+        echo Logging into ibmcloud
         ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
         BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
 
         # download any logs from the deployment runs
+        echo Downloading deployment logs...
         export TMP_LOGS=/tmp/logs.csv
         rm -f $TMP_LOGS
         [ -r "$DEPLOYS_FILE" ] && cat "$DEPLOYS_FILE" | cut -f5 -d, | sort -u | while read url ; do
           RUN=$( echo "$url" \
               | cut -f7-9 -d/ | cut -f1 -d\? )
           RUN_ID=$( echo "$RUN" | cut -f3 -d/ )
+          echo "Downloading PipelineRun ${RUN_ID}"
           curl -s "https://devops-api.us-south.devops.cloud.ibm.com/v1/tekton-pipelines/${RUN}"   \
                   -H  "accept: */*"   -H "Authorization: $BEARER" >/tmp/${RUN_ID}.json
 
@@ -121,11 +124,11 @@ spec:
 
           jq -r '.spec.params[] | select ( .name == "clusterName" ).value' /tmp/t1.json \
           |  grep -v none | while read cluster; do
-            echo Processing $cluster
+            echo Examining $cluster
             jq '. | select ( any(.spec.params[] ; .value == "'$cluster'" ) ) ' /tmp/t1.json >/tmp/t2.json
             COMPONENT=$( jq -r '.spec.params[] | select ( .name == "imageUrl" ).value' /tmp/t2.json | cut -f3 -d/ )
-            echo For ${COMPONENT}:${cluster}
             LOG_ID=$( jq '.metadata.annotations["devops.cloud.ibm.com/tekton-logs"]' /tmp/t2.json | jq '. | fromjson ' | jq -r '.[]'  )
+            echo Processing ${COMPONENT}:${cluster}. Downloading log ${LOG_ID}
             curl -s "https://devops-api.us-south.devops.cloud.ibm.com/v1/tekton-pipelines/${RUN}/${LOG_ID}/logs"   \
                 -H  "accept: */*"   -H "Authorization: $BEARER" >/tmp/${RUN_ID}-${COMPONENT}-${cluster}.log
             echo "$COMPONENT,$cluster,${RUN_ID},${RUN_ID}-${COMPONENT}-${cluster}.log" >>$TMP_LOGS
@@ -138,6 +141,7 @@ spec:
           CLUSTER=$( echo "$csv_line" | cut -f2 -d, )
           RUN_ID=$( echo "$csv_line" | cut -f3 -d, )
           FILE=$( echo "$csv_line" | cut -f4 -d, )
+          printf "Creating CTASK for PipelineRun ${RUN_ID}\nComponent: $COMPONENT\nCluster: $CLUSTER\nEnvironment: $ENVIRONMENT\n"
 
           SUMMARY=$( cat /tmp/"$FILE" |  python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
           cat - >"$TMP" <<HERE
@@ -159,9 +163,10 @@ spec:
           CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
           if [[ ! "$CTASK_ID" ]]; then
-              echo "$RESPONSE"
+              echo "Failed: $RESPONSE"
               exit 1
           fi
+          echo "Created CTASK $CTASK_ID. Closing..."
           PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
             state: "Closed"
@@ -179,7 +184,7 @@ spec:
           CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
           if [[ ! "$CTASK_ID" ]]; then
-              echo "$RESPONSE"
+              echo "Failed: $RESPONSE"
               exit 1
           fi
         done
@@ -188,11 +193,13 @@ spec:
         export SEARCH=umbrella-prod
         if [ "$ENVIRONMENT" = au-syd ]; then SEARCH=integration; E2E_APPLICATION=Pipeline; fi
 
+        echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
         curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json
         BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep "$SEARCH" | tail -1 )
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
+        echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$ENVIRONMENT" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
@@ -216,9 +223,10 @@ spec:
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CTASK_ID" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
+        echo Created task $CTASK_ID. Closing...
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
             state: "Closed"
@@ -236,14 +244,14 @@ spec:
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CTASK_ID" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
 
         CR_CLOSE_CATEGORY=successful
         #CR_CLOSE_CATEGORY=unsuccessful
 
-        echo "Closing ServiceNow change request..."
+        echo "Closing ServiceNow change request $CR_ID ..."
 
         cat - >"$TMP" <<HERE
         {
@@ -262,7 +270,7 @@ spec:
         RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$RESULT" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
 
@@ -289,7 +297,6 @@ spec:
           n=$[$n+1]
           git pull
         done
-        set +x
 
   - name: notify-slack
     image: $(params.deployBaseImage)
@@ -318,7 +325,6 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-        set -x
         cd "${SOURCE_DIRECTORY}"
         
         NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${ENVIRONMENT} has concluded."}
@@ -334,6 +340,7 @@ spec:
           "text": "${NOTICE_TEXT} \n\nThe TOC has been notified in the *#devops-cd-cie* channel."
         }
         EOF
+        echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
         #Post to slack deployment channel
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
@@ -348,6 +355,7 @@ spec:
           "text": "<!subteam^S1SLXH3PE> : ${NOTICE_TEXT}"
         }
         EOF
+        echo Posting message to "${SLACK_TOC_CHANNEL}" channel
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_TOC_HOOK}

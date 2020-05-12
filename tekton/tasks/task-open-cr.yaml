@@ -85,12 +85,14 @@ spec:
         cd "${SOURCE_DIRECTORY}"
         mkdir -p cr/$ENVIRONMENT
         ID_FILE=cr/$ENVIRONMENT/cr_id
-        if [ -r cr/$ENVIRONMENT/cr_id ]; then
+        if [ -r $ID_FILE ]; then
           echo "Already a CR open for $ENVIRONMENT"
+          echo "CR_ID: $(cat $ID_FILE)"
           exit 1
         fi
 
         ibmcloud config --check-version=false
+        echo Logging into ibmcloud
         ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
         BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
 
@@ -110,6 +112,7 @@ spec:
             ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
         fi
 
+        # set CR time for 1 hour
         S_DATE=$(( $(date +%s) + 5 ))
         E_DATE=$(( $(date +%s) + 3600 ))
 
@@ -134,6 +137,9 @@ spec:
         }
         HERE
 
+        echo "Opening CR with:"
+        cat "$TMP"
+
         RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
@@ -144,11 +150,13 @@ spec:
         CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CR_ID" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
 
         echo "ServiceNow change request opened: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
+        echo "Saving CR ID"
+
         echo $CR_ID > $ID_FILE
         git config --global user.email "idsorg@us.ibm.com"
         git config --global user.name "IDS Organization"
@@ -183,7 +191,7 @@ spec:
         CR_STATE=$(jq --raw-output ".result.state | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CR_STATE" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
 
@@ -195,12 +203,14 @@ spec:
         fi
         
         # add au-syd E2E tests via a CTASK
-        curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=500" \
+        echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
+        curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json
         BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort | grep integration | tail -1 )
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
         E2E_STAGE_ENVIRONMENT=au-syd
+        echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$E2E_STAGE_ENVIRONMENT" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
@@ -223,9 +233,12 @@ spec:
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CTASK_ID" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
+        
+        echo Created task $CTASK_ID. Closing...
+
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
             state: "Closed"
@@ -243,9 +256,12 @@ spec:
         CTASK_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
 
         if [[ ! "$CTASK_ID" ]]; then
-            echo "$RESPONSE"
+            echo "Failed: $RESPONSE"
             exit 1
         fi
+
+        echo "Closed $CTASK_ID. Setting $CR_ID to 'implemented' state..."
+
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
             worknotes: "Ready to go"
@@ -301,7 +317,6 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-        set -x
         cd "${SOURCE_DIRECTORY}"
         ID_FILE=cr/$ENVIRONMENT/cr_id
         SN_TICKET_ID=$(<$ID_FILE)
@@ -328,6 +343,7 @@ spec:
         }
         EOF
 
+        echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_DEPLOY_HOOK}
@@ -347,6 +363,7 @@ spec:
           ]
         }
         EOF
+        echo Posting message to "${SLACK_TOC_CHANNEL}" channel
         #Post to devops-cd-cie channel. The <!subteam^S1SLXH3PE> string below sends the message to the user group @toc 
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
