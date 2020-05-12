@@ -10,7 +10,6 @@ spec:
     - name: environment
     - name: deployClusters
     - name: snUrl
-    - name: e2eBuildId
 
     # CD integration
     - name: api
@@ -113,7 +112,7 @@ spec:
           - name: tocChannel
             value: $(params.tocChannel)
           - name: e2eBuildId
-            value: $(params.e2eBuildId)
+            value: $(params.E2E_BUILD_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -137,8 +136,6 @@ spec:
       value: '#devops-cd-cie'
     - name: deployChannel
       value: '#devops-otc-deployment'
-    - name: e2eBuildId
-      value: ''
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
