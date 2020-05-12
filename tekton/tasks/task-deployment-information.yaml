@@ -63,7 +63,7 @@ spec:
             REV=$( git rev-list -n 1 HEAD )
             RESULT=$( git diff --stat ${LAST_TAG}..${REV} )
             if [ -z "$RESULT" ] ; then
-                printf "$REPO : Configuration update only"'\\n' >>$FILE
+                printf "$REPO : Configuration update/redeploy only"'\\n' >>$FILE
             else
                 printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\\n' >>$FILE
             fi
@@ -77,7 +77,7 @@ spec:
         git clone "$REPO_URL_AUTH"
         pushd $REPO
         REV=$( git rev-list -n 1 HEAD )
-        printf "config repo $REPO : ${REPO_URL}/commits/${REV}"'\\n' >>$FILE
+        printf '\\n'"config repo $REPO : ${REPO_URL}/commits/${REV}"'\\n' >>$FILE
         popd
 
 
