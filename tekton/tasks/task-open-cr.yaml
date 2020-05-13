@@ -330,7 +330,7 @@ spec:
         cat << EOF > message.json
         {
           "channel": "${SLACK_DEPLOY_CHANNEL}",
-          "text": "${NOTICE_TEXT} \n\nThe TOC has been notified in the *#devops-cd-cie* channel.",
+          "text": "${NOTICE_TEXT} \n",
           "username": "${SLACK_USERNAME}", 
           "icon_emoji": "${ICON}",
           "attachments": [
@@ -347,25 +347,4 @@ spec:
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_DEPLOY_HOOK}
-
-        cat << EOF > message.json
-        {
-          "channel": "${SLACK_TOC_CHANNEL}",
-          "text": "<!subteam^S1SLXH3PE> : ${NOTICE_TEXT}",
-          "username": "${SLACK_USERNAME}", 
-          "icon_emoji": "${ICON}",
-          "attachments": [
-            {
-              "title": "ServiceNow",
-              "type": "mrkdwn",
-              "text": "ChangeRequest ticket opened: <${URL}/nav_to.do?uri=change_request.do?sysparm_query=number=${SN_TICKET_ID}|${SN_TICKET_ID}>"
-            }
-          ]
-        }
-        EOF
-        echo Posting message to "${SLACK_TOC_CHANNEL}" channel
-        #Post to devops-cd-cie channel. The <!subteam^S1SLXH3PE> string below sends the message to the user group @toc 
-        curl -X POST -H "Content-Type: application/json" \
-            -d @message.json \
-            ${SLACK_TOC_HOOK}
 

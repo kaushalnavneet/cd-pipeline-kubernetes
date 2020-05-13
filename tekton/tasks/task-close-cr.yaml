@@ -337,7 +337,7 @@ spec:
           "channel": "${SLACK_DEPLOY_CHANNEL}",
           "username": "${SLACK_USERNAME}",
           "icon_emoji": "${ICON}",
-          "text": "${NOTICE_TEXT} \n\nThe TOC has been notified in the *#devops-cd-cie* channel."
+          "text": "${NOTICE_TEXT} \n"
         }
         EOF
         echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
@@ -345,17 +345,3 @@ spec:
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_DEPLOY_HOOK}
-
-        #Post to swat channel. The <!subteam^S1SLXH3PE> string below sends the message to the user group @toc that the deployment has concluded
-        cat << EOF > message.json
-        {
-          "channel": "${SLACK_TOC_CHANNEL}",
-          "username": "${SLACK_USERNAME}",
-          "icon_emoji": "${ICON}",
-          "text": "<!subteam^S1SLXH3PE> : ${NOTICE_TEXT}"
-        }
-        EOF
-        echo Posting message to "${SLACK_TOC_CHANNEL}" channel
-        curl -X POST -H "Content-Type: application/json" \
-            -d @message.json \
-            ${SLACK_TOC_HOOK}
