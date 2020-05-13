@@ -96,7 +96,6 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-        set -x
         if [ "${SKIP}" == true ]; then
           echo "Skipping Deploy for $CLUSTER_NAME"
           exit 0
