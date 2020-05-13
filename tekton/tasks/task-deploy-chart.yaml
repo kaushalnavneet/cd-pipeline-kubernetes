@@ -130,7 +130,7 @@ spec:
         echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY}
 
-        ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
+        ibmcloud ks cluster config  --cluster ${CLUSTER_NAME} --skip-rbac
 
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
         echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
