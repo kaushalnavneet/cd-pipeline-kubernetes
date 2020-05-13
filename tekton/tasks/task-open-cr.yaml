@@ -324,7 +324,7 @@ spec:
         
         NOTICE_TEXT="Continuous Delivery deployment of Pipeline to public environment ($DEPLOY_TARGET: $DEPLOY_CLUSTERS)."
 
-        ICON=${SN_ICON:=":-cloud-:"}
+        ICON=${SN_ICON:=":mario-pipe-5339:"}
         SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
 
         cat << EOF > message.json

@@ -329,7 +329,7 @@ spec:
         
         NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${ENVIRONMENT} has concluded."}
 
-        ICON=${SN_ICON:=":-cloud-:"}
+        ICON=${SN_ICON:=":mario-pipe-5339:"}
         SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
 
         cat << EOF > message.json
