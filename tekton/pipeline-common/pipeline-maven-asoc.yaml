@@ -25,7 +25,7 @@ spec:
         - name: directory-name
           value: $(params.source_directory)
       workspaces:
-      - name: workspace
+      - name: output
         workspace: pipeline-pvc 
     - name: clone-component-repo
       taskRef:
@@ -39,7 +39,7 @@ spec:
         - name: directory-name
           value: $(params.component_directory)
       workspaces:
-      - name: workspace
+      - name: output
         workspace: pipeline-pvc 
     - name: build
       runAfter: [clone-otc-deploy-repo, clone-component-repo]

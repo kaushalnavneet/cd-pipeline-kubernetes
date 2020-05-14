@@ -25,7 +25,7 @@ spec:
         - name: directory-name
           value: $(params.source_directory)
       workspaces:
-      - name: workspace
+      - name: output
         workspace: pipeline-pvc
     - name: build
       runAfter: [clone-source-repo]
