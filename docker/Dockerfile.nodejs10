@@ -18,7 +18,7 @@ ADD . /work/component
 
 WORKDIR /work/component
 RUN if [ -s /work/component/dependenciesResolver.sh ] ; then sh /work/component/dependenciesResolver.sh ; fi
-RUN npm install --production
+RUN npm install -f
 
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 RUN npm prune --production
