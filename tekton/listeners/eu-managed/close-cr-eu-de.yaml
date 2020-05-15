@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: open-eu-de-trigger-dev
+  name: close-eu-de-trigger-dev
 spec:
   params:
     - name: charts_repo
@@ -10,9 +10,6 @@ spec:
     - name: environment
     - name: deployClusters
     - name: snUrl
-    - name: tocChannel
-    - name: deployChannel
-    - name: prodRepos
 
     # CD integration
     - name: api
@@ -36,6 +33,10 @@ spec:
       metadata:
         name: cd-config
       data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
@@ -43,7 +44,9 @@ spec:
         name: cd-secret
       type: Opaque
       stringData:
-        API_KEY: $(params.API_KEY_1416501)
+        API_KEY: $(params.API_KEY_1561947)
+        API_KEY_1308775: $(params.API_KEY_1308775)
+        API_KEY_1651315: $(params.API_KEY_1651315)
         IDS_TOKEN: $(params.IDS_TOKEN)
         SN_TOKEN: $(params.SN_TOKEN)
         SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
@@ -66,7 +69,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-open-eu-de-$(uid)-pvc
+        name: $(params.charts_branch)-close-eu-de-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -79,17 +82,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-open-eu-de-$(uid)
+        name: $(params.charts_branch)-close-eu-de-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "open-eu-de-trigger-dev"
+          generatedBy: "close-eu-de-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-open-cr
+          name: pipeline-close-cr
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-open-eu-de-$(uid)-pvc
+              claimName: $(params.charts_branch)-close-eu-de-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
@@ -104,19 +107,17 @@ spec:
             value: $(params.deployClusters)
           - name: snUrl
             value: $(params.snUrl)
-          - name: tocChannel
-            value: $(params.tocChannel)
           - name: deployChannel
             value: $(params.deployChannel)
-          - name: prodRepos
-            value: $(params.prodRepos)
+          - name: tocChannel
+            value: $(params.tocChannel)
           - name: e2eBuildId
             value: $(params.E2E_BUILD_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: open-eu-de-binding-dev
+  name: close-eu-de-binding-dev
 spec:
   params:
     - name: charts_repo
@@ -135,16 +136,14 @@ spec:
       value: '#devops-cd-cie'
     - name: deployChannel
       value: '#devops-otc-deployment'
-    - name: prodRepos
-      value: 'pipeline-log-service'
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: open-eu-de-dev
+  name: close-eu-de-dev
 spec:
   triggers:
     - binding:
-        name: open-eu-de-binding-dev
+        name: close-eu-de-binding-dev
       template:
-        name: open-eu-de-trigger-dev
+        name: close-eu-de-trigger-dev
