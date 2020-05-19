@@ -1,5 +1,5 @@
 {{- define "pipeline.common.ingress.tpl" -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 {{ template "common.metadata" . }}
 {{- if .Values.ingress }}
