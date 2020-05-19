@@ -140,6 +140,7 @@ spec:
         tmp=$(mktemp)
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
+        helm version
         helm dep up ${COMPONENT_NAME}
         set -x
         set +e
