@@ -278,6 +278,7 @@ pipeline:
         TEKTON_CUSTOM_PIPELINE_RUNS: true
         ENABLE_EVENT_SERVICE: true
         ENABLE_TRIGGER_DISABLED: true
+        CLOUD_PAL_LAYOUT: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
