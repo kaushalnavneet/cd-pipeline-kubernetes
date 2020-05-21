@@ -85,7 +85,7 @@ spec:
           generatedBy: "get-deploy-info-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-open-cr
+          name: pipeline-deploy-info
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
