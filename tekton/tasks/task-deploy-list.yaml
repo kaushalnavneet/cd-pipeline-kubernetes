@@ -41,24 +41,21 @@ spec:
 
         PROD_REPOS=blade-pipeline-broker,otc-github-relay-pub,otc-github-relay-sub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-ui,private-worker-service,travis-worker-go
 
-        printf 'Delivering changes for:\\n' 
+        printf 'Deliver changes for:\n' 
 
         IFS=',' read -ra REPOS <<<$PROD_REPOS
         for REPO in ${REPOS[@]}; do
-            echo "finding changes for $REPO"
             REPO_URL=https://github.ibm.com/org-ids/${REPO}
             REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
-            git clone -b integration "$REPO_URL_AUTH"
-            pushd $REPO
+            git clone -b integration "$REPO_URL_AUTH" >/dev/null 2>&1
+            pushd $REPO >/dev/null 2>&1
             LAST_TAG=$( git tag --list 'prod-*' | tail -1 )
             OLD_DEPLOY=$( git rev-list -n 1 $LAST_TAG )
             REV=$( git rev-list -n 1 HEAD )
             if [ $OLD_DEPLOY = $REV ]; then
-                printf "$REPO : no change"'\\n' 
+                printf "$REPO : no change"'\n' 
             else
-                printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\\n' 
+                printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\n' 
             fi
-            popd
+            popd >/dev/null 2>&1
         done
-
-
