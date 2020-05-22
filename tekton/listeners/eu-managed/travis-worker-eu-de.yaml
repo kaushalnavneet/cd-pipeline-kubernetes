@@ -154,7 +154,7 @@ spec:
     - name: environment
       value: "eu-de"
     - name: clusterNamespace
-      value: devopsotc
+      value: opentoolchain
     - name: clusterName1
       value: otc-pw-fra02-prod
     - name: skipDeploy1
