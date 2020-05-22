@@ -213,7 +213,7 @@ spec:
         echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$E2E_STAGE_ENVIRONMENT" \
           -H  "accept: */*" \
-          -H "Authorization: $BEARER" | jq . | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))' )
+          -H "Authorization: $BEARER" | jq . | jq --raw-input --slurp  )
         cat - >"$TMP" <<HERE
         {
           "required": "required",
