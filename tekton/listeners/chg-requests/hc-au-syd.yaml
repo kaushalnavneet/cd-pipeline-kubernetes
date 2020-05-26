@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: event-au-syd-hc-trigger-dev
+  name: au-syd-hc-trigger-dev
 spec:
   params:
     - name: script_repo
@@ -71,7 +71,7 @@ spec:
         name: $(params.charts_branch)-evt-hc-au-syd-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "event-au-syd-hc-trigger-dev"
+          generatedBy: "au-syd-hc-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
@@ -111,7 +111,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: event-hc-au-syd-binding
+  name: hc-au-syd-binding
 spec:
   params:
     - name: script_repo
@@ -126,10 +126,6 @@ spec:
       value: "master"
     - name: config_directory
       value: "pipeline-config"
-    - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-event-service"
-    - name: environment
-      value: "au-syd"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
@@ -148,10 +144,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: event-au-syd-hc
+  name: au-syd-hc
 spec:
   triggers:
     - binding:
-        name: event-hc-au-syd-binding
+        name: hc-au-syd-binding
       template:
-        name: event-au-syd-hc-trigger-dev
+        name: au-syd-hc-trigger-dev
