@@ -97,7 +97,7 @@ spec:
           generatedBy: "pipeline-event-service-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-chart-auto-deploy
+          name: pipeline-chart
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
