@@ -18,6 +18,8 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+    - name: syd_auto_deploy_token
+    - name: syd_auto_deploy_url
 
     # CD integration
     - name: api
@@ -95,7 +97,7 @@ spec:
           generatedBy: "pipeline-event-service-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-chart
+          name: pipeline-chart-auto-deploy
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
@@ -134,6 +136,10 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
+          - name: syd_auto_deploy_token
+            value: $(params.syd_auto_deploy_token)
+          - name: syd_auto_deploy_url
+            value: $(params.syd_auto_deploy_url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -173,6 +179,10 @@ spec:
       value: "false"
     - name: skipVA
       value: "false"
+    - name: syd_auto_deploy_token
+      value: ""
+    - name: syd_auto_deploy_url
+      value: ""
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
