@@ -20,7 +20,19 @@ spec:
   workspaces:
   - name: pipeline-pvc
   tasks:
+    - name: get-master-info
+      taskRef:
+        name: master-list
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: prodRepos
+          value: $(params.prodRepos)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: get-deployment-info
+      runAfter: [get-master-info]
       taskRef:
         name: deployment-list
       params:

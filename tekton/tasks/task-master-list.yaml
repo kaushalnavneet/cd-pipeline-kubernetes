@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deployment-list
+  name: master-list
 spec:
   params:
     - name: source_directory
@@ -22,7 +22,7 @@ spec:
   - name: task-pvc
     mountPath: /workspace 
   steps:
-  - name: get-deployment-list
+  - name: get-master-list
     image: $(params.deployBaseImage)
     imagePullPolicy: Always
     env:
@@ -43,21 +43,21 @@ spec:
 
         PROD_REPOS=blade-pipeline-broker,otc-github-relay-pub,otc-github-relay-sub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-ui,private-worker-service,travis-worker-go
 
-        printf 'Deliver changes for:\n' 
+        printf 'Integration needs merging:\n' 
 
         IFS=',' read -ra REPOS <<<$PROD_REPOS
         for REPO in ${REPOS[@]}; do
             REPO_URL=https://github.ibm.com/org-ids/${REPO}
             REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
-            git clone -b integration "$REPO_URL_AUTH" >/dev/null 2>&1
+            git clone "$REPO_URL_AUTH" >/dev/null 2>&1
             pushd $REPO >/dev/null 2>&1
-            LAST_TAG=$( git tag --list 'prod-*' | tail -1 )
-            OLD_DEPLOY=$( git rev-list -n 1 $LAST_TAG )
-            REV=$( git rev-list -n 1 HEAD )
-            if [ $OLD_DEPLOY = $REV ]; then
+            INT=$( git rev-list -n 1 origin/integration )
+            MASTER=$( git rev-list -n 1 origin/master )
+            DIFF=$(  git diff ${INT}..${MASTER} )
+            if [ -z "$DIFF" ]; then
                 printf "$REPO : no change"'\n' 
             else
-                printf "$REPO : ${REPO_URL}/compare/${LAST_TAG}...${REV}"'\n' 
+                printf "$REPO : merge master to integration"'\n' 
             fi
             popd >/dev/null 2>&1
         done
