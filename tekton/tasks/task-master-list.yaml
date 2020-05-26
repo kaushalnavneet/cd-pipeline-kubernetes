@@ -53,7 +53,7 @@ spec:
             pushd $REPO >/dev/null 2>&1
             INT=$( git rev-list -n 1 origin/integration )
             MASTER=$( git rev-list -n 1 origin/master )
-            DIFF=$(  git diff ${INT}..${MASTER} )
+            DIFF=$(  git diff origin/integration..origin/master )
             if [ -z "$DIFF" ]; then
                 printf "$REPO : no change"'\n' 
             else
