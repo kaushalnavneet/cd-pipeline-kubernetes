@@ -32,6 +32,10 @@ spec:
       default: ''
     - name: consoleAuthToken
       default: ''
+    - name: syd_auto_deploy_token
+      default: ''
+    - name: syd_auto_deploy_url
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -155,4 +159,14 @@ spec:
           value: $(params.environment)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
+    - name: auto-deploy-au-syd
+      runAfter: [publish]
+      taskRef:
+        name: auto-deploy-au-syd
+      params:
+        - name: syd_auto_deploy_token
+          value: $(params.syd_auto_deploy_token)
+        - name: syd_auto_deploy_url
+          value: $(params.syd_auto_deploy_url)
+      
