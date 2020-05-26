@@ -21,7 +21,7 @@ spec:
       args:
         - |
           echo "checking existence of syd_auto_deploy_url"
-          if [ -z "$AUTO_DEPLOY_URL"] && [ -z "$AUTO_DEPLOY_TOKEN" ]; then
+          if [ -z "$AUTO_DEPLOY_URL" ] && [ -z "$AUTO_DEPLOY_TOKEN" ]; then
                 echo "syd_auto_deploy_token or syd_auto_deploy_url is empty, cannot auto deploy to au-syd"
           else
                 echo "Triggering auto deployment to AU-SYD"
