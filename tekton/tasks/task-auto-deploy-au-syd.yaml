@@ -10,7 +10,7 @@ spec:
       description: the generic webhook url
   steps:
     - name: auto-deploy
-      image: $(params.componentDockerImage)
+      image: ibmcom/pipeline-base-image:latest
       imagePullPolicy: Always
       env:
         - name: AUTO_DEPLOY_TOKEN
