@@ -33,7 +33,9 @@ spec:
     - name: consoleAuthToken
       default: ''
     - name: syd_auto_deploy_token
+      default: ''
     - name: syd_auto_deploy_url
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
