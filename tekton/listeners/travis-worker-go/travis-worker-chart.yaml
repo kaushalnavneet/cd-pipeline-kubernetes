@@ -20,6 +20,8 @@ spec:
     - name: imageName
     - name: imageTag
     - name: runBaseImage
+    - name: syd_auto_deploy_token
+    - name: syd_auto_deploy_url
 
     # CD integration
     - name: api
@@ -139,6 +141,10 @@ spec:
             value: $(params.dockerFile)
           - name: runBaseImage
             value: $(params.runBaseImage)
+          - name: syd_auto_deploy_token
+            value: $(params.syd_auto_deploy_token)
+          - name: syd_auto_deploy_url
+            value: $(params.syd_auto_deploy_url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -184,6 +190,10 @@ spec:
       value: "Dockerfile.travis-worker"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.10
+    - name: syd_auto_deploy_token
+      value: ""
+    - name: syd_auto_deploy_url
+      value: ""
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
