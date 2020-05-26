@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: au-syd-hc-trigger-dev
+  name: hc-au-syd-trigger-dev
 spec:
   params:
     - name: script_repo
@@ -57,7 +57,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-evt-hc-au-syd-hc-trigger-dev
+        name: $(params.charts_branch)-evt-hc-hc-au-syd-trigger-dev
       spec:
         resources:
           requests:
@@ -71,7 +71,7 @@ spec:
         name: $(params.charts_branch)-evt-hc-au-syd-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "au-syd-hc-trigger-dev"
+          generatedBy: "hc-au-syd-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
@@ -144,10 +144,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: au-syd-hc
+  name: hc-au-syd
 spec:
   triggers:
     - binding:
         name: hc-au-syd-binding
       template:
-        name: au-syd-hc-trigger-dev
+        name: hc-au-syd-trigger-dev
