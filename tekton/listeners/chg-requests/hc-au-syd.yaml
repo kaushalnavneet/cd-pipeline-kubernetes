@@ -57,7 +57,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-evt-hc-hc-au-syd-trigger-dev
+        name: $(params.script_branch)-evt-hc-hc-au-syd-trigger-dev
       spec:
         resources:
           requests:
@@ -68,17 +68,17 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(params.charts_branch)-evt-hc-au-syd-$(uid)
+        name: $(params.script_branch)-evt-hc-au-syd-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "hc-au-syd-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-deploy-chart
+          name: pipeline-hc
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-evt-hc-au-syd-$(uid)-pvc
+              claimName: $(params.script_branch)-evt-hc-au-syd-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: script_repo
