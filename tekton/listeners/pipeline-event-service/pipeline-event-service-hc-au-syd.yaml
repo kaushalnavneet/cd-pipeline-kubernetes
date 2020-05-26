@@ -126,6 +126,10 @@ spec:
       value: "master"
     - name: config_directory
       value: "pipeline-config"
+    - name: imageUrl
+      value: "us.icr.io/devopsotc/pipeline-event-service"
+    - name: environment
+      value: "au-syd"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
@@ -144,10 +148,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: event-au-syd-dev
+  name: event-au-syd-hc
 spec:
   triggers:
     - binding:
-        name: event-au-syd-binding-dev
+        name: event-hc-au-syd-binding
       template:
         name: event-au-syd-hc-trigger-dev
