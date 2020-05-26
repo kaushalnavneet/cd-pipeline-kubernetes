@@ -22,8 +22,8 @@ waitForReadyPods() {
     echo "Check pods for $2 in namespace $1"
     local notReadyPods
     hasNotReadyPods notReadyPods $namespace $prefix
-    local loopTimes = 2
-    while [ "$notReadyPods" == "true" && loopTimes != 0 ]; do
+    local loopTimes=20
+    while [ "$notReadyPods" == "true" ] && [ $loopTimes -ne 0 ]; do
         echo "Not all $prefix pods are ready in $namespace"
         local pods
         pods=$(kubectl get pod -n $namespace)
@@ -36,18 +36,25 @@ waitForReadyPods() {
         echo "Checking back in 30s"
         echo
         sleep 30
-        loppTimes--
+        ((loopTimes=loopTimes-1))
         hasNotReadyPods notReadyPods $namespace $prefix
     done
+    if [ $loopTimes -eq 0 ]; then
+        hasNotReadyPods notReadyPods $namespace $prefix
+        if [ "$notReadyPods" == "true" ]; then
+            echo "Could not get all pods for $prefix in $namespace ready in 10 minutes"
+            exit 1
+        fi
+    fi
     echo "All $prefix pods are ready in $namespace"
     echo
 }
 
-local componentsFileName=$1
-local namespace=$2
+namespace=$1
+componentsFileName=$2
 
-if [ -f $componentsFileName]; then
-    echo "Missing componments.txt file. Aborting"
+if [ ! -f $componentsFileName ]; then
+    echo "Missing components.txt file. Aborting"
     exit 1
 fi
 

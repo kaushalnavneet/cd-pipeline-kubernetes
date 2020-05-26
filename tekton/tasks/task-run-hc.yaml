@@ -60,4 +60,3 @@ spec:
 
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh 
         ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh  ${CLUSTER_NAMESPACE} ${SOURCE_DIRECTORY}/cr/components.txt
-
