@@ -141,7 +141,6 @@ spec:
     - name: skipDeploy3
       value: "false"
 ---
----
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
