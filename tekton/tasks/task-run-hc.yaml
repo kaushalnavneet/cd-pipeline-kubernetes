@@ -55,7 +55,9 @@ spec:
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
 
-        echo Current Directory: $(pwd)
+        echo "Current Directory: $(pwd)"
+
+        ls -Rla .
 
         echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY} -r ${REGISTRY_REGION} 
