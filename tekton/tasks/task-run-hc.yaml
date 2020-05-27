@@ -57,12 +57,10 @@ spec:
 
         echo "Current Directory: $(pwd)"
 
-        ls -Rla .
-
         echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY} -r ${REGISTRY_REGION} 
 
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME} --skip-rbac
 
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh 
-        ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh  ${CLUSTER_NAMESPACE} ${SOURCE_DIRECTORY}/cr/components.txt
+        ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh ${CLUSTER_NAMESPACE} ${SOURCE_DIRECTORY}/cr/components.txt
