@@ -185,6 +185,7 @@ pipeline:
         NODE_ENV: development
         OTC_API_URL: http://otc-api/api/v1
         PIPELINE_API_URL: http://pipeline-service/pipeline
+        PRIVATE_WORKER_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
