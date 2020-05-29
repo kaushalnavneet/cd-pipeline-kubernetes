@@ -146,9 +146,9 @@ spec:
         echo "kubectl version"
         echo "==============="
         kubectl version
-        echo "helm init"
-        echo "========="
-        helm init
+        echo "helm repo list"
+        echo "=============="
+        helm repo list
         echo "helm ls"
         echo "======="
         helm ls
