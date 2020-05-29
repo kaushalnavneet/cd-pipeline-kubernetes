@@ -154,10 +154,16 @@ spec:
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
         echo "Helm version"
+        echo "============"
         helm version
         echo "kubectl version"
+        echo "==============="
         kubectl version
+        echo "helm init"
+        echo "========="
+        helm init
         echo "helm ls"
+        echo "======="
         helm ls
         echo "helm dep up ${COMPONENT_NAME}"
         helm dep up ${COMPONENT_NAME}
