@@ -100,6 +100,13 @@ spec:
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+
+        # Updating helm version to v2.14.3
+        mkdir -p /tmp/helm_install
+        curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+        chmod 700 get_helm.sh
+        ./get_helm.sh --version v2.14.3
+        rm -rf /tmp/helm*
         
         IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
@@ -141,6 +148,7 @@ spec:
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
         helm version
+        kubectl version
         helm dep up ${COMPONENT_NAME}
         set -x
         set +e
