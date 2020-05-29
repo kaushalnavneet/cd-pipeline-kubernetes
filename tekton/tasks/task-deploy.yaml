@@ -166,7 +166,7 @@ spec:
         echo "======="
         helm ls
         echo "helm dep up ${COMPONENT_NAME}"
-        helm dep up ${COMPONENT_NAME}
+        helm --debug dep up ${COMPONENT_NAME}
         echo "helm dep up done"
         set -x
         set +e
