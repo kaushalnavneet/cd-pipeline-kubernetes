@@ -157,8 +157,11 @@ spec:
         helm version
         echo "kubectl version"
         kubectl version
+        echo "helm ls"
+        helm ls
         echo "helm dep up ${COMPONENT_NAME}"
         helm dep up ${COMPONENT_NAME}
+        echo "helm dep up done"
         set -x
         set +e
         if ! helm list ${COMPONENT_NAME}; then
