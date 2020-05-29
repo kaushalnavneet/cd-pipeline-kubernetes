@@ -107,9 +107,10 @@ spec:
         chmod 700 get_helm.sh
         ./get_helm.sh --version v2.14.3
         rm -rf /tmp/helm*
-        
+
         # Install kubectl 1.15
-        export KUBECTL_VERSION='v1.15.1'
+        export KUBECTL_VERSION='v1.15.11'
+        rm -f /usr/local/bin/kubectl
         wget --quiet --output-document=/usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
         chmod +x /usr/local/bin/kubectl
 
@@ -152,8 +153,11 @@ spec:
         tmp=$(mktemp)
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
+        echo "Helm version"
         helm version
+        echo "kubectl version"
         kubectl version
+        echo "helm dep up ${COMPONENT_NAME}"
         helm dep up ${COMPONENT_NAME}
         set -x
         set +e
