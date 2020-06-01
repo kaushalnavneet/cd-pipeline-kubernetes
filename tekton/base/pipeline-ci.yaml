@@ -71,7 +71,21 @@ spec:
           value: nodejs10
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
+    - name: nodejs12
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: nodejs12
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: java
       runAfter: [clone-config-repo]
       taskRef:
@@ -135,7 +149,43 @@ spec:
           value: 10secure
       workspaces:
       - name: task-pvc
+        workspace: pipeline-pvc
+    - name: nodejs12-run
+      runAfter: [nodejs12]
+      taskRef:
+        name: run-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/ibmnode
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+        - name: dockerFile
+          value: docker/Dockerfile.nodejs12.run
+        - name: imageTag
+          value: 12secure
+      workspaces:
+      - name: task-pvc
         workspace: pipeline-pvc 
+    - name: nodejs12-va
+      runAfter: [nodejs12-run]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/ibmnode
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+        - name: dockerFile
+          value: docker/Dockerfile.nodejs12.run
+        - name: imageTag
+          value: 12secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: websphere-liberty-run
       runAfter: [java]
       taskRef:

@@ -20,7 +20,7 @@ CHART_DIR=$1
 TAG=${2:-latest}
 NAMESPACE=opentoolchain
 ENVIRONMENT=${3:-development}
-CODE_BASE=${4:-nodejs6}
+CODE_BASE=${4:-nodejs10}
 PULL_BUILDER=${5:-true}
 CLUSTER_NAME=${6:-otc-us-south-dev}
 
