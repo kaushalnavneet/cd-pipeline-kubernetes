@@ -23,7 +23,7 @@ RUN npm install -f
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 RUN npm prune --production
 
-FROM us.icr.io/opentoolchain/ibmnode:10secure
+FROM us.icr.io/opentoolchain/ibmnode:12secure
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
