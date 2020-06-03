@@ -2,6 +2,7 @@
 set -e
 
 OLDIFS=$IFS
+MAX_DURATION=7200
 
 hasNotReadyPods() {
     local result=$1
@@ -63,12 +64,9 @@ hasNotDeployedTodayPods() {
     startingTimes=$(kubectl -n $namespace get pods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
     for time in $startingTimes
     do
-        echo "time=$time"
         start=$(date --date $time +%s)
-        echo "start=$start"
         diff=$((now - start))
-        echo "diff=$diff"
-        if [ $diff \> 86400 ]; then
+        if [ $diff \> $MAX_DURATION ]; then
             # pod was started more than 2 hours ago
             eval "$result=true"
             exit 1
@@ -98,7 +96,7 @@ do
             # pods are ready - checking it was deployed by checking the starting time
             hasNotDeployedTodayPods notDeployedToday $namespace $app
             if [ "$notDeployedToday" == "true" ]; then
-                echo "One of the pods for $prefix in $namespace was started more than 2 hours ago"
+                echo "$prefix in $namespace has not been deployed today"
                 exit 1
             fi
         fi
