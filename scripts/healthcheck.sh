@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+OLDIFS=$IFS
+
 hasNotReadyPods() {
     local result=$1
     local namespace=$2
@@ -57,10 +59,8 @@ hasNotDeployedTodayPods() {
     local prefix=$3
 
     local now=$(date --utc +%s)
-    times=$(kubectl -n $namespace get pods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
-    echo "times=$times"
-    IFS=' \b\n'
-    startingTimes=$(echo -n $times)
+    IFS=$OLDIFS
+    startingTimes=$(kubectl -n $namespace get pods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
     for time in $startingTimes
     do
         echo "time=$time"
@@ -84,6 +84,7 @@ if [ ! -f $componentsFileName ]; then
     echo "Missing components.txt file. Aborting"
     exit 1
 fi
+
 
 IFS=','
 apps=$(cat $componentsFileName)
