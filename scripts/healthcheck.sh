@@ -77,6 +77,7 @@ if [ ! -f $componentsFileName ]; then
     exit 1
 fi
 
+set -e
 IFS=','
 apps=$(cat $componentsFileName)
 for app in $apps
@@ -85,14 +86,6 @@ do
         echo "Skip travis-worker-go"
     else
         waitForReadyPods $namespace $app
-        if [ $? == 0 ]; then
-            # pods are ready - checking it was deployed by checking the starting time
-            hasNotDeployedTodayPods notDeployedToday $namespace $app
-            if [ "$notDeployedToday" == "true" ]; then
-                echo "One of the pods for $prefix in $namespace was started more than 2 hours ago"
-                exit 1
-            fi
-        fi
     fi
 done
 
