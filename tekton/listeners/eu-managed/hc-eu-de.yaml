@@ -29,6 +29,7 @@ spec:
       metadata:
         name: cd-config
       data:
+        REGION: $(params.toolchainRegion)
         IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret

@@ -11,8 +11,6 @@ spec:
       default: opentoolchain
     - name: skipDeploy
       default: 'false'
-    - name: registryRegion
-      default: us-south
   stepTemplate:
     env:
       - name: API_KEY
@@ -20,6 +18,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: DEPLOY_API_KEY
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -40,8 +43,6 @@ spec:
         value: $(params.clusterName)
       - name: CLUSTER_NAMESPACE
         value: $(params.clusterNamespace)
-      - name: REGISTRY_REGION
-        value: $(params.registryRegion)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -58,7 +59,7 @@ spec:
         echo "Current Directory: $(pwd)"
 
         echo Logging into Deployment account
-        ibmcloud login --apikey ${API_KEY} -r ${REGISTRY_REGION} 
+        ibmcloud login --apikey ${API_KEY} -r ${REGION} 
 
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME} --skip-rbac
 
