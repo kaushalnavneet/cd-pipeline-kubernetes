@@ -90,7 +90,7 @@ spec:
           generatedBy: "pipeline-log-service-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-ci
+          name: pipeline-ci-node10
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
