@@ -60,7 +60,7 @@ hasNotDeployedTodayPods() {
     for time in $startingTimes
     do
         start=$(date --date $time +%s)
-        if [ $(($((now - time)) > 7200)) ]; then
+        if [ $(($((now - start)) > 86400)) ]; then
             # pod was started more than 2 hours ago
             eval "$result=true"
             exit 1
@@ -86,6 +86,14 @@ do
         echo "Skip travis-worker-go"
     else
         waitForReadyPods $namespace $app
+        if [ $? == 0 ]; then
+            # pods are ready - checking it was deployed by checking the starting time
+            hasNotDeployedTodayPods notDeployedToday $namespace $app
+            if [ "$notDeployedToday" == "true" ]; then
+                echo "One of the pods for $prefix in $namespace was started more than 2 hours ago"
+                exit 1
+            fi
+        fi
     fi
 done
 
