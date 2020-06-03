@@ -58,7 +58,7 @@ spec:
         cpu: "680m"
       limits:
         memory: "500Mi"
-        cpu: "800m"
+        cpu: "690m"
     env:
       - name: IDS_TOKEN
         value: $(params.idsToken)
@@ -134,13 +134,6 @@ spec:
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: Always
-    resources:
-      requests:
-        memory: "64Mi"
-        cpu: "200m"
-      limits:
-        memory: "128Mi"
-        cpu: "200m"
     env:
       - name: API_KEY
         value: $(params.accountApiKey1416501)
