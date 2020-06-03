@@ -21,6 +21,9 @@ spec:
     # CD integration
     - name: apikey
       description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: eu-de
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information

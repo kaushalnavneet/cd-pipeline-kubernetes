@@ -21,6 +21,9 @@ spec:
     # CD integration
     - name: apikey
       description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
@@ -29,6 +32,7 @@ spec:
       metadata:
         name: cd-config
       data:
+        REGION: $(params.toolchainRegion)
         IDS_USER: $(params.IDS_USER)
     - apiVersion: v1
       kind: Secret
