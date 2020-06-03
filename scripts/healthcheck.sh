@@ -83,7 +83,7 @@ if [ ! -f $componentsFileName ]; then
     exit 1
 fi
 
-
+NOT_OK="false"
 IFS=','
 apps=$(cat $componentsFileName)
 for app in $apps
@@ -96,10 +96,15 @@ do
             # pods are ready - checking it was deployed by checking the starting time
             hasNotDeployedTodayPods notDeployedToday $namespace $app
             if [ "$notDeployedToday" == "true" ]; then
+                NOT_OK="true"
                 echo "$app in $namespace has not been deployed today"
             fi
         fi
     fi
 done
 
+if [ $NOT_OK == "true" ]; then
+    echo "Some apps have not been deployed today"
+    exit 1
+fi
 echo "All deployed apps have been successfully checked"
