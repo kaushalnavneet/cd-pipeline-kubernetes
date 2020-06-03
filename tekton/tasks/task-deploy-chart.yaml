@@ -128,7 +128,7 @@ spec:
         echo Current Directory: $(pwd)
 
         echo Logging into Deployment account
-        ibmcloud login --apikey ${API_KEY}
+        ibmcloud login --apikey ${API_KEY} -r ${REGION}
 
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME} --skip-rbac
 
