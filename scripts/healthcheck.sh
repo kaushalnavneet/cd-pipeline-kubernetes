@@ -66,6 +66,8 @@ hasNotDeployedTodayPods() {
     do
         start=$(date --date $time +%s)
         diff=$((now - start))
+        echo "diff=$diff"
+        echo "MAX_DURATION=$MAX_DURATION"
         if [ $diff \> $MAX_DURATION ]; then
             # pod was started more than 2 hours ago
             eval "$result=true"
