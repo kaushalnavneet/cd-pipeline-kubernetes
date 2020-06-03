@@ -47,7 +47,26 @@ waitForReadyPods() {
         fi
     fi
     echo "All $prefix pods are ready in $namespace"
-    echo
+}
+
+hasNotDeployedTodayPods() {
+    local result=$1
+    local namespace=$2
+    local prefix=$3
+
+    local now=$(date --utc +%s)
+
+    startingTimes=$(kubectl -n $namespace get pods -ojson | jq --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
+    for time in $startingTimes
+    do
+        start=$(date --date $time +%s)
+        if [ $(($((now - time)) > 7200)) ]; then
+            # pod was started more than 2 hours ago
+            eval "$result=true"
+            exit 1
+        fi
+    done
+    eval "$result=false"
 }
 
 namespace=$1
@@ -66,6 +85,15 @@ do
         echo "Skip travis-worker-go"
     else
         waitForReadyPods $namespace $app
+        if [ $? == 0 ]; then
+            # pods are ready - checking it was deployed by checking the starting time
+            hasNotDeployedTodayPods notDeployedToday $namespace $prefix
+            if [ "$notDeployedToday" == "true" ]; then
+                echo "One of the pods for $prefix in $namespace was started more than 2 hours ago"
+                exit 1
+            fi
+        fi
     fi
 done
- echo "All deployed apps have been successfully checked"
+
+echo "All deployed apps have been successfully checked"
