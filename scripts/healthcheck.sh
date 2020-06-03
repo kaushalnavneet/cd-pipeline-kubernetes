@@ -57,8 +57,10 @@ hasNotDeployedTodayPods() {
     local prefix=$3
 
     local now=$(date --utc +%s)
-    IFS=" \b\n"
-    startingTimes=$(kubectl -n $namespace get pods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
+    times=$(kubectl -n $namespace get p ods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
+    echo "times=$times"
+    IFS=' \b\n'
+    startingTimes=$(echo -n $times)
     for time in $startingTimes
     do
         echo "time=$time"
