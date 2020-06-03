@@ -24,7 +24,7 @@ else
 fi
 
 kubectl --namespace otc-dev get pods 
-kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
+kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | grep Running | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
 
 while ! nc -z localhost 2375; do   
   sleep 0.1
