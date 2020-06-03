@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eou pipefail
 
 OLDIFS=$IFS
 MAX_DURATION=7200
@@ -48,7 +48,7 @@ waitForReadyPods() {
         hasNotReadyPods notReadyPods $namespace $prefix
         if [ "$notReadyPods" == "true" ]; then
             echo "Could not get all pods for $prefix in $namespace ready in 10 minutes"
-            exit 1
+            return 1
         fi
     fi
     echo "All $prefix pods are ready in $namespace"
@@ -96,8 +96,7 @@ do
             # pods are ready - checking it was deployed by checking the starting time
             hasNotDeployedTodayPods notDeployedToday $namespace $app
             if [ "$notDeployedToday" == "true" ]; then
-                echo "$prefix in $namespace has not been deployed today"
-                exit 1
+                echo "$app in $namespace has not been deployed today"
             fi
         fi
     fi
