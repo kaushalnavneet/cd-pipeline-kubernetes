@@ -52,13 +52,6 @@ spec:
   - name: run-base
     image: $(params.runBaseImage)
     imagePullPolicy: Always
-    resources:
-      requests:
-        memory: "256Mi"
-        cpu: "680m"
-      limits:
-        memory: "500Mi"
-        cpu: "690m"
     env:
       - name: IDS_TOKEN
         value: $(params.idsToken)
