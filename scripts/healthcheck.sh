@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 hasNotReadyPods() {
     local result=$1
     local namespace=$2
@@ -56,11 +58,15 @@ hasNotDeployedTodayPods() {
 
     local now=$(date --utc +%s)
 
-    startingTimes=$(kubectl -n $namespace get pods -ojson | jq --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
+    startingTimes=$(kubectl -n $namespace get pods -ojson | jq -r --arg prefix "$prefix" '.items[]? | select(.metadata.name | startswith($prefix)) |  .status.startTime')
     for time in $startingTimes
     do
+        echo "time=$time"
         start=$(date --date $time +%s)
-        if [ $(($((now - start)) > 86400)) ]; then
+        echo "start=$start"
+        diff=$((now - start))
+        echo "diff=$diff"
+        if [ $diff \> 86400 ]; then
             # pod was started more than 2 hours ago
             eval "$result=true"
             exit 1
@@ -77,7 +83,6 @@ if [ ! -f $componentsFileName ]; then
     exit 1
 fi
 
-set -e
 IFS=','
 apps=$(cat $componentsFileName)
 for app in $apps
