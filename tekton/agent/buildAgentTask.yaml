@@ -54,10 +54,10 @@ spec:
     imagePullPolicy: Always
     resources:  
       requests: 
-        memory: "300Mi" 
+        memory: "850Mi" 
         cpu: "499m" 
       limits: 
-        memory: "350Mi" 
+        memory: "1000Mi" 
         cpu: "810m"
     env:
       - name: IDS_TOKEN
