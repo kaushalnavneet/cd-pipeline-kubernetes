@@ -174,7 +174,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: pipeline-log-service-dev
+  name: pipeline-log-service-node12
 spec:
   triggers:
     - binding:
