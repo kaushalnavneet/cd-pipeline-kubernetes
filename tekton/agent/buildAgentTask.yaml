@@ -136,11 +136,11 @@ spec:
     imagePullPolicy: Always
     resources:  
       requests: 
-        memory: "850Mi" 
-        cpu: "499m" 
+        memory: "300Mi" 
+        cpu: "100m" 
       limits: 
-        memory: "1000Mi" 
-        cpu: "810m"
+        memory: "350Mi" 
+        cpu: "190m"
     env:
       - name: API_KEY
         value: $(params.accountApiKey1416501)
