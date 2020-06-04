@@ -134,6 +134,13 @@ spec:
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: Always
+    resources:  
+      requests: 
+        memory: "300Mi" 
+        cpu: "100m" 
+      limits: 
+        memory: "350Mi" 
+        cpu: "110m"
     env:
       - name: API_KEY
         value: $(params.accountApiKey1416501)
