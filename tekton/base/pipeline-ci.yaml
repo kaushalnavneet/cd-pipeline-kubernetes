@@ -58,22 +58,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: deploy-ji
-      runAfter: [clone-config-repo]
-      taskRef:
-        name:  build-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageName
-          value: cd-deploy-base
-        - name: imageTag
-          value: deploy-ji
-        - name: tagSuffix
-          value: ''
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: nodejs10
       runAfter: [clone-config-repo]
       taskRef:
