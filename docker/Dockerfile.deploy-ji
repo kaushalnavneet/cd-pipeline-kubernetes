@@ -1,0 +1,57 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
+FROM alpine
+
+ENV LANG=en_US.UTF-8
+
+RUN apk update
+RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq=1.6-r0 python py-pip
+RUN update-ca-certificates  2>/dev/null || true
+RUN apk upgrade
+RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-document - "https://api.github.com/repos/sgerrand/alpine-pkg-glibc/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/'); fi && \
+    wget --quiet \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
+    apk --allow-untrusted --no-cache add glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    rm -f glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    /usr/glibc-compat/bin/localedef --force --inputfile ${LANG%.*} --charmap ${LANG#*.} ${LANG}
+
+# Install kubectl
+ARG KUBECTL_VERSION='v1.15.11'
+RUN wget --quiet --output-document=/usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+    && chmod +x /usr/local/bin/kubectl
+
+# Install Helm2
+ARG HELM2_VERSION='v2.14.3'
+RUN mkdir -p /tmp/helm_install \
+    && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
+    && chmod 700 get_helm.sh \
+    && ./get_helm.sh --version ${HELM2_VERSION} \
+    && rm -rf /tmp/helm*
+
+ENV IBMCLOUD_VERSION='1.1.0'
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
+    tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
+    export PATH=/opt/IBM/cf/bin:$PATH && \
+    /tmp/Bluemix_CLI/install_bluemix_cli && \
+    rm -rf /tmp/Bluemix_CLI* && \
+    ibmcloud config --check-version false
+
+RUN ibmcloud plugin install container-service -r Bluemix
+RUN ibmcloud plugin install container-registry -r Bluemix
+RUN ibmcloud plugin install cloud-functions -r Bluemix
+RUN ibmcloud --version
+RUN ibmcloud plugin list
+RUN helm init --client-only
+
+RUN pip install --upgrade pip 
+RUN pip install yq
+
+ADD . /work
