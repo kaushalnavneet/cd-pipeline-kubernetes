@@ -11,7 +11,7 @@ FROM alpine
 ENV LANG=en_US.UTF-8
 
 RUN apk update
-RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq=1.6-r0 python py-pip
+RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq python2 py-pip
 RUN update-ca-certificates  2>/dev/null || true
 RUN apk upgrade
 RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-document - "https://api.github.com/repos/sgerrand/alpine-pkg-glibc/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/'); fi && \
