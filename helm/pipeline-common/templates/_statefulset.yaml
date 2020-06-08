@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: {{ template "common.name" . }} 
   template:
-    serviceName: "{{ template "common.fullname" . }}"
+    serviceName: {{ template "common.fullname" . }}
     metadata:
       labels:
         app: {{ template "common.name" . }}
