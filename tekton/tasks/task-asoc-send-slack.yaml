@@ -67,7 +67,7 @@ spec:
           export SLACK_WEBHOOK="$SLACK_WEBHOOK"
           set +x
 
-          chmod +x ./otc-deploy/k8s/scripts/asoc/send_report_to_slack.sh
+          chmod +x ./otc-deploy/k8s/scripts/asoc/send_report_to_slack_pipeline_apps.sh
           cd ./otc-deploy/k8s/scripts/asoc/
           ./send_report_to_slack_pipeline_apps.sh
 
