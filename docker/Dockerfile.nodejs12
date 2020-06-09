@@ -20,7 +20,6 @@ WORKDIR /work/component
 RUN if [ -s /work/component/dependenciesResolver.sh ] ; then sh /work/component/dependenciesResolver.sh ; fi
 RUN npm install -f
 
-RUN npm prune --production
 RUN if [ -s /work/component/extraSteps.sh ] ; then sh /work/component/extraSteps.sh ; fi
 
 FROM us.icr.io/opentoolchain/ibmnode:12secure
