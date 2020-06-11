@@ -177,7 +177,7 @@ spec:
     - name: dockerFile
       value: "Dockerfile.travis-worker"
     - name: runBaseImage
-      value: us.icr.io/opentoolchain/cd-build-base:go1.10
+      value: us.icr.io/opentoolchain/cd-build-base:go1.14
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
