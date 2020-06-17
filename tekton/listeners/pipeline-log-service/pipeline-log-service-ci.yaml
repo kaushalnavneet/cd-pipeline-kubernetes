@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: pipeline-log-service-trigger-dev
+  name: pipeline-log-service
 spec:
   params:
     - name: source_repo
@@ -87,7 +87,7 @@ spec:
         name: $(params.source_branch)-log-service-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "pipeline-log-service-trigger-dev"
+          generatedBy: "pipeline-log-service"
       spec:
         pipelineRef:
           name: pipeline-ci
@@ -174,10 +174,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: pipeline-log-service-dev
+  name: pipeline-log-service
 spec:
   triggers:
     - binding:
         name: pipeline-log-service-binding-dev
       template:
-        name: pipeline-log-service-trigger-dev
+        name: pipeline-log-service

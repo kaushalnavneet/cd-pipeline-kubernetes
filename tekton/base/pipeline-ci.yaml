@@ -58,20 +58,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: nodejs10
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: build-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageName
-          value: cd-build-base
-        - name: imageTag
-          value: nodejs10
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: nodejs12
       runAfter: [clone-config-repo]
       taskRef:
@@ -114,42 +100,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: nodejs10-run
-      runAfter: [nodejs10]
-      taskRef:
-        name: run-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/ibmnode
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
-        - name: dockerFile
-          value: docker/Dockerfile.nodejs10.run
-        - name: imageTag
-          value: 10secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: nodejs10-va
-      runAfter: [nodejs10-run]
-      taskRef:
-        name: run-va
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/ibmnode
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
-        - name: dockerFile
-          value: docker/Dockerfile.nodejs10.run
-        - name: imageTag
-          value: 10secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: nodejs12-run
       runAfter: [nodejs12]
       taskRef:

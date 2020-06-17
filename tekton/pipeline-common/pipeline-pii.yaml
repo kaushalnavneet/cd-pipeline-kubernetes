@@ -12,7 +12,7 @@ spec:
     - name: pii_directory
     - name: environment
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs12
     - name: javaPattern
       default: 'false'
   workspaces:

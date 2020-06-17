@@ -130,7 +130,7 @@ spec:
         - name: imageUrl
           value: $(params.imageUrl)
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs10
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
         - name: dockerFile
           value: ''
         - name: imageTag

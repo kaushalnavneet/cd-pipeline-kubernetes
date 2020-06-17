@@ -8,7 +8,7 @@ spec:
     - name: source_branch
     - name: dockerFile
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs10
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs12
   workspaces:
   - name: pipeline-pvc
   tasks:
