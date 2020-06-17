@@ -17,7 +17,7 @@ pipeline:
     vaultcommon:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_2019_07_31_16h12m55s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_2020_06_16_17h23m41s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
     probes:
       enabled: true
       liveness:
