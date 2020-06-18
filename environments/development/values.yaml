@@ -155,6 +155,7 @@ pipeline:
         S3_ENABLED: true
         PUBLIC_QUEUE_ID: "a149b42d-a7dc-4975-8468-602037130799"
         DISABLE_TRIGGER_ENDPOINT: true
+        EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
