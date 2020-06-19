@@ -155,9 +155,10 @@ pipeline:
         S3_ENABLED: true
         PUBLIC_QUEUE_ID: "a149b42d-a7dc-4975-8468-602037130799"
         DISABLE_TRIGGER_ENDPOINT: true
+        ENV_ID: ibm:ys1:us-south
         ENABLE_SECRET_BY_REF: true
         ENABLE_SECRET_PICKER: true
-        SECRETS_API_URL: https://dev.console.test.cloud.ibm.com/devops/api/v1/secrets
+        SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
