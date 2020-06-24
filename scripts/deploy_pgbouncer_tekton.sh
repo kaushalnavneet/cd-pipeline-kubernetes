@@ -59,6 +59,8 @@ kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-pgbouncer-secret  -
 rm -f userlist.txt
 rm -f .pgpass
 
+set -x
+
 helm init -c
 helm repo add gitlab https://charts.gitlab.io/
 helm dep up
