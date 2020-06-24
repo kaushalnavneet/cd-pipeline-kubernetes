@@ -64,6 +64,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm dep up
 
 helm upgrade ${TARGET} ./charts/pgbouncer  \
+  --dry-run \
   --install \
   --set tags.environment=false \
   --set ${ENVIRONMENT}.enabled=true \
