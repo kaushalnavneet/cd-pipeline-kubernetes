@@ -6,8 +6,6 @@ metadata:
   labels:
     app: travis-registry
 spec:
-  imagePullSecrets:
-  - name: otc-registry-secret
   serviceName: "travis-registry"
   replicas: 1
   selector:
@@ -21,6 +19,8 @@ spec:
       containers:
       - name: travis-registry
         imagePullPolicy: Always
+        imagePullSecrets:
+        - name: otc-registry-secret
         image: us.icr.io/devopsotc/registry:2.7.1
         ports:
         - containerPort: 5000
