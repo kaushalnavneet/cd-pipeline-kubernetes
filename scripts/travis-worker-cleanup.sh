@@ -163,7 +163,7 @@ function send_to_slack() {
 			;;
 	esac
 	json_string=$(printf "$text_template" "$slack_message" )
-	#curl -X POST -H 'Content-type: application/json' --data "$json_string" $PIPELINE_MON_WEBHOOK
+	curl -X POST -H 'Content-type: application/json' --data "$json_string" $PIPELINE_MON_WEBHOOK
 }
 
 # $1 = cluster name
