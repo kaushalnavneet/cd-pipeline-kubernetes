@@ -110,29 +110,7 @@ function cleanup_docker_containers () {
 			fi
 			echo "Done inspecting container $container"
 		done
-		#check environment variables
-		PID=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef  -o user,pid,comm | grep travis-worker | awk '{print \$2}'")
-		echo "PID=$PID"
-		check_payload=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep PAYLOAD_CIPHER_KEY")
-		result=$(echo $?)
-		if [[ result == 1 ]]; then
-			echo "PAYLOAD_CIPHER_KEY is not set for $worker on $cluster"
-			# notify slack channel
-			send_to_slack "error" "The environment variable PAYLOAD_CIPHER_KEY is not set in $worker on $cluster"
-			errors=true
-		else
-			echo "PAYLOAD_CIPHER_KEY is set for $worker on $cluster"
-		fi
-		check_rabbit=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep RABBITMQ_SERVER_URLS")
-		result=$(echo $?)
-		if [[ result == 1 ]]; then
-			echo "RABBITMQ_SERVER_URLS is not set for $worker on $cluster"
-			# notify slack channel
-			send_to_slack "error" "The environment variable RABBITMQ_SERVER_URLS is not set in $worker on $cluster"
-			errors=true
-		else
-			echo "RABBITMQ_SERVER_URLS is set for $worker on $cluster"
-		fi
+		#check travis-worker service
 		check_travis_service=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "service travis-worker status | grep started")
 		result=$(echo $?)
 		if [[ result == 1 ]]; then
@@ -141,6 +119,36 @@ function cleanup_docker_containers () {
 			errors=true
 		else
 			echo "travis-worker service is up and running for $worker on $cluster"
+		fi
+		#check environment variables
+		PID=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef  -o user,pid,comm | grep travis-worker | awk '{print \$2}'")
+		if [ -z "$PID" ]; then
+			all_processes=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef")
+			echo "$all_processes"
+			send_to_slack "error" "The pid for travis-worker process could not be found in $worker on $cluster:\n$all_processes"
+			errors=true
+		else
+			echo "PID=$PID"
+			check_payload=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep PAYLOAD_CIPHER_KEY")
+			result=$(echo $?)
+			if [[ result == 1 ]]; then
+				echo "PAYLOAD_CIPHER_KEY is not set for $worker on $cluster"
+				# notify slack channel
+				send_to_slack "error" "The environment variable PAYLOAD_CIPHER_KEY is not set in $worker on $cluster"
+				errors=true
+			else
+				echo "PAYLOAD_CIPHER_KEY is set for $worker on $cluster"
+			fi
+			check_rabbit=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep RABBITMQ_SERVER_URLS")
+			result=$(echo $?)
+			if [[ result == 1 ]]; then
+				echo "RABBITMQ_SERVER_URLS is not set for $worker on $cluster"
+				# notify slack channel
+				send_to_slack "error" "The environment variable RABBITMQ_SERVER_URLS is not set in $worker on $cluster"
+				errors=true
+			else
+				echo "RABBITMQ_SERVER_URLS is set for $worker on $cluster"
+			fi
 		fi
 	done
 	if [ "$errors" = true ]; then
