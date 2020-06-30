@@ -79,7 +79,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-support-service-$(uid)-pvc
+        name: $(params.source_branch)-support-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -91,7 +91,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-support-service-$(uid)
+        name: $(params.source_branch)-support-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "pipeline-support-service-trigger-chart"
@@ -101,7 +101,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-support-service-$(uid)-pvc
+              claimName: $(params.source_branch)-support-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: source_repo
