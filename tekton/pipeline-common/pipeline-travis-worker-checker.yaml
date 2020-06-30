@@ -23,10 +23,63 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc 
-    - name: tw-check
+    - name: tw-check-syd
       runAfter: [clone-script-repo]
       taskRef:
         name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: syd
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-lon
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: lon
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-tok
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: tok
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-wdc
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: wdc
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-dal
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: dal
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

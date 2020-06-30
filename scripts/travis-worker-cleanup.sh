@@ -6,8 +6,7 @@ NAMESPACE=opentoolchain
 OLDIFS=$IFS
 
 PIPELINE_MON_WEBHOOK=$PIPELINE_MON_WEBHOOK
-ALL_REGIONS="syd,tok,lon,wdc,dal"
-#ALL_REGIONS="syd"
+ALL_REGIONS=${ALL_REGIONS:-syd,tok,lon,wdc,dal}
 
 if [[ -z $PIPELINE_MON_WEBHOOK ]]; then
 	echo "PIPELINE_MON_WEBHOOK is not defined"
@@ -195,7 +194,7 @@ function check_travis_workers() {
 }
 
 function check_all_clusters() {
-	#ibmcloud login --apikey $API_KEY
+	ibmcloud login --apikey $API_KEY
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
 	IFS=$OLDIFS
 	for region in $regions
