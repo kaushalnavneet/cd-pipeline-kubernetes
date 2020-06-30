@@ -89,7 +89,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: hc-us-south
+  name: travis-worker-checker
 spec:
   triggers:
     - binding:
