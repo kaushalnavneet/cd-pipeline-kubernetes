@@ -56,7 +56,7 @@ function cleanup_docker_containers () {
 						;;
 					running)
 						echo "Running container"
-						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ)
+						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 65m=$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						echo "Started: $started"
@@ -86,7 +86,7 @@ function cleanup_docker_containers () {
 						;;
 					created)
 						echo "Created container"
-						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ)
+						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 65m =$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						echo "Started: $started"
