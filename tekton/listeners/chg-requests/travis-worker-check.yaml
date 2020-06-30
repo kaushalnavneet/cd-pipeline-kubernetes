@@ -17,6 +17,13 @@ spec:
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
     - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        IDS_USER: $(params.IDS_USER)
+
+    - apiVersion: v1
       kind: Secret
       metadata:
         name: cd-secret
@@ -24,6 +31,7 @@ spec:
       stringData:
         API_KEY: $(params.API_KEY_1416501)
         SLACK_WEBHOOK: $(params.TRAVIS_CHECKER_WEBHOOK)
+        IDS_TOKEN: $(params.IDS_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
