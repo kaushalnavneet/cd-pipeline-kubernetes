@@ -1,0 +1,98 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: travis-worker-checker-template
+spec:
+  params:
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+
+    # CD integration
+    - name: apikey
+      description: the ibmcloud api key
+    - name: slack_webhook
+      description: the slack webhook to post travis-worker-checker results
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        SLACK_WEBHOOK: $(params.SLACK_WEBHOOK)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name:  travis-worker-checker-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: $travis-worker-checker-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "travis-worker-checker-template"
+      spec:
+        pipelineRef:
+          name: pipeline-travis-worker-checker
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: travis-worker-checker-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: travis-worker-checker-binding
+spec:
+  params:
+    - name: script_repo
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: script_branch
+      value: "master"
+    - name: script_directory
+      value: "cd-pipeline-kubernetes"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: hc-us-south
+spec:
+  triggers:
+    - binding:
+        name: travis-worker-checker-binding
+      template:
+        name: travis-worker-checker-template

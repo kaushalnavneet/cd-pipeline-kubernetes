@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: travis-worker-check
+spec:
+  stepTemplate:
+    env:
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: PIPELINE_MON_WEBHOOK
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SLACK_WEBHOOK
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: health-check
+    image: ibmcom/pipeline-base-image:2.7
+    imagePullPolicy: Always
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        chmod a+x ${SCRIPT_DIRECTORY}/scripts/travis-worker-cleanup.sh 
+        ${SCRIPT_DIRECTORY}/scripts/travis-worker-cleanup.sh
