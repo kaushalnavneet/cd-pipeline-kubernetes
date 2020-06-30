@@ -61,7 +61,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $travis-worker-checker-$(uid)
+        name: travis-worker-checker-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "travis-worker-checker-template"
