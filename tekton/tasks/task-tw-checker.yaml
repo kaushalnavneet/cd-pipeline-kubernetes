@@ -6,6 +6,7 @@ spec:
   params:
     - name: script_directory
     - name: regions
+    - name: cluster_region
   stepTemplate:
     env:
       - name: API_KEY
@@ -30,6 +31,8 @@ spec:
         value: $(params.script_directory)
       - name: ALL_REGIONS
         value: $(params.regions)
+      - name: REGION
+        value: $(params.cluster_region)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

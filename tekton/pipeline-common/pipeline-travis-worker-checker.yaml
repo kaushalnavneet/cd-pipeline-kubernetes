@@ -32,6 +32,8 @@ spec:
           value: $(params.script_directory)
         - name: regions
           value: syd
+        - name: cluster_region
+          value: au-syd
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -44,6 +46,8 @@ spec:
           value: $(params.script_directory)
         - name: regions
           value: lon
+        - name: cluster_region
+          value: eu-gb
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -56,6 +60,8 @@ spec:
           value: $(params.script_directory)
         - name: regions
           value: tok
+        - name: cluster_region
+          value: jp-tok
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -68,6 +74,8 @@ spec:
           value: $(params.script_directory)
         - name: regions
           value: wdc
+        - name: cluster_region
+          value: us-east
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -80,6 +88,8 @@ spec:
           value: $(params.script_directory)
         - name: regions
           value: dal
+        - name: cluster_region
+          value: us-south
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
