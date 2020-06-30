@@ -186,7 +186,7 @@ function post_soc_notify() {
 	slack_message=$(echo -e "Executing into:\nCRN App ID: continuous-delivery\nCluster name: $1\nPod: travis-worker-0, travis-worker-1\nUser: $username\nAccount: $account_name ($account_guid)\nJustification: checking travis-workers")
 	json_string=$(echo "{\"text\": \"$slack_message\" }")
 	echo $json_string
-	curl -X POST -H 'Content-type: application/json' --data "$json_string" $2
+	curl -X POST -H 'Content-type: application/json' --data "$json_string" $2 > /dev/null
 }
 
 # $1=region (one of lon,dal,tok,wdc,syd)
