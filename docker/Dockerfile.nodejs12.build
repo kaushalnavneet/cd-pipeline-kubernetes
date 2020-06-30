@@ -10,7 +10,7 @@ FROM ubuntu:xenial
 
 ARG TINI_VERSION=v0.16.1
 ARG JQ_VERSION=jq-1.6
-ENV NODE_VERSION 12.18.2-rc.0
+ENV NODE_VERSION 12.18.2
 ENV ARCH x64
 ENV IBMCLOUD_VERSION='1.1.0'
 
@@ -22,7 +22,7 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubunt
 RUN apt-get update && apt-get upgrade -y
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce=5:18.09.9~3-0~ubuntu-xenial docker-ce-cli=5:18.09.9~3-0~ubuntu-xenial wget netcat-openbsd python make
 RUN echo "* ibm-java80-jre-amd64/accepted-license select true" | debconf-set-selections && echo "* ibm-java80-jre-amd64/accepted-license seen true" | debconf-set-selections && DEBIAN_FRONTEND=noninteractive apt-get install -y ibm-java80-jdk
-RUN curl -fsSLO --compressed "https://nodejs.org/download/rc/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
+RUN curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 RUN tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr --strip-components=1 --no-same-owner 
 RUN rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 
