@@ -9,7 +9,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: cd-secret
-            key: DEPLOY_API_KEY
+            key: API_KEY
       - name: PIPELINE_MON_WEBHOOK
         valueFrom:
           secretKeyRef:
