@@ -551,7 +551,7 @@ pipeline:
     vault:
       secretPaths:
         - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
-        - vault read generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-support-service/pipeline-support-service_2020_06_30_16h59m48s
+        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-support-service/pipeline-support-service_2020_06_30_16h59m48s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Pipeline Support Service - YS1
