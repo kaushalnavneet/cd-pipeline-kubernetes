@@ -194,6 +194,7 @@ pipeline:
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
+        TEKTON_MONITOR: true
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
