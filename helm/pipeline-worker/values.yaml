@@ -1,6 +1,5 @@
 image:
   pullPolicy: Always
-
 resources:
   limits:
     cpu: 16 
@@ -8,10 +7,8 @@ resources:
   requests:
     cpu: 12 
     memory: 16Gi
-
 service:
   type: ClusterIP
-
 ingress:
   annotations:
     ingress.bluemix.net/redirect-to-https: "True"
