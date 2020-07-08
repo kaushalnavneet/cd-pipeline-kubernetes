@@ -20,13 +20,14 @@ else
   echo "char for cryptomining detector doesn't exist"
 fi
 
-kubectl get deployments -n "${NAMESPACE}" | grep cryptomining-detector
-result=$(echo $?)
-if [[ result == 0 ]]; then
-  echo "Remove cryptomining deployment"
-  kubectl -n "${NAMESPACE}" delete deployment cryptomining-detector
-  sleep 60
-fi
+#kubectl get deployments -n "${NAMESPACE}" | grep cryptomining-detector
+#result=$(echo $?)
+#if [[ result == 0 ]]; then
+#  echo "Remove cryptomining deployment"
+#  kubectl -n "${NAMESPACE}" delete deployment cryptomining-detector
+#  sleep 60
+#fi
+kubectl -n "${NAMESPACE}" delete deployment cryptomining-detector
 
 helm upgrade cryptomining-detector helm/cryptomining-detector \
   --install \
