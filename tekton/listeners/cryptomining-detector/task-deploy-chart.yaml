@@ -87,9 +87,6 @@ spec:
         set -x
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
         set +e
-        chmod a+x ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
-
-        bash ${SCRIPT_DIRECTORY}/scripts/install_helm.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
 
