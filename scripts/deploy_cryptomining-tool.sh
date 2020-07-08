@@ -11,11 +11,11 @@ if [[ result == 1 ]]; then
   echo "Could not purge existing chart"
   exit 1
 else
+  echo "Purged existing chart"
   sleep 60
 fi
 
-echo "travis-worker service is up and running for $worker on $cluster"
-deploymentExist=$(kubectl get deployments -n "${NAMESPACE}" | grep cryptomining-detector)
+kubectl get deployments -n "${NAMESPACE}" | grep cryptomining-detector
 result=$(echo $?)
 if [[ result == 0 ]]; then
   echo "Remove cryptomining deployment"
