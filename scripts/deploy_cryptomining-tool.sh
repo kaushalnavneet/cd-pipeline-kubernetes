@@ -5,20 +5,20 @@ ENVIRONMENT=${ENVIRONMENT:-dev}
 DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/cryptomining_values.yaml
 
-helm ls | grep cryptomining-detector
-if [[ $? == 0 ]]; then
-  helm delete --purge cryptomining-detector
-  result=$(echo $?)
-  if [[ result == 1 ]]; then
-    echo "Could not purge existing chart"
-    exit 1
-  else
-    echo "Purged existing chart"
-    sleep 60
-  fi
-else
-  echo "char for cryptomining detector doesn't exist"
-fi
+#helm ls | grep cryptomining-detector
+#if [[ $? == 0 ]]; then
+#  helm delete --purge cryptomining-detector
+#  result=$(echo $?)
+#  if [[ result == 1 ]]; then
+#    echo "Could not purge existing chart"
+#    exit 1
+#  else
+#    echo "Purged existing chart"
+#    sleep 60
+#  fi
+#else
+#  echo "char for cryptomining detector doesn't exist"
+#fi
 
 #kubectl get deployments -n "${NAMESPACE}" | grep cryptomining-detector
 #result=$(echo $?)
@@ -27,7 +27,11 @@ fi
 #  kubectl -n "${NAMESPACE}" delete deployment cryptomining-detector
 #  sleep 60
 #fi
-kubectl -n "${NAMESPACE}" delete deployment cryptomining-detector
+helm delete --purge cryptomining-detector
+helm delete --purge cryptomining-detector
+
+kubectl -n opentoolchain delete deployment cryptomining-detector
+kubectl -n opentoolchain delete deployment cryptomining-detector
 
 helm upgrade cryptomining-detector helm/cryptomining-detector \
   --install \
