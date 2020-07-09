@@ -59,8 +59,7 @@ function cleanup_docker_containers () {
 						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 65m=$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
-						result=$(echo $?)
-						if [[ result == 0 ]]; then
+						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
 								echo "Container started more than one hour ago. Need to stop it and clean it"
@@ -92,8 +91,7 @@ function cleanup_docker_containers () {
 						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 65m =$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
-						result=$(echo $?)
-						if [[ result == 0 ]]; then
+						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
 								echo "Container was created more than one hour ago. Need to stop it and clean it"
