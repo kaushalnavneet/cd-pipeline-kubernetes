@@ -165,17 +165,18 @@ function cleanup_docker_containers () {
 # $1 = "info" or "error"
 # $2 text message
 function send_to_slack() {
-	slack_message=$(echo -e "$2")
 	case $1 in
 		info)
-			text_template='{"text":"travis-worker checker", "attachments": [{"title": "travis-worker check is clean","text": "%s", "color": "#19cf19"}]}'
+			slack_message=$(echo -e "$2")
+			echo "No slack message on info: $slack_message" 
+#			text_template='{"text":"travis-worker checker", "attachments": [{"title": "travis-worker check is clean","text": "%s", "color": "#19cf19"}]}'
 			;;
 		error)
 			text_template='{"text":"travis-worker checker", "attachments": [{"title": "travis-worker checker found issues","text": "%s", "color": "#c21807"}]}'
+			json_string=$(printf "$text_template" "$slack_message" )
+			curl -X POST -H 'Content-type: application/json' --data "$json_string" $PIPELINE_MON_WEBHOOK > /dev/null
 			;;
 	esac
-	json_string=$(printf "$text_template" "$slack_message" )
-	curl -X POST -H 'Content-type: application/json' --data "$json_string" $PIPELINE_MON_WEBHOOK > /dev/null
 }
 
 # $1 = cluster name
