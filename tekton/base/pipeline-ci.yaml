@@ -72,6 +72,20 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
+    - name: nodejs12-ubi
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: build-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-build-base
+        - name: imageTag
+          value: nodejs12ubi
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: java
       runAfter: [clone-config-repo]
       taskRef:
@@ -137,7 +151,7 @@ spec:
       - name: task-pvc
         workspace: pipeline-pvc
     - name: nodejs12-ubi-run
-      runAfter: [nodejs12]
+      runAfter: [nodejs12-ubi]
       taskRef:
         name: run-base
       params:
@@ -146,7 +160,7 @@ spec:
         - name: imageUrl
           value: us.icr.io/opentoolchain/ibmnode
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
         - name: dockerFile
           value: docker/Dockerfile.nodejs12ubi.run
         - name: imageTag
@@ -164,7 +178,7 @@ spec:
         - name: imageUrl
           value: us.icr.io/opentoolchain/ibmnode
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
         - name: dockerFile
           value: docker/Dockerfile.nodejs12ubi.run
         - name: imageTag
