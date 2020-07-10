@@ -244,6 +244,7 @@ spec:
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
         cd "${SOURCE_DIRECTORY}"
+        SN_ICON=":delivery-pipeline:"
         
         NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${ENVIRONMENT} has concluded."}
 

@@ -320,7 +320,7 @@ spec:
         cd "${SOURCE_DIRECTORY}"
         ID_FILE=cr/$ENVIRONMENT/cr_id
         SN_TICKET_ID=$(<$ID_FILE)
-        
+        SN_ICON=":delivery-pipeline:"
         
         NOTICE_TEXT="Continuous Delivery deployment of Pipeline to public environment ($DEPLOY_TARGET: $DEPLOY_CLUSTERS)."
 
