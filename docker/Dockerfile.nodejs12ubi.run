@@ -25,7 +25,7 @@ RUN mkdir /image && \
 # see nodejs-files.txt for a list of needed files from the UBI image to copy into our
 # final "FROM scratch" image; this would need to be modified if any additional
 # content was required from UBI for a specific NodeJS application
-COPY nodejs-files.txt /tmp
+COPY docker/nodejs-files.txt /tmp
 RUN tar cf /tmp/files.tar -T /tmp/nodejs-files.txt && tar xf /tmp/files.tar -C /image/ \
   && strip --strip-unneeded /image/usr/lib64/*[0-9].so
 RUN rpm --root /image --initdb \
