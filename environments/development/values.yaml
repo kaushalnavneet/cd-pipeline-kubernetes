@@ -133,6 +133,7 @@ pipeline:
         PIPELINE_UI_SERVER_URL: https://pipeline-ui.us-south.devops.dev.cloud.ibm.com
         enableTekton: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
+        DEBUG: cloudant:plugins:iamauth
   private-worker-service:
     replicas: 1
     revisionHistoryLimit: 3
