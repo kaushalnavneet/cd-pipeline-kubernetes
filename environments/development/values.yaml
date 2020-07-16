@@ -286,6 +286,8 @@ pipeline:
         ENABLE_EVENT_SERVICE: true
         ENABLE_TRIGGER_DISABLED: true
         CLOUD_PAL_LAYOUT: true
+        SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south.devops.dev.cloud.ibm.com
+        LINTER_ENABLE: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
