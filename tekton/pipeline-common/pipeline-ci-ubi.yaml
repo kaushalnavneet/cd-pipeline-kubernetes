@@ -21,6 +21,7 @@ spec:
     - name: clusterNamespace
     - name: skipBuild
     - name: skipVA
+    - name: skipDeploy
     - name: dockerFile
       default: ''
     - name: runBaseImage
