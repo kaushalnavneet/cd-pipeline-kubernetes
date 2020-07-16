@@ -17,6 +17,10 @@ spec:
     - name: tocChannel
       default: '#devops-cd-cie'
     - name: e2eBuildId
+    - name: cr_priority
+      default: "moderate"
+    - name: cr_type
+      default: "standard"
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -64,6 +68,10 @@ spec:
           value: $(params.tocChannel)
         - name: e2eBuildId
           value: $(params.e2eBuildId)
+        - name: cr_priority
+          value: $(params.cr_priority)
+        - name: cr_type
+          value: $(params.cr_type)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

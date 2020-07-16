@@ -23,6 +23,10 @@ spec:
       default: 'Pipeline'
     - name: e2eBuildId
       default: ''
+    - name: cr_priority
+      default: "moderate"
+    - name: cr_type
+      default: "standard"
   stepTemplate:
     env:
       - name: PIPELINE_TRIGGERING_USER
@@ -75,6 +79,10 @@ spec:
         value: $(params.e2eApplication)
       - name: E2E_BUILD_ID
         value: $(params.e2eBuildId)
+      - name: CR_PRIORITY
+        value: $(params.cr_priority)
+      - name: CR_TYPE
+        value: $(params.cr_type)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -125,7 +133,7 @@ spec:
           "system": "$SYSTEM",
           "impact": "N/A",
           "outageduration": "0 00:00:00",
-          "priority": "moderate",
+          "priority": ${CR_PRIORITY},
           "environment": "$CRN",
           "purpose": "$PURPOSE",
           "description": "$PURPOSE\nDescription/Plan: Delivering changes for:\n$DEPLOY_PACKAGE",
@@ -133,7 +141,7 @@ spec:
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
           "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
           "deploymentready": "yes",
-          "type": "standard"
+          "type": ${CR_TYPE}
         }
         HERE
 

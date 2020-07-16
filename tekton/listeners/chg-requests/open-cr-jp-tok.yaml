@@ -112,6 +112,12 @@ spec:
             value: $(params.prodRepos)
           - name: e2eBuildId
             value: $(params.E2E_BUILD_ID)
+          - name: e2eBuildId
+            value: $(params.E2E_BUILD_ID)
+          - name: cr_priority
+            value: $(params.CR_PRIORITY)
+          - name: cr_type
+            value: $(params.CR_TYPE)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
