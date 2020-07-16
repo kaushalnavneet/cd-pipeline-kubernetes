@@ -172,6 +172,7 @@ function send_to_slack() {
 #			text_template='{"text":"travis-worker checker", "attachments": [{"title": "travis-worker check is clean","text": "%s", "color": "#19cf19"}]}'
 			;;
 		error)
+			slack_message=$(echo -e "$2")
 			text_template='{"text":"travis-worker checker", "icon_emoji": ":pipeline-worker:", "attachments": ["text": "%s", "color": "#c21807"}]}'
 			json_string=$(printf "$text_template" "$slack_message" )
 			curl -X POST -H 'Content-type: application/json' --data "$json_string" $PIPELINE_MON_WEBHOOK > /dev/null
