@@ -125,3 +125,27 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
+    - name: deploy
+      runAfter: [build-va]
+      taskRef:
+        name: deploy
+      params:
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipDeploy
+          value: $(params.skipDeploy)
+        - name: clusterName
+          value: $(params.clusterName)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
+        - name: helmOptions
+          value: $(params.helmOptions)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
