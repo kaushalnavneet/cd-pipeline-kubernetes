@@ -32,7 +32,7 @@ ADD . /work
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /work/component/export/tini
 ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
 RUN chmod +x /work/component/export/tini /work/component/export/jq
-RUN cp -a /work/scripts/entrypoint.nodejs.sh /work/component/export/entrypoint.sh
+RUN cp -a /work/scripts/entrypoint.nodejsubi.sh /work/component/export/entrypoint.sh
 
 RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl
