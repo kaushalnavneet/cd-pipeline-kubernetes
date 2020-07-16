@@ -6,7 +6,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM registry.access.redhat.com/ubi8/nodejs-12:latest as bld
+FROM registry.access.redhat.com/ubi8/nodejs-12:latest
 
 USER root
 
