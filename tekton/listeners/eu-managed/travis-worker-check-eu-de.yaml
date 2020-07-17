@@ -50,7 +50,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name:  travis-worker-checker-eu-de-$(uid)-pvc
+        name:  twc-eu-de-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -61,7 +61,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: travis-worker-checker-eu-de-$(uid)
+        name: twc-eu-de-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "travis-worker-checker-eu-de-template"
@@ -71,7 +71,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: travis-worker-checker-eu-de-$(uid)-pvc
+              claimName: twc-eu-de-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: script_repo
