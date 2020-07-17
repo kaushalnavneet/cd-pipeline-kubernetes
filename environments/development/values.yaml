@@ -499,8 +499,8 @@ pipeline:
         worker_dindBase: true
         worker_globalBaseImage: "latest"
         enable_pull_request: true
-        enable_secret_by_ref: false
-        secrets_api_url: https://dev.console.test.cloud.ibm.com/devops/api/v1/secrets
+        enable_secret_by_ref: true
+        secrets_api_url: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: true
