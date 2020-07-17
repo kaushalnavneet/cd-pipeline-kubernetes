@@ -64,23 +64,24 @@ function cleanup_docker_containers () {
 							if [ "$started" \< "$current" ]; then
 								echo "Container started more than one hour ago. Need to stop it and clean it"
 								# notify slack channel
-								send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
-								errors=true
-								#stopped=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker kill $container")
-								#result=$(echo $?)
-								#if [[ result == 1 ]]; then
-								#	echo "Stopping container $container failed"
-								#else
-								#	echo "Stopping container $container was successful"
-								#	removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
-								#	result=$(echo $?)
-								#	if [[ result == 1 ]]; then
-								#		echo "Removing container $container failed"
-								#		# notify slack channel
-								#	else
-								#		echo "Removing container $container was successful"
-								#	fi
-								#fi
+								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
+								stopped=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker kill $container")
+								result=$(echo $?)
+								if [[ result == 1 ]]; then
+									echo "Stopping container $container failed"
+								else
+									echo "Stopping container $container was successful"
+									removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
+									result=$(echo $?)
+									if [[ result == 1 ]]; then
+										echo "Removing container $container failed"
+										# notify slack channel
+										send_to_slack "error" "Removing container $container failed\nFound in $worker on $cluster"
+										errors=true
+									else
+										echo "Removing container $container was successful"
+									fi
+								fi
 							else 
 								echo "Container started less than one hour ago -- keep it running"
 							fi
@@ -96,16 +97,18 @@ function cleanup_docker_containers () {
 							if [ "$started" \< "$current" ]; then
 								echo "Container was created more than one hour ago. Need to stop it and clean it"
 								# notify slack channel
-								send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
+								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								errors=true
-								#removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
-								#result=$(echo $?)
-								#if [[ result == 1 ]]; then
-								#	echo "Removing container $container failed"
-								#	# notify slack channel
-								#else
-								#	echo "Removing container $container was successful"
-								#fi
+								removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
+								result=$(echo $?)
+								if [[ result == 1 ]]; then
+									echo "Removing container $container failed"
+									# notify slack channel
+									send_to_slack "error" "Removing container $container failed\nFound in $worker on $cluster"
+									errors=true
+								else
+									echo "Removing container $container was successful"
+								fi
 							else 
 								echo "Container was created less than one hour ago -- leave it as is"
 							fi
