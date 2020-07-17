@@ -5,6 +5,7 @@ NAMESPACE=opentoolchain
 
 OLDIFS=$IFS
 
+DELAY="75 minutes ago"
 PIPELINE_MON_WEBHOOK=$PIPELINE_MON_WEBHOOK
 ALL_REGIONS=${ALL_REGIONS:-syd,tok,lon,wdc,dal}
 REGION=${REGION:-us-south}
@@ -56,13 +57,13 @@ function cleanup_docker_containers () {
 						;;
 					running)
 						echo "Running container"
-						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
-						echo "current date - 65m=$current"
+						current=$(date -u -v-75M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '75 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
+						echo "current date - 75m=$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
-								echo "Container started more than one hour ago. Need to stop it and clean it"
+								echo "Container started more than ${DELAY}. Need to stop it and clean it"
 								# notify slack channel
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								stopped=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker kill $container")
@@ -83,19 +84,19 @@ function cleanup_docker_containers () {
 									fi
 								fi
 							else 
-								echo "Container started less than one hour ago -- keep it running"
+								echo "Container started less than ${DELAY} -- keep it running"
 							fi
 						fi
 						;;
 					created)
 						echo "Created container"
-						current=$(date -u -v-65M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '65 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
-						echo "current date - 65m =$current"
+						current=$(date -u -v-75M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '75 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
+						echo "current date - 75m =$current"
 						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
-								echo "Container was created more than one hour ago. Need to stop it and clean it"
+								echo "Container was created more than ${DELAY}. Need to stop it and clean it"
 								# notify slack channel
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								errors=true
@@ -110,7 +111,7 @@ function cleanup_docker_containers () {
 									echo "Removing container $container was successful"
 								fi
 							else 
-								echo "Container was created less than one hour ago -- leave it as is"
+								echo "Container was created less than ${DELAY} -- leave it as is"
 							fi
 						fi
 				esac
