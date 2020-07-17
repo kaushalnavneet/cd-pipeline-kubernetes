@@ -199,12 +199,13 @@ function post_soc_notify() {
 	curl -X POST -H 'Content-type: application/json' --data "$json_string" $2 > /dev/null
 }
 
-# $1=region (one of lon,dal,tok,wdc,syd)
+# $1=region (one of lon,dal,tok,wdc,syd,fra)
 function check_travis_workers() {
 	region=$1
 	# list all clusters for region $region
 	clusters_to_check=()
 	while IFS='' read -r line; do clusters_to_check+=("$line"); done < <(ibmcloud ks clusters | grep otc-pw | grep $region | grep prod | awk '{print $1}')
+	echo "All clusters: ${clusters_to_check[@]}"
 	for cluster in "${clusters_to_check[@]}"; do
 		ibmcloud ks cluster config --cluster $cluster
 		echo "check $cluster"
