@@ -30,22 +30,22 @@ ARG MODE=DEVELOPMENT
 ARG warname
 
 #RUN installUtility install --acceptLicense servlet-3.1 ssl-1.0 jsp-2.2
-ENV WLP_OUTPUT_DIR=/opt/ibm/wlp/usr/servers
+ENV WLP_OUTPUT_DIR=/opt/ol/wlp/usr/servers
 
-COPY --from=build /work/warbuild/target/$warname /opt/ibm/wlp/usr/servers/defaultServer/apps
-COPY --from=build /work/warbuild/serverConf/*.template /opt/ibm/wlp/usr/servers/defaultServer/
-COPY --from=build /work/warbuild/serverConf/pipeline-server /opt/ibm/wlp/
-COPY --from=build /work/warbuild/serverConf/qr.jks /opt/ibm/wlp/usr/servers/defaultServer/
-COPY --from=build /work/warbuild/serverConf/log4j.properties /opt/ibm/wlp/usr/servers/defaultServer/
-COPY --from=build /work/warbuild/serverConf/ICDRedisTruststore.jks /opt/ibm/wlp/usr/servers/defaultServer/
-COPY --from=build /work/warbuild/jq /opt/ibm/wlp/
-COPY --from=build /work/warbuild/lib/newrelic.jar /opt/ibm/wlp/usr/servers/defaultServer/newrelic/
-#COPY --from=build /work/warbuild/serverConf/resources/security/* /opt/ibm/wlp/usr/servers/defaultServer/resources/security/
+COPY --from=build /work/warbuild/target/$warname /opt/ol/wlp/usr/servers/defaultServer/apps
+COPY --from=build /work/warbuild/serverConf/*.template /opt/ol/wlp/usr/servers/defaultServer/
+COPY --from=build /work/warbuild/serverConf/pipeline-server /opt/ol/wlp/
+COPY --from=build /work/warbuild/serverConf/qr.jks /opt/ol/wlp/usr/servers/defaultServer/
+COPY --from=build /work/warbuild/serverConf/log4j.properties /opt/ol/wlp/usr/servers/defaultServer/
+COPY --from=build /work/warbuild/serverConf/ICDRedisTruststore.jks /opt/ol/wlp/usr/servers/defaultServer/
+COPY --from=build /work/warbuild/jq /opt/ol/wlp/
+COPY --from=build /work/warbuild/lib/newrelic.jar /opt/ol/wlp/usr/servers/defaultServer/newrelic/
+#COPY --from=build /work/warbuild/serverConf/resources/security/* /opt/ol/wlp/usr/servers/defaultServer/resources/security/
 
 # Import the redis certificate
-RUN keytool -importkeystore -srckeystore /opt/ibm/wlp/usr/servers/defaultServer/ICDRedisTruststore.jks -srcstorepass changeit -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
-RUN chmod 755 /opt/ibm/wlp/pipeline-server /opt/ibm/wlp/jq
+RUN keytool -importkeystore -srckeystore /opt/ol/wlp/usr/servers/defaultServer/ICDRedisTruststore.jks -srcstorepass changeit -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
+RUN chmod 755 /opt/ol/wlp/pipeline-server /opt/ol/wlp/jq
 
 
-ENTRYPOINT ["/opt/ibm/wlp/pipeline-server"]
+ENTRYPOINT ["/opt/ol/wlp/pipeline-server"]
 CMD ["run", "defaultServer"]
