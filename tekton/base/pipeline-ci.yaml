@@ -100,7 +100,7 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: java
+    - name: java-ubi
       runAfter: [clone-config-repo]
       taskRef:
         name: build-base
