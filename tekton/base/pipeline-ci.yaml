@@ -233,8 +233,11 @@ spec:
           value: docker/Dockerfile.java.run
         - name: imageTag
           value: secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: websphere-liberty-ubi-run
-      runAfter: [java]
+      runAfter: [ java-ubi]
       taskRef:
         name: run-base
       params:
