@@ -72,20 +72,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: nodejs12-ubi
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: build-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageName
-          value: cd-build-base
-        - name: imageTag
-          value: nodejs12ubi
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: java
       runAfter: [clone-config-repo]
       taskRef:
@@ -100,20 +86,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: java-ubi
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: build-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageName
-          value: cd-build-base
-        - name: imageTag
-          value: java-ubi
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
     - name: go
       runAfter: [clone-config-repo]
       taskRef:
@@ -164,42 +136,6 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: nodejs12-ubi-run
-      runAfter: [nodejs12-ubi]
-      taskRef:
-        name: run-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/ibmnode
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
-        - name: dockerFile
-          value: docker/Dockerfile.nodejs12ubi.run
-        - name: imageTag
-          value: 12ubisecure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: nodejs12-ubi-va
-      runAfter: [nodejs12-ubi-run]
-      taskRef:
-        name: run-va
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/ibmnode
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
-        - name: dockerFile
-          value: docker/Dockerfile.nodejs12ubi.run
-        - name: imageTag
-          value: 12ubisecure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
     - name: websphere-liberty-run
       runAfter: [java]
       taskRef:
@@ -235,40 +171,4 @@ spec:
           value: secure
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: websphere-liberty-ubi-run
-      runAfter: [ java-ubi]
-      taskRef:
-        name: run-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/websphere-liberty-ubi
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:java-ubi
-        - name: dockerFile
-          value: docker/Dockerfile.java-ubi.run
-        - name: imageTag
-          value: secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: websphere-liberty-ubi-va
-      runAfter: [websphere-liberty-ubi-run]
-      taskRef:
-        name: run-va
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/websphere-liberty-ubi
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:java-ubi
-        - name: dockerFile
-          value: docker/Dockerfile.java-ubi.run
-        - name: imageTag
-          value: secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
