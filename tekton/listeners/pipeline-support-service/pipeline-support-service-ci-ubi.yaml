@@ -1,0 +1,188 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-support-service-ubi-trigger-dev
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: imageName
+    - name: imageTag
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        API_KEY_1308775: $(params.API_KEY_1308775)
+        API_KEY_1651315: $(params.API_KEY_1651315)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.source_branch)-support-ubi-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: $(params.source_branch)-support-ubi-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-support-service-ubi-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-ci-ubi
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.source_branch)-support-ubi-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: source_directory
+            value: $(params.source_directory)
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
+          - name: config_repo
+            value: $(params.config_repo)
+          - name: config_branch
+            value: $(params.config_branch)
+          - name: config_directory
+            value: $(params.config_directory)
+          - name: imageUrl
+            value: $(params.imageUrl)
+          - name: clusterName
+            value: $(params.clusterName)
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
+          - name: skipBuild
+            value: $(params.skipBuild)
+          - name: environment
+            value: $(params.environment)
+          - name: skipVA
+            value: $(params.skipVA)
+          - name: skipDeploy
+            value: $(params.skipDeploy)
+          - name: artifactoryTokenBase64
+            value: $(params.ARTIFACTORY_TOKEN_BASE64)
+          - name: artifactoryId
+            value: $(params.ARTIFACTORY_ID)
+          - name: consoleAuthToken
+            value: $(params.CONSOLE_AUTH_TOKEN)
+          - name: helmOptions
+            value: $(params.helmOptions)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: pipeline-support-service-ubi-binding-dev
+spec:
+  params:
+    - name: source_repo
+      value: "https://github.ibm.com/org-ids/pipeline-support-service.git"
+    - name: source_branch
+      value: "master"
+    - name: source_directory
+      value: "pipeline-support-service"
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: charts_branch
+      value: "master"
+    - name: charts_directory
+      value: "pipeline-support-service/cd-pipeline-kubernetes"
+    - name: config_repo
+      value: "https://github.ibm.com/ids-env/devops-config.git"
+    - name: config_branch
+      value: "master"
+    - name: config_directory
+      value: "pipeline-support-service/devops-config"
+    - name: imageUrl
+      value: "us.icr.io/opentoolchain/pipeline-support-service"
+    - name: environment
+      value: "development"
+    - name: clusterName
+      value: otc-us-south-dev
+    - name: clusterNamespace
+      value: opentoolchain
+    - name: skipBuild
+      value: "false"
+    - name: skipVA
+      value: "true"
+    - name: skipDeploy
+      value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: pipeline-support-service-ubi-dev
+spec:
+  triggers:
+    - binding:
+        name: pipeline-support-service-ubi-binding-dev
+      template:
+        name: pipeline-support-service-ubi-trigger-dev
