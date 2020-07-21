@@ -44,7 +44,7 @@ COPY --from=build /work/warbuild/lib/newrelic.jar /opt/ol/wlp/usr/servers/defaul
 
 # Import the redis certificate
 RUN keytool -importkeystore -srckeystore /opt/ol/wlp/usr/servers/defaultServer/ICDRedisTruststore.jks -srcstorepass changeit -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
-RUN chmod 755 /opt/ol/wlp/pipeline-server /opt/ol/wlp/jq
+RUN chmod 755 /opt/ol/wlp/pipeline-server-ubi /opt/ol/wlp/jq
 
 ENTRYPOINT ["/opt/ol/wlp/pipeline-server-ubi"]
 CMD ["run", "defaultServer"]
