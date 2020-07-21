@@ -119,7 +119,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: agent-0.14.2-pipeline-binding-prod
+  name: agent-0.14.1-pipeline-binding-prod
 spec:
   params:
     - name: componentRevision
@@ -132,11 +132,11 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: manual-agent-0.14.2-listener-prod
+  name: manual-agent-0.14.1-listener-prod
 spec:
   triggers:
     - binding:
-        name: agent-0.14.2-pipeline-binding-prod
+        name: agent-0.14.1-pipeline-binding-prod
       template:
         name: pipeline-template
 ---
