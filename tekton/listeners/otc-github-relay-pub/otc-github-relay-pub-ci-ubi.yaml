@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: blade-ubi-trigger-dev
+  name: otc-github-relay-pub-ubi-trigger-dev
 spec:
   params:
     - name: source_repo
@@ -72,7 +72,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-blade-ubi-$(uid)-pvc
+        name: $(params.source_branch)-relay-pub-ubi-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -83,17 +83,17 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(params.source_branch)-blade-ubi-$(uid)
+        name: $(params.source_branch)-relay-pub-ubi-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "blade-ubi-trigger-dev"
+          generatedBy: "otc-github-relay-pub-ubi-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-ci-ubi
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-blade-ubi-$(uid)-pvc
+              claimName: $(params.source_branch)-relay-pub-ubi-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: source_repo
@@ -134,29 +134,29 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: blade-ubi-binding-dev
+  name: otc-github-relay-pub-ubi-binding-dev
 spec:
   params:
     - name: source_repo
-      value: "https://github.ibm.com/org-ids/blade-pipeline-broker.git"
+      value: "https://github.ibm.com/org-ids/otc-github-relay-pub.git"
     - name: source_branch
       value: "master"
     - name: source_directory
-      value: "blade-pipeline-broker"
+      value: "otc-github-relay-pub"
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: charts_branch
       value: "master"
     - name: charts_directory
-      value: "blade-pipeline-broker/cd-pipeline-kubernetes"
+      value: "otc-github-relay-pub/cd-pipeline-kubernetes"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
-      value: "blade-pipeline-broker/devops-config"
+      value: "otc-github-relay-pub/devops-config"
     - name: imageUrl
-      value: "us.icr.io/opentoolchain/blade-pipeline-broker"
+      value: "us.icr.io/opentoolchain/otc-github-relay-pub"
     - name: environment
       value: "development"
     - name: clusterName
@@ -166,17 +166,17 @@ spec:
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "false"
+      value: "true"
     - name: skipDeploy
       value: "false"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: blade-ubi-dev
+  name: otc-github-relay-pub-ubi-dev
 spec:
   triggers:
     - binding:
-        name: blade-ubi-binding-dev
+        name: otc-github-relay-pub-ubi-binding-dev
       template:
-        name: blade-ubi-trigger-dev
+        name: otc-github-relay-pub-ubi-trigger-dev
