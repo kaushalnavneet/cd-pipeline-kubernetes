@@ -99,6 +99,12 @@ spec:
           exit 1
         fi
 
+        if [ -z ${CR_TYPE} ]; then
+          CR_TYPE="standard"
+        fi
+        if [ -z ${CR_PRIORITY} ]; then
+          CR_PRIORITY="moderate"
+        fi
         ibmcloud config --check-version=false
         echo Logging into ibmcloud
         ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
@@ -133,7 +139,7 @@ spec:
           "system": "$SYSTEM",
           "impact": "N/A",
           "outageduration": "0 00:00:00",
-          "priority": ${CR_PRIORITY},
+          "priority": "${CR_PRIORITY}",
           "environment": "$CRN",
           "purpose": "$PURPOSE",
           "description": "$PURPOSE\nDescription/Plan: Delivering changes for:\n$DEPLOY_PACKAGE",
@@ -141,7 +147,7 @@ spec:
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
           "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
           "deploymentready": "yes",
-          "type": ${CR_TYPE}
+          "type": "${CR_TYPE}"
         }
         HERE
 
