@@ -21,24 +21,19 @@ function rollout () {
 	echo -n $cluster | grep pw > /dev/null
 	if [ $? -ne 0 ]; then
 		#normal cluster
-		IFS=',' read -ra deployments <<< $(echo $ALL_DEPLOYMENTS)
-		IFS=',' read -ra statefulsets <<< $(echo $ALL_STATEFULSETS)
-		IFS=$OLDIFS
-		check_deployments_statefulsets "$deployments" "$statefulsets"
+		check_deployments_statefulsets $ALL_DEPLOYMENTS $ALL_STATEFULSETS
 	else
 		#pw cluster
-		IFS=',' read -ra deployments <<< $(echo $ALL_PW_DEPLOYMENTS)
-		IFS=',' read -ra statefulsets <<< $(echo $ALL_PW_STATEFULSETS)
-		IFS=$OLDIFS
-		check_deployments_statefulsets "$deployments" "$statefulsets"
+		check_deployments_statefulsets $ALL_PW_DEPLOYMENTS $ALL_PW_STATEFULSETS
 	fi
 }
 
 function check_deployments_statefulsets() {
 	# $1 = deployments
 	# $2 = statefulsets
-	deployments=$1
-	statefulsets=$2
+	IFS=',' read -ra deployments <<< $(echo $1)
+	IFS=',' read -ra statefulsets <<< $(echo $2)
+	IFS=$OLDIFS
 
 	echo "All deployments: ${deployments[@]}"
 	echo "All statefulsets: ${statefulsets[@]}"
