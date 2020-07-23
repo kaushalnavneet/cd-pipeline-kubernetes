@@ -39,8 +39,7 @@ function cleanup_docker_containers () {
 		for container in "${containers[@]}"; do
 			echo "Inspecting container $container"
 			status=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.Status'")
-			result=$(echo $?)
-			if [[ result == 1 ]]; then
+			if [ $? -eq 1 ]; then
 				echo "docker container $container has been terminated"
 			else
 				echo "status: $status"
@@ -48,8 +47,7 @@ function cleanup_docker_containers () {
 					exited)
 						echo "Exited container"
 						removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
-						result=$(echo $?)
-						if [[ result == 1 ]]; then
+						if [ $? -eq 1 ]; then
 							echo "Removing container $container failed"
 						else
 							echo "Removing container $container was successful"
@@ -67,14 +65,12 @@ function cleanup_docker_containers () {
 								# notify slack channel
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								stopped=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker kill $container")
-								result=$(echo $?)
-								if [[ result == 1 ]]; then
+								if [ $? -eq 1 ]; then
 									echo "Stopping container $container failed"
 								else
 									echo "Stopping container $container was successful"
 									removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
-									result=$(echo $?)
-									if [[ result == 1 ]]; then
+									if [ $? -eq 1 ]; then
 										echo "Removing container $container failed"
 										# notify slack channel
 										send_to_slack "error" "Removing container $container failed\nFound in $worker on $cluster"
@@ -101,8 +97,7 @@ function cleanup_docker_containers () {
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								errors=true
 								removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
-								result=$(echo $?)
-								if [[ result == 1 ]]; then
+								if [ $? -eq 1 ]; then
 									echo "Removing container $container failed"
 									# notify slack channel
 									send_to_slack "error" "Removing container $container failed\nFound in $worker on $cluster"
@@ -120,8 +115,7 @@ function cleanup_docker_containers () {
 		done
 		#check travis-worker service
 		check_travis_service=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "service travis-worker status | grep started")
-		result=$(echo $?)
-		if [[ result == 1 ]]; then
+		if [ $? -eq 1 ]; then
 			echo "travis-worker service is not up and running for $worker on $cluster"
 			send_to_slack "error" "travis-worker service is not up and running in $worker on $cluster"
 			errors=true
@@ -138,8 +132,7 @@ function cleanup_docker_containers () {
 		else
 			echo "PID=$PID"
 			check_payload=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep PAYLOAD_CIPHER_KEY")
-			result=$(echo $?)
-			if [[ result == 1 ]]; then
+			if [ $? -eq 1 ]; then
 				echo "PAYLOAD_CIPHER_KEY is not set for $worker on $cluster"
 				# notify slack channel
 				send_to_slack "error" "The environment variable PAYLOAD_CIPHER_KEY is not set in $worker on $cluster"
@@ -148,8 +141,7 @@ function cleanup_docker_containers () {
 				echo "PAYLOAD_CIPHER_KEY is set for $worker on $cluster"
 			fi
 			check_rabbit=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "cat /proc/$PID/environ | grep RABBITMQ_SERVER_URLS")
-			result=$(echo $?)
-			if [[ result == 1 ]]; then
+			if [ $? -eq 1 ]; then
 				echo "RABBITMQ_SERVER_URLS is not set for $worker on $cluster"
 				# notify slack channel
 				send_to_slack "error" "The environment variable RABBITMQ_SERVER_URLS is not set in $worker on $cluster"

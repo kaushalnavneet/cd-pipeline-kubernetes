@@ -92,7 +92,7 @@ do
         echo "Skip travis-worker-go"
     else
         waitForReadyPods $namespace $app
-        if [ $? == 0 ]; then
+        if [[ $? -eq 0 ]]; then
             # pods are ready - checking it was deployed by checking the starting time
             hasNotDeployedTodayPods notDeployedToday $namespace $app
             if [ "$notDeployedToday" == "true" ]; then
