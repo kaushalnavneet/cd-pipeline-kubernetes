@@ -38,22 +38,22 @@ function check_deployments_statefulsets() {
 	echo "All deployments: ${deployments[@]}"
 	echo "All statefulsets: ${statefulsets[@]}"
 
-	for deployment in $deployments
+	for deployment in ${deployments[@]}
 	do
 		echo "Rolling out $deployment"
 		#kubectl -n ${NAMESPACE} rollout restart deployment/$deployment
 	done
-	for statefulset in $statefulsets
+	for statefulset in ${statefulsets[@]}
 	do
 		echo "Rolling out $statefulset"
 		#kubectl -n ${NAMESPACE} rollout restart statefulset/$statefulset
 	done
 
-	for deployment in $deployments
+	for deployment in ${deployments[@]}
 	do
 		kubectl -n ${NAMESPACE} rollout status deployment/$deployment -w --timeout=10m
 	done
-	for statefulset in $statefulsets
+	for statefulset in ${statefulsets[@]}
 	do
 		echo "checking status for $statefulset"
 		kubectl -n ${NAMESPACE} rollout status statefulset/$statefulset -w --timeout=10m
