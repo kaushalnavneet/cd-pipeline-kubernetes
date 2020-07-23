@@ -91,7 +91,7 @@ function check_clusters() {
 }
 
 function check_all_clusters() {
-	#ibmcloud login --apikey $API_KEY -r $REGION
+	ibmcloud login --apikey $API_KEY -r $REGION
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
 	IFS=$OLDIFS
 	for region in $regions
