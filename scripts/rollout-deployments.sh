@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o errexit
+#set -o errexit
 set +x
 NAMESPACE=opentoolchain
 
