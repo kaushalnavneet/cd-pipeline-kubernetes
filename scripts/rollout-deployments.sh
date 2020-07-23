@@ -90,7 +90,7 @@ function check_all_clusters() {
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
 	IFS=$OLDIFS
 	echo "All regions: ${regions[@]}"
-	for region in $regions
+	for region in ${regions[@]}
 	do
 		check_pw_clusters $region
 		check_clusters $region
