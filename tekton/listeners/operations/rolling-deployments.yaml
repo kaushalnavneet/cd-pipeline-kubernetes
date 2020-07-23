@@ -11,6 +11,12 @@ spec:
     # CD integration
     - name: apikey
       description: the ibmcloud api key
+    - name: regions
+      description: one of syd,tok,lon,wdc,dal,au-syd,fra
+      default: ""
+    - name: cluster_region
+      description: ibmcloud region for the cluster to rollout
+      default: "us-south"
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
@@ -20,6 +26,8 @@ spec:
         name: cd-config
       data:
         IDS_USER: $(params.IDS_USER)
+        REGION: $(params.CLUSTER_REGION)
+        ALL_REGIONS: $(params.ALL_REGIONS)
 
     - apiVersion: v1
       kind: Secret
@@ -77,6 +85,10 @@ spec:
             value: $(params.script_branch)
           - name: script_directory
             value: $(params.script_directory)
+          - name: regions
+            value: $(params.ALL_REGIONS)
+          - name: cluster_region
+            value: $(params.CLUSTER_REGION)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

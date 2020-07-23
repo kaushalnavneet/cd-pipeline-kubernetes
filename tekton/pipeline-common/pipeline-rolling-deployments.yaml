@@ -7,6 +7,9 @@ spec:
     - name: script_repo
     - name: script_branch
     - name: script_directory
+    - name: regions
+    - name: cluster_region
+      default: "us-south"
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -23,7 +26,7 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc 
-    - name: tw-check-syd
+    - name: rollout
       runAfter: [clone-script-repo]
       taskRef:
         name: rollout-task
@@ -31,80 +34,9 @@ spec:
         - name: script_directory
           value: $(params.script_directory)
         - name: regions
-          value: syd
+          value: $(params.regions)
         - name: cluster_region
-          value: au-syd
+          value: $(params.cluster_region)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: tw-check-au-syd
-      runAfter: [clone-script-repo]
-      taskRef:
-        name: rollout-task
-      params:
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: regions
-          value: au-syd
-        - name: cluster_region
-          value: au-syd
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
-    - name: tw-check-lon
-      runAfter: [clone-script-repo]
-      taskRef:
-        name: rollout-task
-      params:
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: regions
-          value: lon
-        - name: cluster_region
-          value: eu-gb
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: tw-check-tok
-      runAfter: [clone-script-repo]
-      taskRef:
-        name: rollout-task
-      params:
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: regions
-          value: tok
-        - name: cluster_region
-          value: jp-tok
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: tw-check-wdc
-      runAfter: [clone-script-repo]
-      taskRef:
-        name: rollout-task
-      params:
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: regions
-          value: wdc
-        - name: cluster_region
-          value: us-east
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: tw-check-dal
-      runAfter: [clone-script-repo]
-      taskRef:
-        name: rollout-task
-      params:
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: regions
-          value: dal
-        - name: cluster_region
-          value: us-south
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-
