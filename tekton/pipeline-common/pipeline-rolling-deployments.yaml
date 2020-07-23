@@ -1,0 +1,110 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-rolling-deployments
+spec:
+  params:
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-script-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directory-name
+          value: $(params.script_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: tw-check-syd
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: syd
+        - name: cluster_region
+          value: au-syd
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: tw-check-au-syd
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: au-syd
+        - name: cluster_region
+          value: au-syd
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: tw-check-lon
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: lon
+        - name: cluster_region
+          value: eu-gb
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-tok
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: tok
+        - name: cluster_region
+          value: jp-tok
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-wdc
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: wdc
+        - name: cluster_region
+          value: us-east
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: tw-check-dal
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: rollout-task
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: dal
+        - name: cluster_region
+          value: us-south
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+
