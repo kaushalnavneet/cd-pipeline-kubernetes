@@ -209,7 +209,7 @@ function check_all_clusters() {
 	ibmcloud login --apikey $API_KEY -r $REGION
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
 	IFS=$OLDIFS
-	for region in $regions
+	for region in ${regions[@]}
 	do
 		check_travis_workers $region
 	done
