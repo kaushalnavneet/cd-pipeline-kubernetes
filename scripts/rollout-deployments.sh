@@ -41,12 +41,12 @@ function check_deployments_statefulsets() {
 	for deployment in ${deployments[@]}
 	do
 		echo "Rolling out $deployment"
-		#kubectl -n ${NAMESPACE} rollout restart deployment/$deployment
+		kubectl -n ${NAMESPACE} rollout restart deployment/$deployment
 	done
 	for statefulset in ${statefulsets[@]}
 	do
 		echo "Rolling out $statefulset"
-		#kubectl -n ${NAMESPACE} rollout restart statefulset/$statefulset
+		kubectl -n ${NAMESPACE} rollout restart statefulset/$statefulset
 	done
 
 	for deployment in ${deployments[@]}
