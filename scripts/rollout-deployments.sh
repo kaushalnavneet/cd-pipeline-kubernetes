@@ -94,6 +94,7 @@ function check_all_clusters() {
 	ibmcloud login --apikey $API_KEY -r $REGION
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
 	IFS=$OLDIFS
+	echo "All regions: ${regions[@]}"
 	for region in $regions
 	do
 		check_pw_clusters $region
