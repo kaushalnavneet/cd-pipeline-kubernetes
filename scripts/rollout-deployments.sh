@@ -92,7 +92,8 @@ function check_all_clusters() {
 	echo "All regions: ${regions[@]}"
 	for region in ${regions[@]}
 	do
-		check_pw_clusters $region
+		# exclude pw clusters for now
+		#check_pw_clusters $region
 		check_clusters $region
 	done
 }
