@@ -157,8 +157,6 @@ spec:
           echo "current dir=$(pwd)"
           [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
             cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
-          [ -r "../cd-pipeline-kubernetes/environments/${ENVIRONMENT}/values.yaml" ] && \
-            cp ../cd-pipeline-kubernetes/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
         fi
 
         set +e
