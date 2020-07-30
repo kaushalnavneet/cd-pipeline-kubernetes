@@ -37,7 +37,7 @@ pipeline:
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq-icd_2019_04_23_07h59m20s
     probes:
       enabled: false
-    preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
+    preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; docker system prune -f; docker volume prune -f; touch /var/log/travis-worker.done\"]"
     terminationGracePeriodSeconds: 4000  
     configmap:
       data:

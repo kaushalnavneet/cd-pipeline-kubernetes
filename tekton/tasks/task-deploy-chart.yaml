@@ -152,6 +152,9 @@ spec:
           tar zxf ../$CHART_PATH
           cd ..
           # pick up the environment values fresh if available
+          echo "component name=${COMPONENT_NAME}"
+          echo "environment=${ENVIRONMENT}"
+          echo "current dir=$(pwd)"
           [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
             cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
           [ -r "../cd-pipeline-kubernetes/environments/${ENVIRONMENT}/values.yaml" ] && \
