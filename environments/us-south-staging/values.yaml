@@ -29,7 +29,7 @@ pipeline:
         log4js_syslog_appender_port: 6515
         log4js_syslog_appender_url: devops.ng.bluemix.net
         log4js_syslog_appender_whitelist: audit-logs
-  travis-worker-staging:
+  travis-worker:
     replicas: 2
     vault:
       secretPaths:
