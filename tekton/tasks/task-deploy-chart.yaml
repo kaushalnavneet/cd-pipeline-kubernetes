@@ -154,6 +154,8 @@ spec:
           # pick up the environment values fresh if available
           [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
             cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+          [ -r "../cd-pipeline-kubernetes/environments/${ENVIRONMENT}/values.yaml" ] && \
+            cp ../cd-pipeline-kubernetes/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
         fi
 
         set +e
