@@ -54,8 +54,6 @@ spec:
           value: $(params.source_directory)
         - name: runBaseImage
           value: $(params.runBaseImage)
-        - name: environment
-          value: $(params.environment)
         - name: javaPattern
           value: $(params.javaPattern)
       workspaces:

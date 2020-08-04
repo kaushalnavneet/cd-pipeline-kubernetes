@@ -4,19 +4,9 @@ metadata:
   name: pipeline-deploy-info
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
     - name: charts_directory
-    - name: environment
-    - name: deployClusters
-    - name: snUrl
     - name: prodRepos
       default: 'None'
-    - name: deployChannel
-      default: '#devops-otc-deployment'
-    - name: tocChannel
-      default: '#devops-cd-cie'
-    - name: e2eBuildId
   workspaces:
   - name: pipeline-pvc
   tasks:

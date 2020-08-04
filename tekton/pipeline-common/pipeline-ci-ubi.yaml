@@ -14,12 +14,9 @@ spec:
     - name: config_branch
     - name: config_directory
     - name: imageUrl
-    - name: imageName
-    - name: imageTag
     - name: environment
     - name: clusterName
     - name: clusterNamespace
-    - name: skipBuild
     - name: skipVA
     - name: skipDeploy
     - name: dockerFile
@@ -115,12 +112,8 @@ spec:
           value: $(params.imageUrl)
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
-        - name: dockerFile
-          value: ''
         - name: imageTag
           value: ''
-        - name: environment
-          value: $(params.environment)
         - name: skipVA
           value: $(params.skipVA)
       workspaces:
