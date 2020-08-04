@@ -7,8 +7,6 @@ spec:
     - name: source_directory
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-    - name: environment
-      default: 'development'
     - name: prodRepos
       default: 'None'
   stepTemplate:

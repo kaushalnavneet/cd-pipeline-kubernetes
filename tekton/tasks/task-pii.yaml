@@ -6,8 +6,6 @@ spec:
   params:
     - name: source_directory
     - name: runBaseImage
-    - name: environment
-      default: 'development'
     - name: javaPattern
       default: 'false'
   workspaces:

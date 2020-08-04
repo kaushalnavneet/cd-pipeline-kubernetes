@@ -15,16 +15,7 @@ spec:
       default: ''
     - name: imageTag
     - name: imageUrl
-    - name: buildCluster
-      default: otc-dal12-build
-    - name: dockerFile
-    - name: dockerUsername
-      default: iamapikey
     - name: runBaseImage
-    - name: extraDockerOpts
-      default: --no-cache
-    - name: environment
-      default: 'development'
     - name: skipVA
       default: 'false'
   stepTemplate:
