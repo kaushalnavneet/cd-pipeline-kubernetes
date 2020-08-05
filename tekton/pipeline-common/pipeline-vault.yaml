@@ -6,7 +6,7 @@ spec:
   params:
     - name: source-repo
     - name: source-branch
-    - name: source_directory
+    - name: source-directory
     - name: image-url
     - name: environment
     - name: skipVA
@@ -32,7 +32,7 @@ spec:
         - name: branch
           value: $(params.source-branch)
         - name: directory-name
-          value: $(params.source_directory)
+          value: $(params.source-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -41,8 +41,8 @@ spec:
       taskRef:
         name:  run-base
       params:
-        - name: source_directory
-          value: $(params.source_directory)
+        - name: source-directory
+          value: $(params.source-directory)
         - name: image-url
           value: $(params.image-url)
         - name: run-base-image
@@ -67,8 +67,8 @@ spec:
       taskRef:
         name: run-va
       params:
-        - name: source_directory
-          value: $(params.source_directory)
+        - name: source-directory
+          value: $(params.source-directory)
         - name: image-url
           value: $(params.image-url)
         - name: run-base-image

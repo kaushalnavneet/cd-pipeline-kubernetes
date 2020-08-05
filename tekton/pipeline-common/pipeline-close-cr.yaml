@@ -38,7 +38,7 @@ spec:
       taskRef:
         name:  close-cr
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.charts-directory)
         - name: environment
           value: $(params.environment)

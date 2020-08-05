@@ -42,7 +42,7 @@ spec:
       taskRef:
         name: deployment-information
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.charts-directory)
         - name: prod-repos
           value: $(params.prod-repos)
@@ -54,7 +54,7 @@ spec:
       taskRef:
         name:  open-cr
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.charts-directory)
         - name: environment
           value: $(params.environment)

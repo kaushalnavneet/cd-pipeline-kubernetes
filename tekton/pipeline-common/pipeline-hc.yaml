@@ -53,7 +53,7 @@ spec:
       taskRef:
         name:  run-hc
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.config-directory)
         - name: script-directory
           value: $(params.script-directory)
@@ -71,7 +71,7 @@ spec:
       taskRef:
         name:  run-hc
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.config-directory)
         - name: script-directory
           value: $(params.script-directory)
@@ -89,7 +89,7 @@ spec:
       taskRef:
         name:  run-hc
       params:
-        - name: source_directory
+        - name: source-directory
           value: $(params.config-directory)
         - name: script-directory
           value: $(params.script-directory)
