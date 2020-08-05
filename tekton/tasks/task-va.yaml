@@ -16,7 +16,7 @@ spec:
     - name: image-tag
     - name: image-url
     - name: run-base-image
-    - name: skipVA
+    - name: skip-va
       default: 'false'
   stepTemplate:
     env:
@@ -80,7 +80,7 @@ spec:
       - name: SOURCE_DIRECTORY
         value: $(params.source-directory)
       - name: SKIP
-        value: $(params.skipVA)
+        value: $(params.skip-va)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

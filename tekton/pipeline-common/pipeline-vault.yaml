@@ -9,7 +9,7 @@ spec:
     - name: source-directory
     - name: image-url
     - name: environment
-    - name: skipVA
+    - name: skip-va
     - name: docker-file
       default: ''
     - name: run-base-image
@@ -75,8 +75,8 @@ spec:
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12
         - name: image-tag
           value: ''
-        - name: skipVA
-          value: $(params.skipVA)
+        - name: skip-va
+          value: $(params.skip-va)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

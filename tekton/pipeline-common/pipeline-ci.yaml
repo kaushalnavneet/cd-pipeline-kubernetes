@@ -17,7 +17,7 @@ spec:
     - name: environment
     - name: cluster-name
     - name: cluster-namespace
-    - name: skipVA
+    - name: skip-va
     - name: skip-deploy
     - name: docker-file
       default: ''
@@ -114,8 +114,8 @@ spec:
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12
         - name: image-tag
           value: ''
-        - name: skipVA
-          value: $(params.skipVA)
+        - name: skip-va
+          value: $(params.skip-va)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
