@@ -4,9 +4,9 @@ metadata:
   name: blade-pipeline-broker-trigger-pii
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: source_directory
+    - name: source-repo
+    - name: source-branch
+    - name: source-directory
     - name: pii_repo
     - name: pii_branch
     - name: pii_directory
@@ -15,15 +15,15 @@ spec:
     - name: api
       description: the ibmcloud api
       default: https://cloud.ibm.com
-    - name: apikey
+    - name: api-key
       description: the ibmcloud api key
-    - name: toolchainRegion
+    - name: toolchain-region
       description: the ibmcloud region containing the toolchain referencing the repository
       default: us-south
-    - name: resourceGroup
+    - name: resource-group
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
-    - name: toolchainId
+    - name: toolchain-id
       description: The IBM Cloud Kubernetes cluster region
 
   resourcetemplates:
@@ -34,9 +34,9 @@ spec:
         name: cd-config
       data:
         API: $(params.api)
-        REGION: $(params.toolchainRegion)
-        RESOURCE_GROUP: $(params.resourceGroup)
-        TOOLCHAIN_ID: $(params.toolchainId)
+        REGION: $(params.toolchain-region)
+        RESOURCE_GROUP: $(params.resource-group)
+        TOOLCHAIN_ID: $(params.toolchain-id)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -62,7 +62,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-blade-pii-$(uid)-pvc
+        name: $(params.source-branch)-blade-pii-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -73,7 +73,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(params.source_branch)-blade-pii-$(uid)
+        name: $(params.source-branch)-blade-pii-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "blade-pipeline-broker-trigger-pii"
@@ -83,15 +83,15 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-blade-pii-$(uid)-pvc
+              claimName: $(params.source-branch)-blade-pii-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: source_repo
-            value: $(params.source_repo)
-          - name: source_branch
-            value: $(params.source_branch)
-          - name: source_directory
-            value: $(params.source_directory)
+          - name: source-repo
+            value: $(params.source-repo)
+          - name: source-branch
+            value: $(params.source-branch)
+          - name: source-directory
+            value: $(params.source-directory)
           - name: pii_repo
             value: $(params.pii_repo)
           - name: pii_branch
@@ -107,11 +107,11 @@ metadata:
   name: blade-pipeline-broker-binding-pii
 spec:
   params:
-    - name: source_repo
+    - name: source-repo
       value: "https://github.ibm.com/org-ids/blade-pipeline-broker.git"
-    - name: source_branch
+    - name: source-branch
       value: "master"
-    - name: source_directory
+    - name: source-directory
       value: "blade-pipeline-broker"
     - name: pii_repo
       value: "https://github.ibm.com/org-ids/pii.git"

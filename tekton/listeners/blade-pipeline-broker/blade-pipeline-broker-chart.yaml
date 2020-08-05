@@ -4,37 +4,37 @@ metadata:
   name: blade-pipeline-broker-trigger-chart
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: short_source_branch
-    - name: source_directory
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
-    - name: script_repo
-    - name: script_branch
-    - name: script_directory
-    - name: config_repo
-    - name: config_branch
-    - name: config_directory
-    - name: imageName
-    - name: imageTag
-    - name: syd_auto_deploy_token
-    - name: syd_auto_deploy_url
+    - name: source-repo
+    - name: source-branch
+    - name: short-source-branch
+    - name: source-directory
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
+    - name: script-repo
+    - name: script-branch
+    - name: script-directory
+    - name: config-repo
+    - name: config-branch
+    - name: config-directory
+    - name: image-name
+    - name: image-tag
+    - name: syd-auto-deploy-token
+    - name: syd-auto-deploy-url
 
     # CD integration
     - name: api
       description: the ibmcloud api
       default: https://cloud.ibm.com
-    - name: apikey
+    - name: api-key
       description: the ibmcloud api key
-    - name: toolchainRegion
+    - name: toolchain-region
       description: the ibmcloud region containing the toolchain referencing the repository
       default: us-south
-    - name: resourceGroup
+    - name: resource-group
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
-    - name: toolchainId
+    - name: toolchain-id
       description: The IBM Cloud Kubernetes cluster region
 
   resourcetemplates:
@@ -45,9 +45,9 @@ spec:
         name: cd-config
       data:
         API: $(params.api)
-        REGION: $(params.toolchainRegion)
-        RESOURCE_GROUP: $(params.resourceGroup)
-        TOOLCHAIN_ID: $(params.toolchainId)
+        REGION: $(params.toolchain-region)
+        RESOURCE_GROUP: $(params.resource-group)
+        TOOLCHAIN_ID: $(params.toolchain-id)
         IDS_USER: $(params.IDS_USER)
         DRY_RUN_CLUSTER: otc-us-south-dal13-stage
     - apiVersion: v1
@@ -80,7 +80,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.short_source_branch)-blade-$(uid)-pvc
+        name: $(params.short-source-branch)-blade-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -91,8 +91,8 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.source_branch)-base-run
-        name: $(params.short_source_branch)-blade-$(uid)
+        #generateName: $(params.source-branch)-base-run
+        name: $(params.short-source-branch)-blade-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "blade-pipeline-broker-trigger-chart"
@@ -102,45 +102,45 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.short_source_branch)-blade-$(uid)-pvc
+              claimName: $(params.short-source-branch)-blade-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: source_repo
-            value: $(params.source_repo)
-          - name: source_branch
-            value: $(params.source_branch)
-          - name: source_directory
-            value: $(params.source_directory)
-          - name: charts_repo
-            value: $(params.charts_repo)
-          - name: charts_branch
-            value: $(params.charts_branch)
-          - name: charts_directory
-            value: $(params.charts_directory)
-          - name: script_repo
-            value: $(params.script_repo)
-          - name: script_branch
-            value: $(params.script_branch)
-          - name: script_directory
-            value: $(params.script_directory)
-          - name: config_repo
-            value: $(params.config_repo)
-          - name: config_branch
-            value: $(params.config_branch)
-          - name: config_directory
-            value: $(params.config_directory)
-          - name: imageUrl
-            value: $(params.imageUrl)
-          - name: skipBuild
-            value: $(params.skipBuild)
+          - name: source-repo
+            value: $(params.source-repo)
+          - name: source-branch
+            value: $(params.source-branch)
+          - name: source-directory
+            value: $(params.source-directory)
+          - name: charts-repo
+            value: $(params.charts-repo)
+          - name: charts-branch
+            value: $(params.charts-branch)
+          - name: charts-directory
+            value: $(params.charts-directory)
+          - name: script-repo
+            value: $(params.script-repo)
+          - name: script-branch
+            value: $(params.script-branch)
+          - name: script-directory
+            value: $(params.script-directory)
+          - name: config-repo
+            value: $(params.config-repo)
+          - name: config-branch
+            value: $(params.config-branch)
+          - name: config-directory
+            value: $(params.config-directory)
+          - name: image-url
+            value: $(params.image-url)
+          - name: skip-build
+            value: $(params.skip-build)
           - name: environment
             value: $(params.environment)
-          - name: skipVA
-            value: $(params.skipVA)
-          - name: syd_auto_deploy_token
-            value: $(params.syd_auto_deploy_token)
-          - name: syd_auto_deploy_url
-            value: $(params.syd_auto_deploy_url)
+          - name: skip-va
+            value: $(params.skip-va)
+          - name: syd-auto-deploy-token
+            value: $(params.syd-auto-deploy-token)
+          - name: syd-auto-deploy-url
+            value: $(params.syd-auto-deploy-url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -148,43 +148,43 @@ metadata:
   name: blade-pipeline-broker-binding-chart
 spec:
   params:
-    - name: source_repo
+    - name: source-repo
       value: "https://github.ibm.com/org-ids/blade-pipeline-broker.git"
-    - name: source_branch
+    - name: source-branch
       value: "integration"
-    - name: short_source_branch
+    - name: short-source-branch
       value: "int-charts"
-    - name: source_directory
+    - name: source-directory
       value: "blade-pipeline-broker"
-    - name: charts_repo
+    - name: charts-repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
-    - name: charts_branch
+    - name: charts-branch
       value: "master"
-    - name: charts_directory
+    - name: charts-directory
       value: "blade-pipeline-broker/pipeline-config"
-    - name: script_repo
+    - name: script-repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
-    - name: script_branch
+    - name: script-branch
       value: "master"
-    - name: script_directory
+    - name: script-directory
       value: "blade-pipeline-broker/cd-pipeline-kubernetes"
-    - name: config_repo
+    - name: config-repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
-    - name: config_branch
+    - name: config-branch
       value: "master"
-    - name: config_directory
+    - name: config-directory
       value: "blade-pipeline-broker/devops-config"
-    - name: imageUrl
+    - name: image-url
       value: "us.icr.io/devopsotc/blade-pipeline-broker"
     - name: environment
       value: "staging"
-    - name: skipBuild
+    - name: skip-build
       value: "false"
-    - name: skipVA
+    - name: skip-va
       value: "false"
-    - name: syd_auto_deploy_token
+    - name: syd-auto-deploy-token
       value: ""
-    - name: syd_auto_deploy_url
+    - name: syd-auto-deploy-url
       value: ""
 ---
 apiVersion: tekton.dev/v1beta1

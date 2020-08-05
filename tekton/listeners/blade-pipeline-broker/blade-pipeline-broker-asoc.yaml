@@ -4,25 +4,25 @@ metadata:
   name: blade-pipeline-broker-trigger-asoc
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: source_directory
-    - name: componentDockerImage
-    - name: componentName
-    - name: branchName
+    - name: source-repo
+    - name: source-branch
+    - name: source-directory
+    - name: componen-docker-image
+    - name: component-name
+    - name: branch-name
     # CD integration
     - name: api
       description: the ibmcloud api
       default: https://cloud.ibm.com
-    - name: apikey
+    - name: api-key
       description: the ibmcloud api key
-    - name: toolchainRegion
+    - name: toolchain-region
       description: the ibmcloud region containing the toolchain referencing the repository
       default: us-south
-    - name: resourceGroup
+    - name: resource-group
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
-    - name: toolchainId
+    - name: toolchain-id
       description: The IBM Cloud Kubernetes cluster region
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
@@ -35,9 +35,9 @@ spec:
         APPSCAN_APP_ID: $(params.APPSCAN_APP_ID)
         APPSCAN_APP_KEY_ID: $(params.APPSCAN_APP_KEY_ID)
         API: $(params.api)
-        REGION: $(params.toolchainRegion)
-        RESOURCE_GROUP: $(params.resourceGroup)
-        TOOLCHAIN_ID: $(params.toolchainId)
+        REGION: $(params.toolchain-region)
+        RESOURCE_GROUP: $(params.resource-group)
+        TOOLCHAIN_ID: $(params.toolchain-id)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -65,7 +65,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.branchName)-asoc-$(uid)-pvc
+        name: $(params.branch-name)-asoc-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -76,8 +76,8 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.source_branch)-base-run
-        name: $(params.branchName)-asoc-$(uid)
+        #generateName: $(params.source-branch)-base-run
+        name: $(params.branch-name)-asoc-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "blade-pipeline-broker-trigger-asoc"
@@ -87,21 +87,21 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.branchName)-asoc-$(uid)-pvc
+              claimName: $(params.branch-name)-asoc-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: source_repo
-            value: $(params.source_repo)
-          - name: source_branch
-            value: $(params.source_branch)
-          - name: source_directory
-            value: $(params.source_directory)
-          - name: componentDockerImage
-            value: $(params.componentDockerImage)
-          - name: componentName
-            value: $(params.componentName)
-          - name: branchName
-            value: $(params.branchName)
+          - name: source-repo
+            value: $(params.source-repo)
+          - name: source-branch
+            value: $(params.source-branch)
+          - name: source-directory
+            value: $(params.source-directory)
+          - name: componen-docker-image
+            value: $(params.componen-docker-image)
+          - name: component-name
+            value: $(params.component-name)
+          - name: branch-name
+            value: $(params.branch-name)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -109,17 +109,17 @@ metadata:
   name: blade-pipeline-broker-binding-asoc
 spec:
   params:
-    - name: source_repo
+    - name: source-repo
       value: "https://github.ibm.com/org-ids/otc-deploy.git"
-    - name: source_branch
+    - name: source-branch
       value: "master"
-    - name: source_directory
+    - name: source-directory
       value: "otc-deploy"
-    - name: componentDockerImage
+    - name: componen-docker-image
       value: "us.icr.io/opentoolchain/blade-pipeline-broker:latest"
-    - name: componentName
+    - name: component-name
       value: "blade-pipeline-broker"
-    - name: branchName
+    - name: branch-name
       value: "master"
 ---
 apiVersion: tekton.dev/v1beta1
