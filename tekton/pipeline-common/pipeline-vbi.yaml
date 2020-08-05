@@ -6,7 +6,7 @@ spec:
   params:
     - name: source-repo
     - name: source-branch
-    - name: dockerFile
+    - name: docker-file
     - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
     - name: docker-username
@@ -29,8 +29,8 @@ spec:
       taskRef:
         name:  run-vbi
       params:
-        - name: dockerFile
-          value: $(params.dockerFile)
+        - name: docker-file
+          value: $(params.docker-file)
         - name: run-base-image
           value: $(params.run-base-image)
         - name: docker-username

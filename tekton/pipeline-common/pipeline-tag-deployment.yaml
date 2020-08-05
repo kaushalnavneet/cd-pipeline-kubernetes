@@ -7,7 +7,6 @@ spec:
     - name: charts-repo
     - name: charts-branch
     - name: charts-directory
-    - name: environment
     - name: prod-repos
       default: 'None'
   workspaces:

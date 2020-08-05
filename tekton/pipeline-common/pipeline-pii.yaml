@@ -10,7 +10,6 @@ spec:
     - name: pii-repo
     - name: pii-branch
     - name: pii-directory
-    - name: environment
     - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
     - name: java-pattern

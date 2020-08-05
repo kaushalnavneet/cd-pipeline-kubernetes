@@ -6,7 +6,7 @@ spec:
   params:
     - name: syd-auto-deploy-token
       description: the token used to call generic webhook url
-    - name: syd-auto-deploy_url
+    - name: syd-auto-deploy-url
       description: the generic webhook url
   steps:
     - name: auto-deploy
