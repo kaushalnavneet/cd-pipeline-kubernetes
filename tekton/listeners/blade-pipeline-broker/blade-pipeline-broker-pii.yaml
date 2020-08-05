@@ -7,9 +7,9 @@ spec:
     - name: source-repo
     - name: source-branch
     - name: source-directory
-    - name: pii_repo
-    - name: pii_branch
-    - name: pii_directory
+    - name: pii-repo
+    - name: pii-branch
+    - name: pii-directory
 
     # CD integration
     - name: api
@@ -92,12 +92,12 @@ spec:
             value: $(params.source-branch)
           - name: source-directory
             value: $(params.source-directory)
-          - name: pii_repo
-            value: $(params.pii_repo)
-          - name: pii_branch
-            value: $(params.pii_branch)
-          - name: pii_directory
-            value: $(params.pii_directory)
+          - name: pii-repo
+            value: $(params.pii-repo)
+          - name: pii-branch
+            value: $(params.pii-branch)
+          - name: pii-directory
+            value: $(params.pii-directory)
           - name: environment
             value: $(params.environment)
 ---
@@ -113,11 +113,11 @@ spec:
       value: "master"
     - name: source-directory
       value: "blade-pipeline-broker"
-    - name: pii_repo
+    - name: pii-repo
       value: "https://github.ibm.com/org-ids/pii.git"
-    - name: pii_branch
+    - name: pii-branch
       value: "master"
-    - name: pii_directory
+    - name: pii-directory
       value: "blade-pipeline-broker/pii"
     - name: environment
       value: "development"
