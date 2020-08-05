@@ -7,7 +7,7 @@ spec:
     - name: source-repo
     - name: source-branch
     - name: source-directory
-    - name: componen-docker-image
+    - name: component-docker-image
     - name: component-name
     - name: branch-name
     # CD integration
@@ -96,8 +96,8 @@ spec:
             value: $(params.source-branch)
           - name: source-directory
             value: $(params.source-directory)
-          - name: componen-docker-image
-            value: $(params.componen-docker-image)
+          - name: component-docker-image
+            value: $(params.component-docker-image)
           - name: component-name
             value: $(params.component-name)
           - name: branch-name
@@ -115,7 +115,7 @@ spec:
       value: "master"
     - name: source-directory
       value: "otc-deploy"
-    - name: componen-docker-image
+    - name: component-docker-image
       value: "us.icr.io/opentoolchain/blade-pipeline-broker:latest"
     - name: component-name
       value: "blade-pipeline-broker"
