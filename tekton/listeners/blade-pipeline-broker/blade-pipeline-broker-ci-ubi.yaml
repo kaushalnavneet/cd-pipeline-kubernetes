@@ -120,8 +120,6 @@ spec:
             value: $(params.cluster-name)
           - name: cluster-namespace
             value: $(params.cluster-namespace)
-          - name: skip-build
-            value: $(params.skip-build)
           - name: environment
             value: $(params.environment)
           - name: skip-va
@@ -163,8 +161,6 @@ spec:
       value: otc-us-south-dev
     - name: cluster-namespace
       value: opentoolchain
-    - name: skip-build
-      value: "false"
     - name: skip-va
       value: "false"
     - name: skip-deploy
