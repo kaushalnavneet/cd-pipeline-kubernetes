@@ -17,10 +17,11 @@ spec:
     - name: config-repo
     - name: config-branch
     - name: config-directory
-    - name: image-name
-    - name: image-tag
     - name: syd-auto-deploy-token
     - name: syd-auto-deploy-url
+    - name: environment
+    - name: image-url
+    - name: skip-va
 
     # CD integration
     - name: api
@@ -131,8 +132,6 @@ spec:
             value: $(params.config-directory)
           - name: image-url
             value: $(params.image-url)
-          - name: skip-build
-            value: $(params.skip-build)
           - name: environment
             value: $(params.environment)
           - name: skip-va
@@ -178,8 +177,6 @@ spec:
       value: "us.icr.io/devopsotc/blade-pipeline-broker"
     - name: environment
       value: "staging"
-    - name: skip-build
-      value: "false"
     - name: skip-va
       value: "false"
     - name: syd-auto-deploy-token
