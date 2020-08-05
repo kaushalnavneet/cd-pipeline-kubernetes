@@ -4,9 +4,9 @@ metadata:
   name: pipeline-travis-worker-checker
 spec:
   params:
-    - name: script_repo
-    - name: script_branch
-    - name: script_directory
+    - name: script-repo
+    - name: script-branch
+    - name: script-directory
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -15,11 +15,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.script_repo)
+          value: $(params.script-repo)
         - name: branch
-          value: $(params.script_branch)
+          value: $(params.script-branch)
         - name: directory-name
-          value: $(params.script_directory)
+          value: $(params.script-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -28,11 +28,11 @@ spec:
       taskRef:
         name: travis-worker-check
       params:
-        - name: script_directory
-          value: $(params.script_directory)
+        - name: script-directory
+          value: $(params.script-directory)
         - name: regions
           value: syd
-        - name: cluster_region
+        - name: cluster-region
           value: au-syd
       workspaces:
       - name: task-pvc
@@ -42,11 +42,11 @@ spec:
       taskRef:
         name: travis-worker-check
       params:
-        - name: script_directory
-          value: $(params.script_directory)
+        - name: script-directory
+          value: $(params.script-directory)
         - name: regions
           value: lon
-        - name: cluster_region
+        - name: cluster-region
           value: eu-gb
       workspaces:
       - name: task-pvc
@@ -56,11 +56,11 @@ spec:
       taskRef:
         name: travis-worker-check
       params:
-        - name: script_directory
-          value: $(params.script_directory)
+        - name: script-directory
+          value: $(params.script-directory)
         - name: regions
           value: tok
-        - name: cluster_region
+        - name: cluster-region
           value: jp-tok
       workspaces:
       - name: task-pvc
@@ -70,11 +70,11 @@ spec:
       taskRef:
         name: travis-worker-check
       params:
-        - name: script_directory
-          value: $(params.script_directory)
+        - name: script-directory
+          value: $(params.script-directory)
         - name: regions
           value: wdc
-        - name: cluster_region
+        - name: cluster-region
           value: us-east
       workspaces:
       - name: task-pvc
@@ -84,11 +84,11 @@ spec:
       taskRef:
         name: travis-worker-check
       params:
-        - name: script_directory
-          value: $(params.script_directory)
+        - name: script-directory
+          value: $(params.script-directory)
         - name: regions
           value: dal
-        - name: cluster_region
+        - name: cluster-region
           value: us-south
       workspaces:
       - name: task-pvc

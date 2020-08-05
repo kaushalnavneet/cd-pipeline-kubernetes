@@ -4,12 +4,12 @@ metadata:
   name: pipeline-vbi
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
+    - name: source-repo
+    - name: source-branch
     - name: dockerFile
-    - name: runBaseImage
+    - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
-    - name: dockerUsername
+    - name: docker-username
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -18,9 +18,9 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.source_repo)
+          value: $(params.source-repo)
         - name: branch
-          value: $(params.source_branch)
+          value: $(params.source-branch)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -31,10 +31,10 @@ spec:
       params:
         - name: dockerFile
           value: $(params.dockerFile)
-        - name: runBaseImage
-          value: $(params.runBaseImage)
-        - name: dockerUsername
-          value: $(params.dockerUsername)
+        - name: run-base-image
+          value: $(params.run-base-image)
+        - name: docker-username
+          value: $(params.docker-username)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

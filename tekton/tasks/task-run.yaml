@@ -4,32 +4,32 @@ metadata:
   name: run-base
 spec:
   params:
-    - name: source_directory
-    - name: registryUrl
+    - name: source-directory
+    - name: registry-url
       default: us.icr.io
-    - name: registryNamespace
+    - name: registry-namespace
       default: opentoolchain
-    - name: registryRegion
+    - name: registry-region
       default: us-south
-    - name: imageName
+    - name: image-name
       default: ''
-    - name: imageTag
-    - name: imageUrl
-    - name: buildCluster
+    - name: image-tag
+    - name: image-url
+    - name: build-cluster
       default: ''
-    - name: dockerFile
-    - name: dockerUsername
+    - name: docker-file
+    - name: docker-username
       default: iamapikey
-    - name: runBaseImage
-    - name: extraDockerOpts
+    - name: run-base-image
+    - name: extra-docker-opts
       default: --no-cache
     - name: environment
       default: 'development'
-    - name: artifactoryTokenBase64
+    - name: artifactory-token-base64
       default: ''
-    - name: artifactoryId
+    - name: artifactory-id
       default: ''
-    - name: consoleAuthToken
+    - name: console-auth-token
       default: ''
   stepTemplate:
     env:
@@ -83,46 +83,46 @@ spec:
     mountPath: /workspace 
   steps:
   - name: run-base
-    image: $(params.runBaseImage)
+    image: $(params.run-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(params.imageName)
+        value: $(params.image-name)
       - name: IMAGE_TAG
-        value: $(params.imageTag)
+        value: $(params.image-tag)
       - name: APPLICATION_VERSION
-        value: $(params.imageTag)
+        value: $(params.image-tag)
       - name: IMAGE_URL
-        value: $(params.imageUrl)
+        value: $(params.image-url)
       - name: REGISTRY_URL
-        value: $(params.registryUrl)
+        value: $(params.registry-url)
       - name: REGISTRY_NAMESPACE
-        value: $(params.registryNamespace)
+        value: $(params.registry-namespace)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: DOCKERFILE
-        value: $(params.dockerFile)
+        value: $(params.docker-file)
       - name: DOCKER_IMAGE
-        value: $(params.runBaseImage)
+        value: $(params.run-base-image)
       - name: DOCKER_USERNAME
-        value: $(params.dockerUsername)
+        value: $(params.docker-username)
       - name: EXTRA_DOCKER_OPTS
-        value: $(params.extraDockerOpts)
+        value: $(params.extra-docker-opts)
       - name: BUILD_CLUSTER
-        value: $(params.buildCluster)
+        value: $(params.build-cluster)
       - name: ENVIRONMENT
         value: $(params.environment)
       # used for pipeline-ui build
       - name: ARTIFACTORY_TOKEN_BASE64
-        value: $(params.artifactoryTokenBase64)
+        value: $(params.artifactory-token-base64)
       - name: ARTIFACTORY_ID
-        value: $(params.artifactoryId)
+        value: $(params.artifactory-id)
       - name: CONSOLE_AUTH_TOKEN
-        value: $(params.consoleAuthToken)
+        value: $(params.console-auth-token)
       # can we get rid of this?
       - name: OPERATOR_SDK
         value: ''

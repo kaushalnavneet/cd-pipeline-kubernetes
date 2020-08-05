@@ -4,8 +4,8 @@ metadata:
   name: pipeline-deploy-info
 spec:
   params:
-    - name: charts_directory
-    - name: prodRepos
+    - name: charts-directory
+    - name: prod-repos
       default: 'None'
   workspaces:
   - name: pipeline-pvc
@@ -14,10 +14,10 @@ spec:
       taskRef:
         name: master-list
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: prodRepos
-          value: $(params.prodRepos)
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: prod-repos
+          value: $(params.prod-repos)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -26,10 +26,10 @@ spec:
       taskRef:
         name: deployment-list
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: prodRepos
-          value: $(params.prodRepos)
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: prod-repos
+          value: $(params.prod-repos)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

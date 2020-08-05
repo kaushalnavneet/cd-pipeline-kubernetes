@@ -4,18 +4,18 @@ metadata:
   name: pipeline-close-cr
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
     - name: environment
-    - name: deployClusters
-    - name: snUrl
-    - name: deployChannel
+    - name: deploy-clusters
+    - name: sn-url
+    - name: deploy-channel
       default: '#devops-otc-deployment'
-    - name: tocChannel
+    - name: toc-channel
       default: '#devops-cd-cie'
-    - name: e2eBuildId
-    - name: e2eApplication
+    - name: e2e-build-id
+    - name: e2e-application
       default: 'CD-OTC'
   workspaces:
   - name: pipeline-pvc
@@ -25,11 +25,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.charts_repo)
+          value: $(params.charts-repo)
         - name: branch
-          value: $(params.charts_branch)
+          value: $(params.charts-branch)
         - name: directory-name
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -39,21 +39,21 @@ spec:
         name:  close-cr
       params:
         - name: source_directory
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
         - name: environment
           value: $(params.environment)
-        - name: deployClusters
-          value: $(params.deployClusters)
-        - name: snUrl
-          value: $(params.snUrl)
-        - name: deployChannel
-          value: $(params.deployChannel)
-        - name: tocChannel
-          value: $(params.tocChannel)
-        - name: e2eBuildId
-          value: $(params.e2eBuildId)
-        - name: e2eApplication
-          value: $(params.e2eApplication)
+        - name: deploy-clusters
+          value: $(params.deploy-clusters)
+        - name: sn-url
+          value: $(params.sn-url)
+        - name: deploy-channel
+          value: $(params.deploy-channel)
+        - name: toc-channel
+          value: $(params.toc-channel)
+        - name: e2e-build-id
+          value: $(params.e2e-build-id)
+        - name: e2e-application
+          value: $(params.e2e-application)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

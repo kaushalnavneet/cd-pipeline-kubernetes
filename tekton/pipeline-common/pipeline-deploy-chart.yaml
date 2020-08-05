@@ -4,21 +4,21 @@ metadata:
   name: pipeline-deploy-chart
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
-    - name: config_repo
-    - name: config_branch
-    - name: config_directory
-    - name: imageUrl
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
+    - name: config-repo
+    - name: config-branch
+    - name: config-directory
+    - name: image-url
     - name: environment
-    - name: clusterName1
-    - name: skipDeploy1
-    - name: clusterName2
-    - name: skipDeploy2
-    - name: clusterName3
-    - name: skipDeploy3
-    - name: clusterNamespace
+    - name: cluster-name1
+    - name: skip-deploy1
+    - name: cluster-name2
+    - name: skip-deploy2
+    - name: cluster-name3
+    - name: skip-deploy3
+    - name: cluster-namespace
       default: 'opentoolchain'
   workspaces:
   - name: pipeline-pvc
@@ -28,11 +28,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.charts_repo)
+          value: $(params.charts-repo)
         - name: branch
-          value: $(params.charts_branch)
+          value: $(params.charts-branch)
         - name: directory-name
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -42,11 +42,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.config_repo)
+          value: $(params.config-repo)
         - name: branch
-          value: $(params.config_branch)
+          value: $(params.config-branch)
         - name: directory-name
-          value: $(params.config_directory)
+          value: $(params.config-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -55,20 +55,20 @@ spec:
       taskRef:
         name:  deploy-chart
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: imageTag
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: image-url
+          value: $(params.image-url)
+        - name: image-tag
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy1)
-        - name: clusterName
-          value: $(params.clusterName1)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+        - name: skip-deploy
+          value: $(params.skip-deploy1)
+        - name: cluster-name
+          value: $(params.cluster-name1)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -77,20 +77,20 @@ spec:
       taskRef:
         name:  deploy-chart
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: imageTag
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: image-url
+          value: $(params.image-url)
+        - name: image-tag
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy2)
-        - name: clusterName
-          value: $(params.clusterName2)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+        - name: skip-deploy
+          value: $(params.skip-deploy2)
+        - name: cluster-name
+          value: $(params.cluster-name2)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -99,20 +99,20 @@ spec:
       taskRef:
         name:  deploy-chart
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: imageTag
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: image-url
+          value: $(params.image-url)
+        - name: image-tag
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: skipDeploy
-          value: $(params.skipDeploy3)
-        - name: clusterName
-          value: $(params.clusterName3)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+        - name: skip-deploy
+          value: $(params.skip-deploy3)
+        - name: cluster-name
+          value: $(params.cluster-name3)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

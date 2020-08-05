@@ -4,14 +4,14 @@ metadata:
   name: run-vbi
 spec:
   params:
-    - name: buildCluster
+    - name: build-cluster
       default: otc-dal12-build
-    - name: dockerFile
-    - name: runBaseImage
-    - name: extraDockerOpts
+    - name: docker-file
+    - name: run-base-image
+    - name: extra-docker-opts
       default: --no-cache
-    - name: dockerUsername
-    - name: registryRegion
+    - name: docker-username
+    - name: registry-region
       default: us-south
   stepTemplate:
     env:
@@ -75,21 +75,21 @@ spec:
     mountPath: /workspace 
   steps:
   - name: run-base
-    image: $(params.runBaseImage)
+    image: $(params.run-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DOCKERFILE
-        value: $(params.dockerFile)
+        value: $(params.docker-file)
       - name: DOCKER_USERNAME
-        value: $(params.dockerUsername)
+        value: $(params.docker-username)
       - name: EXTRA_DOCKER_OPTS
-        value: $(params.extraDockerOpts)
+        value: $(params.extra-docker-opts)
       - name: BUILD_CLUSTER
-        value: $(params.buildCluster)
+        value: $(params.build-cluster)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

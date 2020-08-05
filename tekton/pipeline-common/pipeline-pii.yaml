@@ -4,16 +4,16 @@ metadata:
   name: pipeline-pii
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: source_directory
-    - name: pii_repo
-    - name: pii_branch
-    - name: pii_directory
+    - name: source-repo
+    - name: source-branch
+    - name: source-directory
+    - name: pii-repo
+    - name: pii-branch
+    - name: pii-directory
     - name: environment
-    - name: runBaseImage
+    - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
-    - name: javaPattern
+    - name: java-pattern
       default: 'false'
   workspaces:
   - name: pipeline-pvc
@@ -23,11 +23,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.source_repo)
+          value: $(params.source-repo)
         - name: branch
-          value: $(params.source_branch)
+          value: $(params.source-branch)
         - name: directory-name
-          value: $(params.source_directory)
+          value: $(params.source-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -37,11 +37,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.pii_repo)
+          value: $(params.pii-repo)
         - name: branch
-          value: $(params.pii_branch)
+          value: $(params.pii-branch)
         - name: directory-name
-          value: $(params.pii_directory)
+          value: $(params.pii-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -50,12 +50,12 @@ spec:
       taskRef:
         name:  run-pii
       params:
-        - name: source_directory
-          value: $(params.source_directory)
-        - name: runBaseImage
-          value: $(params.runBaseImage)
-        - name: javaPattern
-          value: $(params.javaPattern)
+        - name: source-directory
+          value: $(params.source-directory)
+        - name: run-base-image
+          value: $(params.run-base-image)
+        - name: java-pattern
+          value: $(params.java-pattern)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

@@ -4,21 +4,21 @@ metadata:
   name: pipeline-vault
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
+    - name: source-repo
+    - name: source-branch
     - name: source_directory
-    - name: imageUrl
+    - name: image-url
     - name: environment
     - name: skipVA
-    - name: dockerFile
+    - name: docker-file
       default: ''
-    - name: runBaseImage
+    - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
-    - name: artifactoryTokenBase64
+    - name: artifactory-token-base64
       default: ''
-    - name: artifactoryId
+    - name: artifactory-id
       default: ''
-    - name: consoleAuthToken
+    - name: console-auth-token
       default: ''
   workspaces:
   - name: pipeline-pvc
@@ -28,9 +28,9 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.source_repo)
+          value: $(params.source-repo)
         - name: branch
-          value: $(params.source_branch)
+          value: $(params.source-branch)
         - name: directory-name
           value: $(params.source_directory)
       workspaces:
@@ -43,22 +43,22 @@ spec:
       params:
         - name: source_directory
           value: $(params.source_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: runBaseImage
-          value: $(params.runBaseImage)
-        - name: dockerFile
-          value: $(params.dockerFile)
-        - name: imageTag
+        - name: image-url
+          value: $(params.image-url)
+        - name: run-base-image
+          value: $(params.run-base-image)
+        - name: docker-file
+          value: $(params.docker-file)
+        - name: image-tag
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: consoleAuthToken
-          value: $(params.consoleAuthToken)
+        - name: artifactory-token-base64
+          value: $(params.artifactory-token-base64)
+        - name: artifactory-id
+          value: $(params.artifactory-id)
+        - name: console-auth-token
+          value: $(params.console-auth-token)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -69,11 +69,11 @@ spec:
       params:
         - name: source_directory
           value: $(params.source_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: runBaseImage
+        - name: image-url
+          value: $(params.image-url)
+        - name: run-base-image
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12
-        - name: imageTag
+        - name: image-tag
           value: ''
         - name: skipVA
           value: $(params.skipVA)

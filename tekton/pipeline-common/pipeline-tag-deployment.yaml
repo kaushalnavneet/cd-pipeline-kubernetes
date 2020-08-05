@@ -4,11 +4,11 @@ metadata:
   name: pipeline-tag-deployment
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
     - name: environment
-    - name: prodRepos
+    - name: prod-repos
       default: 'None'
   workspaces:
   - name: pipeline-pvc
@@ -18,11 +18,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.charts_repo)
+          value: $(params.charts-repo)
         - name: branch
-          value: $(params.charts_branch)
+          value: $(params.charts-branch)
         - name: directory-name
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -31,10 +31,10 @@ spec:
       taskRef:
         name: tag-deployment
       params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: prodRepos
-          value: $(params.prodRepos)
+        - name: source-directory
+          value: $(params.charts-directory)
+        - name: prod-repos
+          value: $(params.prod-repos)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

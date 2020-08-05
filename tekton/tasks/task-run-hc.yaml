@@ -4,12 +4,12 @@ metadata:
   name: run-hc
 spec:
   params:
-    - name: source_directory
-    - name: script_directory
-    - name: clusterName
-    - name: clusterNamespace
+    - name: source-directory
+    - name: script-directory
+    - name: cluster-name
+    - name: cluster-namespace
       default: opentoolchain
-    - name: skipDeploy
+    - name: skip-deploy
       default: 'false'
   stepTemplate:
     env:
@@ -28,21 +28,21 @@ spec:
     mountPath: /workspace 
   steps:
   - name: health-check
-    image: ibmcom/pipeline-base-image:2.7
+    image: ibmcom/pipeline-base-image:2.8
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: SCRIPT_DIRECTORY
-        value: $(params.script_directory)
+        value: $(params.script-directory)
       - name: SKIP
-        value: $(params.skipDeploy)
+        value: $(params.skip-deploy)
       - name: CLUSTER_NAME
-        value: $(params.clusterName)
+        value: $(params.cluster-name)
       - name: CLUSTER_NAMESPACE
-        value: $(params.clusterNamespace)
+        value: $(params.cluster-namespace)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

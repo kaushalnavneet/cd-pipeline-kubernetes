@@ -4,26 +4,26 @@ metadata:
   name: run-pii
 spec:
   params:
-    - name: source_directory
-    - name: runBaseImage
-    - name: javaPattern
+    - name: source-directory
+    - name: run-base-image
+    - name: java-pattern
       default: 'false'
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
   steps:
   - name: run-pii
-    image: $(params.runBaseImage)
+    image: $(params.run-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: SKIP
         value: "false"
       - name: JAVA_PATTERN
-        value: $(params.javaPattern)
+        value: $(params.java-pattern)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

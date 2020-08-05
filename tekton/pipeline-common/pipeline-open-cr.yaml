@@ -4,22 +4,22 @@ metadata:
   name: pipeline-open-cr
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
     - name: environment
-    - name: deployClusters
-    - name: snUrl
-    - name: prodRepos
+    - name: deploy-clusters
+    - name: sn-url
+    - name: prod-repos
       default: 'None'
-    - name: deployChannel
+    - name: deploy-channel
       default: '#devops-otc-deployment'
-    - name: tocChannel
+    - name: toc-channel
       default: '#devops-cd-cie'
-    - name: e2eBuildId
-    - name: cr_priority
+    - name: e2e-build-id
+    - name: cr-priority
       default: "moderate"
-    - name: cr_type
+    - name: cr-type
       default: "standard"
   workspaces:
   - name: pipeline-pvc
@@ -29,11 +29,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.charts_repo)
+          value: $(params.charts-repo)
         - name: branch
-          value: $(params.charts_branch)
+          value: $(params.charts-branch)
         - name: directory-name
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -43,9 +43,9 @@ spec:
         name: deployment-information
       params:
         - name: source_directory
-          value: $(params.charts_directory)
-        - name: prodRepos
-          value: $(params.prodRepos)
+          value: $(params.charts-directory)
+        - name: prod-repos
+          value: $(params.prod-repos)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -55,23 +55,23 @@ spec:
         name:  open-cr
       params:
         - name: source_directory
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
         - name: environment
           value: $(params.environment)
-        - name: deployClusters
-          value: $(params.deployClusters)
-        - name: snUrl
-          value: $(params.snUrl)
-        - name: deployChannel
-          value: $(params.deployChannel)
-        - name: tocChannel
-          value: $(params.tocChannel)
-        - name: e2eBuildId
-          value: $(params.e2eBuildId)
-        - name: cr_priority
-          value: $(params.cr_priority)
-        - name: cr_type
-          value: $(params.cr_type)
+        - name: deploy-clusters
+          value: $(params.deploy-clusters)
+        - name: sn-url
+          value: $(params.sn-url)
+        - name: deploy-channel
+          value: $(params.deploy-channel)
+        - name: toc-channel
+          value: $(params.toc-channel)
+        - name: e2e-build-id
+          value: $(params.e2e-build-id)
+        - name: cr-priority
+          value: $(params.cr-priority)
+        - name: cr-type
+          value: $(params.cr-type)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

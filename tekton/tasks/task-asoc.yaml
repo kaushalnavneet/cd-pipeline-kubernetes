@@ -4,9 +4,9 @@ metadata:
   name: asoc-task
 spec:
   params:
-    - name: componentDockerImage
+    - name: component-docker-image
       description: name of the component latest docker image
-    - name: componentName
+    - name: component-name
       description: the name of the component/broker
   stepTemplate:
     env:
@@ -30,7 +30,7 @@ spec:
     mountPath: /workspace 
   steps:
     - name: asoc
-      image: $(params.componentDockerImage)
+      image: $(params.component-docker-image)
       imagePullPolicy: Always
       env:
         - name: HOME
@@ -38,7 +38,7 @@ spec:
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
-          value: $(params.componentName)
+          value: $(params.component-name)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:

@@ -4,9 +4,9 @@ metadata:
   name: asoc-send-slack-task
 spec:
   params:
-    - name: componentName
+    - name: component-name
       description: the name of the component/broker
-    - name: branchName
+    - name: branch-name
       description: the name of the branch being scanned
   stepTemplate:
     env:
@@ -40,7 +40,7 @@ spec:
     mountPath: /workspace 
   steps:
     - name: slack
-      image: ibmcom/pipeline-base-image:2.6
+      image: ibmcom/pipeline-base-image:2.8
       imagePullPolicy: Always
       env:
         - name: HOME
@@ -48,9 +48,9 @@ spec:
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
-          value: $(params.componentName)
+          value: $(params.component-name)
         - name: BRANCH_NAME
-          value: $(params.branchName)
+          value: $(params.branch-name)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:

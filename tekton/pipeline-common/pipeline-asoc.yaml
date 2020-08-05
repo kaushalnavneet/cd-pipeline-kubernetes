@@ -4,12 +4,12 @@ metadata:
   name: pipeline-asoc
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: source_directory
-    - name: componentDockerImage
-    - name: componentName
-    - name: branchName
+    - name: source-repo
+    - name: source-branch
+    - name: source-directory
+    - name: component-docker-image
+    - name: component-name
+    - name: branch-name
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -18,11 +18,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.source_repo)
+          value: $(params.source-repo)
         - name: branch
-          value: $(params.source_branch)
+          value: $(params.source-branch)
         - name: directory-name
-          value: $(params.source_directory)
+          value: $(params.source-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc
@@ -31,10 +31,10 @@ spec:
       taskRef:
         name: asoc-task
       params:
-        - name: componentDockerImage
-          value: $(params.componentDockerImage)
-        - name: componentName
-          value: $(params.componentName)
+        - name: component-docker-image
+          value: $(params.component-docker-image)
+        - name: component-name
+          value: $(params.component-name)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
@@ -43,10 +43,10 @@ spec:
       taskRef:
         name: asoc-send-slack-task
       params:
-        - name: componentName
-          value: $(params.componentName)
-        - name: branchName
-          value: $(params.branchName)
+        - name: component-name
+          value: $(params.component-name)
+        - name: branch-name
+          value: $(params.branch-name)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc

@@ -4,27 +4,27 @@ metadata:
   name: deploy-chart
 spec:
   params:
-    - name: source_directory
-    - name: registryUrl
+    - name: source-directory
+    - name: registry-url
       default: us.icr.io
-    - name: registryNamespace
+    - name: registry-namespace
       default: devopsotc
-    - name: registryRegion
+    - name: registry-region
       default: us-south
-    - name: imageName
+    - name: image-name
       default: ''
-    - name: imageTag
+    - name: image-tag
       default: ''
-    - name: imageUrl
-    - name: clusterName
+    - name: image-url
+    - name: cluster-name
       default: otc-us-south-dev
-    - name: clusterNamespace
+    - name: cluster-namespace
       default: opentoolchain
-    - name: deployBaseImage
+    - name: deploy-base-image
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
     - name: environment
       default: 'development'
-    - name: skipDeploy
+    - name: skip-deploy
       default: 'false'
   stepTemplate:
     env:
@@ -62,31 +62,31 @@ spec:
     mountPath: /workspace 
   steps:
   - name: deploy
-    image: $(params.deployBaseImage)
+    image: $(params.deploy-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(params.imageName)
+        value: $(params.image-name)
       - name: APPLICATION_VERSION
-        value: $(params.imageTag)
+        value: $(params.image-tag)
       - name: IMAGE_URL
-        value: $(params.imageUrl)
+        value: $(params.image-url)
       - name: REGISTRY_URL
-        value: $(params.registryUrl)
+        value: $(params.registry-url)
       - name: REGISTRY_NAMESPACE
-        value: $(params.registryNamespace)
+        value: $(params.registry-namespace)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: SKIP
-        value: $(params.skipDeploy)
+        value: $(params.skip-deploy)
       - name: CLUSTER_NAME
-        value: $(params.clusterName)
+        value: $(params.cluster-name)
       - name: CLUSTER_NAMESPACE
-        value: $(params.clusterNamespace)
+        value: $(params.cluster-namespace)
       - name: ENVIRONMENT
         value: $(params.environment)
     workingDir: /workspace

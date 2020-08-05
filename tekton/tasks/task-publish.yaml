@@ -4,27 +4,27 @@ metadata:
   name: publish
 spec:
   params:
-    - name: source_directory
-    - name: charts_repo
-    - name: chartNamespace
+    - name: source-directory
+    - name: charts-repo
+    - name: chart-namespace
       default: 'opentoolchain'
-    - name: registryUrl
+    - name: registry-url
       default: us.icr.io
-    - name: registryNamespace
+    - name: registry-namespace
       default: opentoolchain
-    - name: registryRegion
+    - name: registry-region
       default: us-south
-    - name: imageName
+    - name: image-name
       default: ''
-    - name: imageTag
-    - name: imageUrl
-    - name: deployBaseImage
+    - name: image-tag
+    - name: image-url
+    - name: deploy-base-image
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
     - name: environment
       default: 'development'
-    - name: majorVersion
+    - name: major-version
       default: '1'
-    - name: minorVersion
+    - name: minor-version
       default: '0'
   stepTemplate:
     env:
@@ -68,35 +68,35 @@ spec:
     mountPath: /workspace 
   steps:
   - name: publish
-    image: $(params.deployBaseImage)
+    image: $(params.deploy-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(params.imageName)
+        value: $(params.image-name)
       - name: APPLICATION_VERSION
-        value: $(params.imageTag)
+        value: $(params.image-tag)
       - name: IMAGE_URL
-        value: $(params.imageUrl)
+        value: $(params.image-url)
       - name: REGISTRY_URL
-        value: $(params.registryUrl)
+        value: $(params.registry-url)
       - name: REGISTRY_NAMESPACE
-        value: $(params.registryNamespace)
+        value: $(params.registry-namespace)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: CHART_REPO
-        value: $(params.charts_repo)
+        value: $(params.charts-repo)
       - name: CHART_NAMESPACE
-        value: $(params.chartNamespace)
+        value: $(params.chart-namespace)
       - name: ENVIRONMENT
         value: $(params.environment)
       - name: MAJOR_VERSION
-        value: $(params.majorVersion)
+        value: $(params.major-version)
       - name: MINOR_VERSION
-        value: $(params.minorVersion)
+        value: $(params.minor-version)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

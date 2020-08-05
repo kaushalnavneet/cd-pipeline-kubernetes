@@ -4,28 +4,28 @@ metadata:
   name: open-cr
 spec:
   params:
-    - name: source_directory
-    - name: deployBaseImage
+    - name: source-directory
+    - name: deploy-base-image
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
     - name: environment
       default: 'development'
-    - name: snUrl
+    - name: sn-url
       default: 'https://watson.service-now.com'
-    - name: deployClusters
+    - name: deploy-clusters
       default: ''
-    - name: deployChannel
+    - name: deploy-channel
       default: '#devops-otc-deployment'
-    - name: tocChannel
+    - name: toc-channel
       default: '#devops-cd-cie'
-    - name: e2eToolchainId
+    - name: e2e-toolchain-id
       default: 'd5c0676c-55ed-4c25-b763-60b7afd64c87'
-    - name: e2eApplication
+    - name: e2e-application
       default: 'Pipeline'
-    - name: e2eBuildId
+    - name: e2e-build-id
       default: ''
-    - name: cr_priority
+    - name: cr-priority
       default: "moderate"
-    - name: cr_type
+    - name: cr-type
       default: "standard"
   stepTemplate:
     env:
@@ -58,7 +58,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: open-cr
-    image: $(params.deployBaseImage)
+    image: $(params.deploy-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
@@ -66,23 +66,23 @@ spec:
       - name: DEPLOY_TARGET
         value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(params.deployClusters)
+        value: $(params.deploy-clusters)
       - name: SN_URL
-        value: $(params.snUrl)
+        value: $(params.sn-url)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: ENVIRONMENT
         value: $(params.environment)
       - name: E2E_TOOLCHAIN_ID
-        value: $(params.e2eToolchainId)
+        value: $(params.e2e-toolchain-id)
       - name: E2E_APPLICATION
-        value: $(params.e2eApplication)
+        value: $(params.e2e-application)
       - name: E2E_BUILD_ID
-        value: $(params.e2eBuildId)
+        value: $(params.e2e-build-id)
       - name: CR_PRIORITY
-        value: $(params.cr_priority)
+        value: $(params.cr-priority)
       - name: CR_TYPE
-        value: $(params.cr_type)
+        value: $(params.cr-type)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -305,7 +305,7 @@ spec:
         echo "ServiceNow change request is in $CR_STATE state."
 
   - name: notify-slack
-    image: $(params.deployBaseImage)
+    image: $(params.deploy-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
@@ -313,17 +313,17 @@ spec:
       - name: DEPLOY_TARGET
         value: $(params.environment)
       - name: DEPLOY_CLUSTERS
-        value: $(params.deployClusters)
+        value: $(params.deploy-clusters)
       - name: URL
-        value: $(params.snUrl)
+        value: $(params.sn-url)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: ENVIRONMENT
         value: $(params.environment)
       - name: SLACK_DEPLOY_CHANNEL
-        value: $(params.deployChannel)
+        value: $(params.deploy-channel)
       - name: SLACK_TOC_CHANNEL
-        value: $(params.tocChannel)
+        value: $(params.toc-channel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

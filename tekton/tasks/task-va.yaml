@@ -4,18 +4,18 @@ metadata:
   name: run-va
 spec:
   params:
-    - name: source_directory
-    - name: registryUrl
+    - name: source-directory
+    - name: registry-url
       default: us.icr.io
-    - name: registryNamespace
+    - name: registry-namespace
       default: opentoolchain
-    - name: registryRegion
+    - name: registry-region
       default: us-south
-    - name: imageName
+    - name: image-name
       default: ''
-    - name: imageTag
-    - name: imageUrl
-    - name: runBaseImage
+    - name: image-tag
+    - name: image-url
+    - name: run-base-image
     - name: skipVA
       default: 'false'
   stepTemplate:
@@ -60,25 +60,25 @@ spec:
     mountPath: /workspace 
   steps:
   - name: run-va
-    image: $(params.runBaseImage)
+    image: $(params.run-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: IMAGE_NAME
-        value: $(params.imageName)
+        value: $(params.image-name)
       - name: APPLICATION_VERSION
-        value: $(params.imageTag)
+        value: $(params.image-tag)
       - name: IMAGE_URL
-        value: $(params.imageUrl)
+        value: $(params.image-url)
       - name: REGISTRY_URL
-        value: $(params.registryUrl)
+        value: $(params.registry-url)
       - name: REGISTRY_NAMESPACE
-        value: $(params.registryNamespace)
+        value: $(params.registry-namespace)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: SKIP
         value: $(params.skipVA)
     workingDir: /workspace

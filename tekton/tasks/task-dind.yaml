@@ -4,12 +4,12 @@ metadata:
   name: run-dind
 spec:
   params:
-    - name: buildCluster
+    - name: build-cluster
       default: otc-dal12-build
-    - name: dockerFile
+    - name: docker-file
     - name: branch
-    - name: runBaseImage
-    - name: registryRegion
+    - name: run-base-image
+    - name: registry-region
       default: us-south
   stepTemplate:
     env:
@@ -73,17 +73,17 @@ spec:
     mountPath: /workspace 
   steps:
   - name: build-dind
-    image: $(params.runBaseImage)
+    image: $(params.run-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: DOCKERFILE
-        value: $(params.dockerFile)
+        value: $(params.docker-file)
       - name: BUILD_CLUSTER
-        value: $(params.buildCluster)
+        value: $(params.build-cluster)
       - name: REGISTRY_REGION
-        value: $(params.registryRegion)
+        value: $(params.registry-region)
       - name: GIT_BRANCH
         value: $(params.branch)
     workingDir: /workspace

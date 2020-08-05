@@ -4,27 +4,27 @@ metadata:
   name: pipeline-mocha
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: source_directory
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
-    - name: config_repo
-    - name: config_branch
-    - name: config_directory
-    - name: imageUrl
+    - name: source-repo
+    - name: source-branch
+    - name: source-directory
+    - name: charts-repo
+    - name: charts-branch
+    - name: charts-directory
+    - name: config-repo
+    - name: config-branch
+    - name: config-directory
+    - name: image-url
     - name: environment
-    - name: skipMocha
-    - name: dockerFile
+    - name: skip-mocha
+    - name: docker-file
       default: ''
-    - name: runBaseImage
+    - name: run-base-image
       default: us.icr.io/opentoolchain/cd-build-base:nodejs12
-    - name: artifactoryTokenBase64
+    - name: artifactory-token-base64
       default: ''
-    - name: artifactoryId
+    - name: artifactory-id
       default: ''
-    - name: consoleAuthToken
+    - name: console-auth-token
       default: ''
   workspaces:
   - name: pipeline-pvc
@@ -34,11 +34,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.source_repo)
+          value: $(params.source-repo)
         - name: branch
-          value: $(params.source_branch)
+          value: $(params.source-branch)
         - name: directory-name
-          value: $(params.source_directory)
+          value: $(params.source-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -48,11 +48,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.charts_repo)
+          value: $(params.charts-repo)
         - name: branch
-          value: $(params.charts_branch)
+          value: $(params.charts-branch)
         - name: directory-name
-          value: $(params.charts_directory)
+          value: $(params.charts-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -62,11 +62,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.config_repo)
+          value: $(params.config-repo)
         - name: branch
-          value: $(params.config_branch)
+          value: $(params.config-branch)
         - name: directory-name
-          value: $(params.config_directory)
+          value: $(params.config-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -75,26 +75,26 @@ spec:
       taskRef:
         name:  run-mocha
       params:
-        - name: source_directory
-          value: $(params.source_directory)
-        - name: imageUrl
-          value: $(params.imageUrl)
-        - name: runBaseImage
-          value: $(params.runBaseImage)
-        - name: dockerFile
-          value: $(params.dockerFile)
-        - name: imageTag
+        - name: source-directory
+          value: $(params.source-directory)
+        - name: image-url
+          value: $(params.image-url)
+        - name: run-base-image
+          value: $(params.run-base-image)
+        - name: docker-file
+          value: $(params.docker-file)
+        - name: image-tag
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: consoleAuthToken
-          value: $(params.consoleAuthToken)
-        - name: skipMocha
-          value: $(params.skipMocha)
+        - name: artifactory-token-base64
+          value: $(params.artifactory-token-base64)
+        - name: artifactory-id
+          value: $(params.artifactory-id)
+        - name: console-auth-token
+          value: $(params.console-auth-token)
+        - name: skip-mocha
+          value: $(params.skip-mocha)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

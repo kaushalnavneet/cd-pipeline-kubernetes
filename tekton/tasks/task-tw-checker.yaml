@@ -4,9 +4,9 @@ metadata:
   name: travis-worker-check
 spec:
   params:
-    - name: script_directory
+    - name: script-directory
     - name: regions
-    - name: cluster_region
+    - name: cluster-region
   stepTemplate:
     env:
       - name: API_KEY
@@ -24,15 +24,15 @@ spec:
     mountPath: /workspace 
   steps:
   - name: travis-worker-checker
-    image: ibmcom/pipeline-base-image:2.7
+    image: ibmcom/pipeline-base-image:2.8
     imagePullPolicy: Always
     env:
       - name: SCRIPT_DIRECTORY
-        value: $(params.script_directory)
+        value: $(params.script-directory)
       - name: ALL_REGIONS
         value: $(params.regions)
       - name: REGION
-        value: $(params.cluster_region)
+        value: $(params.cluster-region)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

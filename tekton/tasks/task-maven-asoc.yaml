@@ -4,7 +4,7 @@ metadata:
   name: maven-asoc-task
 spec:
   params:
-    - name: componentName
+    - name: component-name
       description: the name of the component/broker
   stepTemplate:
     env:
@@ -28,7 +28,7 @@ spec:
     mountPath: /workspace 
   steps:
     - name: asoc
-      image: ibmcom/pipeline-base-image:2.6
+      image: ibmcom/pipeline-base-image:2.8
       imagePullPolicy: Always
       env:
         - name: HOME
@@ -36,7 +36,7 @@ spec:
         - name: WORKSPACE
           value: "/workspace"
         - name: APPSCAN_NAME
-          value: $(params.componentName)
+          value: $(params.component-name)
       workingDir: /workspace
       command: ["/bin/bash", "-c"]
       args:

@@ -4,19 +4,19 @@ metadata:
   name: pipeline-hc
 spec:
   params:
-    - name: script_repo
-    - name: script_branch
-    - name: script_directory
-    - name: config_repo
-    - name: config_branch
-    - name: config_directory
-    - name: clusterName1
-    - name: skipDeploy1
-    - name: clusterName2
-    - name: skipDeploy2
-    - name: clusterName3
-    - name: skipDeploy3
-    - name: clusterNamespace
+    - name: script-repo
+    - name: script-branch
+    - name: script-directory
+    - name: config-repo
+    - name: config-branch
+    - name: config-directory
+    - name: cluster-name1
+    - name: skip-deploy1
+    - name: cluster-name2
+    - name: skip-deploy2
+    - name: cluster-name3
+    - name: skip-deploy3
+    - name: cluster-namespace
       default: 'opentoolchain'
   workspaces:
   - name: pipeline-pvc
@@ -26,11 +26,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.script_repo)
+          value: $(params.script-repo)
         - name: branch
-          value: $(params.script_branch)
+          value: $(params.script-branch)
         - name: directory-name
-          value: $(params.script_directory)
+          value: $(params.script-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -40,11 +40,11 @@ spec:
         name: git-clone-repo
       params:
         - name: repository
-          value: $(params.config_repo)
+          value: $(params.config-repo)
         - name: branch
-          value: $(params.config_branch)
+          value: $(params.config-branch)
         - name: directory-name
-          value: $(params.config_directory)
+          value: $(params.config-directory)
       workspaces:
       - name: output
         workspace: pipeline-pvc 
@@ -54,15 +54,15 @@ spec:
         name:  run-hc
       params:
         - name: source_directory
-          value: $(params.config_directory)
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: skipDeploy
-          value: $(params.skipDeploy1)
-        - name: clusterName
-          value: $(params.clusterName1)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+          value: $(params.config-directory)
+        - name: script-directory
+          value: $(params.script-directory)
+        - name: skip-deploy
+          value: $(params.skip-deploy1)
+        - name: cluster-name
+          value: $(params.cluster-name1)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -72,15 +72,15 @@ spec:
         name:  run-hc
       params:
         - name: source_directory
-          value: $(params.config_directory)
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: skipDeploy
-          value: $(params.skipDeploy2)
-        - name: clusterName
-          value: $(params.clusterName2)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+          value: $(params.config-directory)
+        - name: script-directory
+          value: $(params.script-directory)
+        - name: skip-deploy
+          value: $(params.skip-deploy2)
+        - name: cluster-name
+          value: $(params.cluster-name2)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -90,15 +90,15 @@ spec:
         name:  run-hc
       params:
         - name: source_directory
-          value: $(params.config_directory)
-        - name: script_directory
-          value: $(params.script_directory)
-        - name: skipDeploy
-          value: $(params.skipDeploy3)
-        - name: clusterName
-          value: $(params.clusterName3)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+          value: $(params.config-directory)
+        - name: script-directory
+          value: $(params.script-directory)
+        - name: skip-deploy
+          value: $(params.skip-deploy3)
+        - name: cluster-name
+          value: $(params.cluster-name3)
+        - name: cluster-namespace
+          value: $(params.cluster-namespace)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

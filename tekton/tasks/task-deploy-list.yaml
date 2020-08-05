@@ -4,10 +4,10 @@ metadata:
   name: deployment-list
 spec:
   params:
-    - name: source_directory
-    - name: deployBaseImage
+    - name: source-directory
+    - name: deploy-base-image
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
-    - name: prodRepos
+    - name: prod-repos
       default: 'None'
   stepTemplate:
     env:
@@ -21,15 +21,15 @@ spec:
     mountPath: /workspace 
   steps:
   - name: get-deployment-list
-    image: $(params.deployBaseImage)
+    image: $(params.deploy-base-image)
     imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
       - name: SOURCE_DIRECTORY
-        value: $(params.source_directory)
+        value: $(params.source-directory)
       - name: PROD_REPOS
-        value: $(params.prodRepos)
+        value: $(params.prod-repos)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
