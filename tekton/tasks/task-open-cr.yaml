@@ -99,6 +99,8 @@ spec:
           exit 1
         fi
 
+        echo "Given E2E_BUILD_ID: ${E2E_BUILD_ID}"
+        exit 0
         if [ -z ${CR_TYPE} ]; then
           CR_TYPE="standard"
         fi
