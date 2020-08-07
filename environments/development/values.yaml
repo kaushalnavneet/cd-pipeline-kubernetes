@@ -527,7 +527,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_07_16h52m16s
     probes:
       enabled: false
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"
