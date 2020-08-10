@@ -4,7 +4,6 @@ metadata:
   name: pipeline-asoc
 spec:
   params:
-    - name: pipeline-pvc
     - name: source_repo
     - name: source_branch
     - name: source_directory
