@@ -177,7 +177,8 @@ spec:
 ## `common.container`
 
 The `common.container` template creates a basic `Container` spec to be used
-within a `Deployment` or `ReplicaSet`. It holds the following defaults:
+within a `Deployment` or `ReplicaSet`. The image pull policy is `IfNotPresent`.
+It holds the following defaults:
 
 - The name is set to the chart name
 - Uses `.Values.image` to describe the image to run, with the following spec:
@@ -185,7 +186,6 @@ within a `Deployment` or `ReplicaSet`. It holds the following defaults:
   image:
     repository: nginx
     tag: stable
-    pullPolicy: IfNotPresent
   ```
 - Exposes the named port `http` as port 80
 - Lays out the compute resources using `.Values.resources`
@@ -226,14 +226,13 @@ best practice to define the image, tag and pull policy in your charts' values as
 this makes it easy for an operator to change the image registry, or use a
 specific tag or version. Another example of configuration that should be exposed
 to chart operators is the container's required compute resources, as this is
-also very specific to an operators environment. An example `values.yaml` for
-your chart could look like:
+also very specific to an operators environment. The image pull policy is `IfNotPresent`.
+An example `values.yaml` for your chart could look like:
 
 ```yaml
 image:
   repository: nginx
   tag: stable
-  pullPolicy: IfNotPresent
 resources:
   limits:
     cpu: 100m

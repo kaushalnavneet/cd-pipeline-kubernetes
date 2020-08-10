@@ -37,6 +37,7 @@ spec:
       initContainers:
       - name: vault-sidekick
         image: us.icr.io/opentoolchain/vault-sidekick:{{.Values.vault.sidekickImageTag}}
+        imagePullPolicy: IfNotPresent
         args:
         - -logtostderr=true
         - -ca-cert=/var/run/certs/vault.pem

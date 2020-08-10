@@ -45,6 +45,7 @@ spec:
         - name: VAULT_COMPONENT
           value: {{ template "common.fullname" . }}
         image: us.icr.io/opentoolchain/vault-sidekick:{{.Values.vault.sidekickImageTag}}
+        imagePullPolicy: IfNotPresent
         name: vault-sidekick
         volumeMounts:
         - mountPath: /var/run/certs
