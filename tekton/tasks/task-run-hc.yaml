@@ -29,7 +29,7 @@ spec:
   steps:
   - name: health-check
     image: ibmcom/pipeline-base-image:2.7
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

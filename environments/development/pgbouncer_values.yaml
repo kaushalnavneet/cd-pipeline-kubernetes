@@ -26,6 +26,6 @@ defaultPoolSize: 10
 image:
   repository: registry.ng.bluemix.net/opentoolchain/gitlab-pgbouncer
   tag: v1.7.2.2
-  pullPolicy: 'Always'
+  pullPolicy: IfNotPresent
   pullSecrets: 
   - name: otc-registry-secret

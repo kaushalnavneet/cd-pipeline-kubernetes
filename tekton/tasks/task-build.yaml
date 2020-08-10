@@ -52,7 +52,7 @@ spec:
   steps:
   - name: build-base
     image: ibmcom/pipeline-base-image:latest
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: /root

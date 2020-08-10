@@ -31,7 +31,7 @@ spec:
   steps:
     - name: asoc
       image: $(params.componentDockerImage)
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       env:
         - name: HOME
           value: "/home/node"

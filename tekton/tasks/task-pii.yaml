@@ -16,7 +16,7 @@ spec:
   steps:
   - name: run-pii
     image: $(params.runBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

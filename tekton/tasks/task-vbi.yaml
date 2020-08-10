@@ -76,7 +76,7 @@ spec:
   steps:
   - name: run-base
     image: $(params.runBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

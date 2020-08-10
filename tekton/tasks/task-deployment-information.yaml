@@ -24,7 +24,7 @@ spec:
   steps:
   - name: get-deployment-information
     image: $(params.deployBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

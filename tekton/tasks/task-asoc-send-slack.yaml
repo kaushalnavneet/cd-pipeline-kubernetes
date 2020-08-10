@@ -41,7 +41,7 @@ spec:
   steps:
     - name: slack
       image: ibmcom/pipeline-base-image:2.6
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       env:
         - name: HOME
           value: "/root"

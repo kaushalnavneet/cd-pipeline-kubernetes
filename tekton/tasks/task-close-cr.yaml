@@ -55,7 +55,7 @@ spec:
   steps:
   - name: close-cr
     image: $(params.deployBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"
@@ -218,7 +218,7 @@ spec:
 
   - name: notify-slack
     image: $(params.deployBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

@@ -49,7 +49,7 @@ spec:
   steps:
   - name: deploy
     image: $(params.deployBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

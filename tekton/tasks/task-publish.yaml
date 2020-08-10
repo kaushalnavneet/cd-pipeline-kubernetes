@@ -69,7 +69,7 @@ spec:
   steps:
   - name: publish
     image: $(params.deployBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

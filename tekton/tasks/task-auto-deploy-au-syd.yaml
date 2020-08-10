@@ -11,7 +11,7 @@ spec:
   steps:
     - name: auto-deploy
       image: ibmcom/pipeline-base-image:latest
-      imagePullPolicy: Always
+      imagePullPolicy: IfNotPresent
       env:
         - name: AUTO_DEPLOY_TOKEN
           value: $(params.syd_auto_deploy_token)

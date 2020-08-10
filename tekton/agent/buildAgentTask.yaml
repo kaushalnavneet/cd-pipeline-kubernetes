@@ -54,7 +54,7 @@ spec:
     volumeMounts:
       - mountPath: /var/run/
         name: dind-socket  
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: IDS_TOKEN
         value: $(params.idsToken)
@@ -204,7 +204,7 @@ spec:
         echo "###########################################"
   - name: run-va
     image: $(params.runBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: API_KEY
         value: $(params.accountApiKey1416501)

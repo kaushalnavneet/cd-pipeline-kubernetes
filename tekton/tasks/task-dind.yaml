@@ -74,7 +74,7 @@ spec:
   steps:
   - name: build-dind
     image: $(params.runBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

@@ -72,7 +72,7 @@ spec:
   steps:
   - name: run-va
     image: $(params.runBaseImage)
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
       - name: HOME
         value: "/root"

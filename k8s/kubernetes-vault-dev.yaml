@@ -108,7 +108,7 @@ spec:
       containers:
       - name: kubernetes-vault
         image: registry.ng.bluemix.net/opentoolchain/kubernetes-vault:dev
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: KUBERNETES_NAMESPACE
           valueFrom:
