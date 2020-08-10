@@ -78,7 +78,8 @@ spec:
             echo "No secrets";
             sleep 5;
             exit 1;
-        image: alpine:3.8
+        image: alpine:3.12
+        imagePullPolicy: IfNotPresent
         name: vault-init
         volumeMounts:
         - mountPath: /etc/secrets
@@ -100,13 +101,15 @@ spec:
         - name: varlog
           mountPath: /var/log
       - name: docker-log
-        image: alpine
+        image: alpine:3.12
+        imagePullPolicy: IfNotPresent
         args: [/bin/sh, -c, '( tail -n+1 -F /var/log/docker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
         volumeMounts:
         - name: varlog
           mountPath: /var/log
       - name: travis-worker-log
-        image: alpine 
+        image: alpine:3.12
+        imagePullPolicy: IfNotPresent
         args: [/bin/sh, -c, '( tail -n+1 -F /var/log/travis-worker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
         volumeMounts:
         - name: varlog
