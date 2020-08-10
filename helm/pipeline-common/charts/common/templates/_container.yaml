@@ -1,7 +1,7 @@
 {{- define "common.container.tpl" -}}
 name: {{ .Chart.Name }}
 image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-imagePullPolicy: {{ .Values.image.pullPolicy }}
+imagePullPolicy: IfNotPresent
 ports:
 - name: http
   containerPort: 80
