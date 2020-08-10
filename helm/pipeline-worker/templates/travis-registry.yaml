@@ -20,7 +20,7 @@ spec:
       - name: otc-registry-secret
       containers:
       - name: travis-registry
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         image: us.icr.io/devopsotc/registry:2.7.1
         ports:
         - containerPort: 5000
