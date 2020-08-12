@@ -154,7 +154,7 @@ spec:
     - name: imageUrl
       value: "us.icr.io/devopsotc/travis-worker"
     - name: environment
-      value: "us-south"
+      value: "us-south-staging"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
