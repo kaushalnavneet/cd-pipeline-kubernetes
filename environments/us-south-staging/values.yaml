@@ -14,31 +14,38 @@ pipeline:
       requests:
         cpu: 100m
         memory: 1Gi
+    vault:
+      sidekickImageTag: 38dfea5b362e506e60becc91c9988c9d569e8014-202005112130UTC
     vaultcommon:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common_2019_04_23_08h07m17s
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/common_2019_07_31_15h44m21s
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-cloudant_do_not_version
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/cloudant_iam_id_2020_07_08_14h50m03s
+    probes:
+      enabled: true
+      liveness:
+        initialDelay: 30
+        periodSeconds: 15
+        timeoutSeconds: 5
+      readiness:
+        initialDelay: 5
+        periodSeconds: 15
+        timeoutSeconds: 10
     configmap:
       data:
+        USE_K8S: true
         SECGRP: GRP1PRDY
-        log4js_logmet_enabled: true
-        log4js_logmet_logging_host: ingest.logging.ng.bluemix.net
-        log4js_logmet_logging_port: 9091
-        log4js_logmet_space_id: 3f02963c-7330-4cef-b34c-1356ff3924c2
-        log4js_syslog_appender_enabled: true
-        log4js_syslog_appender_host: syslog.prd.ccs.ibmcloud.com
-        log4js_syslog_appender_port: 6515
-        log4js_syslog_appender_url: devops.ng.bluemix.net
-        log4js_syslog_appender_whitelist: audit-logs
+        CLOUDANT_ACCOUNT: '9cb9bdc9-10b0-4a27-afea-d26eadc3ddb2-bluemix'
   travis-worker:
     replicas: 2
     vault:
       secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker-staging_2019_04_30_16h50m37s
+      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/travis-worker_2019_04_25_14h46m29s
       - generic/crn/v1/bluemix/public/continuous-delivery/us-south/otc-components/common-rabbitmq-icd_2019_04_23_07h59m20s
     probes:
       enabled: false
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; docker system prune -f; docker volume prune -f; touch /var/log/travis-worker.done\"]"
-    terminationGracePeriodSeconds: 4000  
+    terminationGracePeriodSeconds: 4000
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
@@ -49,4 +56,4 @@ pipeline:
         POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
-        PAYLOAD_ENCRYPT: false
+        PAYLOAD_ENCRYPT: true
