@@ -558,4 +558,5 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Support Service - YS1
         USE_NEW_RELIC: true
         ENV_ID: ibm:ys1:us-south
+        ENABLE_ECHO: true
 
