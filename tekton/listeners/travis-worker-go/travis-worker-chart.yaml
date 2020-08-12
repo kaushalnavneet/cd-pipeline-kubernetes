@@ -181,7 +181,7 @@ spec:
     - name: imageUrl
       value: "us.icr.io/devopsotc/travis-worker"
     - name: environment
-      value: "staging"
+      value: "au-syd"
     - name: skipBuild
       value: "false"
     - name: skipVA
