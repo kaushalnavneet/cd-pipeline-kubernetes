@@ -5,7 +5,6 @@ metadata:
 spec:
   params:
     - name: environment
-    - name: serviceName
     - name: clusterNamespace
     - name: clusterName1
     - name: skipDeploy1
@@ -108,8 +107,6 @@ spec:
   params:
     - name: environment
       value: "au-syd"
-    - name: serviceName
-      value: "pipeline-service"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
