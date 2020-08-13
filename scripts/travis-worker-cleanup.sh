@@ -205,6 +205,53 @@ function check_travis_workers() {
 	done
 }
 
+function check_tekton_pods() {
+	# $1 cluster name
+		cluster=$1
+	# collect all pods
+	all_pods=()
+	while IFS='' read -r line; do all_pods+=("$line"); done < <(kubectl get pods --all-namespaces | grep -i terminat | awk '{print $1}')
+
+    echo "all pods in ${cluster} len=(${#all_pods[@]}): ${all_pods[@]}"
+	if [ ${#all_pods[@]} -ne 0 ]; then
+		echo "Found pods in terminated state"
+		send_to_slack "error" "Found pods in terminated state in $cluster"
+	fi
+
+	# collect all namespaces
+	all_ns=()
+	while IFS='' read -r line; do all_ns+=("$line"); done < <(kubectl get ns | grep -i "pw-" | grep -i terminat | awk '{print $1}')
+
+    echo "all namespaces in ${cluster} len=(${#all_ns[@]}): ${all_ns[@]}"
+	if [ ${#all_ns[@]} -ne 0 ]; then
+		echo "Found namespaces in terminated state"
+		send_to_slack "error" "Found namespaces in terminated state in $cluster"
+	fi
+
+	# collect all pipelineruns
+	all_pipelineruns=()
+	while IFS='' read -r line; do all_pipelineruns+=("$line"); done < <(kubectl get pipelineruns --all-namespaces | grep -i terminat | awk '{print $1}')
+
+    echo "all pipelineruns in ${cluster} len=(${#all_pipelineruns[@]}): ${all_pipelineruns[@]}"
+	if [ ${#all_pipelineruns[@]} -ne 0 ]; then
+		echo "Found pipeline runs in terminated state"
+		send_to_slack "error" "Found pipeline in terminated state in $cluster"
+	fi
+}
+
+function check_tekton_clusters() {
+	region=$1
+	# list all clusters for region $region
+	clusters_to_check=()
+	while IFS='' read -r line; do clusters_to_check+=("$line"); done < <(ibmcloud ks clusters | grep otc-tektonpw | grep $region | grep prod | awk '{print $1}')
+	echo "All clusters: ${clusters_to_check[@]}"
+	for cluster in "${clusters_to_check[@]}"; do
+		ibmcloud ks cluster config --cluster $cluster
+		echo "check $cluster"
+		check_tekton_pods $cluster
+	done
+}
+
 function check_all_clusters() {
 	ibmcloud login --apikey $API_KEY -r $REGION
 	IFS=',' read -ra regions <<< $(echo $ALL_REGIONS)
@@ -212,6 +259,7 @@ function check_all_clusters() {
 	for region in ${regions[@]}
 	do
 		check_travis_workers $region
+		check_tekton_clusters $region
 	done
 }
 
