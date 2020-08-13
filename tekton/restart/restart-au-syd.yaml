@@ -18,9 +18,6 @@ spec:
     - name: api
       description: the ibmcloud api
       default: https://cloud.ibm.com
-    - name: toolchainRegion
-      description: the ibmcloud region containing the toolchain referencing the repository
-      default: au-syd
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -33,7 +30,6 @@ spec:
         name: cd-config
       data:
         API: $(params.api)
-        REGION: $(params.toolchainRegion)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -59,7 +55,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-restart-au-syd-$(uid)-pvc
+        name: restart-au-syd-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -72,7 +68,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-restart-au-syd-$(uid)
+        name: restart-au-syd-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "restart-au-syd-trigger-dev"
@@ -82,7 +78,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-restart-au-syd-$(uid)-pvc
+              claimName: restart-au-syd-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: clusterNamespace

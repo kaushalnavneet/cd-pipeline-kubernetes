@@ -25,21 +25,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: API
-      - name: REGION
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: REGION
       - name: API_KEY
         valueFrom:
           secretKeyRef:
             name: cd-secret
             key: API_KEY
-      - name: TOOLCHAIN_ID
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: TOOLCHAIN_ID
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -77,7 +67,7 @@ spec:
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f kubernetes-service
-        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+        ibmcloud login -a ${API} -r ${ENVIRONMENT} --apikey ${API_KEY}
 
         ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
