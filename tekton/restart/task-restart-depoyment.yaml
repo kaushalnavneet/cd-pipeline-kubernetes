@@ -1,0 +1,96 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: restart-deployment
+spec:
+  params:
+    - name: registryRegion
+      default: us-south
+    - name: serviceName
+      default: pipeline-service
+    - name: clusterName
+      default: otc-us-south-dev
+    - name: clusterNamespace
+      default: opentoolchain
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'false'
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: deploy
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: REGISTRY_REGION
+        value: $(params.registryRegion)
+      - name: SKIP
+        value: $(params.skipDeploy)
+      - name: SERVICE_NAME
+        value: $(params.serviceName)
+      - name: CLUSTER_NAME
+        value: $(params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(params.clusterNamespace)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping restart"
+          exit 0
+        fi
+        cd /workspace
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+
+        ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
+
+        RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
+        kubectl -n${CLUSTER_NAMESPACE} rollout restart deployment ${SERVICE_NAME}
+        i=0
+        while kubectl -n${CLUSTER_NAMESPACE} get pods | grep $RS >/dev/null 2>&1 ; do
+          if (( i>40 )); then break; fi
+          echo Checking ${i}
+          kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u
+          sleep 15
+          (( i=i+1 ))
+        done
+        echo Restart complete
+        kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
+        set +x
