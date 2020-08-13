@@ -34,7 +34,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: cd-secret
-            key: DEPLOY_API_KEY
+            key: API_KEY
       - name: TOOLCHAIN_ID
         valueFrom:
           configMapKeyRef:
