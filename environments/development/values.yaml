@@ -163,6 +163,7 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         ENABLE_SECRET_PICKER: true
         SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
