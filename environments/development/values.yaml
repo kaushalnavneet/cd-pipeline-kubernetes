@@ -520,6 +520,9 @@ pipeline:
         pipeline_ui_ribbon_listOfServers: pipeline-ui
         pipeline_ui_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         pipeline_ui_ribbon_IsSecure: false
+        pipeline_event_service_ribbon_listOfServers: pipeline-event-service
+        pipeline_event_service_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        pipeline_event_service_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_ui_cast_enable: true
         com_ibm_team_integration_pipeline_server_without_test_server: true
         com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
