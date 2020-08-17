@@ -267,7 +267,7 @@ pipeline:
         LATEST_DOCKER_IMAGE: "2.7"
         DEFAULT_BASE_IMAGE_VERSION_FROM_CONFIG: "latest"
         ENABLE_CONFIG_REACT: true
-        PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        PIPELINE_API: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
         HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
@@ -430,7 +430,7 @@ pipeline:
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.ng.bluemix.net
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
@@ -441,7 +441,7 @@ pipeline:
         com_ibm_team_integration_pipeline_db_cloudant_connections_pipeline: 30
         com_ibm_team_integration_pipeline_db_cloudant_connections_stage: 30
         com_ibm_team_integration_pipeline_db_cloudant_timeout: 1000
-        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
         useKeystoreEncodings: false
         com_ibm_team_integration_pipeline_events_threadCount: 3
         codestation_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
