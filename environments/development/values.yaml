@@ -291,6 +291,7 @@ pipeline:
         CLOUD_PAL_LAYOUT: true
         SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south.devops.dev.cloud.ibm.com
         LINTER_ENABLE: true
+        ECHO_ENABLED: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
