@@ -20,7 +20,6 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_2019_07_31_16h12m55s
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/cloudant_iam_id_2020_07_08_14h50m03s
     probes:
       enabled: true
       liveness:
