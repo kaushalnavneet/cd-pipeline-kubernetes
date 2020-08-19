@@ -268,7 +268,7 @@ pipeline:
         DEFAULT_BASE_IMAGE_VERSION_FROM_CONFIG: "latest"
         ENABLE_CONFIG_REACT: true
         PIPELINE_API: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
-        HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
+        HOOKURL: https://otc-github-relay-pub.us-south.devops.dev.cloud.ibm.com
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
         PRIVATE_WORKER_API: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
@@ -431,7 +431,7 @@ pipeline:
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub.us-south.devops.dev.cloud.ibm.com
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
