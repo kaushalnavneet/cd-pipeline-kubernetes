@@ -291,6 +291,8 @@ pipeline:
         SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south.devops.dev.cloud.ibm.com
         LINTER_ENABLE: true
         ECHO_ENABLED: true
+        LOG4JS_WATCHER_INTERVAL: 180000
+        TEKTON_PUBLIC_WORKER_VERSION: v0.14.1
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
