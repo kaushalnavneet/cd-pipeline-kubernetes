@@ -20,7 +20,6 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_2019_07_31_16h12m55s
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/cloudant_iam_id_2020_07_08_14h50m03s
     probes:
       enabled: true
       liveness:
@@ -44,7 +43,7 @@ pipeline:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_04_25_15h37m28s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/api/version"
@@ -79,7 +78,7 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_10_24_20h12m54s
     configmap:
       data:
@@ -103,7 +102,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub_2019_05_03_16h52m07s
     configmap:
       data:
@@ -141,7 +140,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
        - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_01_30_21h14m27s
     configmap:
@@ -163,13 +162,14 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         ENABLE_SECRET_PICKER: true
         SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
         - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
         - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-common_2020_02_28_21h08m12s
     configmap:
@@ -209,7 +209,7 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2020_07_24_13h46m23s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     configmap:
       data:
         AMQP_EXCHANGE: pipeline
@@ -266,8 +266,8 @@ pipeline:
         LATEST_DOCKER_IMAGE: "2.7"
         DEFAULT_BASE_IMAGE_VERSION_FROM_CONFIG: "latest"
         ENABLE_CONFIG_REACT: true
-        PIPELINE_API: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
-        HOOKURL: https://otc-github-relay-pub-opentoolchain.otc-us-south-dev.us-south.containers.appdomain.cloud
+        PIPELINE_API: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
+        HOOKURL: https://otc-github-relay-pub.us-south.devops.dev.cloud.ibm.com
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
         PRIVATE_WORKER_API: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
@@ -290,13 +290,14 @@ pipeline:
         CLOUD_PAL_LAYOUT: true
         SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south.devops.dev.cloud.ibm.com
         LINTER_ENABLE: true
+        ECHO_ENABLED: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_03_20_15h36m22s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/codestation/v2/artifacts/version"
@@ -328,7 +329,7 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_03_20_15h29m17s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2019_04_08_18h41m26s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_05_20h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
         path: "/pipeline/version"
@@ -429,7 +430,7 @@ pipeline:
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-webhook-relay.ng.bluemix.net
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub.us-south.devops.dev.cloud.ibm.com
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
@@ -440,7 +441,7 @@ pipeline:
         com_ibm_team_integration_pipeline_db_cloudant_connections_pipeline: 30
         com_ibm_team_integration_pipeline_db_cloudant_connections_stage: 30
         com_ibm_team_integration_pipeline_db_cloudant_timeout: 1000
-        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.stage1.ng.bluemix.net/v1/pipeline
+        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
         useKeystoreEncodings: false
         com_ibm_team_integration_pipeline_events_threadCount: 3
         codestation_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
@@ -519,6 +520,9 @@ pipeline:
         pipeline_ui_ribbon_listOfServers: pipeline-ui
         pipeline_ui_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         pipeline_ui_ribbon_IsSecure: false
+        pipeline_event_service_ribbon_listOfServers: pipeline-event-service
+        pipeline_event_service_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        pipeline_event_service_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_ui_cast_enable: true
         com_ibm_team_integration_pipeline_server_without_test_server: true
         com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
@@ -529,7 +533,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline_rabbit-icd_2020_08_07_16h52m16s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       enabled: false
     preStopCommand: "[/bin/sh, \"-c\", \"service travis-worker stop ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; service travis-worker status; done ; fi ; touch /var/log/travis-worker.done\"]"

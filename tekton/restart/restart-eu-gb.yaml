@@ -1,0 +1,134 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: restart-eu-gb-trigger-dev
+spec:
+  params:
+    - name: environment
+    - name: clusterNamespace
+    - name: clusterName1
+    - name: skipDeploy1
+    - name: clusterName2
+    - name: skipDeploy2
+    - name: clusterName3
+    - name: skipDeploy3
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: restart-eu-gb-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: restart-eu-gb-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "restart-eu-gb-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-restarter
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: restart-eu-gb-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
+          - name: environment
+            value: $(params.environment)
+          - name: serviceName
+            value: $(params.serviceName)
+          - name: clusterName1
+            value: $(params.clusterName1)
+          - name: skipDeploy1
+            value: $(params.skipDeploy1)
+          - name: clusterName2
+            value: $(params.clusterName2)
+          - name: skipDeploy2
+            value: $(params.skipDeploy2)
+          - name: clusterName3
+            value: $(params.clusterName3)
+          - name: skipDeploy3
+            value: $(params.skipDeploy3)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: restart-eu-gb-binding-dev
+spec:
+  params:
+    - name: environment
+      value: "eu-gb"
+    - name: clusterNamespace
+      value: opentoolchain
+    - name: clusterName1
+      value: otc-lon04-prod
+    - name: skipDeploy1
+      value: "false"
+    - name: clusterName2
+      value: otc-lon05-prod
+    - name: skipDeploy2
+      value: "false"
+    - name: clusterName3
+      value: otc-lon06-prod
+    - name: skipDeploy3
+      value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: restart-eu-gb-dev
+spec:
+  triggers:
+    - binding:
+        name: restart-eu-gb-binding-dev
+      template:
+        name: restart-eu-gb-trigger-dev
