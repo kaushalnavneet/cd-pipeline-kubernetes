@@ -98,7 +98,7 @@ spec:
           generatedBy: "travis-worker-go-ubi-trigger-chart"
       spec:
         pipelineRef:
-          name: pipeline-chart
+          name: pipeline-chart-ubi
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
@@ -141,10 +141,6 @@ spec:
             value: $(params.dockerFile)
           - name: runBaseImage
             value: $(params.runBaseImage)
-          - name: syd_auto_deploy_token
-            value: $(params.syd_auto_deploy_token)
-          - name: syd_auto_deploy_url
-            value: $(params.syd_auto_deploy_url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
