@@ -1,0 +1,9 @@
+[Unit]
+Description=Start docker daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/start_docker_daemon.sh
+
+[Install]
+WantedBy=multi-user.target
