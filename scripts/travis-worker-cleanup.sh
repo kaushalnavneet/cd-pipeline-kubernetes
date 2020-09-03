@@ -223,20 +223,32 @@ function check_tekton_pods() {
 	while IFS='' read -r line; do all_ns+=("$line"); done < <(kubectl get ns | grep -i "pw-" | grep -i terminat | awk '{print $1}')
 
     echo "all namespaces in ${cluster} len=(${#all_ns[@]}): ${all_ns[@]}"
-	if [ ${#all_ns[@]} -ne 0 ]; then
-		echo "Found namespaces in terminated state"
-		send_to_slack "error" "Found namespaces in terminated state in $cluster"
-	fi
+	for ns in "${all_ns[@]}";
+	do
+		# wait 1 mn and check each namespace
+		sleep 60
+		result=$(kubectl get ns | grep -i $n | grep -i terminat | awk '{print $1}')
+		if [ -z "$result" ]; then
+			echo "Found namespace $ns in terminated state"
+			send_to_slack "error" "Found namespace $ns in terminated state in $cluster"
+		fi
+	done
 
 	# collect all pipelineruns
 	all_pipelineruns=()
 	while IFS='' read -r line; do all_pipelineruns+=("$line"); done < <(kubectl get pipelineruns --all-namespaces | grep -i terminat | awk '{print $1}')
 
     echo "all pipelineruns in ${cluster} len=(${#all_pipelineruns[@]}): ${all_pipelineruns[@]}"
-	if [ ${#all_pipelineruns[@]} -ne 0 ]; then
-		echo "Found pipeline runs in terminated state"
-		send_to_slack "error" "Found pipeline in terminated state in $cluster"
-	fi
+	for pipelinerun in "${all_pipelineruns[@]}";
+	do
+		# wait 1 mn and check each namespace
+		sleep 60
+		result=$(kubectl get pipelineruns --all-namespaces | grep -i $pipelinerun | grep -i terminat | awk '{print $1}')
+		if [ -z "$result" ]; then
+			echo "Found pipelinerun $pipelinerun in terminated state"
+			send_to_slack "error" "Found pipelinerun $pipelinerun in terminated state in $cluster"
+		fi
+	done
 }
 
 function check_tekton_clusters() {
