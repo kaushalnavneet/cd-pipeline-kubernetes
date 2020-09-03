@@ -83,7 +83,7 @@ spec:
           generatedBy: "pipeline-ui-trigger-asoc"
       spec:
         pipelineRef:
-          name: pipeline-asoc
+          name: pipeline-asoc-test
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
