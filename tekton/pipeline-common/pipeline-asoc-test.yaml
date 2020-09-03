@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-asoc
+  name: pipeline-asoc-test
 spec:
   params:
     - name: source_repo
@@ -35,18 +35,6 @@ spec:
           value: $(params.componentDockerImage)
         - name: componentName
           value: $(params.componentName)
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
-    - name: send-slack
-      runAfter: [build]
-      taskRef:
-        name: asoc-send-slack-task
-      params:
-        - name: componentName
-          value: $(params.componentName)
-        - name: branchName
-          value: $(params.branchName)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
