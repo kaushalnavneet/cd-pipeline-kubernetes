@@ -185,7 +185,7 @@ spec:
     - name: skipVA
       value: "false"
     - name: runBaseImage
-      value: us.icr.io/opentoolchain/cd-build-base:java
+      value: us.icr.io/opentoolchain/cd-build-base:java-ubi
     - name: syd_auto_deploy_token
       value: ""
     - name: syd_auto_deploy_url

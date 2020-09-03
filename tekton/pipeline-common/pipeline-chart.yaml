@@ -25,7 +25,7 @@ spec:
     - name: dockerFile
       default: ''
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs12
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
     - name: artifactoryTokenBase64
       default: ''
     - name: artifactoryId
@@ -130,7 +130,7 @@ spec:
         - name: imageUrl
           value: $(params.imageUrl)
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
         - name: dockerFile
           value: ''
         - name: imageTag
