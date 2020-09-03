@@ -226,8 +226,9 @@ function check_tekton_pods() {
 	for ns in "${all_ns[@]}";
 	do
 		# wait 1 mn and check each namespace
-		sleep 60
-		result=$(kubectl get ns | grep -i $n | grep -i terminat | awk '{print $1}')
+		sleep 120
+		result=$(kubectl get ns | grep $n | grep -i terminat | awk '{print $1}')
+		echo "result for specific namespace ${n}: ${result}"
 		if [ -z "$result" ]; then
 			echo "Found namespace $ns in terminated state"
 			send_to_slack "error" "Found namespace $ns in terminated state in $cluster"
@@ -242,8 +243,9 @@ function check_tekton_pods() {
 	for pipelinerun in "${all_pipelineruns[@]}";
 	do
 		# wait 1 mn and check each namespace
-		sleep 60
-		result=$(kubectl get pipelineruns --all-namespaces | grep -i $pipelinerun | grep -i terminat | awk '{print $1}')
+		sleep 120
+		result=$(kubectl get pipelineruns --all-namespaces | grep $pipelinerun | grep -i terminat | awk '{print $1}')
+		echo "result for specific namespace ${pipelinerun}: ${result}"
 		if [ -z "$result" ]; then
 			echo "Found pipelinerun $pipelinerun in terminated state"
 			send_to_slack "error" "Found pipelinerun $pipelinerun in terminated state in $cluster"
