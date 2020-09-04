@@ -207,16 +207,23 @@ function check_travis_workers() {
 
 function check_tekton_pods() {
 	# $1 cluster name
-		cluster=$1
+	cluster=$1
 	# collect all pods
 	all_pods=()
 	while IFS='' read -r line; do all_pods+=("$line"); done < <(kubectl get pods --all-namespaces | grep -i terminat | awk '{print $1}')
 
     echo "all pods in ${cluster} len=(${#all_pods[@]}): ${all_pods[@]}"
-	if [ ${#all_pods[@]} -ne 0 ]; then
-		echo "Found pods in terminated state"
-		send_to_slack "error" "Found pods in terminated state in $cluster"
-	fi
+	for pod in "${all_pods[@]}";
+	do
+		# wait 60s and check each namespace again
+		sleep 60
+		result=$(kubectl get pods --all-namespaces | grep $pod | awk '{print $1}')
+		echo "result for specific pod ${pod}: ${result}"
+		if [ -n "$result" ]; then
+			echo "Found pod $pod in terminated state"
+			send_to_slack "error" "Found pod $pod in terminated state in $cluster"
+		fi
+	done
 
 	# collect all namespaces
 	all_ns=()
@@ -245,7 +252,7 @@ function check_tekton_pods() {
 		# wait 60s and check each namespace
 		sleep 60
 		result=$(kubectl get pipelineruns --all-namespaces | grep $pipelinerun | grep -i terminat | awk '{print $1}')
-		echo "result for specific namespace ${pipelinerun}: ${result}"
+		echo "result for specific pipelinerun ${pipelinerun}: ${result}"
 		if [ -n "$result" ]; then
 			echo "Found pipelinerun $pipelinerun in terminated state"
 			send_to_slack "error" "Found pipelinerun $pipelinerun in terminated state in $cluster"
