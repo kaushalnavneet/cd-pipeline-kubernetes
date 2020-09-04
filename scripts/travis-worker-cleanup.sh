@@ -215,7 +215,7 @@ function check_tekton_pods() {
     echo "all pods in ${cluster} len=(${#all_pods[@]}): ${all_pods[@]}"
 	for pod in "${all_pods[@]}";
 	do
-		# wait 60s and check each namespace again
+		# wait 60s and check each pod again
 		sleep 60
 		result=$(kubectl get pods --all-namespaces | grep $pod | awk '{print $1}')
 		echo "result for specific pod ${pod}: ${result}"
@@ -249,7 +249,7 @@ function check_tekton_pods() {
     echo "all pipelineruns in ${cluster} len=(${#all_pipelineruns[@]}): ${all_pipelineruns[@]}"
 	for pipelinerun in "${all_pipelineruns[@]}";
 	do
-		# wait 60s and check each namespace
+		# wait 60s and check each pipelinerun again
 		sleep 60
 		result=$(kubectl get pipelineruns --all-namespaces | grep $pipelinerun | grep -i terminat | awk '{print $1}')
 		echo "result for specific pipelinerun ${pipelinerun}: ${result}"
