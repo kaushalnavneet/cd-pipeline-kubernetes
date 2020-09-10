@@ -16,7 +16,7 @@ spec:
       default: ""
     - name: cluster_region
       description: ibmcloud region for the cluster to rollout
-      default: "us-south"
+      default: "eu-de"
 
   resourcetemplates:
     # CD context defined as a configmap and secret because it is immutable information
