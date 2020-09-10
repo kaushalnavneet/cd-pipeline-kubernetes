@@ -105,16 +105,21 @@ spec:
         IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
         DOCKERFILE=${DOCKERFILE}
 
-        ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
+        if [ ! -z "$BUILD_CLUSTER" ]; then
+          echo "Building using cluster ${BUILD_CLUSTER}"
+          ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
 
-        kubectl --namespace otc-dev get pods 
-        kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
+          kubectl --namespace otc-dev get pods 
+          kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | grep Running | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
 
-        while ! nc -z localhost 2375; do   
-          sleep 0.1
-        done
+          while ! nc -z localhost 2375; do   
+            sleep 0.1
+          done
 
-        export DOCKER_HOST='tcp://localhost:2375'
+          export DOCKER_HOST='tcp://localhost:2375'
+        else
+          echo "Building using local Docker"
+        fi
 
         docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
         echo "Dockerfile: ${DOCKERFILE}"
@@ -138,4 +143,13 @@ spec:
             echo \"Failed during execution of docker push command for latest tag\"
             exit 1
         fi
-
+  sidecars:
+    - image: docker:dind
+      name: server
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /var/lib/docker
+          name: dind-storage
+        - mountPath: /var/run/
+          name: dind-socket
