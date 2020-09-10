@@ -98,8 +98,7 @@ spec:
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
         ibmcloud config --check-version=false
-        ibmcloud plugin install -f container-registry
-        ibmcloud plugin install -f kubernetes-service
+        ibmcloud plugin update --all -f
         ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
         
         IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
