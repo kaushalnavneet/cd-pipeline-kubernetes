@@ -86,8 +86,6 @@ spec:
         value: $(params.dockerUsername)
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
-      - name: BUILD_CLUSTER
-        value: $(params.buildCluster)
       - name: REGISTRY_REGION
         value: $(params.registryRegion)
     workingDir: /workspace
