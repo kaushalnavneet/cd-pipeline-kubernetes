@@ -51,6 +51,7 @@ function check_deployments_statefulsets() {
 
 	for deployment in ${deployments[@]}
 	do
+		echo "Rolling out $deployment"
 		#kubectl -n ${NAMESPACE} rollout status deployment/$deployment -w --timeout=10m
 	done
 	for statefulset in ${statefulsets[@]}
