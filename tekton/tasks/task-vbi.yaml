@@ -7,7 +7,6 @@ spec:
     - name: buildCluster
       default: otc-dal12-build
     - name: dockerFile
-    - name: runBaseImage
     - name: extraDockerOpts
       default: --no-cache
     - name: dockerUsername
@@ -75,7 +74,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: run-base
-    image: $(params.runBaseImage)
+    image: ibmcom/pipeline-base-image:2.8
     imagePullPolicy: IfNotPresent
     env:
       - name: HOME

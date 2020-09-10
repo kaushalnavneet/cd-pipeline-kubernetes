@@ -7,8 +7,6 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: dockerFile
-    - name: runBaseImage
-      default: ibmcom/pipeline-base-image:2.8
     - name: dockerUsername
   workspaces:
   - name: pipeline-pvc
@@ -31,8 +29,6 @@ spec:
       params:
         - name: dockerFile
           value: $(params.dockerFile)
-        - name: runBaseImage
-          value: $(params.runBaseImage)
         - name: dockerUsername
           value: $(params.dockerUsername)
       workspaces:
