@@ -89,6 +89,9 @@ spec:
       - name: REGISTRY_REGION
         value: $(params.registryRegion)
     workingDir: /workspace
+    volumeMounts:
+      - mountPath: /var/run/
+        name: dind-socket
     command: ["/bin/bash", "-c"]
     args:
       - | 
