@@ -71,7 +71,7 @@ spec:
             key: IDS_TOKEN
   workspaces:
   - name: task-pvc
-    mountPath: /workspace 
+    mountPath: /workspace
   steps:
   - name: run-base
     image: ibmcom/pipeline-base-image:2.8
@@ -99,12 +99,11 @@ spec:
         set -e
         ibmcloud config --check-version=false
         ibmcloud plugin update --all -f
-        ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
-        
-        IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
+
         DOCKERFILE=${DOCKERFILE}
 
         if [ ! -z "$BUILD_CLUSTER" ]; then
+          ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
           echo "Building using cluster ${BUILD_CLUSTER}"
           ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
 
