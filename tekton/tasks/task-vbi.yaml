@@ -100,6 +100,13 @@ spec:
         ibmcloud config --check-version=false
         ibmcloud plugin update --all -f
 
+        apt-get update -y
+        DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils apt-transport-https ca-certificates curl software-properties-common python-software-properties xz-utils bzip2 build-essential
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        apt-get update && apt-get upgrade -y
+        DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce=5:18.09.9~3-0~ubuntu-xenial docker-ce-cli=5:18.09.9~3-0~ubuntu-xenial wget netcat-openbsd python make
+
         DOCKERFILE=${DOCKERFILE}
 
         if [ ! -z "$BUILD_CLUSTER" ]; then
