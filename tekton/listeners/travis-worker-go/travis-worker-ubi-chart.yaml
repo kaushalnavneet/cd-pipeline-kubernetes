@@ -186,10 +186,6 @@ spec:
       value: "Dockerfile.travis-worker.ubi"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.14
-    - name: syd_auto_deploy_token
-      value: ""
-    - name: syd_auto_deploy_url
-      value: ""
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener

@@ -25,7 +25,7 @@ spec:
     - name: dockerFile
       default: ''
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs12
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
     - name: artifactoryTokenBase64
       default: ''
     - name: artifactoryId
@@ -126,7 +126,7 @@ spec:
         - name: imageUrl
           value: $(params.imageUrl)
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
         - name: dockerFile
           value: ''
         - name: imageTag
@@ -135,6 +135,24 @@ spec:
           value: $(params.environment)
         - name: skipVA
           value: $(params.skipVA)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: publish
+      runAfter: [build-va]
+      taskRef:
+        name: publish
+      params:
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: charts_repo
+          value: $(params.charts_repo)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
