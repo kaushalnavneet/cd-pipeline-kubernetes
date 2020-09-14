@@ -126,9 +126,7 @@ spec:
           echo "Building using local Docker"
         fi
 
-        docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
         echo "Dockerfile: ${DOCKERFILE}"
-
         docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
 
         if [ $? -ne 0 ]; then
@@ -137,6 +135,7 @@ spec:
         fi
 
         exit 0
+        docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
         docker push ${IMAGE_NAME}:${IMAGE_TAG}
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker push command\"
