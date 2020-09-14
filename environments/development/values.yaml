@@ -86,14 +86,6 @@ pipeline:
         AMQP_MSG_EXP_TIME: 60000
         AMQP_RECONNECT_TIMEOUT: 5
         AMQP_QUEUE: ''
-        AMQP_DEDICATED_PROTOCOL: amqps
-        AMQP_DEDICATED_HOST: bea79f33-100c-4649-b0cc-1a281eb68f9e.blijtlfd05jdimoomdig.databases.appdomain.cloud
-        AMQP_DEDICATED_PORT: 32505
-        AMQP_DEDICATED_PATH: ""
-        AMQP_DEDICATED_EXCHANGE: ''
-        AMQP_DEDICATED_QUEUE: '' 
-        AMQP_DEDICATED_USER: admin
-        AMQP_DEDICATED_SSL_PROTOCOL: TLSv1_2_method
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
