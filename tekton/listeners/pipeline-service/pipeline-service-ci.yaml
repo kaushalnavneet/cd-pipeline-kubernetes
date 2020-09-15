@@ -173,7 +173,7 @@ spec:
     - name: skipDeploy
       value: "false"
     - name: runBaseImage
-      value: us.icr.io/opentoolchain/cd-build-base:java
+      value: us.icr.io/opentoolchain/cd-build-base:java-ubi
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
