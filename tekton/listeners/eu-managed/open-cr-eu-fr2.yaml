@@ -1,0 +1,154 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: open-eu-fr2-trigger
+spec:
+  params:
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: environment
+    - name: deployClusters
+    - name: snUrl
+    - name: tocChannel
+    - name: deployChannel
+    - name: prodRepos
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        IDS_USER: $(params.IDS_USER)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1561947)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN)
+        SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
+        SLACK_TOC_HOOK: $(params.SLACK_TOC_HOOK)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.charts_branch)-open-eu-fr2-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.charts_branch)-open-eu-fr2-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "open-eu-fr2-trigger"
+      spec:
+        pipelineRef:
+          name: pipeline-open-cr
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-open-eu-fr2-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
+          - name: environment
+            value: $(params.environment)
+          - name: deployClusters
+            value: $(params.deployClusters)
+          - name: snUrl
+            value: $(params.snUrl)
+          - name: tocChannel
+            value: $(params.tocChannel)
+          - name: deployChannel
+            value: $(params.deployChannel)
+          - name: prodRepos
+            value: $(params.prodRepos)
+          - name: e2eBuildId
+            value: $(params.E2E_BUILD_ID)
+          - name: cr_priority
+            value: $(params.CR_PRIORITY)
+          - name: cr_type
+            value: $(params.CR_TYPE)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: open-eu-fr2-binding
+spec:
+  params:
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: charts_branch
+      value: "master"
+    - name: charts_directory
+      value: "pipeline-config"
+    - name: environment
+      value: "eu-fr2"
+    - name: deployClusters
+      value: 'otc-par04-bnpp-prod,otc-par04-bnpp-prod,otc-par05-bnpp-prod'
+    - name: snUrl
+      value: 'https://watson.service-now.com'
+    - name: tocChannel
+      value: '#devops-cd-cie'
+    - name: deployChannel
+      value: '#devops-otc-deployment'
+    - name: prodRepos
+      value: 'pipeline-log-service'
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: open-eu-fr2
+spec:
+  triggers:
+    - binding:
+        name: open-eu-fr2-binding
+      template:
+        name: open-eu-fr2-trigger
