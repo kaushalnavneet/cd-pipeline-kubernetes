@@ -1,0 +1,17 @@
+{{- define "pipeline.common.virtualservice.tpl" -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+{{ template "common.metadata" . }}
+spec:
+  hosts:
+  - {{ template "common.fullname" $ }}.{{ .Values.basedomain }}
+  gateways:
+  - devops-gateway
+  http:
+  - route:
+    - destination:
+        host: {{ template "common.fullname" $ }}
+{{- end -}}
+{{- define "pipeline.common.virtualservice" -}}
+{{- template "common.util.merge" (append . "pipeline.common.virtualservice.tpl") -}}
+{{- end -}}
