@@ -132,7 +132,7 @@ spec:
     - name: environment
       value: "us-south"
     - name: deployClusters
-      value: 'otc-dal10-prod,otc-dal12-prod,otc-dal13-prod'
+      value: 'otc-dal10-prod,otc-dal12-prod,otc-dal13-prod (otc-pw-dal10-prod,otc-pw-dal12-prod,otc-pw-dal13-prod for travis-workers and crytomining detector)'
     - name: snUrl
       value: 'https://watson.service-now.com'
     - name: tocChannel
