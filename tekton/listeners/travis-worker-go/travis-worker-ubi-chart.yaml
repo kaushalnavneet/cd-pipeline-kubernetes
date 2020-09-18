@@ -17,8 +17,6 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: imageName
-    - name: imageTag
     - name: runBaseImage
     - name: syd_auto_deploy_token
     - name: syd_auto_deploy_url

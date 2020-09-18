@@ -13,8 +13,6 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: imageName
-    - name: imageTag
     - name: runBaseImage
 
     # CD integration
