@@ -17,8 +17,6 @@ spec:
     - name: config_branch
     - name: config_directory
     - name: imageUrl
-    - name: imageName
-    - name: imageTag
     - name: environment
     - name: skipBuild
     - name: skipVA
