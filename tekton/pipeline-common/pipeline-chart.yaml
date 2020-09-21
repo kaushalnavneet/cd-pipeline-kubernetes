@@ -139,7 +139,7 @@ spec:
           value: $(params.skipVA)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
     - name: publish
       runAfter: [build-va]
       taskRef:

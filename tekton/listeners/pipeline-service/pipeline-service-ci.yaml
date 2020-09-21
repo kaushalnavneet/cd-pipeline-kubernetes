@@ -169,7 +169,7 @@ spec:
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "true"
+      value: "false"
     - name: skipDeploy
       value: "false"
     - name: runBaseImage

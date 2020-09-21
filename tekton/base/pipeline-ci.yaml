@@ -41,7 +41,7 @@ spec:
           value: $(params.config_directory)
       workspaces:
       - name: output
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
     - name: deploy
       runAfter: [clone-config-repo]
       taskRef:
