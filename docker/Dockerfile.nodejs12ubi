@@ -37,6 +37,8 @@ WORKDIR /home/node
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
 RUN rm -rf /home/node/cd-pipeline-kubernetes
+RUN chown -hR node /home/node
+
 USER node
 EXPOSE 80
 
