@@ -335,12 +335,6 @@ pipeline:
         newrelic_env: YS1-k8s
         AMQP_LISTENERS_DISABLED: false
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
-        qradar_enabled: false
-        qradar_host: syslog.prd.ccs.ibmcloud.com
-        qradar_keystore_path: qr.jks
-        qradar_port: "6515"
-        qradar_product: otc-pipeline-server-ys1-dev
-        qradar_url: devops.stage1.ng.bluemix.net
         serverHttpPort: 80
         serverHttpsPort: 443
         serverRootDir: /deployRoot/${p:environment.name}/${p:application/serverName}
