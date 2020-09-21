@@ -36,6 +36,7 @@ pipeline:
         USE_K8S: true
         SECGRP: GRP1PRDY
         CLOUDANT_ACCOUNT: '9cb9bdc9-10b0-4a27-afea-d26eadc3ddb2-bluemix'
+        CLOUDANT_URL: 'https://9cb9bdc9-10b0-4a27-afea-d26eadc3ddb2-bluemix.cloudant.com'
   travis-worker:
     replicas: 2
     vault:
