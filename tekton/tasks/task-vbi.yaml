@@ -134,6 +134,7 @@ spec:
             exit 1
         fi
 
+        exit 0
         docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
         docker push ${IMAGE_NAME}:${IMAGE_TAG}
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
