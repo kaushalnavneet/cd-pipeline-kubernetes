@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: blade-pipeline-broker-trigger-dev
+  name: blade-pipeline-broker-non-root
 spec:
   params:
     - name: source_repo
@@ -86,7 +86,7 @@ spec:
         name: $(params.source_branch)-blade-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "blade-pipeline-broker-trigger-dev"
+          generatedBy: "blade-pipeline-broker-non-root"
       spec:
         pipelineRef:
           name: pipeline-ci
@@ -134,7 +134,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: blade-pipeline-broker-binding-dev
+  name: blade-pipeline-broker-binding-non-root
 spec:
   params:
     - name: source_repo
@@ -177,6 +177,6 @@ metadata:
 spec:
   triggers:
     - binding:
-        name: blade-pipeline-broker-binding-dev
+        name: blade-pipeline-broker-binding-non-root
       template:
-        name: blade-pipeline-broker-trigger-dev
+        name: blade-pipeline-broker-non-root
