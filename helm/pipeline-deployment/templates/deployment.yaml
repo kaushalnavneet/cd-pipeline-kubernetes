@@ -91,14 +91,14 @@ spec:
 livenessProbe:
   httpGet:
     path: {{.Values.probes.liveness.path | default "/version"}}
-    port: 80
+    port: 8080
   initialDelaySeconds: {{.Values.probes.liveness.initialDelay | default 30}}
   timeoutSeconds: {{.Values.probes.liveness.timeoutSeconds | default 3}}
   periodSeconds: {{.Values.probes.liveness.periodSeconds | default 30}}
 readinessProbe:
   httpGet:
     path: {{.Values.probes.readiness.path | default "/status"}}
-    port: 80
+    port: 8080
   initialDelaySeconds: {{.Values.probes.readiness.initialDelay | default 30}}
   timeoutSeconds: {{.Values.probes.readiness.timeoutSeconds | default 3}}
   periodSeconds: {{.Values.probes.readiness.periodSeconds | default 30}}

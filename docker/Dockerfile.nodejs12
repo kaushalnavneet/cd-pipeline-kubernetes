@@ -27,7 +27,7 @@ FROM us.icr.io/opentoolchain/ibmnode:12secure
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
 
-ENV PORT=80
+ENV PORT=8080
 
 #RUN useradd -ms /bin/bash node 
 ENV HOME /home/node
@@ -37,7 +37,7 @@ COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
 RUN rm -rf /home/node/cd-pipeline-kubernetes
 #USER node
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
 CMD ["sh","-c","env > /home/node/envcheck.txt && node --max-http-header-size=65535 index.js"]
