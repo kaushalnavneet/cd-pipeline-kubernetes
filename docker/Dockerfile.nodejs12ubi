@@ -29,7 +29,7 @@ ARG NODE_ENV=production
 
 ENV PORT=80
 
-#RUN adduser -s /bin/bash -d /home/node -U node
+RUN adduser -s /bin/bash -d /home/node -U node
 
 ENV HOME /home/node
 WORKDIR /home/node
@@ -37,10 +37,10 @@ WORKDIR /home/node
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
 RUN rm -rf /home/node/cd-pipeline-kubernetes
-#RUN chown -hR node /home/node \
-#    && chgrp -hR node /home/node 
+RUN chown -hR node /home/node \
+    && chgrp -hR node /home/node 
 
-#USER node
+USER node
 EXPOSE 80
 
 ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
