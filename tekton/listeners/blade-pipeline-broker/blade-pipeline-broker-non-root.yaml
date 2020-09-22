@@ -173,7 +173,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: blade-pipeline-broker-dev
+  name: blade-pipeline-broker-non-root
 spec:
   triggers:
     - binding:
