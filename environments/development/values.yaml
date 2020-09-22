@@ -75,6 +75,7 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
+        HTTP_PORT: 8080
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -337,7 +338,7 @@ pipeline:
         newrelic_env: YS1-k8s
         AMQP_LISTENERS_DISABLED: false
         JBP_CONFIG_IBMJDK: "version: 1.8.+"
-        serverHttpPort: 80
+        serverHttpPort: 8080
         serverHttpsPort: 443
         serverRootDir: /deployRoot/${p:environment.name}/${p:application/serverName}
         serverJava: /opt/ibm/ibm-java-x86_64-70/jre
