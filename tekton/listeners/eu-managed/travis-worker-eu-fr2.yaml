@@ -156,15 +156,15 @@ spec:
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-par04-bnpp-prod
+      value: otc-pw-par04-bnpp-prod
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-par05-bnpp-prod
+      value: otc-pw-par05-bnpp-prod
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: otc-par06-bnpp-prod
+      value: otc-pw-par06-bnpp-prod
     - name: skipDeploy3
       value: "false"
 ---
