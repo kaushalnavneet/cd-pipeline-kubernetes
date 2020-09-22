@@ -207,11 +207,11 @@ spec:
 livenessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 8080
 readinessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 8080
 {{- end -}}
 ```
 
@@ -266,15 +266,15 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: 80
+            port: 8080
         name: deployment
         ports:
-        - containerPort: 80
+        - containerPort: 8080
           name: http
         readinessProbe:
           httpGet:
             path: /
-            port: 80
+            port: 8080
         resources:
           limits:
             cpu: 100m
