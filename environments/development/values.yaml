@@ -128,6 +128,7 @@ pipeline:
         enableTekton: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         DEBUG: cloudant:plugins:iamauth
+        PORT: 8080
   private-worker-service:
     replicas: 1
     revisionHistoryLimit: 3
