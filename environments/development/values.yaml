@@ -179,6 +179,7 @@ pipeline:
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENABLE_RATE_LIMIT: false
         ENABLE_RUN_ENDPOINT: true
+        PORT: 8080
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
