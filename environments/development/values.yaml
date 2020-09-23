@@ -75,7 +75,7 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
-        HTTP_PORT: 8080
+        PORT: 8080
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -561,4 +561,5 @@ pipeline:
         USE_NEW_RELIC: true
         ENV_ID: ibm:ys1:us-south
         ENABLE_ECHO: true
+        PORT: 8080
 
