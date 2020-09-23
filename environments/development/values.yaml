@@ -33,6 +33,7 @@ pipeline:
         timeoutSeconds: 10
     configmap:
       data:
+        PORT: 8080
         USE_K8S: true
         SECGRP: GRP3DEVS
         CLOUDANT_ACCOUNT: '4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix'
@@ -75,7 +76,6 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
-        PORT: 8080
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -91,7 +91,6 @@ pipeline:
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        PORT: 8080
   otc-github-relay-sub:
     replicas: 1
     revisionHistoryLimit: 3
@@ -110,7 +109,6 @@ pipeline:
         LOG4JS_CONFIG_PATH: ''
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline/triggers/
-        PORT: 8080
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -131,7 +129,6 @@ pipeline:
         enableTekton: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         DEBUG: cloudant:plugins:iamauth
-        PORT: 8080
   private-worker-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -162,7 +159,6 @@ pipeline:
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
         ENABLE_MESSAGE_COMPRESSION: true
-        PORT: 8080
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -179,7 +175,6 @@ pipeline:
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENABLE_RATE_LIMIT: false
         ENABLE_RUN_ENDPOINT: true
-        PORT: 8080
   pipeline-consumption:
     replicas: 1
     revisionHistoryLimit: 3
@@ -199,7 +194,6 @@ pipeline:
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
         TEKTON_MONITOR: true
-        PORT: 8080
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
@@ -294,7 +288,6 @@ pipeline:
         ECHO_ENABLED: true
         LOG4JS_WATCHER_INTERVAL: 180000
         TEKTON_PUBLIC_WORKER_VERSION: v0.14.1
-        PORT: 8080
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -326,7 +319,6 @@ pipeline:
         PAYLOAD_ENCRYPT: true
         CLOUDANT_DATABASE: ars-staging
         ORG_URI: https://api.stage1.ng.bluemix.net/v2/organizations
-        PORT: 8080
   pipeline-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -562,5 +554,4 @@ pipeline:
         USE_NEW_RELIC: true
         ENV_ID: ibm:ys1:us-south
         ENABLE_ECHO: true
-        PORT: 8080
 
