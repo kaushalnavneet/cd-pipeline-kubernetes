@@ -287,7 +287,8 @@ pipeline:
         LINTER_ENABLE: true
         ECHO_ENABLED: true
         LOG4JS_WATCHER_INTERVAL: 180000
-        TEKTON_PUBLIC_WORKER_VERSION: v0.14.1
+        TEKTON_PUBLIC_WORKER_VERSION: v0.14.1,
+        NEW_CONFIGURATION_LOGIC: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
