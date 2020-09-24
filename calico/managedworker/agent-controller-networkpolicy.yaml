@@ -1,0 +1,35 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: agent-controller
+  namespace: tekton-pipelines
+spec:
+  egress:
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns'
+      namespaceSelector: projectcalico.org/name == 'kube-system'
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns'
+      namespaceSelector: projectcalico.org/name == 'kube-system'
+    protocol: TCP
+  - action: Allow
+    destination:
+      nets:
+      - 172.20.0.1/32
+  - action: Deny
+    destination:
+      selector: all()
+  - action: Allow
+    destination:
+      nets:
+      - 0.0.0.0/0
+  selector: name == 'private-worker-agent'
+  types:
+  - Egress

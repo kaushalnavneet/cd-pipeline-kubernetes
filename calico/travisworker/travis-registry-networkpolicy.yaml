@@ -1,0 +1,13 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: travis-registry
+  namespace: opentoolchain
+spec:
+  ingress:
+  - action: Allow
+    source:
+      selector: app == 'travis-worker'
+  selector: app == 'travis-registry'
+  types:
+  - Ingress

@@ -1,0 +1,38 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: travis-worker
+  namespace: opentoolchain
+spec:
+  egress:
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns'
+      namespaceSelector: projectcalico.org/name == 'kube-system'
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns'
+      namespaceSelector: projectcalico.org/name == 'kube-system'
+    protocol: TCP
+  - action: Allow
+    destination:
+      selector: app == 'travis-registry'
+  - action: Deny
+    destination:
+      nets:
+      - 172.20.0.1/32
+  - action: Deny
+    destination:
+      selector: all()
+  - action: Allow
+    destination:
+      nets:
+      - 0.0.0.0/0
+  selector: app == 'travis-worker'
+  types:
+  - Egress

@@ -1,0 +1,14 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: tekton-controller
+  namespace: tekton-pipelines
+spec:
+  egress:
+  - action: Allow
+    destination:
+      nets:
+      - 172.20.0.1/32
+  selector: app == 'tekton-pipelines-controller'
+  types:
+  - Egress
