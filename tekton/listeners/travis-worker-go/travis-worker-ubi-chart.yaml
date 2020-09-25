@@ -18,8 +18,6 @@ spec:
     - name: config_branch
     - name: config_directory
     - name: runBaseImage
-    - name: syd_auto_deploy_token
-    - name: syd_auto_deploy_url
 
     # CD integration
     - name: api
@@ -133,8 +131,6 @@ spec:
             value: $(params.skipBuild)
           - name: environment
             value: $(params.environment)
-          - name: skipVA
-            value: $(params.skipVA)
           - name: dockerFile
             value: $(params.dockerFile)
           - name: runBaseImage
@@ -178,8 +174,6 @@ spec:
       value: "au-syd"
     - name: skipBuild
       value: "false"
-    - name: skipVA
-      value: "true"
     - name: dockerFile
       value: "Dockerfile.travis-worker.ubi"
     - name: runBaseImage
