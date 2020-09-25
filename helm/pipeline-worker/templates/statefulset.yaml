@@ -94,7 +94,7 @@ spec:
           mountPath: /etc/secrets
           readOnly: true
         - name: otc-registry-secret
-          mountPath: /var/run/secrets/cloud.ibm.com/travis-worker
+          mountPath: /tmp/cloud.ibm.com/travis-worker
           readOnly: true
         - name: dockervarlib
           mountPath: /var/lib/docker
