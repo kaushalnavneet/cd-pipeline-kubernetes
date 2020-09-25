@@ -149,7 +149,7 @@ spec:
     - name: source_repo
       value: "https://github.ibm.com/org-ids/travis-worker-go.git"
     - name: source_branch
-      value: "master"
+      value: "ubi"
     - name: short_source_branch
       value: "int-charts"
     - name: source_directory
@@ -163,7 +163,7 @@ spec:
     - name: script_repo
       value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     - name: script_branch
-      value: "master"
+      value: "ubi"
     - name: script_directory
       value: "travis-worker-go/cd-pipeline-kubernetes"
     - name: config_repo
