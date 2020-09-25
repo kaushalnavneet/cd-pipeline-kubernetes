@@ -147,7 +147,7 @@ spec:
     - name: source_branch
       value: "ubi"
     - name: short_source_branch
-      value: "int-charts"
+      value: "ubi-charts"
     - name: source_directory
       value: "travis-worker-go"
     - name: charts_repo
