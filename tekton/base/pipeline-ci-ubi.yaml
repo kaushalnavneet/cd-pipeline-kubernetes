@@ -12,6 +12,10 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+    - name: icd-redis-keystore-base64
+      default: ''
+    - name: qr-keystore-base64
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -67,6 +71,10 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: java-ubi
+        - name: icd-redis-keystore-base64
+          value: $(params.icd-redis-keystore-base64)
+        - name: qr-keystore-base64
+          value: $(params.qr-keystore-base64)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

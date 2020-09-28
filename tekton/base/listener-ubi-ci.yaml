@@ -101,6 +101,10 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
+          - name: icd-redis-keystore-base64
+            value: $(params.ICD_REDIS_KEYSTORE)
+          - name: qr-keystore-base64
+            value: $(params.QR_KEYSTORE)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

@@ -19,6 +19,10 @@ spec:
       default: 'development'
     - name: extraDockerOpts
       default: '--no-cache'
+    - name: icd-redis-keystore-base64
+      default: ''
+    - name: qr-keystore-base64
+      default: ''
   stepTemplate:
     env:
       - name: API
@@ -74,6 +78,10 @@ spec:
         value: $(params.environment)
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
+      - name: QR_KEYSTORE
+        value: $(arams.qr-keystore-base64)
+      - name: ICD_REDIS_KEYSTORE
+        value: $(arams.icd-redis-keystore-base64)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
