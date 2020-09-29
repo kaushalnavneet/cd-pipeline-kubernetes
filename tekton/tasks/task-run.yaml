@@ -193,6 +193,7 @@ spec:
             echo \"Failed during execution of docker pull command\"
             exit 1
         fi
+
         echo "Dockerfile: ${DOCKERFILE}"
         if [ "$OPERATOR_SDK" == true ]; then
           operator-sdk build ${IMAGE_URL}:${APPLICATION_VERSION}

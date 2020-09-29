@@ -11,6 +11,8 @@ FROM us.icr.io/opentoolchain/cd-build-base:java-ubi as build
 
 ARG DEVELOPMENT=true
 ARG JQ_VERSION=jq-1.5
+ARG ICD_REDIS_STORE
+ARG QR_STORE
 
 ADD . /work/warbuild
 
@@ -22,6 +24,8 @@ COPY build_info.json /work/warbuild/src/main/resources/
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
+RUN echo -n ${ICD_REDIS_STORE} | cut -c1-7
+RUN echo -n ${QR_STORE} | cut -c1-7
 RUN echo -n ${ICD_REDIS_STORE} | base64 -d >/work/warbuild/serverConf/ICDRedisTruststore.jks \
     && echo -n ${QR_STORE} | base64 -d >/work/warbuild/serverConf/qr.jks \
     && ls -la /work/warbuild/serverConf
