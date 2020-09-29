@@ -143,6 +143,10 @@ spec:
             value: $(params.syd_auto_deploy_token)
           - name: syd_auto_deploy_url
             value: $(params.syd_auto_deploy_url)
+          - name: icd-redis-store
+            value: $(params.ICD_REDIS_STORE)
+          - name: qr-store
+            value: $(params.QR_STORE)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
