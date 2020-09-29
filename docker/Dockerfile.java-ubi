@@ -24,11 +24,9 @@ COPY build_info.json /work/warbuild/src/main/resources/
 # publish logmet and qradar jars to local maven repo
 RUN mvn -B clean package
 
-RUN echo -n ${ICD_REDIS_STORE} | cut -c1-7
-RUN echo -n ${QR_STORE} | cut -c1-7
+# Create jks files based on secure properties
 RUN echo -n ${ICD_REDIS_STORE} | base64 -d >/work/warbuild/serverConf/ICDRedisTruststore.jks \
-    && echo -n ${QR_STORE} | base64 -d >/work/warbuild/serverConf/qr.jks \
-    && ls -la /work/warbuild/serverConf
+    && echo -n ${QR_STORE} | base64 -d >/work/warbuild/serverConf/qr.jks
 
 FROM us.icr.io/opentoolchain/websphere-liberty-ubi:secure
 
