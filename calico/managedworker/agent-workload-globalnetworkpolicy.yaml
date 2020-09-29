@@ -17,18 +17,16 @@ spec:
       - 53
       selector: k8s-app == 'kube-dns'
       namespaceSelector: projectcalico.org/name == 'kube-system'
-    protocol: TCP  
+    protocol: TCP
   - action: Deny
     destination:
-      selector: all()
-  - action: Deny
-    destination:
-      nets:
-      - 172.20.0.1/32
+      selector: ibm.role == 'worker_private' || ibm.role == 'worker_public'
   - action: Allow
     destination:
       nets:
       - 0.0.0.0/0
+      notNets:
+      - 172.16.0.0/12
   selector: app.kubernetes.io/managed-by == 'tekton-pipelines'
   types:
   - Egress
