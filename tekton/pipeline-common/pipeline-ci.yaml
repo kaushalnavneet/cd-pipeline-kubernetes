@@ -32,6 +32,10 @@ spec:
       default: ''
     - name: helmOptions
       default: ''
+    - name: icd-redis-store
+      default: ''
+    - name: qr-store
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -99,6 +103,10 @@ spec:
           value: $(params.artifactoryId)
         - name: consoleAuthToken
           value: $(params.consoleAuthToken)
+        - name: icd-redis-store
+          value: $(params.icd-redis-store)
+        - name: qr-store
+          value: $(params.qr-store)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

@@ -133,6 +133,10 @@ spec:
             value: $(params.runBaseImage)
           - name: helmOptions
             value: $(params.helmOptions)
+          - name: icd-redis-store
+            value: $(params.ICD_REDIS_STORE)
+          - name: qr-store
+            value: $(params.QR_STORE)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
