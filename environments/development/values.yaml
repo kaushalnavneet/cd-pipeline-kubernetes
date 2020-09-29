@@ -355,8 +355,6 @@ pipeline:
         jazzhub_login_client_ribbon_listOfServers: psdev.login.jazz.net:443
         bluemix_client_ribbon_listOfServers: ace.ng.bluemix.net:443
         com_ibm_team_integration_pipeline_db: cloudant
-        com_ibm_team_integration_pipeline_db_cloudant_url: https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud
-        com_ibm_team_integration_pipeline_db_cloudant_username: 4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix
         com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
         com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
         com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
