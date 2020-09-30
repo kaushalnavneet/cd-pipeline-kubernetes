@@ -49,6 +49,11 @@ spec:
         export AUTH_TOKEN=$(echo -n "pipeline:$BROKER_SECRET" | base64 -w 0)
         OPTS="-X $VERB"
         URL=$API_URL/v1/pipeline/extensions
+        if [ ! -z "$EXT_URL" ]; then
+          cat - >url.json <<EOF
+{"url": "$EXT_URL"}
+EOF
+        fi
         if [ $VERB = "GET" ]; then
           if [ "$EXT_ID" = "None" ]; then
             URL="${URL}?all=true"
@@ -63,10 +68,10 @@ spec:
             URL="${URL}/$EXT_ID/disable"
             OPTS="${OPTS} -d''"
           else
-            OPTS="${OPTS} -d '{\"url\":\"${EXT_URL}\"}' "
+            OPTS="${OPTS} -d @url.json "
           fi
         elif [ $VERB = "PUT" ]; then
-          OPTS="${OPTS} -d '{\"url\":\"${EXT_URL}\"}' "
+          OPTS="${OPTS} -d @url.json "
           URL="${URL}/$EXT_ID"
         elif [ $VERB = "DELETE" ]; then
           URL="${URL}/$EXT_ID"
