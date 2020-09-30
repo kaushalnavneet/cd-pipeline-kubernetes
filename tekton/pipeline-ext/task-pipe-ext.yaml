@@ -18,7 +18,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: deploy
-    image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    image: ibmcom/pipeline-base-image:2.7
     imagePullPolicy: IfNotPresent
     env:
       - name: HOME
@@ -44,6 +44,7 @@ spec:
     args:
       - | 
         export HOME=/root
+        set -x
         cd /workspace
         export AUTH_TOKEN=$(echo -n "pipeline:$BROKER_SECRET" | base64 -w 0)
         OPTS="-X $VERB"
