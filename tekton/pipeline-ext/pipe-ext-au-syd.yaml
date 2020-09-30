@@ -6,7 +6,7 @@ spec:
   params:
     - name: environment
     - name: api_url
-    - name: extention_url
+    - name: extension_url
     - name: brokerSecret
     - name: verb
 
@@ -59,10 +59,10 @@ spec:
             value: $(params.environment)
           - name: api_url
             value: $(params.api_url)
-          - name: extention_url
-            value: $(params.extention_url)
-          - name: extention_id
-            value: $(params.extention_id)
+          - name: extension_url
+            value: $(params.extension_url)
+          - name: extension_id
+            value: $(params.extension_id)
           - name: brokerSecret
             value: $(params.brokerSecret)
           - name: verb
@@ -82,9 +82,9 @@ spec:
       value: "au-syd"
     - name: api_url
       value: "https://devops-api.au-syd.devops.cloud.ibm.com"
-    - name: extention_url
+    - name: extension_url
       value: ""
-    - name: extention_id
+    - name: extension_id
       value: "None"
     - name: brokerSecret
       value: $(params.au_syd_brokerSecret)

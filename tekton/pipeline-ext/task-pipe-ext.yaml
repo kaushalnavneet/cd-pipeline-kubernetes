@@ -6,8 +6,8 @@ spec:
   params:
     - name: environment
     - name: api_url
-    - name: extention_url
-    - name: extention_id
+    - name: extension_url
+    - name: extension_id
       default: "None"
     - name: brokerSecret
     - name: verb
@@ -28,9 +28,9 @@ spec:
       - name: API_URL
         value: $(params.api_url)
       - name: EXT_URL
-        value: $(params.extention_url)
+        value: $(params.extension_url)
       - name: EXT_ID
-        value: $(params.extention_id)
+        value: $(params.extension_id)
       - name: BROKER_SECRET
         value: $(params.brokerSecret)
       - name: VERB
