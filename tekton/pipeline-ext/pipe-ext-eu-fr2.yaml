@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: ext-jp-tok-trigger-dev
+  name: ext-eu-fr2-trigger-dev
 spec:
   params:
     - name: environment
@@ -32,7 +32,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: ext-jp-tok-$(uid)-pvc
+        name: ext-eu-fr2-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -45,17 +45,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: ext-jp-tok-$(uid)
+        name: ext-eu-fr2-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "ext-jp-tok-trigger-dev"
+          generatedBy: "ext-eu-fr2-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-extension
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: ext-jp-tok-$(uid)-pvc
+              claimName: ext-eu-fr2-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: environment
@@ -78,19 +78,19 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: ext-jp-tok-binding-dev
+  name: ext-eu-fr2-binding-dev
 spec:
   params:
     - name: environment
-      value: "jp-tok"
+      value: "eu-fr2"
     - name: api_url
-      value: "https://devops-api.jp-tok.devops.cloud.ibm.com"
+      value: "https://devops-api.eu-fr2.devops.cloud.ibm.com"
     - name: extension_url
       value: ""
     - name: extension_id
       value: "None"
     - name: brokerSecret
-      value: $(params.jp_tok_brokerSecret)
+      value: $(params.eu_fr2_brokerSecret)
     - name: verb
       value: "GET"
     - name: enable
@@ -101,10 +101,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: ext-jp-tok-dev
+  name: ext-eu-fr2-dev
 spec:
   triggers:
     - binding:
-        name: ext-jp-tok-binding-dev
+        name: ext-eu-fr2-binding-dev
       template:
-        name: ext-jp-tok-trigger-dev
+        name: ext-eu-fr2-trigger-dev

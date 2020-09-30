@@ -7,6 +7,9 @@ spec:
     - name: environment
     - name: api_url
     - name: extension_url
+    - name: extension_id
+    - name: enable
+    - name: disable
     - name: brokerSecret
     - name: verb
 
