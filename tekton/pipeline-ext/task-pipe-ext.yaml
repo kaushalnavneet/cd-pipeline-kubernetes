@@ -71,6 +71,6 @@ spec:
         elif [ $VERB = "DELETE" ]; then
           URL="${URL}/$EXT_ID"
         fi
-        curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" $OPTS $URL | jq .
+        curl -s -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" $OPTS $URL | jq .
         # curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"url":"${p:extension_url}"}' -X POST 
         set +x
