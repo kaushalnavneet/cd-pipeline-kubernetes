@@ -44,7 +44,7 @@ spec:
     args:
       - | 
         export HOME=/root
-        set -x
+        set +x
         cd /workspace
         export AUTH_TOKEN=$(echo -n "pipeline:$BROKER_SECRET" | base64 -w 0)
         OPTS="-X $VERB"
@@ -71,6 +71,6 @@ spec:
         elif [ $VERB = "DELETE" ]; then
           URL="${URL}/$EXT_ID"
         fi
-        curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" $OPTS $URL
+        curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" $OPTS $URL | jq .
         # curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"url":"${p:extension_url}"}' -X POST 
         set +x
