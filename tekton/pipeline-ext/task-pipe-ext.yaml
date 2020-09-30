@@ -44,7 +44,7 @@ spec:
     args:
       - | 
         export HOME=/root
-        set +x
+        set -x
         cd /workspace
         export AUTH_TOKEN=$(echo -n "pipeline:$BROKER_SECRET" | base64 -w 0)
         OPTS="-X $VERB"
