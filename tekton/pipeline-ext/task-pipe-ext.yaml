@@ -51,8 +51,8 @@ spec:
         URL=$API_URL/v1/pipeline/extensions
         if [ ! -z "$EXT_URL" ]; then
           cat - >url.json <<EOF
-{"url": "$EXT_URL"}
-EOF
+        {"url": "$EXT_URL"}
+        EOF
         fi
         if [ $VERB = "GET" ]; then
           if [ "$EXT_ID" = "None" ]; then
