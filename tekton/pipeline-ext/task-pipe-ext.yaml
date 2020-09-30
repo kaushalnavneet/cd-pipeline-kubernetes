@@ -1,0 +1,75 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pipeline-ext
+spec:
+  params:
+    - name: environment
+    - name: api_url
+    - name: extention_url
+    - name: extention_id
+      default: "None"
+    - name: brokerSecret
+    - name: verb
+    - name: enable
+    - name: disable
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: deploy
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: API_URL
+        value: $(params.api_url)
+      - name: EXT_URL
+        value: $(params.extention_url)
+      - name: EXT_ID
+        value: $(params.extention_id)
+      - name: BROKER_SECRET
+        value: $(params.brokerSecret)
+      - name: VERB
+        value: $(params.verb)
+      - name: ENABLE
+        value: $(params.enable)
+      - name: DISABLE
+        value: $(params.disable)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        cd /workspace
+        export AUTH_TOKEN=$(echo -n "pipeline:$BROKER_SECRET" | base64 -w 0)
+        OPTS="-X $VERB"
+        URL=$API_URL/v1/pipeline/extensions
+        if [ $VERB = "GET" ]; then
+          if [ "$EXT_ID" = "None" ]; then
+            URL="${URL}?all=true"
+          else
+            URL="${URL}/$EXT_ID"
+          fi
+        elif [ $VERB = "POST" ]; then
+          if [ $ENABLE = true ]; then
+            URL="${URL}/$EXT_ID/enable"
+            OPTS="${OPTS} -d''"
+          elif [ $DISABLE = true ]; then
+            URL="${URL}/$EXT_ID/disable"
+            OPTS="${OPTS} -d''"
+          else
+            OPTS="${OPTS} -d '{\"url\":\"${EXT_URL}\"}' "
+          fi
+        elif [ $VERB = "PUT" ]; then
+          OPTS="${OPTS} -d '{\"url\":\"${EXT_URL}\"}' "
+          URL="${URL}/$EXT_ID"
+        elif [ $VERB = "DELETE" ]; then
+          URL="${URL}/$EXT_ID"
+        fi
+        curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" $OPTS $URL
+        # curl -k -H "Authorization: Basic $AUTH_TOKEN" -H "Content-Type: application/json" -d '{"url":"${p:extension_url}"}' -X POST 
+        set +x
