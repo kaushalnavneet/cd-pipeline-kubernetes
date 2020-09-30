@@ -87,7 +87,7 @@ spec:
     - name: extention_id
       value: "None"
     - name: brokerSecret
-      value: $(params.brokerSecret)
+      value: $(params.jp_tok_brokerSecret)
     - name: verb
       value: "GET"
     - name: enable
