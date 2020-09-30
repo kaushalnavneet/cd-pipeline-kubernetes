@@ -81,7 +81,7 @@ spec:
     - name: environment
       value: "jp-tok"
     - name: api_url
-      value: "devops-api.jp-tok.devops.cloud.ibm.com"
+      value: "https://devops-api.jp-tok.devops.cloud.ibm.com"
     - name: extention_url
       value: ""
     - name: extention_id

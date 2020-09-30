@@ -81,7 +81,7 @@ spec:
     - name: environment
       value: "au-syd"
     - name: api_url
-      value: "devops-api.au-syd.devops.cloud.ibm.com"
+      value: "https://devops-api.au-syd.devops.cloud.ibm.com"
     - name: extention_url
       value: ""
     - name: extention_id

@@ -81,7 +81,7 @@ spec:
     - name: environment
       value: "us-east"
     - name: api_url
-      value: "devops-api.us-east.devops.cloud.ibm.com"
+      value: "https://devops-api.us-east.devops.cloud.ibm.com"
     - name: extention_url
       value: ""
     - name: extention_id
