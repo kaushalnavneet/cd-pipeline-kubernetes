@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-extension
+spec:
+  params:
+    - name: environment
+    - name: api_url
+    - name: extension_url
+    - name: extension_id
+    - name: brokerSecret
+    - name: verb
+    - name: enable
+    - name: disable
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: pipeline-ext
+      taskRef:
+        name:  pipeline-ext
+      params:
+        - name: environment
+          value: $(params.environment)
+        - name: api_url
+          value: $(params.api_url)
+        - name: extension_url
+          value: $(params.extension_url)
+        - name: extension_id
+          value: $(params.extension_id)
+        - name: brokerSecret
+          value: $(params.brokerSecret)
+        - name: verb
+          value: $(params.verb)
+        - name: enable
+          value: $(params.enable)
+        - name: disable
+          value: $(params.disable)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
