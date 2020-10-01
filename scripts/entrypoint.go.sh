@@ -15,17 +15,6 @@ if [ -d /etc/secrets ]; then
     done
 fi
 
-read -d '' vcap_services_template <<"EOF"
-    "%s": [
-        {
-            "credentials": %s,
-            %s
-        }
-    ]
-EOF
-
-printf -v VCAP_SERVICES "{$vcap_services_template}" "user-provided" "$OTC_TIAM_CLIENTS" "\"name\": \"otc-tiam-clients\""
-
 CF_INSTANCE_INDEX=$(hostname | grep -o "[[:digit:]]*$")
 
 #Avoid queue conflicts with CF instances
