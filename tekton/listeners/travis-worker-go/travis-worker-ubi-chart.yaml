@@ -157,7 +157,7 @@ spec:
     - name: charts_repo
       value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: charts_branch
-      value: "master"
+      value: "ubi"
     - name: charts_directory
       value: "travis-worker-go/pipeline-config"
     - name: script_repo
