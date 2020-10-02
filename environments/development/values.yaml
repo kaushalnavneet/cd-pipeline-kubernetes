@@ -145,7 +145,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         LOG_SERVICE_URL: https://pipeline-log-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.7.0-dev"
+        AGENT_VERSION: "0.8.0-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
         S3_STORAGE_REGION: us-standard
@@ -287,7 +287,7 @@ pipeline:
         LINTER_ENABLE: true
         ECHO_ENABLED: true
         LOG4JS_WATCHER_INTERVAL: 180000
-        TEKTON_PUBLIC_WORKER_VERSION: v0.14.1,
+        TEKTON_PUBLIC_WORKER_VERSION: v0.14.1
         NEW_CONFIGURATION_LOGIC: true
   pipeline-artifact-repository-service:
     replicas: 1
