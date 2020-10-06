@@ -1,0 +1,11 @@
+FROM us.icr.io/opentoolchain/travis-worker:run
+
+USER root
+
+RUN yum update -y && \
+    yum clean all -y
+
+COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
+
+ENTRYPOINT ["/root/entrypoint.sh"]
+CMD ["/usr/bin/dockerd"]
