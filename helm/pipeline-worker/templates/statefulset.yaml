@@ -87,8 +87,6 @@ spec:
           name: vault-secrets
       containers:
       - {{ template "common.container" (list . "pipeline.statefulset.container") }}
-        securityContext:
-          privileged: true
         volumeMounts:
         - name: vault-secrets
           mountPath: /etc/secrets
@@ -100,20 +98,22 @@ spec:
           mountPath: /var/lib/docker
         - name: varlog
           mountPath: /var/log
-      - name: docker-log
-        image: alpine:3.12
+      - name: docker
+        image: us.icr.io/opentoolchain/travis-docker:secure
         imagePullPolicy: IfNotPresent
-        args: [/bin/sh, -c, '( tail -n+1 -F /var/log/docker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
+        securityContext:
+          privileged: true
         volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-      - name: travis-worker-log
-        image: alpine:3.12
-        imagePullPolicy: IfNotPresent
-        args: [/bin/sh, -c, '( tail -n+1 -F /var/log/travis-worker.log ) & CHILD_PID=$! ; while [ ! -e /var/log/travis-worker.done ]; do sleep 2 ; done ; kill $CHILD_PID ; exit 0']
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
+          - name: vault-secrets
+            mountPath: /etc/secrets
+            readOnly: true
+          - name: otc-registry-secret
+            mountPath: /tmp/cloud.ibm.com/travis-worker
+            readOnly: true
+          - name: dockervarlib
+            mountPath: /var/lib/docker
+          - name: varlog
+            mountPath: /var/log
 {{- end -}}
 {{- define "pipeline.statefulset.container" -}}
 {{- if .Values.probes.enabled }}
