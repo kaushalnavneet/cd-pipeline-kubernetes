@@ -20,7 +20,7 @@ CF_INSTANCE_INDEX=$(hostname | grep -o "[[:digit:]]*$")
 #Avoid queue conflicts with CF instances
 CF_INSTANCE_INDEX=$((CF_INSTANCE_INDEX+100))
 
-export VCAP_SERVICES CF_INSTANCE_INDEX
+export CF_INSTANCE_INDEX
 
 #Component specific entry point script
 COMPONENT_ENTRY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/entrypoint.component.sh"
