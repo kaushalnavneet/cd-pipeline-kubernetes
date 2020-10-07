@@ -86,7 +86,7 @@ spec:
           readOnly: true
           name: vault-secrets
       containers:
-        - name: docker
+      - name: docker
         image: us.icr.io/opentoolchain/travis-docker:secure
         imagePullPolicy: IfNotPresent
         securityContext:
