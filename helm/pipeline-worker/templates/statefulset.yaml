@@ -94,10 +94,16 @@ spec:
         lifecycle:
           postStart:
             exec:
-            command:
-              - sh
-              - -c
-              - /root/dockerpullstart.sh
+              command:
+                - sh
+                - -c
+                - /root/dockerpullstart.sh
+          preStop:
+            exec:
+              command:
+                - sh
+                - c
+                - jobs=$(docker ps | tail -n+2); while [ ! -z $jobs ]; do sleep 15; docker ps; jobs=$(docker ps | tail -n+2); done; exit 0
         volumeMounts:
           - name: vault-secrets
             mountPath: /etc/secrets
