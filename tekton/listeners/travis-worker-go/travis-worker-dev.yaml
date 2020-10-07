@@ -56,7 +56,7 @@ spec:
         API_KEY: $(params.API_KEY_1651315)
         API_KEY_1308775: $(params.API_KEY_1308775)
         API_KEY_1651315: $(params.API_KEY_1651315)
-        DEPLOY_API_KEY: $(params.API_KEY_1308775)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
         REGISTRY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
 
