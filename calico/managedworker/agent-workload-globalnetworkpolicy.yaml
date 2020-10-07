@@ -8,15 +8,15 @@ spec:
     destination:
       ports:
       - 53
-      selector: k8s-app == 'kube-dns'
-      namespaceSelector: projectcalico.org/name == 'kube-system'
+      selector: k8s-app == 'kube-dns' && projectcalico.org/namespace == 'kube-system'
+      namespaceSelector: all()
     protocol: UDP
   - action: Allow
     destination:
       ports:
       - 53
-      selector: k8s-app == 'kube-dns'
-      namespaceSelector: projectcalico.org/name == 'kube-system'
+      selector: k8s-app == 'kube-dns' && projectcalico.org/namespace == 'kube-system'
+      namespaceSelector: all()
     protocol: TCP
   - action: Deny
     destination:
