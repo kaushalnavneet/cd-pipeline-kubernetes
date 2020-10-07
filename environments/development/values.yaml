@@ -528,7 +528,6 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       enabled: false
-    preStopCommand: "[/bin/sh, \"-c\", \"systemctl stop travis-worker ; if [ $? -ne 0 ]; then date; while [ $? -eq 0 ]; do sleep 5; docker ps ; systemctl status travis-worker; done ; fi ; touch /var/log/travis-worker.done\"]"
     terminationGracePeriodSeconds: 4000
     configmap:
       data:
