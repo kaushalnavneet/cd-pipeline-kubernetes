@@ -6,6 +6,7 @@ RUN yum update -y && \
     yum clean all -y
 
 COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
+COPY ./docker_ubi/dockerpullstart.sh /root/dockerpullstart.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["/usr/bin/dockerd"]

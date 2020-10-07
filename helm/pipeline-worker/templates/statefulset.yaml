@@ -86,6 +86,29 @@ spec:
           readOnly: true
           name: vault-secrets
       containers:
+        - name: docker
+        image: us.icr.io/opentoolchain/travis-docker:secure
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        lifecycle:
+          postStart:
+            exec:
+            command:
+              - sh
+              - -c
+              - /root/dockerpullstart.sh
+        volumeMounts:
+          - name: vault-secrets
+            mountPath: /etc/secrets
+            readOnly: true
+          - name: otc-registry-secret
+            mountPath: /tmp/cloud.ibm.com/travis-worker
+            readOnly: true
+          - name: dockervarlib
+            mountPath: /var/lib/docker
+          - name: varlog
+            mountPath: /var/log
       - {{ template "common.container" (list . "pipeline.statefulset.container") }}
         volumeMounts:
         - name: vault-secrets
@@ -98,22 +121,6 @@ spec:
           mountPath: /var/lib/docker
         - name: varlog
           mountPath: /var/log
-      - name: docker
-        image: us.icr.io/opentoolchain/travis-docker:secure
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
-        volumeMounts:
-          - name: vault-secrets
-            mountPath: /etc/secrets
-            readOnly: true
-          - name: otc-registry-secret
-            mountPath: /tmp/cloud.ibm.com/travis-worker
-            readOnly: true
-          - name: dockervarlib
-            mountPath: /var/lib/docker
-          - name: varlog
-            mountPath: /var/log
 {{- end -}}
 {{- define "pipeline.statefulset.container" -}}
 {{- if .Values.probes.enabled }}
