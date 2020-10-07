@@ -158,7 +158,7 @@ spec:
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-pw-dal10-stage
+      value: otc-rabbitmq-dev
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
