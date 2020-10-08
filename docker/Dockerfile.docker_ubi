@@ -1,4 +1,15 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2020. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 FROM us.icr.io/opentoolchain/travis-worker:run
+
+ARG TINI_VERSION=v0.16.1
+ARG JQ_VERSION=jq-1.6
 
 USER root
 
@@ -6,6 +17,10 @@ RUN yum update -y && \
     yum clean all -y
 
 COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
+
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /root/tini
+ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /root/jq
+RUN chmod +x /root/tini /root/jq
 
 RUN chmod a+x /root/entrypoint.sh
 
