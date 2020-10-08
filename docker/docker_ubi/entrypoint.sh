@@ -17,6 +17,7 @@ fi
 
 mkdir -p /etc/docker/certs.d/travis-registry:5000
 echo -e "$TRAVIS_REG_CERT" > /etc/docker/certs.d/travis-registry:5000/ca.crt
+export DOCKER_HOST=tcp://0.0.0.0:2376
 
 cat > /etc/docker/daemon.json <<EOL
 {
