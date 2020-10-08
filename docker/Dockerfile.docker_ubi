@@ -8,5 +8,7 @@ RUN yum update -y && \
 COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
 COPY ./docker_ubi/dockerpullstart.sh /root/dockerpullstart.sh
 
+RUN chmod a+x /root/entrypoint.sh /root/dockerpullstart.sh
+
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["/usr/bin/dockerd"]
