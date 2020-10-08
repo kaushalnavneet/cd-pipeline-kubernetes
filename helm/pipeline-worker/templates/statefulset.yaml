@@ -66,6 +66,8 @@ spec:
           secretName: {{ template "common.fullname" . }}
       - name: varlog
         emptyDir: {}
+      - name: roothome
+        emptyDir: {}
       - name: otc-registry-secret
         secret:
           secretName: otc-registry-secret
@@ -124,6 +126,8 @@ spec:
             mountPath: /var/lib/docker
           - name: varlog
             mountPath: /var/log
+          - name: roothome
+            mountPath: /root
       - {{ template "common.container" (list . "pipeline.statefulset.container") }}
         volumeMounts:
         - name: vault-secrets
