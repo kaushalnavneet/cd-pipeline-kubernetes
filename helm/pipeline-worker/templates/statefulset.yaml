@@ -91,6 +91,15 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
+        env:
+          {{ $fullname := include "common.fullname" . }}
+          {{- range $envvar, $envvarvalue := .Values.configmap.data }}
+          - {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
+          {{- end }}
+          {{- if .Values.secret }}
+          {{- range $envvar, $envvarvalue := .Values.secret.data }}
+          - {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
+          {{- end }}
         lifecycle:
           postStart:
             exec:
@@ -102,7 +111,7 @@ spec:
             exec:
               command:
                 - sh
-                - c
+                - -c
                 - jobs=$(docker ps | tail -n+2); while [ ! -z $jobs ]; do sleep 15; docker ps; jobs=$(docker ps | tail -n+2); done; exit 0
         volumeMounts:
           - name: vault-secrets
