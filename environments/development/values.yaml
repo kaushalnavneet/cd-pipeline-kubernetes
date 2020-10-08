@@ -520,7 +520,7 @@ pipeline:
         com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
         bitbucket_server_client_ribbon_ClientClassName: com.ibm.team.integration.pipeline.http.IgnoreCookieClient
   travis-worker:
-    replicas: 2
+    replicas: 0
     revisionHistoryLimit: 3
     vault:
       secretPaths:
