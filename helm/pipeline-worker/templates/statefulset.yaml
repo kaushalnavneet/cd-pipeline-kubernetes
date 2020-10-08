@@ -94,15 +94,15 @@ spec:
         securityContext:
           privileged: true
         env:
-        {{ $fullname := include "common.fullname" . }}
-        {{- range $envvar, $envvarvalue := .Values.configmap.data }}
-        - {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
-        {{- end }}
-        {{- if .Values.secret }}
-        {{- range $envvar, $envvarvalue := .Values.secret.data }}
-        - {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
-        {{- end }}
-        {{- end }}
+          {{ $fullname := include "common.fullname" . }}
+          {{- range $envvar, $envvarvalue := .Values.configmap.data }}
+          - {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
+          {{- end }}
+          {{- if .Values.secret }}
+          {{- range $envvar, $envvarvalue := .Values.secret.data }}
+          - {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
+          {{- end }}
+          {{- end }}
         lifecycle:
           postStart:
             exec:
@@ -118,7 +118,7 @@ spec:
                   done
                 fi
                 ln -sfn /tmp/cloud.ibm.com/travis-worker/.dockercfg /root/.dockercfg
-
+                
                 for ITER in {1..6}
                 do
                   docker info >/dev/null 2>&1
