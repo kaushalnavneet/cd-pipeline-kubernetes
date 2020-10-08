@@ -9,3 +9,12 @@
       name: {{ $secretName }}
       key: {{ $secretKey }}
 {{- end -}}
+
+
+{{- define "pipeline.common.envvar.value.statefulset" -}}
+  {{- $name := index . 0 -}}
+  {{- $value := index . 1 -}}
+
+  name: {{ $name }}
+          value: {{ default "" $value | quote }}
+{{- end -}}

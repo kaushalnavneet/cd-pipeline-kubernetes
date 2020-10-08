@@ -18,14 +18,6 @@
       key: {{ $secretKey }}
 {{- end -}}
 
-{{- define "common.envvar.value.statefulset" -}}
-  {{- $name := index . 0 -}}
-  {{- $value := index . 1 -}}
-
-  name: {{ $name }}
-          value: {{ default "" $value | quote }}
-{{- end -}}
-
 {{- define "common.envvar.secret.statefulset" -}}
   {{- $name := index . 0 -}}
   {{- $secretName := index . 1 -}}
