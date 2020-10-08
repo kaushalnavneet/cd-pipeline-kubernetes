@@ -109,7 +109,13 @@ spec:
                 - sh
                 - -c
                 - |
-                #!/bin/sh
+                #!/bin/bash
+                if [ -d /etc/secrets ]; then
+                  for file in /etc/secrets/*.secret; do
+                    [ -e "$file" ] || continue
+                    eval "$(/root/jq -r  '. | to_entries | .[] | "export " + .key + "=" + ( .value|if (type|. != "string") then tostring else .|tojson end)' < $file)"
+                  done
+                fi
                 ln -sfn /tmp/cloud.ibm.com/travis-worker/.dockercfg /root/.dockercfg
 
                 for ITER in {1..6}
