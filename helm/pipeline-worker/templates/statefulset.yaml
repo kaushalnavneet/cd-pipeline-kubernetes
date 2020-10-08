@@ -96,11 +96,11 @@ spec:
         env:
           {{ $fullname := include "common.fullname" . }}
           {{- range $envvar, $envvarvalue := .Values.configmap.data }}
-        - {{ template "pipeline.common.envvar.value" (list $envvar $fullname $envvar ) }}
+        - {{ template "pipeline.common.envvar.value.statefulset" (list $envvar $fullname $envvar ) }}
           {{- end }}
           {{- if .Values.secret }}
           {{- range $envvar, $envvarvalue := .Values.secret.data }}
-        - {{ template "common.envvar.secret" (list $envvar $fullname $envvar) }}
+        - {{ template "common.envvar.secret.statefulset" (list $envvar $fullname $envvar) }}
           {{- end }}
           {{- end }}
         lifecycle:
