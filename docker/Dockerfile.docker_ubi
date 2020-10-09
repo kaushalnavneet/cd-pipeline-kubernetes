@@ -13,8 +13,9 @@ ARG JQ_VERSION=jq-1.6
 
 USER root
 
-RUN yum update -y && \
-    yum clean all -y
+RUN yum install -y procps \
+    && yum update -y \
+    && yum clean all -y
 
 COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
 
