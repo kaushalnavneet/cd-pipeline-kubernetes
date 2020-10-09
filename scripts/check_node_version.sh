@@ -1,5 +1,5 @@
 #!/bin/bash
-NODE_VERSION=2.18.2
+NODE_VERSION=2.19.0
 NAMESPACE="opentoolchain"
 OLDIFS=$IFS
 RED='\033[0;31m'
