@@ -15,7 +15,7 @@ USER root
 
 RUN yum upgrade -y \
     && curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
-    && yum install -y hostname nodejs wget sudo \
+    && yum install -y hostname nodejs wget procps sudo \
     && yum remove -y mariadb-connector-c \
     && yum clean -y all
 
