@@ -10,6 +10,7 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
+    - name: node-user-password
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -83,6 +84,8 @@ spec:
           value: docker/Dockerfile.nodejs12ubi.run
         - name: imageTag
           value: 12ubisecure
+        - name: node-user-password
+          value: $(params.node-user-password)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

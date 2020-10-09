@@ -13,6 +13,7 @@ ARG IDS_USER
 ARG ARTIFACTORY_TOKEN_BASE64
 ARG ARTIFACTORY_ID
 ARG CONSOLE_AUTH_TOKEN
+ARG NODE_USER_PASSWORD
 
 ADD . /work/component
 
@@ -29,8 +30,8 @@ ARG NODE_ENV=production
 
 ENV PORT=80
 
-RUN adduser -s /bin/bash -d /home/node -U node
-RUN echo -e "node\tALL=(ALL)\tNOPASSWD: ALL" > /etc/sudoers.d/sudo_for_node
+RUN adduser -s /bin/bash -d /home/node -U node -p ${NODE_USER_PASSWORD}
+RUN echo -e "node\tALL=(ALL) ALL" > /etc/sudoers.d/sudo_for_node
 
 ENV HOME /home/node
 WORKDIR /home/node
