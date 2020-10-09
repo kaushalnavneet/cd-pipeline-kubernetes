@@ -536,7 +536,7 @@ pipeline:
         DOCKER_SSH_USER: pipeline
         DOCKER_RETRY_INTERVAL: "5"
         STATUS_UPDATE_INTERVAL: 5m
-        POOL_SIZE: "18"
+        POOL_SIZE: "9"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
         PAYLOAD_ENCRYPT: true
