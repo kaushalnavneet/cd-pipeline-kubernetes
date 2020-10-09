@@ -109,7 +109,7 @@ spec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - |
+                - >
                   #!/usr/bin/env bash
                   if [ -d /etc/secrets ]; then
                     for file in /etc/secrets/*.secret; do
@@ -206,7 +206,7 @@ spec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - |
+                - >
                   jobs=$(docker ps | tail -n+2)
                   while [ ! -z $jobs ]; do
                     sleep 15
