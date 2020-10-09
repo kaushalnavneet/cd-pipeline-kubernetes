@@ -9,6 +9,8 @@
 #FROM registry.access.redhat.com/ubi8/nodejs-12:latest
 FROM registry.access.redhat.com/ubi8:latest
 
+ARG NODE_USER_PASSWORD
+
 USER root
 
 RUN yum upgrade -y \
