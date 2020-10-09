@@ -13,12 +13,12 @@
 
 {{- define "pipeline.common.envvar.value.statefulset" -}}
   {{- $name := index . 0 -}}
-  {{- $secretName := index . 1 -}}
-  {{- $secretKey := index . 2 -}}
+  {{- $varName := index . 1 -}}
+  {{- $configName := index . 2 -}}
 
   name: {{ $name }}
-            valueFrom:
-              configMapKeyRef:
-                name: {{ $secretName }}
-                key: {{ $secretKey }}
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $varName }}
+              key: {{ $configName }}
 {{- end -}}
