@@ -30,9 +30,6 @@ ARG NODE_ENV=production
 
 ENV PORT=80
 
-RUN adduser -s /bin/bash -d /home/node -U node -p ${NODE_USER_PASSWORD}
-RUN echo -e "node\tALL=(ALL) ALL" > /etc/sudoers.d/sudo_for_node
-
 ENV HOME /home/node
 WORKDIR /home/node
 
