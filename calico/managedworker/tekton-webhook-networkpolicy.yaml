@@ -12,8 +12,8 @@ spec:
   ingress:
   - action: Allow
     source:
-      selector: app == 'vpn'
-      namespaceSelector: projectcalico.org/name == 'kube-system'
+      selector: app == 'vpn' && projectcalico.org/namespace == 'kube-system'
+      namespaceSelector: all()
   selector: app == 'tekton-pipelines-webhook'
   types:
   - Egress
