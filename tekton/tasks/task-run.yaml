@@ -35,6 +35,8 @@ spec:
       default: ''
     - name: qr-store
       default: ''
+    - name: node-user-password
+      default: ''
   stepTemplate:
     env:
       - name: API
@@ -134,6 +136,8 @@ spec:
         value: $(params.icd-redis-store)
       - name: QR_STORE
         value: $(params.qr-store)
+      - name: NODE_USER_PASSWORD
+        value: $(params.node-user-password)
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -202,7 +206,7 @@ spec:
             COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
             --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" \
             --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
-            --build-arg "QR_STORE=${QR_STORE}"
+            --build-arg "QR_STORE=${QR_STORE}" --build-arg "NODE_USER_PASSWORD=${NODE_USER_PASSWORD}"
         fi
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"

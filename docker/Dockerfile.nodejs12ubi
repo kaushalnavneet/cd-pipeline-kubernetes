@@ -29,8 +29,6 @@ ARG NODE_ENV=production
 
 ENV PORT=80
 
-RUN adduser -s /bin/bash -d /home/node -U node
-
 ENV HOME /home/node
 WORKDIR /home/node
 
