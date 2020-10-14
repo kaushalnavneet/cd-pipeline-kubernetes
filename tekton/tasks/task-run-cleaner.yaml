@@ -4,7 +4,7 @@ metadata:
   name: run-cleaner
 spec:
   params:
-    - name: deployBaseImage
+    - name: pipelineCleanerBaseImage
       default: us.icr.io/devopsotc/pipeline-cleaner:latest
     - name: NODE_MODE
       default: 'true'
@@ -39,8 +39,15 @@ spec:
     mountPath: /workspace 
   steps:
   - name: pipeline-clean-step
-    image: $(params.deployBaseImage)
+    image: $(params.pipelineCleanerBaseImage)
     imagePullPolicy: IfNotPresent
+    env:
+      - name: NODE_MODE
+        value: $(params.NODE_MODE)
+      - name: SHOW_RECORDS
+        value: $(params.SHOW_RECORDS)
+      - name: HOME
+        value: $(params.HOME)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
