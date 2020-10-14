@@ -34,7 +34,7 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: PIPELINE_SERVER_URL
-       - name: CLEAN_TASK_MODULE
+      - name: CLEAN_TASK_MODULE
         valueFrom:
           configMapKeyRef:
             name: cd-config
