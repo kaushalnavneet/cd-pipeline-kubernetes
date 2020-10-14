@@ -8,6 +8,10 @@ spec:
       default: us.icr.io/devopsotc/pipeline-cleaner:18cf7613ede5637b7eace382999b465162d95c34-202010141957UTC
     - name: NODE_MODE
       default: 'true'
+    - name: SHOW_RECORDS
+      default: 'true'
+    - name: HOME
+      value: "/home/node"
   stepTemplate:
     env:
       - name: PIPELINE_BASIC_AUTH_TOKEN
@@ -41,11 +45,9 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        cd ..
+        cd /bin
         ls
-        echo "cd home/node"
-        cd home/node
-        ls
+        cd $HOME
         echo "PIPELINE_SERVER_URL is $PIPELINE_SERVER_URL"
         echo "Start cleaning"
         node ./cleaner.js
