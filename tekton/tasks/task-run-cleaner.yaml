@@ -43,6 +43,18 @@ spec:
       - | 
         cd ..
         ls
+        echo "cd home"
+        cd home
+        ls
+        echo "../tekton"
+        cd ../tekton
+        ls
+        echo "../tmp"
+        cd ../tmp
+        ls
+        echo "../usr"
+        cd ../usr
+        ls
         echo "PIPELINE_SERVER_URL is $PIPELINE_SERVER_URL"
         echo "Start cleaning"
         node ./cleaner.js
