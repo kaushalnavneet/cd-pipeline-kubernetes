@@ -7,6 +7,9 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: imageName
     - name: imageTag
 
@@ -111,6 +114,12 @@ spec:
             value: $(params.CONSOLE_AUTH_TOKEN)
           - name: skipVA
             value: $(params.skipVA)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -132,6 +141,12 @@ spec:
       value: "au-syd"
     - name: skipVA
       value: "false"
+    - name: script_repo
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: script_branch
+      value: "master"
+    - name: script_directory
+      value: "pipeline-cleaner/cd-pipeline-kubernetes"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
