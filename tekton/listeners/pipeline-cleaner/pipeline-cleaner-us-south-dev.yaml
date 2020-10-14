@@ -11,6 +11,7 @@ spec:
         name: cd-config
       data:
         PIPELINE_SERVER_URL: $(params.PIPELINE_SERVER_URL)
+        CLEAN_TASK_MODULE: $(params.CLEAN_TASK_MODULE)
     - apiVersion: v1
       kind: Secret
       metadata:

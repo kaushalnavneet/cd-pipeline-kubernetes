@@ -34,6 +34,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: PIPELINE_SERVER_URL
+       - name: CLEAN_TASK_MODULE
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: CLEAN_TASK_MODULE
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -52,10 +57,6 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        cd /bin
-        ls
         cd $HOME
-        npm link
-        echo "PIPELINE_SERVER_URL is $PIPELINE_SERVER_URL"
         echo "Start cleaning"
-        pipeline-cleaner 'classic-hanging-job'
+        node ./cleaner.js
