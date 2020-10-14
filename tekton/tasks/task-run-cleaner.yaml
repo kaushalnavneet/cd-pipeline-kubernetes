@@ -10,8 +10,6 @@ spec:
       default: 'true'
     - name: SHOW_RECORDS
       default: 'true'
-    - name: HOME
-      default: "/home/node"
   stepTemplate:
     env:
       - name: PIPELINE_BASIC_AUTH_TOKEN
@@ -46,15 +44,9 @@ spec:
         value: $(params.NODE_MODE)
       - name: SHOW_RECORDS
         value: $(params.SHOW_RECORDS)
-      - name: HOME
-        value: $(params.HOME)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
       - | 
-        cd /bin
-        ls
-        cd $HOME
-        echo "PIPELINE_SERVER_URL is $PIPELINE_SERVER_URL"
         echo "Start cleaning"
-        node ./cleaner.js
+        pipeline-cleaner 'classic-hanging-job'
