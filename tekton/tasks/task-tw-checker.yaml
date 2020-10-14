@@ -7,6 +7,8 @@ spec:
     - name: script_directory
     - name: regions
     - name: cluster_region
+    - name: skip
+      default: 'false'
   stepTemplate:
     env:
       - name: API_KEY
@@ -33,9 +35,15 @@ spec:
         value: $(params.regions)
       - name: REGION
         value: $(params.cluster_region)
+      - name: SKIP
+        value: $(params.skip)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
       - |
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping travis-checker"
+          exit 0
+        fi
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/travis-worker-cleanup.sh 
         ${SCRIPT_DIRECTORY}/scripts/travis-worker-cleanup.sh

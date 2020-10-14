@@ -34,6 +34,8 @@ spec:
           value: syd
         - name: cluster_region
           value: au-syd
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
