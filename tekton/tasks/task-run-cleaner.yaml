@@ -1,0 +1,46 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-cleaner
+spec:
+  params:
+    - name: deployBaseImage
+      default: us.icr.io/devopsotc/pipeline-cleaner:18cf7613ede5637b7eace382999b465162d95c34-202010141957UTC
+  stepTemplate:
+    env:
+      - name: PIPELINE_BASIC_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: PIPELINE_BASIC_AUTH_TOKEN
+      - name: CLOUDANT_IAM_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CLOUDANT_IAM_API_KEY
+      - name: CLOUDANT_URL
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CLOUDANT_URL
+      - name: PIPELINE_SERVER_URL
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: PIPELINE_SERVER_URL
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: pipeline-clean-step
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        pwd
+        ls
+        echo "PIPELINE_SERVER_URL is $PIPELINE_SERVER_URL"
+        echo "Start cleaning"
+        pipeline-cleaner 'classic-hanging-job'
