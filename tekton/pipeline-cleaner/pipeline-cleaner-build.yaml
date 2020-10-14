@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-cleaner-build
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: source_directory
+    - name: imageUrl
+    - name: skipBuild
+    - name: skipVA
+    - name: dockerFile
+      default: ''
+    - name: runBaseImage
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+    - name: artifactoryTokenBase64
+      default: ''
+    - name: artifactoryId
+      default: ''
+    - name: consoleAuthToken
+      default: ''
+    - name: helmOptions
+      default: ''
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+        - name: directory-name
+          value: $(params.source_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: build
+      taskRef:
+        name:  run-base
+      params:
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: runBaseImage
+          value: $(params.runBaseImage)
+        - name: dockerFile
+          value: $(params.dockerFile)
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: artifactoryTokenBase64
+          value: $(params.artifactoryTokenBase64)
+        - name: artifactoryId
+          value: $(params.artifactoryId)
+        - name: consoleAuthToken
+          value: $(params.consoleAuthToken)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: build-va
+      runAfter: [build]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+        - name: dockerFile
+          value: ''
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipVA
+          value: $(params.skipVA)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
