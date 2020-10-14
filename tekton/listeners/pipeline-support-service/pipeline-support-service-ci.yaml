@@ -172,7 +172,7 @@ spec:
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "false"
+      value: "true"
     - name: skipDeploy
       value: "false"
 ---
