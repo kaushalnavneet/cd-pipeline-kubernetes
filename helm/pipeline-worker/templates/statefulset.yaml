@@ -191,16 +191,16 @@ spec:
                 - "/bin/bash"
                 - "-c"
                 - >
-                  echo "shutting down...";
+                  echo "shutting down..." > /proc/1/dev/stdout; 
                   jobs=$(docker ps | tail -n+2);
                   while [ ! -z $jobs ]; do
                     sleep 5;
                     echo "jobs=${jobs}";
                     jobs=$(docker ps | tail -n+2);
                   done;
-                  echo "All docker containers are done";
+                  echo "All docker containers are done" > /proc/1/dev/stdout;
                   jobs=$(docker ps | tail -n+2);
-                  echo "jobs=${jobs}"
+                  echo "jobs=${jobs}" > /proc/1/dev/stdout
         volumeMounts:
           - name: vault-secrets
             mountPath: /etc/secrets
