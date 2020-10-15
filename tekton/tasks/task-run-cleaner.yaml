@@ -4,8 +4,6 @@ metadata:
   name: run-cleaner
 spec:
   params:
-    - name: pipelineCleanerBaseImage
-      default: us.icr.io/devopsotc/pipeline-cleaner:9eddaef60da322d18708db022f991cda48823783-202010142226UTC
     - name: NODE_MODE
       default: 'true'
     - name: SHOW_RECORDS
@@ -44,8 +42,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: pipeline-clean-step
-    image: $(params.pipelineCleanerBaseImage)
-    imagePullPolicy: IfNotPresent
+    image: us.icr.io/devopsotc/pipeline-cleaner:latest
     env:
       - name: NODE_MODE
         value: $(params.NODE_MODE)
