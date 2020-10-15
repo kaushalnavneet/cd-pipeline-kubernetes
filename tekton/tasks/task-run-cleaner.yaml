@@ -5,7 +5,7 @@ metadata:
 spec:
   params:
     - name: pipelineCleanerBaseImage
-      default: us.icr.io/devopsotc/pipeline-cleaner
+      default: us.icr.io/devopsotc/pipeline-cleaner:9eddaef60da322d18708db022f991cda48823783-202010142226UTC
     - name: NODE_MODE
       default: 'true'
     - name: SHOW_RECORDS
