@@ -1,0 +1,29 @@
+{
+  "service": "continuous-delivery-pipeline-private-worker",
+  "customer": "ibm",
+  "serviceAddresses": [
+    "10.217.4.253",
+    "10.218.7.219",
+    "10.219.5.180"
+  ],
+  "hostname": "private-worker-service.private.eu-fr2.devops.cloud.ibm.com",
+  "maxSpeed": "1g",
+  "region": "eu-fr2",
+  "dataCenters": [
+    "par04",
+    "par05",
+    "par06"
+  ],
+  "tcpports": [
+    80,
+    443
+  ],
+  "tcpportrange": "80-443",
+  "dedicated": 1,
+  "multitenant": 1,
+  "acl": [
+    "10.0.0.0/0:443",
+    "10.0.0.0/0:80"
+  ]
+}
+
