@@ -528,7 +528,7 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       enabled: false
-    preStopCommand: "[/bin/bash, \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
+    preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
     terminationGracePeriodSeconds: 4000
     configmap:
       data:
