@@ -520,7 +520,7 @@ pipeline:
         com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
         bitbucket_server_client_ribbon_ClientClassName: com.ibm.team.integration.pipeline.http.IgnoreCookieClient
   travis-worker:
-    replicas: 0
+    replicas: 2
     revisionHistoryLimit: 3
     vault:
       secretPaths:
@@ -537,7 +537,7 @@ pipeline:
         DOCKER_SSH_USER: pipeline
         DOCKER_RETRY_INTERVAL: "5"
         STATUS_UPDATE_INTERVAL: 5m
-        POOL_SIZE: "9"
+        POOL_SIZE: "18"
         HARD_TIMEOUT: 60m
         LOG_TIMEOUT: 60m
         PAYLOAD_ENCRYPT: true
