@@ -170,9 +170,9 @@ spec:
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: 'none'
+      value: 'otc-rabbitmq-dev'
     - name: skipDeploy2
-      value: "true"
+      value: "false"
     - name: clusterName3
       value: 'none'
     - name: skipDeploy3
