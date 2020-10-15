@@ -39,7 +39,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: cleaner-dev-$(uid)-pvc
+        name: cleaner-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -52,17 +52,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: cleaner-dev-$(uid)
+        name: cleaner-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "cleaner-trigger-dev"
+          generatedBy: "cleaner-trigger"
       spec:
         pipelineRef:
           name: pipeline-cleaner-run
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: cleaner-dev-$(uid)-pvc
+              claimName: cleaner-$(uid)-pvc
         serviceAccountName: docker-build-sa
 ---
 apiVersion: tekton.dev/v1beta1
@@ -73,7 +73,7 @@ metadata:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: pipeline-cleaner-dev
+  name: pipeline-cleaner
 spec:
   triggers:
     - binding:
