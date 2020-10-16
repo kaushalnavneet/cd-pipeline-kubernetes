@@ -80,6 +80,8 @@ spec:
           value: wdc
         - name: cluster_region
           value: us-east
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
