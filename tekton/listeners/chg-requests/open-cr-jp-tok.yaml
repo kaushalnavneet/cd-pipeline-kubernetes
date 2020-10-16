@@ -134,7 +134,7 @@ spec:
     - name: environment
       value: "jp-tok"
     - name: deployClusters
-      value: 'otc-tok02-prod,otc-tok04-prod,otc-tok05-prod (otc-pw-tok02-prod,otc-pw-tok04-prod,otc-pw-tok05-prod for travis-workers and crytomining detector)'
+      value: 'otc-tok02-prod,otc-tok04-prod,otc-tok05-prod (otc-pw-tok02-prod,otc-pw-tok04-prod,otc-pw-tok05-prod for travis-workers and cryptomining detector)'
     - name: snUrl
       value: 'https://watson.service-now.com'
     - name: tocChannel

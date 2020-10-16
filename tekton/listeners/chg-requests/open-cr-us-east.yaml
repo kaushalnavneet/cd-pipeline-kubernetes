@@ -132,7 +132,7 @@ spec:
     - name: environment
       value: "us-east"
     - name: deployClusters
-      value: 'otc-wdc04-prod,otc-wdc06-prod,otc-wdc07-prod (otc-pw-wdc04-prod,otc-pw-wdc06-prod,otc-pw-wdc07-prod for travis-workers and crytomining detector)'
+      value: 'otc-wdc04-prod,otc-wdc06-prod,otc-wdc07-prod (otc-pw-wdc04-prod,otc-pw-wdc06-prod,otc-pw-wdc07-prod for travis-workers and cryptomining detector)'
     - name: snUrl
       value: 'https://watson.service-now.com'
     - name: tocChannel

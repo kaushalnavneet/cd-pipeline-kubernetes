@@ -132,7 +132,7 @@ spec:
     - name: environment
       value: "eu-gb"
     - name: deployClusters
-      value: 'otc-lon04-prod,otc-lon05-prod,otc-lon06-prod (otc-pw-lon04-prod,otc-pw-lon05-prod,otc-pw-lon06-prod for travis-workers and crytomining detector)'
+      value: 'otc-lon04-prod,otc-lon05-prod,otc-lon06-prod (otc-pw-lon04-prod,otc-pw-lon05-prod,otc-pw-lon06-prod for travis-workers and cryptomining detector)'
     - name: snUrl
       value: 'https://watson.service-now.com'
     - name: tocChannel
