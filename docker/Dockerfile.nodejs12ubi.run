@@ -15,10 +15,10 @@ USER root
 RUN yum update -y \
     && yum remove nodejs.x86_64 nodejs-docs.noarch nodejs-full-i18n.x86_64 nodejs-nodemon.noarch nodejs-devel.x86_64 nodejs-packaging.noarch -y \
     && curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
-    && yum install hostname wget procps sudo nodejs -y \
+    && yum install hostname wget procps sudo nodejs yum-utils -y \
     && yum remove -y mariadb-connector-c \
     && yum clean all -y
 
 RUN adduser -s /bin/bash -d /home/node -U node
 RUN echo "${NODE_USER_PASSWORD}" | passwd node --stdin
-RUN echo -e "node\tALL=(ALL) ALL" > /etc/sudoers.d/sudo_for_node
+RUN echo -e "n# /usr/bin/yum is added to be able to add debug tools if needed on the fly\n# /usr/bin/um-config-manager is added to be able to add tools from a different repo\node\tALL=(ALL) /usr/bin/yum,/usr/bin/yum-config-manager" > /etc/sudoers.d/sudo_for_node
