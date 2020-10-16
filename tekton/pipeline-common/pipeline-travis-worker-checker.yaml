@@ -50,6 +50,8 @@ spec:
           value: lon
         - name: cluster_region
           value: eu-gb
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
