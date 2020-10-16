@@ -21,4 +21,4 @@ RUN yum update -y \
 
 RUN adduser -s /bin/bash -d /home/node -U node
 RUN echo "${NODE_USER_PASSWORD}" | passwd node --stdin
-RUN echo -e "n# /usr/bin/yum is added to be able to add debug tools if needed on the fly\n# /usr/bin/um-config-manager is added to be able to add tools from a different repo\node\tALL=(ALL) /usr/bin/yum,/usr/bin/yum-config-manager" > /etc/sudoers.d/sudo_for_node
+RUN echo -e "# /usr/bin/yum is added to be able to add debug tools if needed on the fly\n# /usr/bin/um-config-manager is added to be able to add tools from a different repo\nnode\tALL=(ALL) /usr/bin/yum,/usr/bin/yum-config-manager" > /etc/sudoers.d/sudo_for_node
