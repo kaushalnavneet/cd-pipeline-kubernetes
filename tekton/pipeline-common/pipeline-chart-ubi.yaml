@@ -19,6 +19,7 @@ spec:
     - name: imageUrl
     - name: environment
     - name: skipBuild
+    - name: skipVA
     - name: dockerFile
       default: ''
     - name: runBaseImage
@@ -28,6 +29,10 @@ spec:
     - name: artifactoryId
       default: ''
     - name: consoleAuthToken
+      default: ''
+    - name: icd-redis-store
+      default: ''
+    - name: qr-store
       default: ''
   workspaces:
   - name: pipeline-pvc
@@ -110,11 +115,37 @@ spec:
           value: $(params.artifactoryId)
         - name: consoleAuthToken
           value: $(params.consoleAuthToken)
+        - name: icd-redis-store
+          value: $(params.icd-redis-store)
+        - name: qr-store
+          value: $(params.qr-store)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: publish
+        workspace: pipeline-pvc
+    - name: build-va
       runAfter: [build]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.source_directory)
+        - name: imageUrl
+          value: $(params.imageUrl)
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+        - name: dockerFile
+          value: ''
+        - name: imageTag
+          value: ''
+        - name: environment
+          value: $(params.environment)
+        - name: skipVA
+          value: $(params.skipVA)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: publish
+      runAfter: [build-va]
       taskRef:
         name: publish
       params:
