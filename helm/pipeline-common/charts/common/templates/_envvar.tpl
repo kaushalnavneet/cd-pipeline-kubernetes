@@ -17,3 +17,15 @@
       name: {{ $secretName }}
       key: {{ $secretKey }}
 {{- end -}}
+
+{{- define "common.envvar.secret.statefulset" -}}
+  {{- $name := index . 0 -}}
+  {{- $secretName := index . 1 -}}
+  {{- $secretKey := index . 2 -}}
+
+  name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $secretName }}
+                key: {{ $secretKey }}
+{{- end -}}
