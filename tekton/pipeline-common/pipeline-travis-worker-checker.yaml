@@ -64,6 +64,8 @@ spec:
           value: tok
         - name: cluster_region
           value: jp-tok
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
