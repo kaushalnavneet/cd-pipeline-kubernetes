@@ -34,6 +34,8 @@ spec:
           value: fra
         - name: cluster_region
           value: eu-de
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
