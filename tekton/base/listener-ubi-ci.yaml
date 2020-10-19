@@ -101,8 +101,6 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
-          - name: node-user-password
-            value: $(params.NODE_USER_PASSWORD)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
