@@ -34,11 +34,11 @@ function cleanup_docker_containers () {
 	for worker in "${travis_worker_arr[@]}"; do
 		echo "Checking $worker"
 		containers=()
-		while IFS='' read -r line; do containers+=("$line"); done < <(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c 'docker ps -aq')
+		while IFS='' read -r line; do containers+=("$line"); done < <(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c 'docker ps -aq')
 		echo "All containers: ${containers[@]}"
 		for container in "${containers[@]}"; do
 			echo "Inspecting container $container"
-			status=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.Status'")
+			status=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.Status'")
 			if [ $? -eq 1 ]; then
 				echo "docker container $container has been terminated"
 			else
@@ -46,7 +46,7 @@ function cleanup_docker_containers () {
 				case $status in
 					exited)
 						echo "Exited container"
-						removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
+						removed=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker rm $container")
 						if [ $? -eq 1 ]; then
 							echo "Removing container $container failed"
 						else
@@ -57,19 +57,19 @@ function cleanup_docker_containers () {
 						echo "Running container"
 						current=$(date -u -v-75M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '75 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 75m=$current"
-						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
+						started=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
 								echo "Container started more than ${DELAY}. Need to stop it and clean it"
 								# notify slack channel
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
-								stopped=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker kill $container")
+								stopped=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker kill $container")
 								if [ $? -eq 1 ]; then
 									echo "Stopping container $container failed"
 								else
 									echo "Stopping container $container was successful"
-									removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
+									removed=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker rm $container")
 									if [ $? -eq 1 ]; then
 										echo "Removing container $container failed"
 										# notify slack channel
@@ -88,7 +88,7 @@ function cleanup_docker_containers () {
 						echo "Created container"
 						current=$(date -u -v-75M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '75 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 75m =$current"
-						started=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
+						started=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
 						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
@@ -96,7 +96,7 @@ function cleanup_docker_containers () {
 								# notify slack channel
 								#send_to_slack "error" "The container $container is older than 65m and should be clean\nFound in $worker on $cluster (starting time: $started, current - 65M: $current)"
 								errors=true
-								removed=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "docker rm $container")
+								removed=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker rm $container")
 								if [ $? -eq 1 ]; then
 									echo "Removing container $container failed"
 									# notify slack channel
@@ -114,7 +114,7 @@ function cleanup_docker_containers () {
 			echo "Done inspecting container $container"
 		done
 		#check travis-worker service
-		check_travis_service=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "service travis-worker status | grep started")
+		check_travis_service=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "service travis-worker status | grep started")
 		if [ $? -eq 1 ]; then
 			echo "travis-worker service is not up and running for $worker on $cluster"
 			send_to_slack "error" "travis-worker service is not up and running in $worker on $cluster"
