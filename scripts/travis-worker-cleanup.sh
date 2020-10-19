@@ -114,7 +114,7 @@ function cleanup_docker_containers () {
 			echo "Done inspecting container $container"
 		done
 		#check environment variables
-		PID=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef  -o user,pid,comm | grep travis-worker | awk '{print \$2}'")
+		PID=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef | grep travis-worker | awk '{print \$2}' | head -1" )
 		if [ -z "$PID" ]; then
 			all_processes=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef")
 			echo "$all_processes"
