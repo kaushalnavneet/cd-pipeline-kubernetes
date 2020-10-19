@@ -35,7 +35,7 @@ spec:
         - name: cluster_region
           value: au-syd
         - name: skip
-          value: 'true'
+          value: 'false'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -98,6 +98,8 @@ spec:
           value: dal
         - name: cluster_region
           value: us-south
+        - name: skip
+          value: 'true'
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
