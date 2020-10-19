@@ -38,7 +38,7 @@ function cleanup_docker_containers () {
 		echo "All containers: ${containers[@]}"
 		for container in "${containers[@]}"; do
 			echo "Inspecting container $container"
-			status=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.Status'")
+			status=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container" | jq -r '.[] .State.Status')
 			if [ $? -eq 1 ]; then
 				echo "docker container $container has been terminated"
 			else
