@@ -36,7 +36,6 @@ pipeline:
         PORT: 8080
         USE_K8S: true
         SECGRP: GRP3DEVS
-        CLOUDANT_ACCOUNT: '4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix'
         CLOUDANT_URL: 'https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud'
   pipeline-log-service:
     replicas: 1
@@ -136,7 +135,7 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_01_30_21h14m27s
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_15_14h50m29s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Private Worker - YS1
@@ -149,7 +148,8 @@ pipeline:
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
         S3_STORAGE_REGION: us-standard
-        S3_ENABLED: true
+        ENABLE_S3_STORAGE: true
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
         PUBLIC_QUEUE_ID: "6f97df8f-5727-4a2b-bb71-541ba8e3f71f"
         DISABLE_TRIGGER_ENDPOINT: true
         ENV_ID: ibm:ys1:us-south
