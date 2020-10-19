@@ -88,7 +88,7 @@ function cleanup_docker_containers () {
 						echo "Created container"
 						current=$(date -u -v-75M +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '75 minutes ago' +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)
 						echo "current date - 75m =$current"
-						started=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container | jq -r '.[] .State.StartedAt'")
+						started=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "docker inspect $container" | jq -r '.[] .State.StartedAt')
 						if [[ ! -z "$started" ]]; then
 							echo "Started: $started"
 							if [ "$started" \< "$current" ]; then
