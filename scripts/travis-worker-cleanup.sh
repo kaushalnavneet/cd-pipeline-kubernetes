@@ -113,15 +113,6 @@ function cleanup_docker_containers () {
 			fi
 			echo "Done inspecting container $container"
 		done
-		#check travis-worker service
-		check_travis_service=$(kubectl -n "${NAMESPACE}" -c docker exec "$worker" -- sh -c "service travis-worker status | grep started")
-		if [ $? -eq 1 ]; then
-			echo "travis-worker service is not up and running for $worker on $cluster"
-			send_to_slack "error" "travis-worker service is not up and running in $worker on $cluster"
-			errors=true
-		else
-			echo "travis-worker service is up and running for $worker on $cluster"
-		fi
 		#check environment variables
 		PID=$(kubectl -n "${NAMESPACE}" -c pipeline exec "$worker" -- sh -c "ps -ef  -o user,pid,comm | grep travis-worker | awk '{print \$2}'")
 		if [ -z "$PID" ]; then
