@@ -66,8 +66,6 @@ spec:
           secretName: {{ template "common.fullname" . }}
       - name: varlog
         emptyDir: {}
-      - name: roothome
-        emptyDir: {}
       - name: otc-registry-secret
         secret:
           secretName: otc-registry-secret
@@ -90,7 +88,7 @@ spec:
       containers:
       - name: docker
         image: us.icr.io/opentoolchain/travis-docker:secure
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         env:
@@ -128,8 +126,6 @@ spec:
                   jobs=$(docker ps | tail -n+2);
                   echo "outside jobs=${jobs}" > /proc/1/fd/1;
         volumeMounts:
-          - name: roothome
-            mountPath: /root
           - name: vault-secrets
             mountPath: /etc/secrets
             readOnly: true
