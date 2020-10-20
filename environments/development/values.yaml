@@ -290,6 +290,7 @@ pipeline:
         LOG4JS_WATCHER_INTERVAL: 180000
         TEKTON_PUBLIC_WORKER_VERSION: v0.14.1
         NEW_CONFIGURATION_LOGIC: true
+        ENABLE_LOCAL_RUN: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
