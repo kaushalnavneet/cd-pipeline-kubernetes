@@ -31,7 +31,7 @@ spec:
         - name: script_directory
           value: $(params.script_directory)
         - name: regions
-          value: fra
+          value: par
         - name: cluster_region
           value: eu-fr2
         - name: skip
