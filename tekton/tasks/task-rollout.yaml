@@ -19,7 +19,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: rollout
-    image: ibmcom/pipeline-base-image:2.7
+    image: ibmcom/pipeline-base-image:2.9
     imagePullPolicy: IfNotPresent
     env:
       - name: SCRIPT_DIRECTORY
