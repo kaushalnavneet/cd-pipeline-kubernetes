@@ -128,6 +128,8 @@ spec:
                   jobs=$(docker ps | tail -n+2);
                   echo "outside jobs=${jobs}" > /proc/1/fd/1;
         volumeMounts:
+          - name: roothome
+            mountPath: /root
           - name: vault-secrets
             mountPath: /etc/secrets
             readOnly: true
