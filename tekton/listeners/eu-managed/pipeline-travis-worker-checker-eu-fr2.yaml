@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-travis-worker-checker-eu-fr2
+spec:
+  params:
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-script-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directory-name
+          value: $(params.script_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: tw-check-fra
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: fra
+        - name: cluster_region
+          value: eu-fr2
+        - name: skip
+          value: 'false'
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+
