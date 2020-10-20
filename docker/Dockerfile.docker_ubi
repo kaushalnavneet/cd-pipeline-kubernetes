@@ -18,6 +18,10 @@ RUN yum install -y procps \
     && yum clean all -y
 
 COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
+COPY ./docker_ubi/docker_pull_start.sh /root/docker_pull_start.sh
+COPY ./docker_ubi/docker_pre_stop.sh /root/docker_pre_stop.sh
+
+RUN chmod +x /root/docker_pull_start.sh /root/docker_pre_stop.sh
 
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /root/tini
 ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /root/jq
