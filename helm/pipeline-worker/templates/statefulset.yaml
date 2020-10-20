@@ -88,7 +88,7 @@ spec:
       containers:
       - name: docker
         image: us.icr.io/opentoolchain/travis-docker:secure
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
         env:
@@ -107,24 +107,13 @@ spec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - "/root/docker_pull_start.sh"                
+                - "/root/docker_pull_start.sh"
           preStop:
             exec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - >
-                  echo "Shutting down.." > /proc/1/fd/1;
-                  jobs=$(docker ps | tail -n+2);
-                  echo "found jobs=${jobs}" > /proc/1/fd/1;
-                  while [[ ! -z "${jobs}" ]]; do
-                    sleep 5;
-                    jobs=$(docker ps | tail -n+2);
-                    echo "inside jobs=${jobs}" > /proc/1/fd/1;
-                  done;
-                  echo "all done" > /proc/1/fd/1;
-                  jobs=$(docker ps | tail -n+2);
-                  echo "outside jobs=${jobs}" > /proc/1/fd/1;
+                - "/root/docker_pre_stop.sh"
         volumeMounts:
           - name: vault-secrets
             mountPath: /etc/secrets
