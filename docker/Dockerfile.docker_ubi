@@ -17,9 +17,10 @@ RUN yum install -y procps \
     && yum update -y \
     && yum clean all -y
 
-COPY ./docker_ubi/entrypoint.sh /root/entrypoint.sh
-COPY ./docker_ubi/docker_pull_start.sh /root/docker_pull_start.sh
-COPY ./docker_ubi/docker_pre_stop.sh /root/docker_pre_stop.sh
+# build context is from the docker folder parent
+COPY ./docker/docker_ubi/entrypoint.sh /root/entrypoint.sh
+COPY ./docker/docker_ubi/docker_pull_start.sh /root/docker_pull_start.sh
+COPY ./docker/docker_ubi/docker_pre_stop.sh /root/docker_pre_stop.sh
 
 RUN chmod +x /root/docker_pull_start.sh /root/docker_pre_stop.sh
 
