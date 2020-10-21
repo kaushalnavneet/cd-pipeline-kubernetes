@@ -127,8 +127,6 @@ spec:
           value: us.icr.io/opentoolchain/ibmnode
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12
-        - name: dockerFile
-          value: docker/Dockerfile.nodejs12.run
         - name: imageTag
           value: 12secure
       workspaces:
@@ -163,8 +161,6 @@ spec:
           value: us.icr.io/opentoolchain/websphere-liberty
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:java
-        - name: dockerFile
-          value: docker/Dockerfile.java.run
         - name: imageTag
           value: secure
       workspaces:

@@ -15,16 +15,7 @@ spec:
       default: ''
     - name: imageTag
     - name: imageUrl
-    - name: buildCluster
-      default: otc-dal12-build
-    - name: dockerFile
-    - name: dockerUsername
-      default: iamapikey
     - name: runBaseImage
-    - name: extraDockerOpts
-      default: --no-cache
-    - name: environment
-      default: 'development'
     - name: skipVA
       default: 'false'
   stepTemplate:
@@ -108,7 +99,6 @@ spec:
         
         IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
-        DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
         [ -f build.properties ] && source build.properties
 
         if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
