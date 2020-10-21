@@ -48,12 +48,13 @@ RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/blu
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI*
 
-RUN bx config --check-version false
-RUN bx plugin install container-service -r Bluemix
-RUN bx plugin install container-registry -r Bluemix
-RUN bx plugin install cloud-functions -r Bluemix
-RUN bx --version
-RUN bx plugin list
+RUN sleep 600
+RUN ibmcloud config --check-version false
+RUN ibmcloud plugin install container-service -r Bluemix
+RUN ibmcloud plugin install container-registry -r Bluemix
+RUN ibmcloud plugin install cloud-functions -r Bluemix
+RUN ibmcloud --version
+RUN ibmcloud plugin list
 RUN helm init --client-only
 
 
