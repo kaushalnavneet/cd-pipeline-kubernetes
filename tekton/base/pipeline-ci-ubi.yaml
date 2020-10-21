@@ -140,38 +140,4 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: travis-docker-secure
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: run-base
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/travis-docker
-        - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
-        - name: dockerFile
-          value: docker/Dockerfile.docker_ubi
-        - name: imageTag
-          value: secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-    - name: travis-docker-secure-va
-      runAfter: [travis-docker-secure]
-      taskRef:
-        name: run-va
-      params:
-        - name: source_directory
-          value: $(params.charts_directory)
-        - name: imageUrl
-          value: us.icr.io/opentoolchain/travis-docker
-        - name: runBaseImage
-          value: ibmcom/pipeline-base-image:latest
-        - name: imageTag
-          value: secure
-      workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc
   

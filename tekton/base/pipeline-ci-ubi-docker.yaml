@@ -1,0 +1,77 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-base-ubi-docker
+spec:
+  params:
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.charts_repo)
+        - name: branch
+          value: $(params.charts_branch)
+        - name: directory-name
+          value: $(params.charts_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: clone-config-repo
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.config_repo)
+        - name: branch
+          value: $(params.config_branch)
+        - name: directory-name
+          value: $(params.config_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
+   - name: travis-docker-secure
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: run-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/travis-docker
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+        - name: dockerFile
+          value: docker/Dockerfile.docker_ubi
+        - name: imageTag
+          value: secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: travis-docker-secure-va
+      runAfter: [travis-docker-secure]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/travis-docker
+        - name: runBaseImage
+          value: ibmcom/pipeline-base-image:latest
+        - name: imageTag
+          value: secure
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+  
