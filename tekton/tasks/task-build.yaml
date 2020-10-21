@@ -19,6 +19,7 @@ spec:
       default: 'development'
     - name: extraDockerOpts
       default: '--no-cache'
+    - name: runBaseImage
   stepTemplate:
     env:
       - name: API
@@ -51,7 +52,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: build-base
-    image: ibmcom/pipeline-base-image:latest
+    image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
     env:
       - name: HOME
