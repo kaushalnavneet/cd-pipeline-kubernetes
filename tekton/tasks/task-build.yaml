@@ -75,6 +75,8 @@ spec:
         value: $(params.environment)
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -131,6 +133,11 @@ spec:
       name: server
       securityContext:
         privileged: true
+      command:
+        - dockerd-entrypoint.sh
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --mtu=1400
       volumeMounts:
         - mountPath: /var/lib/docker
           name: dind-storage
