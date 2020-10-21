@@ -91,6 +91,7 @@ spec:
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+        ibmcloud cr login
         ibmcloud cr info
 
         echo -e "Build environment variables:"

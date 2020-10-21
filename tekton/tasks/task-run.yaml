@@ -134,6 +134,8 @@ spec:
         value: $(params.icd-redis-store)
       - name: QR_STORE
         value: $(params.qr-store)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -151,27 +153,14 @@ spec:
         ibmcloud plugin install -f container-registry
         ibmcloud plugin install -f kubernetes-service
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${BUILD_CLUSTER_KEY}
+        ibmcloud cr login
         
         IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
         DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
         [ -f build.properties ] && source build.properties
-
-        if [ ! -z "$BUILD_CLUSTER" ]; then
-          echo "Building using cluster ${BUILD_CLUSTER}"
-          ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
-
-          kubectl --namespace otc-dev get pods 
-          kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | grep Running | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
-
-          while ! nc -z localhost 2375; do   
-            sleep 0.1
-          done
-
-          export DOCKER_HOST='tcp://localhost:2375'
-        else
-          echo "Building using local Docker"
-        fi
+        
+        echo "Building using local Docker"
 
         TIMESTAMP=$(date +%Y%m%d%H%M%Z)
         if [ -z "$GIT_COMMIT" ]; then
@@ -225,6 +214,11 @@ spec:
   sidecars:
     - image: docker:dind
       name: server
+      command:
+        - dockerd-entrypoint.sh
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --mtu=1400
       securityContext:
         privileged: true
       volumeMounts:

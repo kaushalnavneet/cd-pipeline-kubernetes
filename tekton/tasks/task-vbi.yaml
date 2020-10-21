@@ -87,6 +87,8 @@ spec:
         value: $(params.extraDockerOpts)
       - name: REGISTRY_REGION
         value: $(params.registryRegion)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -109,26 +111,10 @@ spec:
 
         DOCKERFILE=${DOCKERFILE}
 
-        if [ ! -z "$BUILD_CLUSTER" ]; then
-          ibmcloud login -a ${API} -r ${REGISTRY_REGION}  --apikey ${BUILD_CLUSTER_KEY}
-          echo "Building using cluster ${BUILD_CLUSTER}"
-          ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
-
-          kubectl --namespace otc-dev get pods 
-          kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | grep Running | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
-
-          while ! nc -z localhost 2375; do   
-            sleep 0.1
-          done
-
-          export DOCKER_HOST='tcp://localhost:2375'
-        else
-          echo "Building using local Docker"
-        fi
+        echo "Building using local Docker"
 
         echo "Dockerfile: ${DOCKERFILE}"
-        #docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
-        ibmcloud cr build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
+        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
 
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"
@@ -153,6 +139,11 @@ spec:
   sidecars:
     - image: docker:dind
       name: server
+      command:
+        - dockerd-entrypoint.sh
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --mtu=1400
       securityContext:
         privileged: true
       volumeMounts:

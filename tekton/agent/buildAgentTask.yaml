@@ -96,6 +96,8 @@ spec:
         value: ibmcom/pipeline-private-worker
       - name: ENV_TAG
         value: $(params.envTag)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
     command: ["/bin/bash", "-c"]
     args:
       - | 
@@ -126,26 +128,7 @@ spec:
 
         ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
 
-        if [ ! -z "$BUILD_CLUSTER" ]; then
-          echo "Building using cluster ${BUILD_CLUSTER}"
-          ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
-          if [ "$ksversion" -eq "0"  ]; then
-              $(ibmcloud ks cluster config --export --cluster ${BUILD_CLUSTER})
-          else
-              ibmcloud ks cluster config --cluster ${BUILD_CLUSTER}
-          fi
-
-          kubectl --namespace otc-dev get pods 
-          kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | grep Running | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &
-
-          while ! nc -z localhost 2375; do   
-            sleep 0.1
-          done
-
-          export DOCKER_HOST='tcp://localhost:2375'
-        else
-          echo "Building using local Docker"
-        fi
+        echo "Building using local Docker"
 
         if [ -z "$GIT_COMMIT" ]; then
           GIT_COMMIT=$(git rev-parse --verify HEAD)
@@ -248,6 +231,11 @@ spec:
   sidecars:
     - image: docker:dind
       name: server
+      command:
+        - dockerd-entrypoint.sh
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --mtu=1400
       securityContext:
         privileged: true
       volumeMounts:
