@@ -40,7 +40,7 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc
-   - name: travis-docker-secure
+    - name: travis-docker-secure
       runAfter: [clone-config-repo]
       taskRef:
         name: run-base
