@@ -127,7 +127,8 @@ spec:
         fi
 
         echo "Dockerfile: ${DOCKERFILE}"
-        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
+        #docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
+        ibmcloud cr build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
 
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"
