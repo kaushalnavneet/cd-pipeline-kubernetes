@@ -526,11 +526,11 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
-    travisDockerTag: dfe2edd0cad8c29dbc23dee0573acd30ab643fb1-202010221429UTC
     probes:
       enabled: false
     preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
     terminationGracePeriodSeconds: 4000
+    travisDockerTag: 51d0a59909aabe19cb979dd8ef90edf7a2e0236e-202010221625UTC
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
