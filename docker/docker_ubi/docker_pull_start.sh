@@ -1,4 +1,26 @@
 #!/bin/bash
+
+function pullImage {
+  local vbi_name=$1
+  local version=$2
+  local curated_images=$3
+  local registry_url=$4
+  echo "vbi name: ${vbi_name}" > /proc/1/fd/1
+  echo "vbi version: ${version}" > /proc/1/fd/1
+  echo "curated_images: ${curated_images}" > /proc/1/fd/1
+  echo "registry_url: ${registry_url}" > /proc/1/fd/1
+
+  local base_image_name=`echo ${curated_images} | tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
+  local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
+  cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag} > /proc/1/fd/1 
+  exits=$(cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag})
+  if [[ $? -ne 0 ]]; then
+    docker pull ${vbi_name}
+    docker tag ${vbi_name} ${registry_url}/${base_image_name}:${base_image_tag}
+    docker push ${registry_url}/${base_image_name}:${base_image_tag}
+  fi
+}
+
 if [ -d /etc/secrets ]; then
   for file in /etc/secrets/*.secret; do
     [ -e "$file" ] || continue
@@ -37,24 +59,3 @@ pullImage ${WORKER_26_BASE_IMAGE} 2.6 ${WORKER_CURATED_IMAGES} ${WORKER_TRAVIS_R
 pullImage ${WORKER_27_BASE_IMAGE} 2.7 ${WORKER_CURATED_IMAGES} ${WORKER_TRAVIS_REGISTRY_URL}
 pullImage ${WORKER_28_BASE_IMAGE} 2.8 ${WORKER_CURATED_IMAGES} ${WORKER_TRAVIS_REGISTRY_URL}
 pullImage ${WORKER_29_BASE_IMAGE} 2.9 ${WORKER_CURATED_IMAGES} ${WORKER_TRAVIS_REGISTRY_URL}
-
-function pullImage {
-  local vbi_name=$1
-  local version=$2
-  local curated_images=$3
-  local registry_url=$4
-  echo "vbi name: ${vbi_name}" > /proc/1/fd/1
-  echo "vbi version: ${version}" > /proc/1/fd/1
-  echo "curated_images: ${curated_images}" > /proc/1/fd/1
-  echo "registry_url: ${registry_url}" > /proc/1/fd/1
-
-  local base_image_name=`echo ${curated_images} | tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
-  local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
-  cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag} > /proc/1/fd/1 
-  exits=$(cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag})
-  if [[ $? -ne 0 ]]; then
-    docker pull ${vbi_name}
-    docker tag ${vbi_name} ${registry_url}/${base_image_name}:${base_image_tag}
-    docker push ${registry_url}/${base_image_name}:${base_image_tag}
-  fi
-}
