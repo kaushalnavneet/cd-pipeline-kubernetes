@@ -6,6 +6,9 @@ function pullImage {
 
   local base_image_name=`echo ${WORKER_CURATED_IMAGES}| tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
   local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
+  if [[ "$base_image_tag" == "2.4.1" ]];
+    base_image_tag="2.4"
+  fi
   echo "image checked=https://${WORKER_TRAVIS_REGISTRY_URL}/v2/${base_image_name}/manifests/${base_image_tag}" > /proc/1/fd/1
   image=$(curl \
     --silent \
