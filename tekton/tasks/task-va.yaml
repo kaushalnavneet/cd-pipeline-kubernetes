@@ -115,8 +115,8 @@ spec:
 
         for iteration in {1..30}
         do
-          BX_CR_VA=$(ibmcloud cr va $PIPELINE_IMAGE_URL) 
-          if [[ "${BX_CR_VA}" =~ SAFE ]] || [[ "${BX_CR_VA}" =~ CAUTION ]] || [[ "${BX_CR_VA}" =~ BLOCKED ]] || [[ "${BX_CR_VA}" =~ NO[[:space:]]ISSUES ]]; then
+          BX_CR_VA=$(ibmcloud cr va $PIPELINE_IMAGE_URL --output json | jq -r '.[] .status')
+          if [[ "${BX_CR_VA}" == "OK" ]]; then
             break
           fi
 
@@ -125,7 +125,7 @@ spec:
         done
 
         echo "${BX_CR_VA}"
-        if [[ ! "${BX_CR_VA}" =~ SAFE ]] && [[ ! "${BX_CR_VA}" =~ NO[[:space:]]ISSUES ]]; then
+        if [[ ! "${BX_CR_VA}" == "OK" ]]; then
           echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."
           exit 1
         fi
