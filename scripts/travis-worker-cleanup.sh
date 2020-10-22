@@ -7,7 +7,7 @@ OLDIFS=$IFS
 
 DELAY="75 minutes ago"
 PIPELINE_MON_WEBHOOK=$PIPELINE_MON_WEBHOOK
-ALL_REGIONS=${ALL_REGIONS:-syd,tok,lon,wdc,dal}
+ALL_REGIONS=${ALL_REGIONS:-syd,tok,lon,wdc,dal,par}
 REGION=${REGION:-us-south}
 
 if [[ -z $PIPELINE_MON_WEBHOOK ]]; then
@@ -141,6 +141,13 @@ function cleanup_docker_containers () {
 				echo "RABBITMQ_SERVER_URLS is set for $worker on $cluster"
 			fi
 		fi
+		# collect docker pull time for 2.9 vbi - just print the output to the console for now
+        for iteration in {1..4}
+		do
+			kubectl -n "${NAMESPACE}" exec "$worker" -c docker -- bash -c "docker rm xyzzy" > /dev/null  2> /dev/null
+			time1=$(kubectl -n "${NAMESPACE}" exec "$worker" -c docker -- bash -c "docker run --name xyzzy --rm -d --privileged us.icr.io/dockerimages/worker_dind:master-2019-11-01_15-38-55 && docker exec -i xyzzy time -f \"%e\" docker pull travis-registry:5000/pipeline-worker:2.9 > /dev/null && docker stop xyzzy" 2> results.txt) 
+			echo "pull time(${iteration})=$(cat results.txt)"
+		done
 	done
 	if [ "$errors" = true ]; then
 		send_to_slack "error" "Errors were found checking travis-workers on $cluster"
@@ -182,7 +189,7 @@ function post_soc_notify() {
 	curl -X POST -H 'Content-type: application/json' --data "$json_string" $2 > /dev/null
 }
 
-# $1=region (one of lon,dal,tok,wdc,syd,fra)
+# $1=region (one of lon,dal,tok,wdc,syd,fra,par)
 function check_travis_workers() {
 	region=$1
 	# list all clusters for region $region
