@@ -6,8 +6,13 @@ function pullImage {
 
   local base_image_name=`echo ${WORKER_CURATED_IMAGES}| tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
   local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
-  docker pull ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}
-  if [[ $? -ne 0 ]]; then
+  image=$(curl \
+    --silent \
+    --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+    "${WORKER_TRAVIS_REGISTRY_URL}/v2/${base_image_name}/manifests/${base_image_tag}" --insecure | /root/jq -r .errors)
+ if [[ "$image" == "null" ]]; then
+    docker pull ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}  
+  else
     docker pull ${vbi_name}
     docker tag ${vbi_name} ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}
     docker push ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}
