@@ -120,9 +120,10 @@ spec:
         do
           BX_CR_VA=$(ibmcloud cr va $PIPELINE_IMAGE_URL --output json)
           if [[ $? -eq 0 ]]; then
-            BX_CR_VA=$(echo -n ${BX_CR_VA} | jq '.[] .status')
+            BX_CR_VA=$(echo -n ${BX_CR_VA} | jq -r '.[] .status')
             echo "BX_CR_VA=${BX_CR_VA}"
             if [[ "${BX_CR_VA}" == "OK" ]]; then
+              echo "break va check loop"
               break
             fi
           else
