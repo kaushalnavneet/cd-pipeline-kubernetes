@@ -6,6 +6,7 @@ function pullImage {
 
   local base_image_name=`echo ${WORKER_CURATED_IMAGES}| tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
   local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
+  echo "image checked=https://${WORKER_TRAVIS_REGISTRY_URL}/v2/${base_image_name}/manifests/${base_image_tag}" > /proc/1/fd/1
   image=$(curl \
     --silent \
     --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
