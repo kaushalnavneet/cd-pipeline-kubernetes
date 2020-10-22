@@ -87,7 +87,7 @@ spec:
           name: vault-secrets
       containers:
       - name: docker
-        image: us.icr.io/opentoolchain/travis-docker:{{.Values.travis-docker-tag}}
+        image: us.icr.io/opentoolchain/travis-docker:{{.Values.travisDockerTag}}
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
