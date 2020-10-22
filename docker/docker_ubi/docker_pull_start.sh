@@ -20,7 +20,7 @@ docker info >/dev/null 2>&1
 
 # get list of all existing images
 docker images >images.txt
-cat images.txt
+cat images.txt > /proc/1/fd/1
 docker pull ${WORKER_LEGACY_IMAGE}
 docker tag ${WORKER_LEGACY_IMAGE} ibm_devops_services/worker_base:latest
 docker pull ${WORKER_DIND_IMAGE}
@@ -43,14 +43,15 @@ function pullImage {
   local version=$2
   local curated_images=$3
   local registry_url=$4
-  echo "vbi name: ${vbi_name}"
-  echo "vbi version: ${version}"
-  echo "curated_images: ${curated_images}"
-  echo "registry_url: ${registry_url}"
+  echo "vbi name: ${vbi_name}" > /proc/1/fd/1
+  echo "vbi version: ${version}" > /proc/1/fd/1
+  echo "curated_images: ${curated_images}" > /proc/1/fd/1
+  echo "registry_url: ${registry_url}" > /proc/1/fd/1
 
   local base_image_name=`echo ${curated_images} | tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
   local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
-  exits=$(cat images.txt | grep ${registry_url}/${base_image_name} | grep ${base_image_tag})
+  cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag} > /proc/1/fd/1 
+  exits=$(cat images.txt | grep "${registry_url}/${base_image_name}" | grep ${base_image_tag})
   if [[ $? -ne 0 ]]; then
     docker pull ${vbi_name}
     docker tag ${vbi_name} ${registry_url}/${base_image_name}:${base_image_tag}

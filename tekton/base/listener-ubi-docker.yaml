@@ -64,7 +64,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-ubi-run-$(uid)-pvc
+        name: $(params.charts_branch)-ubi-docker-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -76,7 +76,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.charts_branch)-base-run
-        name: $(params.charts_branch)-ubi-run-$(uid)
+        name: $(params.charts_branch)-ubi-docker-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "trigger-template-ci"
@@ -86,7 +86,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-ubi-run-$(uid)-pvc
+              claimName: $(params.charts_branch)-ubi-docker-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
