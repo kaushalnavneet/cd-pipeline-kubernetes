@@ -53,6 +53,8 @@ spec:
           value: deploy
         - name: tagSuffix
           value: ''
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -67,6 +69,8 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: nodejs12
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
@@ -81,7 +85,9 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: java
-      workspaces:
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:java
+       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
     - name: go
@@ -95,6 +101,8 @@ spec:
           value: cd-build-base
         - name: imageTag
           value: go1.14
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
