@@ -87,7 +87,7 @@ spec:
           value: java
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:java
-       workspaces:
+      workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
     - name: go
