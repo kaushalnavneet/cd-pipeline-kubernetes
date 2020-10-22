@@ -144,9 +144,11 @@ function cleanup_docker_containers () {
 		# collect docker pull time for 2.9 vbi - just print the output to the console for now
         for iteration in {1..4}
 		do
+			kubectl -n "${NAMESPACE}" exec "$worker" -c docker -- bash -c "docker stop xyzzy" > /dev/null  2> /dev/null
 			kubectl -n "${NAMESPACE}" exec "$worker" -c docker -- bash -c "docker rm xyzzy" > /dev/null  2> /dev/null
 			time1=$(kubectl -n "${NAMESPACE}" exec "$worker" -c docker -- bash -c "docker run --name xyzzy --rm -d --privileged us.icr.io/dockerimages/worker_dind:master-2019-11-01_15-38-55 && docker exec -i xyzzy time -f \"%e\" docker pull travis-registry:5000/pipeline-worker:2.9 > /dev/null && docker stop xyzzy" 2> results.txt) 
 			echo "pull time(${iteration})=$(cat results.txt)"
+			rm -f results.txt
 		done
 	done
 	if [ "$errors" = true ]; then
