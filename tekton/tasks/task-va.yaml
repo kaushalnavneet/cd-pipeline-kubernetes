@@ -123,7 +123,6 @@ spec:
             BX_CR_VA=$(echo -n ${BX_CR_VA} | jq -r '.[] .status')
             echo "BX_CR_VA=${BX_CR_VA}"
             if [[ "${BX_CR_VA}" == "OK" ]]; then
-              echo "break va check loop"
               break
             fi
           else
