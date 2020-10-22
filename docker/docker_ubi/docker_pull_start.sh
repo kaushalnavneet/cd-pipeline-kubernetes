@@ -9,7 +9,7 @@ function pullImage {
   image=$(curl \
     --silent \
     --header "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-    "${WORKER_TRAVIS_REGISTRY_URL}/v2/${base_image_name}/manifests/${base_image_tag}" --insecure | /root/jq -r .errors)
+    "https://${WORKER_TRAVIS_REGISTRY_URL}/v2/${base_image_name}/manifests/${base_image_tag}" --insecure | /root/jq -r .errors)
  if [[ "$image" == "null" ]]; then
     docker pull ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}  
   else

@@ -119,6 +119,7 @@ spec:
         for iteration in {1..30}
         do
           BX_CR_VA=$(ibmcloud cr va $PIPELINE_IMAGE_URL --output json | jq -r '.[] .status')
+          echo "BX_CR_VA=${BX_CR_VA}"
           if [[ "${BX_CR_VA}" == "OK" ]]; then
             break
           fi
