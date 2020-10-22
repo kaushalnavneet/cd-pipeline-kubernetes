@@ -556,4 +556,5 @@ pipeline:
         USE_NEW_RELIC: true
         ENV_ID: ibm:ys1:us-south
         ENABLE_ECHO: true
+        ENABLE_SYSDIG_METRICS: true
 
