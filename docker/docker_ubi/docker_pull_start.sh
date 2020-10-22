@@ -6,7 +6,7 @@ function pullImage {
 
   local base_image_name=`echo ${WORKER_CURATED_IMAGES}| tr ',' $'\n' | grep ${version} | sed -e 's#.*=\(\)#\1#'`
   local base_image_tag=`echo ${vbi_name} | sed -e 's#.*:\(\)#\1#'`
-  exits=$(cat images.txt | grep "${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}" | grep ${base_image_tag})
+  docker pull ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}
   if [[ $? -ne 0 ]]; then
     docker pull ${vbi_name}
     docker tag ${vbi_name} ${WORKER_TRAVIS_REGISTRY_URL}/${base_image_name}:${base_image_tag}
@@ -32,9 +32,6 @@ done
 
 docker info >/dev/null 2>&1
 [ $? -eq 0 ] || exit 1
-
-# get list of all existing images
-docker images >images.txt
 
 docker pull ${WORKER_LEGACY_IMAGE}
 docker tag ${WORKER_LEGACY_IMAGE} ibm_devops_services/worker_base:latest
