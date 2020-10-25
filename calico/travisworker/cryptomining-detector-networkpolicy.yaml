@@ -33,6 +33,7 @@ spec:
       - 0.0.0.0/0
       notNets:
       - 172.16.0.0/12
+  order: 1000
   selector: app == 'cryptomining-detector'
   types:
   - Egress
