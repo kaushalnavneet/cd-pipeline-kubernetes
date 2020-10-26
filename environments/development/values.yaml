@@ -83,13 +83,10 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_10_24_20h12m54s
     configmap:
       data:
-        AMQP_EXCHANGE: 'webhook-relay.fanout'
-        AMQP_MSG_EXP_TIME: 60000
-        AMQP_RECONNECT_TIMEOUT: 5
-        AMQP_QUEUE: ''
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
+        POST_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline/triggers/
   otc-github-relay-sub:
     replicas: 1
     revisionHistoryLimit: 3
