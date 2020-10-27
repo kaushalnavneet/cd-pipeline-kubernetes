@@ -9,6 +9,7 @@ spec:
     destination:
       nets:
       - 172.20.0.1/32
+  order: 1000
   selector: app == 'tekton-pipelines-controller'
   types:
   - Egress

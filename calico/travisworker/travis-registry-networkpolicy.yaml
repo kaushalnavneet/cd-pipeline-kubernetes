@@ -8,6 +8,7 @@ spec:
   - action: Allow
     source:
       selector: app == 'travis-worker'
+  order: 1000
   selector: app == 'travis-registry'
   types:
   - Ingress
