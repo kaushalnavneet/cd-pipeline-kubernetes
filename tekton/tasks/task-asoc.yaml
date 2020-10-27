@@ -46,7 +46,7 @@ spec:
           export HOME=/home/node
           cd $HOME
           cp -R /workspace/otc-deploy .
-          export TMPDIR=/home/node/tmp
+          export TMPDIR=/tmp/asoc
           mkdir $TMPDIR
           set +x
           export WORKSPACE=$HOME
