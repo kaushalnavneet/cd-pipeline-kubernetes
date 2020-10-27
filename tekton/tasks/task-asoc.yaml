@@ -46,9 +46,8 @@ spec:
           export HOME=/home/node
           cd $HOME
           cp -R /workspace/otc-deploy .
-          apt update && apt install -qq wget zip unzip
-          mkdir /workspace/tmp
-          export TMPDIR=/workspace/tmp
+          export TMPDIR=/home/node/tmp
+          mkdir $TMPDIR
           set +x
           export WORKSPACE=$HOME
           export API_KEY_ID="$APPSCAN_APP_KEY_ID"
@@ -56,3 +55,4 @@ spec:
           export APPSCAN_APP_ID="$APPSCAN_APP_ID"
           export SCAN_NAME="$APPSCAN_NAME"
           ./otc-deploy/k8s/scripts/asoc/run_static_code_scan.sh
+          rm -rf $TMPDIR
