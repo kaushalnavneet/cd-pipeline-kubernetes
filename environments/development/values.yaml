@@ -18,7 +18,7 @@ pipeline:
       sidekickImageTag: 38dfea5b362e506e60becc91c9988c9d569e8014-202005112130UTC
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_2019_07_31_16h12m55s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
     probes:
       enabled: true
@@ -132,7 +132,7 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_15_14h50m29s
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Private Worker - YS1
@@ -164,7 +164,6 @@ pipeline:
       secretPaths:
         - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
         - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-common_2020_02_28_21h08m12s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Pipeline Event Service - YS1
@@ -200,7 +199,7 @@ pipeline:
         path: "/version"
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2020_07_24_13h46m23s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2020_10_30_10h32m07s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     configmap:
@@ -324,7 +323,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_03_20_15h29m17s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_10_30_10h17m45s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
@@ -545,8 +544,6 @@ pipeline:
     vault:
       secretPaths:
         - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-common_2020_02_28_21h08m12s
-        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-support-service/pipeline-support-service_2020_06_30_16h59m48s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Pipeline Support Service - YS1
