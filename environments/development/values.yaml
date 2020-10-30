@@ -18,7 +18,7 @@ pipeline:
       sidekickImageTag: 38dfea5b362e506e60becc91c9988c9d569e8014-202005112130UTC
     vaultcommon:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/common_do_not_version
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/pipeline-common-do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
     probes:
       enabled: true
