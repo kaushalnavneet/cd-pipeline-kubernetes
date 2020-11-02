@@ -32,8 +32,6 @@ ENV PORT=80
 ENV HOME /home/node
 WORKDIR /home/node
 
-RUN adduser -s /bin/bash -d /home/node -U node
-
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
 RUN rm -rf /home/node/cd-pipeline-kubernetes
