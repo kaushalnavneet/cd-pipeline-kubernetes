@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-cleaner-run
+spec:
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: pipeline-clean
+      taskRef:
+        name:  run-cleaner
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
