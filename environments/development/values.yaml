@@ -132,6 +132,7 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-toolchain-api-keys_2019_03_04_13h14m20s
        - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
