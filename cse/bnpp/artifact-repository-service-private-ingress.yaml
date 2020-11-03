@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+    ingress.bluemix.net/ALB-ID: "private-crbsrbe45b0ild86a5so80-alb1;private-crbsrbg8fb0r1ubcp66n4g-alb1;private-crbsrbhhrb0tkhgcp66n50-alb1"
+  labels:
+    app: pipeline-artifact-repository-service
+    release: pipeline-artifact-repository-service
+  name: pipeline-ars-long-name
+  namespace: opentoolchain
+spec:
+  rules:
+    - host: pipeline-artifact-repository-service.private.eu-fr2.devops.cloud.ibm.com
+      http:
+        paths:
+        - backend:
+            serviceName: pipeline-artifact-repository-service
+            servicePort: 80
+  tls:
+    - hosts:
+        - pipeline-artifact-repository-service.private.eu-fr2.devops.cloud.ibm.com
+      secretName: star.eu-fr2.devops.cloud.ibm.com
+
