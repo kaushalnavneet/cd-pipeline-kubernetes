@@ -227,7 +227,7 @@ Promise.all(promises).then(result => {
     let out = fs.createWriteStream("run-" + mainFile.metadata.name + ".sh");
     out.write("#!/bin/bash\n");
     let clusterRoleBindingName = "agent-localpipeline-role-" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    out.write("kubectl apply -f " + outFile + "\n");
+    out.write("kubectl create -f " + outFile + "\n");
     out.write("kubectl create clusterrolebinding " + clusterRoleBindingName + " --clusterrole=cluster-admin --serviceaccount=" + local_namespace + ":agent-localpipeline\n"); 
     out.end();
 
