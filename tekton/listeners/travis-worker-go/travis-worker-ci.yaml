@@ -163,7 +163,7 @@ spec:
     - name: environment
       value: "development"
     - name: clusterName
-      value: otc-rabbitmq-dev
+      value: otc-pw-us-south-dev
     - name: clusterNamespace
       value: opentoolchain
     - name: skipBuild
