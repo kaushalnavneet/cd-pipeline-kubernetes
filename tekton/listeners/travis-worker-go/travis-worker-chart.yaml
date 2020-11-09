@@ -155,7 +155,7 @@ spec:
     - name: source_branch
       value: "integration"
     - name: short_source_branch
-      value: "int-charts"
+      value: "ubi-charts"
     - name: source_directory
       value: "travis-worker-go"
     - name: charts_repo
@@ -183,9 +183,9 @@ spec:
     - name: skipBuild
       value: "false"
     - name: skipVA
-      value: "true"
+      value: "false"
     - name: dockerFile
-      value: "Dockerfile.travis-worker"
+      value: "Dockerfile.travis-worker.ubi"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.14
     - name: syd_auto_deploy_token
