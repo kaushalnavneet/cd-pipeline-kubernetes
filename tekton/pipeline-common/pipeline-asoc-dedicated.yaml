@@ -1,0 +1,62 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-asoc
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: branch
+      description: the branch for the git repo
+    - name: componentName
+      description: the name of the component/broker
+    - name: idsUser
+      description: the git user for idsorg organization
+      default: idsorg
+    - name: idsToken
+      description: The git token of the idsorg user
+    - name: buildScriptFile
+      description: the build script for this component
+    - name: reportToSlackFile
+      description: the script for this component to report results to slack
+      default: send_report_to_slack.sh
+    - name: artifactoryId
+      description: the name of the artifactory id
+    - name: artifactoryTokenBase64
+      description: the artifactory token
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: branch
+          value: $(params.branch)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: asoc
+      runAfter: [clone-repo]
+      taskRef:
+        name: asoc-task
+      params:
+        - name: idsUser
+          value: $(params.idsUser)
+        - name: idsToken
+          value: $(params.idsToken)
+        - name: componentName
+          value: $(params.componentName)
+        - name: buildScriptFile
+          value: $(params.buildScriptFile)
+        - name: reportToSlackFile
+          value: $(params.reportToSlackFile)
+        - name: artifactoryId
+          value: $(params.artifactoryId)
+        - name: artifactoryTokenBase64
+          value: $(params.artifactoryTokenBase64)
+      workspaces:
+      - name: task-volume
+        workspace: pipeline-pvc 
