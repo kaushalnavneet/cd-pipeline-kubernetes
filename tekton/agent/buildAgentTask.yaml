@@ -47,13 +47,13 @@ spec:
       default: ''
   workspaces:
   - name: task-pvc
-    mountPath: /artifacts 
+    mountPath: /artifacts
   steps:
   - name: run-base
     image: $(params.runBaseImage)
     volumeMounts:
       - mountPath: /var/run/
-        name: dind-socket  
+        name: dind-socket
     imagePullPolicy: IfNotPresent
     env:
       - name: IDS_TOKEN
@@ -100,11 +100,11 @@ spec:
         value: "unix:///var/run/docker.sock"
     command: ["/bin/bash", "-c"]
     args:
-      - | 
+      - |
         set -e
-       
+
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
-        
+
         export GOPATH=`pwd`
         mkdir -p src/github.ibm.com/org-ids
         cd src/github.ibm.com/org-ids
@@ -114,11 +114,11 @@ spec:
         GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
         basename=$(basename ${COMPONENT_REPO})
         cd ${basename%.*}
-        
+
         ls -al
         #export GO111MODULE=on
 
-        
+
         cp -a /work cd-pipeline-kubernetes
 
         IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
@@ -144,18 +144,19 @@ spec:
         echo ${APPLICATION_VERSION} > .pipeline_build_id
         echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
 
-        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
+        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_IMAGE%%/*}
         # For some reason this doesn't get repulled in docker engine
         docker pull ${DOCKER_IMAGE}
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker pull command\"
             exit 1
         fi
+        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
         echo "Dockerfile: ${DOCKERFILE}"
         if [ "$OPERATOR_SDK" == true ]; then
         go mod vendor
         operator-sdk build ${IMAGE_URL}:${APPLICATION_VERSION}
-        else 
+        else
         docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
         fi
         if [ $? -ne 0 ]; then
@@ -163,21 +164,16 @@ spec:
             exit 1
         fi
 
-        docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${IMAGE_URL}:latest
+        AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
+
+        docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker tag command\"
             exit 1
         fi
 
-        docker push ${IMAGE_URL}:${APPLICATION_VERSION}
-        if [ $? -ne 0 ]; then
-            echo \"Failed during execution of docker push command\"
-            exit 1
-        fi
+        docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
 
-        docker push ${IMAGE_URL}:latest
-
-        AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
         echo "###########################################"
         echo ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION}${ENV_TAG}
         docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION}${ENV_TAG}
@@ -217,7 +213,7 @@ spec:
         value: $(params.skipVA)
     command: ["/bin/bash", "-c"]
     args:
-      - | 
+      - |
         set -e
         if [ "${SKIP}" == true ]; then
           echo "Skipping VA"

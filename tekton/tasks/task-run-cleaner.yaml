@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-cleaner
+spec:
+  params:
+    - name: NODE_MODE
+      default: 'true'
+    - name: SHOW_RECORDS
+      default: 'true'
+    - name: HOME
+      default: "/home/node"
+  stepTemplate:
+    env:
+      - name: PIPELINE_BASIC_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: PIPELINE_BASIC_AUTH_TOKEN
+      - name: CLOUDANT_IAM_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CLOUDANT_IAM_API_KEY
+      - name: CLOUDANT_URL
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CLOUDANT_URL
+      - name: PIPELINE_SERVER_URL
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: PIPELINE_SERVER_URL
+      - name: CLEAN_TASK_MODULE
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: CLEAN_TASK_MODULE
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: pipeline-clean-step
+    image: us.icr.io/devopsotc/pipeline-cleaner:latest
+    env:
+      - name: NODE_MODE
+        value: $(params.NODE_MODE)
+      - name: SHOW_RECORDS
+        value: $(params.SHOW_RECORDS)
+      - name: HOME
+        value: $(params.HOME)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        cd $HOME
+        echo "Start cleaning"
+        node ./cleaner.js

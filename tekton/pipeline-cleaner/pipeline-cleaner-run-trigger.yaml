@@ -1,0 +1,82 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-cleaner-run-template
+spec:
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        PIPELINE_SERVER_URL: $(params.PIPELINE_SERVER_URL)
+        CLEAN_TASK_MODULE: $(params.CLEAN_TASK_MODULE)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        CLOUDANT_URL: $(params.CLOUDANT_URL)
+        CLOUDANT_IAM_API_KEY: $(params.CLOUDANT_IAM_API_KEY)
+        PIPELINE_BASIC_AUTH_TOKEN: $(params.PIPELINE_BASIC_AUTH_TOKEN)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: cleaner-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: cleaner-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "cleaner-trigger"
+      spec:
+        pipelineRef:
+          name: pipeline-cleaner-run
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: cleaner-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: pipeline-cleaner-run-binding
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: pipeline-cleaner
+spec:
+  triggers:
+    - binding:
+        name: pipeline-cleaner-run-binding
+      template:
+        name: pipeline-cleaner-run-template

@@ -7,6 +7,9 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: imageUrl
     - name: skipBuild
     - name: skipVA
@@ -38,8 +41,23 @@ spec:
           value: $(params.source_directory)
       workspaces:
       - name: output
+        workspace: pipeline-pvc
+    - name: clone-script-repo
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directory-name
+          value: $(params.script_directory)
+      workspaces:
+      - name: output
         workspace: pipeline-pvc 
     - name: build
+      runAfter: [clone-source-repo,clone-script-repo]
       taskRef:
         name:  run-base
       params:
