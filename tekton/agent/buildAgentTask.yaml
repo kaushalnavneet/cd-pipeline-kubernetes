@@ -218,6 +218,10 @@ spec:
           echo "Skipping VA"
           exit 0
         fi
+        
+        wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
+        chmod +x /usr/bin/jq
+        
         APPLICATION_VERSION=$(cat /artifacts/appVersion)
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd /work
