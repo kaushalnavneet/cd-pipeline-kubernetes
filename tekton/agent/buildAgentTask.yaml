@@ -138,8 +138,6 @@ spec:
           APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}"
         fi
 
-         echo ${APPLICATION_VERSION} > /artifacts/appVersion
-
         echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
         echo ${APPLICATION_VERSION} > .pipeline_build_id
         echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
@@ -172,6 +170,7 @@ spec:
             exit 1
         fi
 
+        echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
         docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
 
         echo "###########################################"
