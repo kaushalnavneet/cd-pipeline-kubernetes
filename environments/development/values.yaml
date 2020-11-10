@@ -75,6 +75,8 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
+        CIPHER_ALGORITHM: aes-128-cbc
+        HMAC_ALGORITHM: sha1
   otc-github-relay-pub:
     replicas: 1
     vault:
@@ -294,7 +296,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_03_20_15h36m22s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_11_09_14h44m53s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
