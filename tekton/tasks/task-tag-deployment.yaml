@@ -55,6 +55,9 @@ spec:
 
         IFS=',' read -ra REPOS <<<$PROD_REPOS
         for REPO in ${REPOS[@]}; do
+            if [ $REPO == "pgbouncer" ]; then
+              continue
+            fi
             echo Tagging repo $REPO
             REPO_URL=https://github.ibm.com/org-ids/${REPO}
             REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
