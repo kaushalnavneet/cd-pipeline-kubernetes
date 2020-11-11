@@ -14,6 +14,7 @@ spec:
     - name: chartNamespace
       default: opentoolchain
     - name: script_directory
+    - name: cr_directory
   stepTemplate:
     env:
       - name: API
@@ -71,6 +72,8 @@ spec:
         value: $(params.chartNamespace)
       - name: SCRIPT_DIRECTORY
         value: $(params.script_directory)
+      - name: CR_DIRECTORY
+        value: $(params.cr_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

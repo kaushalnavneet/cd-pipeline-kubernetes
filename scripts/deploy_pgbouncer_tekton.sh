@@ -13,7 +13,11 @@ ENVIRONMENT=${ENVIRONMENT:-development}
 DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/pgbouncer_values.yaml
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
+COMPONENT_NAME=gitlab-pgbouncer
 
+
+ls -la .
+exit 0
 # install vault
 curl -o v.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_linux_amd64.zip
 unzip v.zip
@@ -72,3 +76,34 @@ helm upgrade ${TARGET} ./charts/pgbouncer  \
   --values=${VALUES} \
   --timeout 600 \
   --debug
+
+  # save information for CR
+echo "Saving deploy info for CR"
+RUN=$( echo "${PIPELINE_RUN_URL}" \
+      | cut -f7-9 -d/ | cut -f1 -d\? )
+RUN_ID=$( echo "$RUN" | cut -f3 -d/ )
+APP_VERSION=$( kubectl get -n${CHART_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
+  | jq -r '.spec.template.spec.containers[] | select(.name == "pgbouncer").image' \
+  | cut -f2 -d: )
+echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}"
+echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
+
+git config --global user.email "idsorg@us.ibm.com"
+git config --global user.name "IDS Organization"
+git config --global push.default matching
+git add -A "cr/$ENVIRONMENT"
+git commit -m "Adding deploy info for ${COMPONENT_NAME}-${CLUSTER_NAME}"
+
+n=0
+rc=0
+ORIG_DIR=$(pwd)
+until [ $n -ge 5 ]
+do
+  git push
+  rc=$?
+  if [[ $rc == 0 ]]; then 
+    break;
+  fi
+  n=$[$n+1]
+  git pull
+done
