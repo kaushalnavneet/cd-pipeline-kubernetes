@@ -17,6 +17,10 @@ spec:
     - name: cr_directory
   stepTemplate:
     env:
+      - name: PIPELINE_RUN_URL
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
       - name: API
         valueFrom:
           configMapKeyRef:
