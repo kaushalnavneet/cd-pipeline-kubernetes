@@ -128,6 +128,12 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
+          - name: cr_repo
+            value: $(params.cr_repo)
+          - name: cr_branch
+            value: $(params.cr_branch)
+          - name: cr_directory
+            value: $(params.cr_directory)
           - name: environment
             value: $(params.environment)
           - name: clusterName1
