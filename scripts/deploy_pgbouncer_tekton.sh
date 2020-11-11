@@ -34,6 +34,8 @@ if [ -d cr/$ENVIRONMENT ]; then
   echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
 
   ls -la cr/$ENVIRONMENT
+else
+  echo "cr/$ENVIRONMENT directory doesn't exist"
 fi
 
 exit 0
