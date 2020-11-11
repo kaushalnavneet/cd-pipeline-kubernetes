@@ -11,15 +11,16 @@ CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
 TARGET=${TARGET:-gitlab}
 ENVIRONMENT=${ENVIRONMENT:-development}
 DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
-CR_DIRECTORY=${CR_DIRECTORY:-pipeline-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/pgbouncer_values.yaml
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 COMPONENT_NAME=gitlab-pgbouncer
 
 ls -la .
+echo "CR_DIRECTORY=${CR_DIRECTORY}"
 
-if [ -z ${CR_DIRECTORY} ]; then
-   exit 0
+if [ ${CR_DIRECTORY} == "" ]; then
+  echo "No CR directory specified"
+  exit 0
 fi
 if [ -d cr/$ENVIRONMENT ]; then
   cd ${CR_DIRECTORY}
