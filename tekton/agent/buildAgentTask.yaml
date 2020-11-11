@@ -138,8 +138,6 @@ spec:
           APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}"
         fi
 
-         echo ${APPLICATION_VERSION} > /artifacts/appVersion
-
         echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
         echo ${APPLICATION_VERSION} > .pipeline_build_id
         echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
@@ -172,6 +170,7 @@ spec:
             exit 1
         fi
 
+        echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
         docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
 
         echo "###########################################"
@@ -219,11 +218,43 @@ spec:
           echo "Skipping VA"
           exit 0
         fi
+        
+        wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
+        chmod +x /usr/bin/jq
+        
         APPLICATION_VERSION=$(cat /artifacts/appVersion)
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
         cd /work
-        chmod u+x /work/scripts/pipeline_va_tek.sh
-        "$_"
+        
+        IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
+        
+        ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
+        ibmcloud cr region-set global
+        # default value for PIPELINE_IMAGE_URL -- uncomment and customize as needed
+        export PIPELINE_IMAGE_URL="${IMAGE_URL}:${APPLICATION_VERSION}"
+        echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
+
+        for iteration in {1..30}
+        do
+          BX_CR_VA=$(ibmcloud cr va $PIPELINE_IMAGE_URL --output json)
+          if [[ $? -eq 0 ]]; then
+            BX_CR_VA=$(echo -n ${BX_CR_VA} | jq -r '.[] .status')
+            echo "BX_CR_VA=${BX_CR_VA}"
+            if [[ "${BX_CR_VA}" == "OK" ]]; then
+              break
+            fi
+          else
+            echo "error while running va check: ${BX_CR_VA}"
+          fi
+          echo -e "A vulnerability report was not found for the specified image, either the image doesn't exist or the scan hasn't completed yet. Waiting for scan to complete.."
+          sleep 10
+        done
+        echo "${BX_CR_VA}"
+        if [[ ! "${BX_CR_VA}" == "OK" ]]; then
+          echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."
+          exit 1
+        fi
+
   sidecars:
     - image: docker:dind
       name: server
