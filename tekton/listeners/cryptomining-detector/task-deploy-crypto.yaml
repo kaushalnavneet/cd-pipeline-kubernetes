@@ -16,8 +16,13 @@ spec:
     - name: helmVersion
     - name: script_directory
     - name: config_directory
+    - name: cr_directory
   stepTemplate:
     env:
+      - name: PIPELINE_RUN_URL
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
       - name: API
         valueFrom:
           configMapKeyRef:
@@ -67,6 +72,8 @@ spec:
         value: $(params.script_directory)
       - name: DEVOPS_CONFIG
         value: $(params.config_directory)
+      - name: CR_DIRECTORY
+        value: $(params.cr_directory)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

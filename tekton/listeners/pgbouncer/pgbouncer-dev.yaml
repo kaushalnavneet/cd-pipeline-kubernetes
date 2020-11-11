@@ -170,11 +170,11 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: cr_repo
-      value: ""
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
     - name: cr_branch
-      value: ""
+      value: "master"
     - name: cr_directory
-      value: ""
+      value: "pipeline-config"
     - name: environment
       value: "development"
     - name: chartNamespace

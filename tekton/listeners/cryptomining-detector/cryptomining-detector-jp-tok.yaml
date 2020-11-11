@@ -12,6 +12,9 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
+    - name: cr_repo
+    - name: cr_branch
+    - name: cr_directory
     - name: environment
     - name: clusterName1
     - name: skipDeploy1
@@ -120,6 +123,12 @@ spec:
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
+          - name: cr_repo
+            value: $(params.cr_repo)
+          - name: cr_branch
+            value: $(params.cr_branch)
+          - name: cr_directory
+            value: $(params.cr_directory)
           - name: environment
             value: $(params.environment)
           - name: clusterName1
@@ -161,6 +170,12 @@ spec:
       value: "master"
     - name: config_directory
       value: "devops-config"
+    - name: cr_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: cr_branch
+      value: "master"
+    - name: cr_directory
+      value: "pipeline-config"
     - name: environment
       value: "jp-tok"
     - name: chartNamespace

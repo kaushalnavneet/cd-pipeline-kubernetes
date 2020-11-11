@@ -12,6 +12,9 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
+    - name: cr_repo
+    - name: cr_branch
+    - name: cr_directory
     - name: environment
     - name: chartNamespace
     - name: clusterName1
@@ -62,9 +65,23 @@ spec:
           value: $(params.config_directory)
       workspaces:
       - name: output
-        workspace: pipeline-pvc 
-    - name: deploy-cluster-1
+        workspace: pipeline-pvc
+    - name: clone-cr-repo
       runAfter: [clone-config-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.cr_repo)
+        - name: branch
+          value: $(params.cr_branch)
+        - name: directory-name
+          value: $(params.cr_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
+    - name: deploy-cluster-1
+      runAfter: [clone-cr-repo]
       taskRef:
         name:  deploy-cryptomining
       params:
@@ -82,6 +99,8 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+        - name: cr_directory
+          value: $(params.cr_directory)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -104,6 +123,8 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+        - name: cr_directory
+          value: $(params.cr_directory)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -126,6 +147,8 @@ spec:
           value: $(params.config_directory)
         - name: script_directory
           value: $(params.script_directory)
+        - name: cr_directory
+          value: $(params.cr_directory)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
