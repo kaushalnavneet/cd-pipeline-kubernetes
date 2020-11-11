@@ -99,6 +99,5 @@ spec:
         ibmcloud ks cluster config  --cluster ${CLUSTER_NAME}
         set -e
 
-        echo "CR_DIRECTORY=${CR_DIRECTORY}"
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton.sh
