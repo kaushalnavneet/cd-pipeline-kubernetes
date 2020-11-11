@@ -15,15 +15,12 @@ VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/pgbouncer_values.yaml
 API_KEY=${DEPLOY_API_KEY:-${API_KEY}}
 COMPONENT_NAME=gitlab-pgbouncer
 
-ls -la .
-echo "CR_DIRECTORY=${CR_DIRECTORY}"
-
 if [ ${CR_DIRECTORY} == "" ]; then
   echo "No CR directory specified"
   exit 0
 fi
+cd ${CR_DIRECTORY}
 if [ -d cr/$ENVIRONMENT ]; then
-  cd ${CR_DIRECTORY}
   echo "Saving deploy info for CR"
   RUN=$( echo "${PIPELINE_RUN_URL}" \
         | cut -f7-9 -d/ | cut -f1 -d\? )
