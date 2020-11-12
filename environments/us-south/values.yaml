@@ -179,29 +179,6 @@ pipeline:
         NEW_RELIC_APP_NAME: otc-webhook-relay - PROD
         log4js_logmet_component: otc-github-relay-pub-k8s
         log4js_syslog_appender_product: otc-github-relay-pub-k8s-yp
-  otc-github-relay-sub:
-    vault:
-      secretPaths:
-      - generic/crn/v1/bluemix/public/continuous-delivery/us-south/cd-pipeline/otc-github-relay-sub
-    configmap:
-      data:
-        AMQP_EXCHANGE: ""
-        AMQP_HOST: sl-us-dal-9-portal.2.dblayer.com
-        AMQP_MSG_EXP_TIME: ""
-        AMQP_PATH: /otc-yp
-        AMQP_PORT: "10866"
-        AMQP_PROTOCOL: amqps
-        AMQP_QUEUE: webhook-relay.yp
-        AMQP_RECONNECT_TIMEOUT: ""
-        AMQP_SSL_PROTOCOL: TLSv1_2_method
-        AMQP_USER: jazzhub
-        AUTO_INIT_SUBSCRIBE: true
-        BASIC_USER: relay
-        LOG4JS_CONFIG_PATH: 
-        NEW_RELIC_APP_NAME: otc-webhook-relay-sub - YP
-        POST_URL: https://devops-api.ng.bluemix.net/v1/pipeline/triggers/
-        log4js_logmet_component: otc-github-relay-sub-k8s
-        log4js_syslog_appender_product: otc-github-relay-sub-k8s-yp
   blade-pipeline-broker:
     extrahosts:
     - otc-pipeline-broker
