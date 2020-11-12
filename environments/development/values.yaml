@@ -57,12 +57,14 @@ pipeline:
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ''
         CERT_FILE: keys/server.crt
+        CIPHER_ALGORITHM: aes-128-cbc
         DB_CA_PEM: ''
         DB_HOST: gitlab-pgbouncer
         DB_NAME: compose
         DB_PORT: "6432"
         DB_TYPE: postgresql
         DB_USER: pipe01
+        HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: "7200000"
@@ -75,8 +77,6 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
-        CIPHER_ALGORITHM: aes-128-cbc
-        HMAC_ALGORITHM: sha1
   otc-github-relay-pub:
     replicas: 1
     vault:
