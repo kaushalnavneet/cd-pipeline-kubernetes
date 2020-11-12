@@ -43,7 +43,7 @@ pipeline:
     vault:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_04_25_15h37m28s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_12_20h19m16s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
@@ -62,7 +62,7 @@ pipeline:
         DB_NAME: compose
         DB_PORT: "6432"
         DB_TYPE: postgresql
-        DB_USER: admin
+        DB_USER: pipe01
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: "7200000"
