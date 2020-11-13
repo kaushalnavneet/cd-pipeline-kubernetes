@@ -43,7 +43,7 @@ pipeline:
     vault:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_12_20h19m16s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
@@ -57,12 +57,14 @@ pipeline:
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ''
         CERT_FILE: keys/server.crt
+        CIPHER_ALGORITHM: aes-128-cbc
         DB_CA_PEM: ''
         DB_HOST: gitlab-pgbouncer
         DB_NAME: compose
         DB_PORT: "6432"
         DB_TYPE: postgresql
         DB_USER: pipe01
+        HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: "7200000"
@@ -179,7 +181,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2020_03_20_15h59m42s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2020_11_11_15h54m14s
     probes:
       readiness:
         path: "/version"
@@ -294,7 +296,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_03_20_15h36m22s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_11_09_14h44m53s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
