@@ -43,7 +43,7 @@ pipeline:
     vault:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_12_20h19m16s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:

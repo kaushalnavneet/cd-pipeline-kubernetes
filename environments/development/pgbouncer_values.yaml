@@ -9,7 +9,7 @@ global:
     port: 6432
     sslMode: require
     database: compose
-    secretPath: generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_09_16h46m47s
+    secretPath: generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
     password: 
       secret: gitlab-postgres-secret
       key: postgres-password
