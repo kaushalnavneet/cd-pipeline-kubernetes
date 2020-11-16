@@ -37,6 +37,8 @@ pipeline:
         USE_K8S: true
         SECGRP: GRP3DEVS
         CLOUDANT_URL: 'https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud'
+        CONSOLE_URL: 'https://dev.console.test.cloud.ibm.com'
+        ENV_ID: 'ibm:ys1:us-south'
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
