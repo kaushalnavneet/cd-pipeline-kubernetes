@@ -34,10 +34,7 @@ export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( ec
 export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 
 export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
-export DB_ADMIN=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_ADMIN )
-export DB_PIPE01=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PIPE01 )
-export DB_PIPE02=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PIPE02 )
-export PG_USERNAME=$( yq -r .global.psql.username ${VALUES} )
+export PG_USERNAME=admin
 
 ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
 if [ "$ksversion" -eq "0"  ]; then
@@ -53,14 +50,10 @@ kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-postgres-secret --f
 kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-pgbouncer-secret
 echo "Creating '${TARGET}-pgbouncer-secret' secret..."
 cat << EOF > userlist.txt
-"admin" "md5$(echo -n ${DB_ADMIN}admin | md5sum | cut -d' ' -f1)"
-"pipe01" "md5$(echo -n ${DB_PIPE01}pipe01 | md5sum | cut -d' ' -f1)"
-"pipe02" "md5$(echo -n ${DB_PIPE02}pipe02 | md5sum | cut -d' ' -f1)"
+"${PG_USERNAME}" "md5$(echo -n ${PG_PASSWORD}${PG_USERNAME} | md5sum | cut -d' ' -f1)"
 EOF
 cat << EOF > .pgpass
-*:*:compose:admin:${DB_ADMIN}
-*:*:compose:pipe01:${DB_PIPE01}
-*:*:compose:pipe02:${DB_PIPE02}
+*:*:compose:${PG_USERNAME}:${PG_PASSWORD}
 EOF
   
 kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-pgbouncer-secret  --from-file=userlist.txt --from-file=.pgpass
