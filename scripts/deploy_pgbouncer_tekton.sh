@@ -33,10 +33,11 @@ export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( ec
 # for yq 2.7.2
 export SECRET_PATH=$( yq -r .global.psql.secretPath ${VALUES} )
 
-export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PASSWORD )
 export DB_ADMIN=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_ADMIN )
 export DB_PIPE01=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PIPE01 )
 export DB_PIPE02=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.DB_PIPE02 )
+
+export PG_PASSWORD=$( ./vault read --format=json ${SECRET_PATH} | jq -r .data.PG_PASSWORD )
 export PG_USERNAME=$( yq -r .global.psql.username ${VALUES} )
 
 ksversion=$(ibmcloud plugin list | grep kubernetes | awk '{print $2}' | head -c1)
