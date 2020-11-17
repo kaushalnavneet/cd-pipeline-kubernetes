@@ -65,7 +65,7 @@ pipeline:
         DB_NAME: compose
         DB_PORT: "6432"
         DB_TYPE: postgresql
-        DB_USER: pipe01
+        DB_USER: admin
         HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
