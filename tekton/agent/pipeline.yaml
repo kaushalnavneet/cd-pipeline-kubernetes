@@ -21,7 +21,9 @@ spec:
     - name: envTag
       description: tag for the final dockerhub image
     - name: skipVA
-      description: skip VA 
+      description: skip VA
+    - name: operatorSDK
+      description: operator SDK 
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -47,6 +49,8 @@ spec:
         value: $(params.envTag)
       - name: skipVA
         value: $(params.skipVA)
+      - name: operatorSDK
+        value: $(params.operatorSDK)
     workspaces:
     - name: task-pvc
       workspace: pipeline-pvc 
