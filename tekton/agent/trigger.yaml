@@ -207,7 +207,7 @@ metadata:
 spec:
   params:
     - name: componentRevision
-      value: master
+      value: bog/0.18.1
     - name: envTag
       value: -dev
     - name: skipVA
