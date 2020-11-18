@@ -91,9 +91,9 @@ spec:
         fi
         CR_ID=$(cat $ID_FILE)
         
-        echo "Creating deploys file"
-        DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
-        cat cr/$ENVIRONMENT/*.csv > $DEPLOYS_FILE
+        #echo "Creating deploys file"
+        #DEPLOYS_FILE=cr/$ENVIRONMENT/deploys.csv
+        #cat cr/$ENVIRONMENT/*.csv > $DEPLOYS_FILE
         export TMP=/tmp/tmp_$$.txt
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
@@ -200,8 +200,11 @@ spec:
         git config --global push.default matching
         set +e
         git rm $ID_FILE
-        rm -f "$DEPLOYS_FILE"
-        git rm cr/$ENVIRONMENT/*.csv
+        #rm -f "$DEPLOYS_FILE"
+        CSV_FILES=$( echo cr/$ENVIRONMENT/*.csv )
+        if [ "$CSV_FILES" != "cr/$ENVIRONMENT/*.csv" ]; then
+          git rm cr/$ENVIRONMENT/*.csv
+        fi
         git commit -m "$CR_ID closed"
         n=0
         rc=0
