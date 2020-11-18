@@ -67,7 +67,7 @@ spec:
             value: $(params.envTag)
           - name: skipVA
             value: $(params.skipVA)
-           - name: operatorSDK
+          - name: operatorSDK
             value: $(params.operatorSDK)
 ---
 apiVersion: tekton.dev/v1beta1
