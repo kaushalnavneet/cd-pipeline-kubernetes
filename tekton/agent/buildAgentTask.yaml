@@ -45,6 +45,8 @@ spec:
       default: ''
     - name: environment
       default: ''
+    - name: operatorSDK
+      default: "true"
   workspaces:
   - name: task-pvc
     mountPath: /artifacts
@@ -77,7 +79,7 @@ spec:
       - name: DOCKER_IMAGE
         value: $(params.runBaseImage)
       - name: OPERATOR_SDK
-        value: "true"
+        value: $(params.operatorSDK)
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
       - name: IDS_USER
