@@ -67,6 +67,8 @@ spec:
             value: $(params.envTag)
           - name: skipVA
             value: $(params.skipVA)
+           - name: operatorSDK
+            value: $(params.operatorSDK)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -80,6 +82,8 @@ spec:
       value: ""
     - name: skipVA
       value: "false"
+    - name: operatorSDK
+      value: "true"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -104,6 +108,8 @@ spec:
       value: ""
     - name: skipVA
       value: "false"
+    - name: operatorSDK
+      value: "true"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -128,6 +134,8 @@ spec:
       value: ""
     - name: skipVA
       value: "false"
+    - name: operatorSDK
+      value: "true"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -152,6 +160,8 @@ spec:
       value: ""
     - name: skipVA
       value: "false"
+    - name: operatorSDK
+      value: "true"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -176,6 +186,8 @@ spec:
       value: -dev
     - name: skipVA
       value: "true"
+    - name: operatorSDK
+      value: "true"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -185,5 +197,31 @@ spec:
   triggers:
     - binding:
         name: agent-0.16.3-pipeline-binding-dev
+      template:
+        name: pipeline-template
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: agent-0.18.1-pipeline-binding-dev
+spec:
+  params:
+    - name: componentRevision
+      value: master
+    - name: envTag
+      value: -dev
+    - name: skipVA
+      value: "true"
+    - name: operatorSDK
+      value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: manual-agent-0.18.1-listener-dev
+spec:
+  triggers:
+    - binding:
+        name: agent-0.18.1-pipeline-binding-dev
       template:
         name: pipeline-template
