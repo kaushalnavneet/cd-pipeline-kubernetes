@@ -103,6 +103,8 @@ spec:
       - |
         set -e
 
+        echo "$OPERATOR_SDK"
+        
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
 
         export GOPATH=`pwd`
