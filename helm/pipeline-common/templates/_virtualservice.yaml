@@ -8,6 +8,13 @@ spec:
   gateways:
   - devops-gateway
   http:
+  # does this app have any custom_routes defined? e.g. pipeline-support-service
+  {{- if .Values.custom_routes }}
+  # " | indent 2 | trim" is a workaround for how toYaml behaves in helm 2 which may have been fixed in helm 3
+  # See https://github.com/helm/helm/pull/3837 and  https://github.com/helm/helm/issues/3854 
+  {{ toYaml .Values.custom_routes | indent 2 | trim }}
+  {{- end }}
+  # allow all other routes through to the app
   - route:
     - destination:
         host: {{ template "common.fullname" $ }}

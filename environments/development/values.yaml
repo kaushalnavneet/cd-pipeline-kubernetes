@@ -37,13 +37,15 @@ pipeline:
         USE_K8S: true
         SECGRP: GRP3DEVS
         CLOUDANT_URL: 'https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud'
+        CONSOLE_URL: 'https://dev.console.test.cloud.ibm.com'
+        ENV_ID: 'ibm:ys1:us-south'
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
     vault:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2019_04_25_15h37m28s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
@@ -57,12 +59,14 @@ pipeline:
         ARCHIVE_TYPE: s3ObjectStorage
         CA_FILE: ''
         CERT_FILE: keys/server.crt
+        CIPHER_ALGORITHM: aes-128-cbc
         DB_CA_PEM: ''
         DB_HOST: gitlab-pgbouncer
         DB_NAME: compose
         DB_PORT: "6432"
         DB_TYPE: postgresql
-        DB_USER: admin
+        DB_USER: pipe02
+        HMAC_ALGORITHM: sha1
         KEY_FILE: keys/server.key
         LOGS_EXCHANGE_NAME: reporting
         LOGS_QUEUE_MSG_TTL: "7200000"
@@ -142,7 +146,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         LOG_SERVICE_URL: https://pipeline-log-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.8.4-dev"
+        AGENT_VERSION: "0.9.0-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
         S3_STORAGE_REGION: us-standard
@@ -159,6 +163,8 @@ pipeline:
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
         ENABLE_MESSAGE_COMPRESSION: true
         ENABLE_RECORD_QUEUE_TIME: true
+        GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
+        RC_URL: https://resource-controller.test.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -179,7 +185,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2020_03_20_15h59m42s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2020_11_11_15h54m14s
     probes:
       readiness:
         path: "/version"
@@ -294,7 +300,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_03_20_15h36m22s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_11_09_14h44m53s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
     probes:
       liveness:
