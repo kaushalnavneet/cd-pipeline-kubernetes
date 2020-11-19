@@ -7,7 +7,7 @@ OLDIFS=$IFS
 
 ALL_REGIONS=${ALL_REGIONS:-syd,au-syd,tok,lon,wdc,dal,fra}
 REGION=${REGION:-us-south}
-ALL_DEPLOYMENTS=${ALL_DEPLOYMENTS:-blade-pipeline-broker,otc-github-relay-pub,otc-github-relay-sub,pipeline-artifact-repository-service,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-support-service,pipeline-ui,private-worker-service}
+ALL_DEPLOYMENTS=${ALL_DEPLOYMENTS:-blade-pipeline-broker,otc-github-relay-pub,pipeline-artifact-repository-service,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-support-service,pipeline-ui,private-worker-service}
 ALL_STATEFULSETS=${ALL_STATEFULSETS:-pipeline-consumption}
 
 ALL_PW_DEPLOYMENTS=${ALL_PW_DEPLOYMENTS:-cryptomining-detector}
