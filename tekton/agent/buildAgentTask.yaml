@@ -104,7 +104,7 @@ spec:
     args:
       - |
         set -e
-
+        pwd
         echo "$OPERATOR_SDK"
         
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
