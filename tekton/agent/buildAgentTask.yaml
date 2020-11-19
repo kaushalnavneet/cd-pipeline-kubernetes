@@ -104,7 +104,7 @@ spec:
     args:
       - |
         set -e
-        pwd
+        
         echo "$OPERATOR_SDK"
         
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
@@ -121,14 +121,15 @@ spec:
 
         ls -al
         #export GO111MODULE=on
-
+        pwd
 
         cp -a /work cd-pipeline-kubernetes
 
         IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
         IMAGE_URL=${IMAGE_URL:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_NAME}}
         COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
-        DOCKERFILE=${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
+        DOCKERFILE=Dockerfile
+        #${DOCKERFILE:-cd-pipeline-kubernetes/docker/Dockerfile.${DOCKER_IMAGE##*:}}
 
         ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
 
