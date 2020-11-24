@@ -34,6 +34,6 @@ spec:
       notNets:
       - 172.16.0.0/12
   order: 1000
-  selector: name == 'private-worker-agent'
+  selector: app == 'private-worker-agent'
   types:
   - Egress
