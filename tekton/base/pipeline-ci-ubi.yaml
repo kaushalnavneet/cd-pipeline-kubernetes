@@ -72,6 +72,24 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
+    - name: deploy
+      runAfter: [clone-config-repo]
+      taskRef:
+        name:  build-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-deploy-base
+        - name: imageTag
+          value: deploy
+        - name: tagSuffix
+          value: ''
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs12
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
     - name: go
       runAfter: [clone-config-repo]
       taskRef:
