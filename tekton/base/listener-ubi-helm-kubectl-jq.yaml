@@ -7,6 +7,7 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
+    - name: image_tag
 
     # CD integration
     - name: api
@@ -91,6 +92,8 @@ spec:
             value: $(params.source_branch)
           - name: source_directory
             value: $(params.source_directory)
+          - name: image_tag
+            value: $(params.image_tag)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -104,6 +107,8 @@ spec:
       value: "master"
     - name: source_directory
       value: "cd-pipeline-kubernetes"
+    - name: image_tag
+      value: $(params.helm-kubectl-jq-image-tag)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener

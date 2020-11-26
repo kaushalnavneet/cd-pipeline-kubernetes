@@ -7,6 +7,7 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
+    - name: image_tag
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -37,7 +38,7 @@ spec:
         - name: dockerFile
           value: docker/Dockerfile.helm-kubectl-jq_ubi
         - name: imageTag
-          value: ''
+          value: $(params.image_tag)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -53,7 +54,7 @@ spec:
         - name: runBaseImage
           value: ibmcom/pipeline-base-image:latest
         - name: imageTag
-          value: ''
+          value: $(params.image_tag)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
