@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: trigger-template-ubi-jq-kubectl
+  name: trigger-template-ubi-helm-kubectl-jq
 spec:
   params:
     - name: source_repo
@@ -61,7 +61,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-ubi-jq-kubectl-$(uid)-pvc
+        name: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -72,18 +72,17 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        #generateName: $(params.charts_branch)-base-run
-        name: $(params.charts_branch)-ubi-jq-kubectl-$(uid)
+        name: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "trigger-template-ci"
       spec:
         pipelineRef:
-          name: pipeline-base-ubi-jq-kubectl
+          name: pipeline-base-ubi-helm-kubectl-jq
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-ubi-jq-kubectl-$(uid)-pvc
+              claimName: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: source_repo
@@ -96,7 +95,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: trigger-binding-ubi-jq-kubectl
+  name: trigger-binding-ubi-helm-kubectl-jq
 spec:
   params:
     - name: source_repo
@@ -109,10 +108,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: pipeline-base-ubi-jq-kubectl
+  name: pipeline-base-ubi-helm-kubectl-jq
 spec:
   triggers:
     - binding:
-        name: trigger-binding-ubi-jq-kubectl
+        name: trigger-binding-ubi-helm-kubectl-jq
       template:
-        name: trigger-template-ubi-jq-kubectl
+        name: trigger-template-ubi-helm-kubectl-jq
