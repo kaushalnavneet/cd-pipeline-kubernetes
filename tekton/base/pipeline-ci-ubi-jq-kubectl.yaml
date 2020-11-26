@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-base-ubi-docker
+  name: pipeline-base-ubi-helm-kubectl-jq
 spec:
   params:
     - name: source_repo
@@ -23,7 +23,7 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc
-    - name: travis-jq-kubectl-secure
+    - name: travis-helm-kubectl-jq-secure
       runAfter: [clone-source-repo]
       taskRef:
         name: run-base
@@ -35,14 +35,14 @@ spec:
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
         - name: dockerFile
-          value: docker/Dockerfile.jq_kubectl_ubi
+          value: docker/Dockerfile.helm-kubectl-jq_ubi
         - name: imageTag
           value: ''
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: travis-jq-kubectl-secure-va
-      runAfter: [travis-docker-secure]
+    - name: travis-helm-kubectl-jq-secure-va
+      runAfter: [travis-helm-kubectl-jq-secure]
       taskRef:
         name: run-va
       params:
