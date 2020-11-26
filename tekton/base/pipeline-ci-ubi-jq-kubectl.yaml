@@ -37,7 +37,7 @@ spec:
         - name: dockerFile
           value: docker/Dockerfile.jq_kubectl_ubi
         - name: imageTag
-          value: '3.3.4'
+          value: ''
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -53,7 +53,7 @@ spec:
         - name: runBaseImage
           value: ibmcom/pipeline-base-image:latest
         - name: imageTag
-          value: '3.3.4'
+          value: ''
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
