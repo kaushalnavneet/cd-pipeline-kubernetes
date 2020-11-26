@@ -29,7 +29,7 @@ spec:
         name: run-base
       params:
         - name: source_directory
-          value: $(params.charts_directory)
+          value: $(params.source_directory)
         - name: imageUrl
           value: icr.io/continuous-delivery/pipeline/tekton/helm-kubectl-jq
         - name: runBaseImage
@@ -47,7 +47,7 @@ spec:
         name: run-va
       params:
         - name: source_directory
-          value: $(params.charts_directory)
+          value: $(params.source_directory)
         - name: imageUrl
           value: icr.io/continuous-delivery/pipeline/tekton/helm-kubectl-jq
         - name: runBaseImage
