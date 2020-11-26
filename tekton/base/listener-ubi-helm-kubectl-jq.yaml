@@ -61,7 +61,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)-pvc
+        name: helm-kubectl-jq-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -72,7 +72,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)
+        name: helm-kubectl-jq-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "trigger-template-ci"
@@ -82,7 +82,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-ubi-helm-kubectl-jq-$(uid)-pvc
+              claimName: helm-kubectl-jq-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: source_repo
