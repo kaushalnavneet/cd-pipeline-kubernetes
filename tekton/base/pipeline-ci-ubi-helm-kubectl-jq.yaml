@@ -55,6 +55,8 @@ spec:
           value: ibmcom/pipeline-base-image:latest
         - name: imageTag
           value: $(params.image_tag)
+        - name: registryScope
+          value: "global"
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc

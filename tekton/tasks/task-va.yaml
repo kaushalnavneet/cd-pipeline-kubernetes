@@ -18,6 +18,8 @@ spec:
     - name: runBaseImage
     - name: skipVA
       default: 'false'
+    - name: registryScope
+      default: 'us-south'
   stepTemplate:
     env:
       - name: API
@@ -81,6 +83,8 @@ spec:
         value: $(params.source_directory)
       - name: SKIP
         value: $(params.skipVA)
+      - name: REGISTRY_SCOPE
+        value: $(params.registryScope)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -97,6 +101,7 @@ spec:
         ibmcloud plugin install -f container-registry
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DOCKER_PASSWORD}
 
+        ibmcloud cr region-set ${REGISTRY_SCOPE}
         wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O /usr/bin/jq
         chmod +x /usr/bin/jq
         
