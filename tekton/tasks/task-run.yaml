@@ -177,7 +177,7 @@ spec:
         
         docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
         # For some reason this doesn't get repulled in docker engine
-        docker pull ${DOCKER_IMAGE}
+        #docker pull ${DOCKER_IMAGE}
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker pull command\"
             exit 1
