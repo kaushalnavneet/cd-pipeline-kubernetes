@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  labels:
+    app: pipeline-artifact-repository-service
+    release: pipeline-artifact-repository-service
+  name: pipeline-ars-long-name
+  namespace: opentoolchain
+spec:
+  gateways:
+  - private-gateway
+  hosts:
+  - pipeline-artifact-repository-service.private.eu-fr2.devops.cloud.ibm.com
+  http:
+  - route:
+    - destination:
+        host: pipeline-artifact-repository-service

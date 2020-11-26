@@ -2,10 +2,10 @@
   "service": "continuous-delivery-pipeline-ars-cse",
   "customer": "ibm",
   "serviceAddresses": [
-    "10.217.4.253",
-    "10.218.7.219",
-    "10.219.5.180"
-  ],
+    "10.217.4.250",
+    "10.218.7.220",
+    "10.219.5.182"
+],
   "hostname": "pipeline-artifact-repository-service.private.eu-fr2.devops.cloud.ibm.com",
   "maxSpeed": "1g",
   "region": "eu-fr2",

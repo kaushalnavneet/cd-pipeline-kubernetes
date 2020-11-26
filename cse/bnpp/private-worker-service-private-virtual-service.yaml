@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  labels:
+    app: private-worker-service
+    release: private-worker-service
+  name: private-worker-service-private-virtual-service
+  namespace: opentoolchain
+spec:
+  gateways:
+  - private-gateway
+  hosts:
+  - private-worker-service.private.eu-fr2.devops.cloud.ibm.com
+  http:
+  - route:
+    - destination:
+        host: private-worker-service
+ 
