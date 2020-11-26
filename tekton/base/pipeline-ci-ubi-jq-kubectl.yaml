@@ -24,7 +24,7 @@ spec:
       - name: output
         workspace: pipeline-pvc
     - name: travis-jq-kubectl-secure
-      runAfter: [clone-config-repo]
+      runAfter: [clone-source-repo]
       taskRef:
         name: run-base
       params:
