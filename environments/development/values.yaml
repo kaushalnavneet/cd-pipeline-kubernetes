@@ -39,6 +39,8 @@ pipeline:
         CLOUDANT_URL: 'https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud'
         CONSOLE_URL: 'https://dev.console.test.cloud.ibm.com'
         ENV_ID: 'ibm:ys1:us-south'
+        ENABLE_CLOUDANT_QUEUE: true
+        ENABLE_MESSAGE_COMPRESSION: true
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -91,24 +93,6 @@ pipeline:
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
         POST_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline/triggers/
-  otc-github-relay-sub:
-    replicas: 1
-    revisionHistoryLimit: 3
-    vault:
-      secretPaths:
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-sub/otc-github-relay-sub_2019_05_03_16h52m07s
-    configmap:
-      data:
-        AMQP_EXCHANGE: 'webhook-relay.fanout'
-        AMQP_MSG_EXP_TIME: 600000
-        AMQP_RECONNECT_TIMEOUT: 5
-        AMQP_QUEUE: webhook-relay.ys1-dev
-        AUTO_INIT_SUBSCRIBE: true
-        BASIC_USER: relay
-        LOG4JS_CONFIG_PATH: ''
-        NEW_RELIC_APP_NAME: otc-webhook-relay - YS1
-        POST_URL: https://devops-api.stage1.ng.bluemix.net/v1/pipeline/triggers/
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -146,7 +130,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         LOG_SERVICE_URL: https://pipeline-log-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.9.0-dev"
+        AGENT_VERSION: "0.9.1-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
         S3_STORAGE_REGION: us-standard
@@ -161,7 +145,6 @@ pipeline:
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
-        ENABLE_MESSAGE_COMPRESSION: true
         ENABLE_RECORD_QUEUE_TIME: true
         GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
         RC_URL: https://resource-controller.test.cloud.ibm.com

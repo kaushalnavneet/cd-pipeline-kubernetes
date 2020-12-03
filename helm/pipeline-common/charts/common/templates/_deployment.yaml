@@ -12,7 +12,7 @@ spec:
         app: {{ template "common.name" . }}
         release: {{ .Release.Name | quote }}
     spec:
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: 30
       containers:
       -
 {{ include "common.container.tpl" . | indent 8 }}
