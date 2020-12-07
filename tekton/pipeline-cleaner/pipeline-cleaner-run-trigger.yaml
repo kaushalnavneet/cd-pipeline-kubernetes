@@ -11,7 +11,14 @@ spec:
         name: cd-config
       data:
         PIPELINE_SERVER_URL: $(params.PIPELINE_SERVER_URL)
+        PWS_URL: $(params.PWS_URL)
+        HOURS_TO_KEEP: $(params.HOURS_TO_KEEP)
+        DAYS_TO_KEEP: $(params.DAYS_TO_KEEP)
+        S3_RESOURCES_BUCKET_NAME: $(params.S3_RESOURCES_BUCKET_NAME)
+        S3_STORAGE_REGION: $(params.S3_STORAGE_REGION)
+        S3_STORAGE_ENDPOINT: $(params.S3_STORAGE_ENDPOINT)
         CLEAN_TASK_MODULE: $(params.CLEAN_TASK_MODULE)
+        REQUEST_TIMEOUT: $(params.REQUEST_TIMEOUT)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -19,6 +26,9 @@ spec:
       type: Opaque
       stringData:
         CLOUDANT_URL: $(params.CLOUDANT_URL)
+        S3_STORAGE_ACCESS_KEY: $(params.S3_STORAGE_ACCESS_KEY)
+        S3_STORAGE_SECRET_KEY: $(params.S3_STORAGE_SECRET_KEY)
+        PIPELINE_CLEANER_IAM: $(params.PIPELINE_CLEANER_IAM)
         CLOUDANT_IAM_API_KEY: $(params.CLOUDANT_IAM_API_KEY)
         PIPELINE_BASIC_AUTH_TOKEN: $(params.PIPELINE_BASIC_AUTH_TOKEN)
 

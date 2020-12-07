@@ -17,6 +17,21 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: PIPELINE_BASIC_AUTH_TOKEN
+      - name: PIPELINE_CLEANER_IAM
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: PIPELINE_CLEANER_IAM
+      - name: S3_STORAGE_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: S3_STORAGE_ACCESS_KEY
+      - name: S3_STORAGE_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: S3_STORAGE_SECRET_KEY
       - name: CLOUDANT_IAM_API_KEY
         valueFrom:
           secretKeyRef:
@@ -32,11 +47,46 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: PIPELINE_SERVER_URL
+      - name: PWS_URL
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: PWS_URL
+      - name: HOURS_TO_KEEP 
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: HOURS_TO_KEEP
+      - name: DAYS_TO_KEEP 
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: DAYS_TO_KEEP
+      - name: S3_RESOURCES_BUCKET_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: S3_RESOURCES_BUCKET_NAME
+      - name: S3_STORAGE_REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: S3_STORAGE_REGION
+      - name: S3_STORAGE_ENDPOINT
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: S3_STORAGE_ENDPOINT
       - name: CLEAN_TASK_MODULE
         valueFrom:
           configMapKeyRef:
             name: cd-config
             key: CLEAN_TASK_MODULE
+      - name: REQUEST_TIMEOUT
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REQUEST_TIMEOUT
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
