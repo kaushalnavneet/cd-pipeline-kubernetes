@@ -23,8 +23,10 @@ rm v.zip
 export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
 
 # must set base64 encoded VAULT_SIDEKICK_ROLE_ID and VAULT_SIDEKICK_SECRET_ID
-export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID | base64 -d - ) \
-  secret_id=$( echo $VAULT_SIDEKICK_SECRET_ID | base64 -d - ))
+#export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID | base64 -d - ) \
+#  secret_id=$( echo $VAULT_SIDEKICK_SECRET_ID | base64 -d - ))
+export VAULT_TOKEN=$(./vault write -field=token auth/approle/login role_id=$( echo $VAULT_SIDEKICK_ROLE_ID ) \
+  secret_id=$( echo $VAULT_SIDEKICK_SECRET_ID ))
 
 
 # for yq 2.2.1
