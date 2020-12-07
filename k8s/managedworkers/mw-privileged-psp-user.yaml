@@ -22,6 +22,3 @@ subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: Group
   name: system:serviceaccounts:ibm-services-system
-- apiGroup: rbac.authorization.k8s.io
-  kind: Group
-  name: system:serviceaccounts:tekton-pipelines
