@@ -201,7 +201,9 @@ Checkpoint: At this stage you have exported and decrypted the pipeline runs loca
 
 ### Setup Pipelines Calling Pipelines
 
-1. Before running the main pipeline via the subpipe.js script, we need to provide an input file that details the main pipeline to run, any parameters we want to change in the main pipeline task and any mappings we might need in other pipelines. For this example we are going create a file that uses `main` as the main pipeline. We add entries to the mapping array that map main to the actual filename we decryped for the main file, and add other mappings for `e2e-tests.json` and `deployer.json`. 
+Before running the main pipeline via the subpipe.js script, we need to provide an input file that details the main pipeline to run, any parameters we want to change in the main pipeline task and any mappings we might need in other pipelines. 
+
+For this example we are going create a file that uses `main` as the main pipeline. We add entries to the mapping array that map main to the actual filename we decryped for the main file, and add other mappings for `e2e-tests.json` and `deployer.json`. 
 
 In our scripts we will launch pipelines called e2e-tests.json and deployer.json. The subpipe.js script will use this mapping table to look up the files to use. This is done to allow us to write the scripts once and not have to change it every time a file name changes.
 
@@ -225,3 +227,12 @@ In our scripts we will launch pipelines called e2e-tests.json and deployer.json.
   }
 ```
 
+### Run Pipelines Calling Pipelines
+
+Finally to run the pipeline, all we need to do is `node subpipe [INPUT FILE]`.
+
+To observe the pipelines, it is suggested you install the local tekton dashboard:
+
+1. `kubectl apply --filename https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml`
+2. Easiest way to view it is by using port-forward: `kubectl --namespace tekton-pipelines port-forward service/tekton-dashboard 9097:9097`
+3. You can then watch the action by going to `http://localhost:9097/#/pipelineruns`
