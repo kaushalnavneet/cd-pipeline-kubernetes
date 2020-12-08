@@ -229,7 +229,10 @@ In our scripts we will launch pipelines called e2e-tests.json and deployer.json.
 
 ### Run Pipelines Calling Pipelines
 
-Finally to run the pipeline, all we need to do is `node subpipe [INPUT FILE]`.
+Finally to run the pipeline, all we need to do is:
+
+1. `npm install`
+2. `node subpipe [INPUT FILE]`.
 
 To observe the pipelines, it is suggested you install the local tekton dashboard:
 
