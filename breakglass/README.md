@@ -72,3 +72,14 @@ Some things to note:
 * the mappings array contains a mapping of pipeline names -> local file names. The intent is to avoid having to touch your  Task code anytime you download a new exported version of a pipeline run. You can use the pipeline name in the script, put the current file name in the file: field of the mappings and the helper app will do the look up.
 * the first pipeline entry is the pipeline name of the main pipeline to run
 * the params array represent parameters in the tasks of the main pipeline that are to be replaced with the provided values
+
+To see how a pipeline is supposed to call another pipeline, let's take a closer look at main_task.yaml in subpipe/sample/.tekton/main/. This file contains the main tasks for the main pipeline.
+
+If you look carefully at the build-task job you'll notice this in the results section:
+```
+  results:
+      - name: localpipeline-run-tests
+        description: test pipeline to run - name mapped to real file in pipelines-final.json
+      - name: localpipeline-run-tests-param-1
+        description: sample param to pass to launched pipeline
+```
