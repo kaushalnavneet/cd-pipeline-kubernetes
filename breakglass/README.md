@@ -85,3 +85,26 @@ If you look carefully at the build-task job you'll notice this in the results se
 ```
 
 This is the signaling mechansim from within a running pipeline. When the helper app detects one of these results, it will take the appropriate action and spin up the next pipeline.
+
+Here is the actual code that writes out the values to the results. Something to notice:
+
+* localpipeline-run-tests is used to write out the next pipeline mapping (the e2e-tests.json value has a mapping table look up entry that points to the real downloaded local pipeline file to use
+* localpipeline-run-tests-param-1 contains the parameter override in the run-cleanup-tests job. This is the mechanism for overriding parameters in the next pipeling.
+
+The format in the name is useful to observe as well:
+
+localpipeline-run-[name_var] for pipelines
+localpipeline-run-[name_var]-parama-[number] for parameters
+
+You can have as many parameters as you want but [number] needs to be unique and the payload needs to exist (ie. task must actually exist in the pipeline etc)
+
+```
+    - name: launch-test-suite
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Launching test pipeline";
+          echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
+          echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path); 
+ ```
