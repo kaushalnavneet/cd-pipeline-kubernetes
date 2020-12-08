@@ -185,7 +185,7 @@ In order to be able to run the pipeline locally, you first need to obtain a loca
 4. Once the file is downloaded, create a new work directory and copy the localRun file over.
 5. Copy over the following utils from this repo to your work dir:
   * [decrypt.sh](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/decrypt.sh)
-  * [subpipe.js](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/subpipe.js)
+  * [subpipe.js](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/subpipe.js) + the package.json file from the subpipe dire
 6. To decrypt each local pipeline:
   * `chmod +x decrypt.sh`
   * `decrypt.sh [localRun_file] [AES key]`
