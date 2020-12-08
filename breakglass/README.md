@@ -6,6 +6,9 @@ There are 2 main parts to this support:
 * Running an exported pipeline by itself
 * Running an exported pipeline that calls a number of other exported pipelines (ie. *pipelines calling pipelines* or *subpipelines*)
 
+Contents of this folder:
+* decrypt.sh -  shell script for decrypting a downloaded pipeline payload (see Single Pipeline section for instructions)
+* subpipe - folder that contains helper app and examples for running a local pipeline that calls another pipeline
 
 ## Single Pipeline
 
