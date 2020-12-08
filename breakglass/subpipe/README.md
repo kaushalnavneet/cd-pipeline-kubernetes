@@ -184,5 +184,44 @@ In order to be able to run the pipeline locally, you first need to obtain a loca
 3. To download the pipelines, click on Run Pipeline, check the Export Pipeline Run box and click Run. Instead of kicking off a new pipeline run, you will get a new file download called localRun. 
 4. Once the file is downloaded, create a new work directory and copy the localRun file over.
 5. Copy over the following utils from this repo to your work dir:
- * [decrypt.sh](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/decrypt.sh)
- * [subpipe.js](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/subpipe.js)
+  * [decrypt.sh](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/decrypt.sh)
+  * [subpipe.js](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/subpipe.js)
+6. To decrypt each local pipeline:
+  * `chmod +x decrypt.sh`
+  * `decrypt.sh [localRun_file] [AES key]`
+7. The decrypted file will be labeled with the name you gave the listener + a timestamp. For example:
+```
+tests-test-listener-local-2020-12-08-212904utc.json
+main-main-listener-local-2020-12-08-220425utc.json
+deploy-deploy-listener-local-2020-12-08-220618utc.json
+```
+
+Checkpoint: At this stage you have exported and decrypted the pipeline runs locally.
+
+
+### Setup Pipelines Calling Pipelines
+
+1. Before running the main pipeline via the subpipe.js script, we need to provide an input file that details the main pipeline to run, any parameters we want to change in the main pipeline task and any mappings we might need in other pipelines. For this example we are going create a file that uses `main` as the main pipeline. We add entries to the mapping array that map main to the actual filename we decryped for the main file, and add other mappings for `e2e-tests.json` and `deployer.json`. 
+
+In our scripts we will launch pipelines called e2e-tests.json and deployer.json. The subpipe.js script will use this mapping table to look up the files to use. This is done to allow us to write the scripts once and not have to change it every time a file name changes.
+
+```
+{
+    "pipeline": "main",
+      "mappings": [
+          {
+              "pipeline": "e2e-tests.json",
+              "file": "tests-test-listener-local-2020-12-08-212904utc.json"
+          },
+          {
+            "pipeline": "main",
+            "file": "main-main-listener-local-2020-12-08-220425utc.json"
+          },
+          {
+            "pipeline": "deployer.json",
+            "file": "deploy-deploy-listener-local-2020-12-08-220618utc.json"
+          }
+      ]
+  }
+```
+
