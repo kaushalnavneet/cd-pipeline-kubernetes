@@ -68,6 +68,24 @@ function printUsage() {
     console.log(JSON.stringify(input));
 }
 
+function addToStep(step, name, value) {
+        let newStep = {name: name, value: value};
+        if (!step.env) {
+            step.env = [];
+        }
+        step.env.push(newStep);
+    
+    return step;
+}
+
+function injectEnvVar(element, name, value) {
+    if (element.spec.steps) {
+        let steps_final = element.spec.steps.map(step => addToStep(step, name, value));
+        element.spec.steps = steps_final;
+    }
+    return element;
+}
+
 function subInSteps(steps, element) {
     if (steps.env) {
         for (let index = 0; index < steps.env.length; index++) {
@@ -92,15 +110,17 @@ function subInParams(params, element) {
 function subInResource(resource, params) {
     let temp = JSON.parse(resource);
     if (temp.kind === "Task") {
-        for (let index = 0; index < params.length; index++) {
-            const element = params[index];
-            if (temp.metadata.name === element.task) {
-                //first go through params and look for defaults
-                let steps_params = temp.spec.params.map(param => subInParams(param, element));
-                temp.spec.params = steps_params;
-                //next go through each step and override the env var
-                let steps_final = temp.spec.steps.map(step => subInSteps(step, element));
-                temp.spec.steps = steps_final;
+        if (params) {
+            for (let index = 0; index < params.length; index++) {
+                const element = params[index];
+                if (temp.metadata.name === element.task) {
+                    //first go through params and look for defaults
+                    let steps_params = temp.spec.params.map(param => subInParams(param, element));
+                    temp.spec.params = steps_params;
+                    //next go through each step and override the env var
+                    let steps_final = temp.spec.steps.map(step => subInSteps(step, element));
+                    temp.spec.steps = steps_final;
+                }
             }
         }
         return JSON.stringify(temp);
@@ -178,10 +198,10 @@ if (res.mappings) {
 let mainFile =  await subParams(res);
 
 //get ns
-//let original_namespace = extractNamespace(mainFile);
+let main_pipeline_id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 let timestamp =  new Date(Date.now());
 let date = timestamp.getFullYear().toString() +  (timestamp.getMonth() + 1).toString() + timestamp.getDate().toString() + timestamp.getUTCHours().toString() + timestamp.getUTCMinutes().toString() + timestamp.getUTCSeconds().toString();
-let generated_namespace =  "pw-" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + "-local-" + date;
+let generated_namespace =  "pw-" + main_pipeline_id + "-local-" + date;
 
 //grant super powers
 let permissions = [];
@@ -199,9 +219,16 @@ let finalResources = (mainFile.spec.payload.resources).map(resource => {
     if (temp.kind === "PipelineRun") {
         temp.metadata.namespace = generated_namespace;
         //add Service Account
-        temp.spec.serviceAccountName = "agent-localpipeline"
+        temp.spec.serviceAccountName = "agent-localpipeline";
+        temp.metadata.labels = {localmainpipelineid: main_pipeline_id};
         return JSON.stringify(temp);
-    } 
+    } else if (temp.kind === "Task") {
+        temp.metadata.namespace = generated_namespace;
+        //add ENV VAR with sub id
+        injectEnvVar(temp, "PIPELINE_SUB_ID", main_pipeline_id);
+        injectEnvVar(temp, "BREAK_GLASS", "true");
+        return JSON.stringify(temp);
+    }
     temp.metadata.namespace = generated_namespace;
     return JSON.stringify(temp);
 });
@@ -237,7 +264,7 @@ async function launchPipeline(pipelineMap) {
             let generated_namespace =  "pw-" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + "-local";
             pipelinerun_ns[generated_namespace] = {"done": false, counter: 0};
             //
-            let finalResources = (mainFile.spec.payload.resources).map(resource => {
+            let finalResources = (nextFile.spec.payload.resources).map(resource => {
                 let temp = JSON.parse(resource);
                 if (temp.kind === "Namespace") {
                     temp.metadata.name = generated_namespace;
@@ -245,8 +272,7 @@ async function launchPipeline(pipelineMap) {
                 }
                 if (temp.kind === "PipelineRun") {
                     temp.metadata.namespace = generated_namespace;
-                    //add Service Account
-                    temp.spec.serviceAccountName = "agent-localpipeline"
+                    temp.metadata.labels = {localsubpipelineid: main_pipeline_id};
                     return JSON.stringify(temp);
                 } 
                 temp.metadata.namespace = generated_namespace;
@@ -284,7 +310,7 @@ const looper2 = async () => {
                 } else {
                     //full check
                     if (prlist[i].metadata.namespace.startsWith(key)) {
-                        if (prlist[i].status.completionTime) {
+                        if (prlist[i].status && prlist[i].status.completionTime) {
                             console.log("Pipeline Run done " + prlist[i].metadata.namespace);
                             let count = value.counter + 1;
                             pipelinerun_ns[key] = {"done": true, counter: count};
