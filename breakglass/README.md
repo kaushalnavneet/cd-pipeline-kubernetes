@@ -22,4 +22,48 @@ There are 3 folders inside .tekton, each containing a different pipeline:
 * main
 * tests
 
+Each pipeline is made up of 3 files, a listener file that contains a single listener, a pipeline file that defines the pipeline and tasks, and a task file that contains all the tasks required by the pipeline.
 
+For this example, the main pipeline does some work and then kicks off the test pipeline. The main pipeline then waits around for the test pipeline to finish before starting off a deploy pipeline. The main pipeline once again waits for the deploy pipeline to finish before it finishes it's own last tasks.
+
+### Synchronization Mechanics
+
+In order to kick off and interact with other pipelines, there needs to some overall orchestrating component. This comes in the form of the helper nodejs application found in the subpipe folder called subpipe.js.
+
+subpipe takes as input a json file that contains the start parameters - the name of the first pipeline to kick off as well as any parameters that need to be overwritten. Consider this sample pipeline entry file (called pipeline-entry.json):
+
+```
+{
+    "pipeline": "main",
+    "params": [
+        {
+            "task":"build-task",
+            "name":"revision",
+            "value":"bog/local"
+        },{
+            "task":"build-task",
+            "name":"registryRegion",
+            "value":"eu-gb"
+        },{
+            "task":"build-task",
+            "name":"imageName",
+            "value":"alpine"
+            
+        },{
+            "task":"validate-task",
+            "name":"repository",
+            "value":"https://github.com/bogg/hello-tekton/tree/bog/local"
+        }
+      ],
+      "mappings": [
+          {
+              "pipeline": "bog-pipeline",
+              "file": "hello2-local.json"
+          },
+          {
+            "pipeline": "main",
+            "file": "mainpipe.json"
+          }
+      ]
+  }
+```
