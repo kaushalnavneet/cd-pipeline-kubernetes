@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-with-kubectl
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the revision
+      default: master
+    - name: cluster
+      description: the cluster
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      env:
+        - name: REPOSITORY
+          value: $(params.repository)
+        - name: REVISION
+          value: $(params.revision)
+      command: ["/bin/sh", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Cloning $REPOSITORY";
+          cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
+    - name: deploy
+      image: ibmcom/pipeline-base-image
+      env:
+        - name: CLUSTER
+          value: $(params.cluster)
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Deploying to $CLUSTER";
+          sleep 30s;
+          echo "Done!"
