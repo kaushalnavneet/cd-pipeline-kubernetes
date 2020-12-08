@@ -83,3 +83,5 @@ If you look carefully at the build-task job you'll notice this in the results se
       - name: localpipeline-run-tests-param-1
         description: sample param to pass to launched pipeline
 ```
+
+This is the signaling mechansim from within a running pipeline. When the helper app detects one of these results, it will take the appropriate action and spin up the next pipeline.
