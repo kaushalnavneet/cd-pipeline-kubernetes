@@ -169,10 +169,20 @@ Here are the step by step instructions on how to run the pipeline.
       * set the definition to your git repo and the path .tekton/deploy
       * create a new manual trigger
       * select a worker (either add/create a private worker or select the IBM Managed Worker)
+      
 Checkpoint: At this stage you should be able to run any of these pipelines normally from the UI. Note they aren't set up to call each other in the remote case so they will just run to completion.
 
 ### Export Pipeline Runs
 
 In order to be able to run the pipeline locally, you first need to obtain a local copy of the pipeline run. To do this:
 
-
+1. Generate a 256-bit AES key (for example from here https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx). Make sure it is in hex format (there is an option in the www.allkeysgenerator.com for hex)
+2. Repeat these steps for each pipeline (main, tests and deploy):
+  * Click on the pipeline and go to the Other Settings tab.
+  * Check the Enable Pipeline Run Export box and hit Save
+  * Go the Environment Properties tab. Add a new secure property called `localrun_aes_key` and paste the generated hex AES key as the value. Hit Save when done.
+3. To download the pipelines, click on Run Pipeline, check the Export Pipeline Run box and click Run. Instead of kicking off a new pipeline run, you will get a new file download called localRun. 
+4. Once the file is downloaded, create a new work directory and copy the localRun file over.
+5. Copy over the following utils from this repo to your work dir:
+ * [decrypt.sh](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/decrypt.sh)
+ * [subpipe.js](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/subpipe.js)
