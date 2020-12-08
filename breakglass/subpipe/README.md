@@ -160,13 +160,15 @@ Here are the step by step instructions on how to run the pipeline.
 3. In your main pipeline:
       * set the definition to your git repo and the path .tekton/main
       * create a new manual trigger
+      * select a worker (either add/create a private worker or select the IBM Managed Worker)
 4. In your tests pipeline:
       * set the definition to your git repo and the path .tekton/tests
       * create a new manual trigger
+      * select a worker (either add/create a private worker or select the IBM Managed Worker)
 5. In your deploy pipeline:
       * set the definition to your git repo and the path .tekton/deploy
       * create a new manual trigger
-
+      * select a worker (either add/create a private worker or select the IBM Managed Worker)
 Checkpoint: At this stage you should be able to run any of these pipelines normally from the UI. Note they aren't set up to call each other in the remote case so they will just run to completion.
 
 ### Export Pipeline Runs
