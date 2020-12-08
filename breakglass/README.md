@@ -133,3 +133,17 @@ You can have as many parameters as you want but [number] needs to be unique and 
             echo "Done!"
           fi
 ```
+
+We first check to see if the BREAK_GLASS env var is defined (this gets automatically injected as an env var by the helper app when running pipeline calling pipeline). If we are in the break glass mode we make use of the kubectl cli (provided by the ibmcom/pipeline-base-image:2.7) to inspect the pipeline runs on the cluster.
+
+```
+"$(kubectl get pipelinerun --selector tekton.dev/pipeline=e2e-tests,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" 
+```
+
+The point of interest here is the values used for the selector. In this case we are looking for a pipeline called e2e-tests. To look for another pipeline just change the name. For example:
+
+```
+--selector tekton.dev/pipeline=[PIPELINE NAME HERE],localsubpipelineid=$PIPELINE_SUB_ID 
+```
+
+The $PIPELINE_SUB_ID part is a unique identifier that gets automatically injected into each pipeline run. It allows you to distinguish the current pipeline run from previous ones. 
