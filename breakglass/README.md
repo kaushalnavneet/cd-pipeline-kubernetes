@@ -13,4 +13,13 @@ There are 2 main parts to this support:
 
 It can be convenient to organize an entire workflow amongst multiple pipelines and have a main pipeline invoke the other sub-pipelines as needed.
 
-Unfortunately, Tekton does not offer this functionality at the moment.
+Unfortunately, Tekton does not offer this functionality nativel at the moment. However with some helper apps and some careful writing of the tasks, it is possible to synthesize this workflow right now.
+
+For the purpose of this example, we will examine the pipelines contained in the sample/.tekon folder.
+
+There are 3 folders inside .tekton, each containing a different pipeline:
+* deploy
+* main
+* tests
+
+
