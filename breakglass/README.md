@@ -108,3 +108,28 @@ You can have as many parameters as you want but [number] needs to be unique and 
           echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
           echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path); 
  ```
+ 
+ ### Waiting Mechanics 
+ 
+ The split side of launching is being able to detect when a pipeline that you have launched has completed running. As a result of running the main pipeline with the helper app, the main pipeline has the ability to interact with the cluster and make kubectl calls.
+ 
+ This allows you to write script in a task that queries the cluster to determine if a launched pipeline is finished. Consider the following block from the *wait-for-tests* job in the sample main_task.yaml:
+
+```
+    - name: wait-until-done
+      image: ibmcom/pipeline-base-image:2.7
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          set -e
+          if [[ -z "${BREAK_GLASS}" ]]; then
+            echo "Running in reguar mode, will curl for pipeline to finish"
+          else
+            echo "Break glass mode detected"
+            while [ "$(kubectl get pipelinerun --selector tekton.dev/pipeline=e2e-tests,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+              echo "Waiting for pipleinerun in $latestns to finish"
+              sleep 5
+            done
+            echo "Done!"
+          fi
+```
