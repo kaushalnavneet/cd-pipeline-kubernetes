@@ -67,3 +67,8 @@ subpipe takes as input a json file that contains the start parameters - the name
       ]
   }
 ```
+
+Some things to note:
+* the mappings array contains a mapping of pipeline names -> local file names. The intent is to avoid having to touch your  Task code anytime you download a new exported version of a pipeline run. You can use the pipeline name in the script, put the current file name in the file: field of the mappings and the helper app will do the look up.
+* the first pipeline entry is the pipeline name of the main pipeline to run
+* the params array represent parameters in the tasks of the main pipeline that are to be replaced with the provided values
