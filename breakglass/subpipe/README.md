@@ -10,7 +10,7 @@ This folder contains a small node helper app and some examples of local pipeline
 * pipeline-entry.json - an example of an input file that overrides some params in the default pipeline
 * subpipe.js - the node helper app that serves as an orchestrator for pipelines calling pipelines
 
-## Details
+## Pipelines Calling Pipelines
 
 It can be convenient to organize an entire workflow amongst multiple pipelines and have a main pipeline invoke the other sub-pipelines as needed.
 
@@ -148,4 +148,29 @@ The point of interest here is the values used for the selector. In this case we 
 ```
 
 The $PIPELINE_SUB_ID part is a unique identifier that gets automatically injected into each pipeline run. It allows you to distinguish the current pipeline run from previous ones. 
+
+## Running the sample
+
+Here are the step by step instructions on how to run the pipeline.
+
+### Create Pipelines
+
+1. Create a new toolchain and populate it with a new GitHub repo and 3 tekton pipelines called main, tests and deploy.
+2. Clone your new GitHub repo locally and copy over the .tekton folder from this repo and push the changes.
+3. In your main pipeline:
+      * set the definition to your git repo and the path .tekton/main
+      * create a new manual trigger
+4. In your tests pipeline:
+      * set the definition to your git repo and the path .tekton/tests
+      * create a new manual trigger
+5. In your deploy pipeline:
+      * set the definition to your git repo and the path .tekton/deploy
+      * create a new manual trigger
+
+Checkpoint: At this stage you should be able to run any of these pipelines normally from the UI. Note they aren't set up to call each other in the remote case so they will just run to completion.
+
+### Export Pipeline Runs
+
+In order to be able to run the pipeline locally, you first need to obtain a local copy of the pipeline run. To do this:
+
 
