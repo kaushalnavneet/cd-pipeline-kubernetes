@@ -207,6 +207,8 @@ For this example we are going create a file that uses `main` as the main pipelin
 
 In our scripts we will launch pipelines called e2e-tests.json and deployer.json. The subpipe.js script will use this mapping table to look up the files to use. This is done to allow us to write the scripts once and not have to change it every time a file name changes.
 
+Here is an example of the file that can be used to run the sample. NOTE you will have to change the file names for the e2e-tests.json, main and deployer.json parts to match the filenames you decypted after downloading the pipeline runs. The example won't run without the proper filenames.
+
 ```
 {
     "pipeline": "main",
