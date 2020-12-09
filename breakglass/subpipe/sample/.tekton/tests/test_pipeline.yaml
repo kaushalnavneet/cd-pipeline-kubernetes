@@ -1,0 +1,44 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: e2e-tests
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the branch for the git repo
+  workspaces:
+  - name: pipeline-pvc
+  tasks:  
+    - name: run-e2e-tests
+      taskRef:
+        name: run-e2e-tests
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc  
+    - name: run-api-tests
+      taskRef:
+        name: run-api-tests
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc        
+    - name: run-cleanup-tests
+      runAfter: [run-e2e-tests,run-api-tests]
+      taskRef:
+        name: run-cleanup-tests
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: revision
+          value: $(params.revision)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: cleanup
+      runAfter: [run-cleanup-tests]
+      taskRef:
+        name: cleanup
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc

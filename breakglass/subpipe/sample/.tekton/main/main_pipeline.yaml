@@ -1,0 +1,52 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: main-pipeline
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the branch for the git repo
+  workspaces:
+  - name: pipeline-pvc
+  tasks:  
+    - name: build-task
+      taskRef:
+        name: build-task
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: revision
+          value: $(params.revision)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc  
+    - name: wait-for-tests
+      runAfter: [build-task]
+      taskRef:
+        name: wait-for-tests
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc        
+    - name: deploy
+      runAfter: [wait-for-tests]
+      taskRef:
+        name: deploy
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: wait-for-deploy
+      runAfter: [deploy]
+      taskRef:
+        name: wait-for-deploy
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: cleanup
+      runAfter: [wait-for-deploy]
+      taskRef:
+        name: cleanup
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc

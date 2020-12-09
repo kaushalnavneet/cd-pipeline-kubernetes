@@ -1,0 +1,20 @@
+{
+    "pipeline": "main",
+      "mappings": [
+          {
+              "pipeline": "e2e-tests.json",
+              "file": "subpipes-tests-test-listener-local-2020-12-07-220400utc.json"
+          },
+          {
+            "pipeline": "main",
+            "file": "subpipes-main-listener-local-2020-12-07-231046utc.json"
+          },
+          {
+            "pipeline": "deployer.json",
+            "file": "subpipes-deploy-deploy-listener-local-2020-12-07-221409utc.json"
+          }
+      ]
+  }
+
+
+  

@@ -1,0 +1,137 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-task
+  annotations:
+    io.kubernetes.cri.untrusted-workload: "false"
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: revision
+      description: the revision
+      default: master
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts
+  results:
+      - name: localpipeline-run-tests
+        description: test pipeline to run - name mapped to real file in pipelines-final.json
+      - name: localpipeline-run-tests-param-1
+        description: sample param to pass to launched pipeline
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      env:
+        - name: REPOSITORY
+          value: $(params.repository)
+        - name: REVISION
+          value: $(params.revision)
+      command: ["/bin/sh", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Cloning $REPOSITORY";
+          cd /workspace && git clone -q -b $REVISION $REPOSITORY .;
+    - name: pre-build-check
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "hi";
+          env;
+    - name: launch-test-suite
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Launching test pipeline";
+          echo -n "e2e-tests.json" > $(results.localpipeline-run-tests.path);
+          echo -n "{\"task\":\"run-cleanup-tests\", \"name\":\"repository\", \"value\":\"https://github.com/bogg/orion.server\" }" > $(results.localpipeline-run-tests-param-1.path);
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: wait-for-tests
+spec:
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts 
+  steps:
+    - name: wait-until-done
+      image: ibmcom/pipeline-base-image:2.7
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          set -e
+          if [[ -z "${BREAK_GLASS}" ]]; then
+            echo "Running in reguar mode, will curl for pipeline to finish"
+          else
+            echo "Break glass mode detected"
+            while [ "$(kubectl get pipelinerun --selector tekton.dev/pipeline=e2e-tests,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+              echo "Waiting for pipleinerun in $latestns to finish"
+              sleep 5
+            done
+            echo "Done!"
+          fi
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts    
+  results:
+      - name: localpipeline-run-deploy
+        description: deploy pipeline to run - name mapped to real file in pipelines-final.json    
+  steps:
+    - name: deploy-with-kubectl
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "Launching deploy pipeline";
+          echo -n "deployer.json" > $(results.localpipeline-run-deploy.path);
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: wait-for-deploy
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: wait-until-deploy-done
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          set -e
+          if [[ -z "${BREAK_GLASS}" ]]; then
+            echo "Running in reguar mode, will curl for pipeline to finish"
+          else
+            echo "Break glass mode detected"
+            while [ "$(kubectl get pipelinerun  --selector tekton.dev/pipeline=deploy-pipeline,localsubpipelineid=$PIPELINE_SUB_ID --all-namespaces -o=custom-columns=NAME:.status.completionTime --no-headers)" == "<none>" ]; do
+              echo "Waiting for pipleinerun in $latestns to finish"
+              sleep 5
+            done
+            echo "Done!"
+          fi
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup
+spec: 
+  workspaces:
+  - name: task-pvc
+    mountPath: /artifacts         
+  steps:
+    - name: cleanup
+      image: ibmcom/pipeline-base-image
+      command: ["/bin/bash", "-c"]
+      args:
+        - set -e -o pipefail;
+          echo "cleanup"
