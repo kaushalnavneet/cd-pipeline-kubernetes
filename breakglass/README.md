@@ -16,4 +16,4 @@ Contents of this folder:
 
 It can be convenient to organize an entire workflow amongst multiple pipelines and have a main pipeline invoke the other sub-pipelines as needed.
 
-Unfortunately, Tekton does not offer this functionality nativel at the moment. However with some helper apps and some careful writing of the tasks, it is possible to synthesize this workflow right now. For an in-depth explanation take a look at the [README.MD in the subpipes folder](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/README.md)
+Unfortunately, this functionality is not built into Tekton at the moment. However with some helper apps and some careful writing of the tasks, it is possible to synthesize this workflow right now. For an in-depth explanation take a look at the [README.MD in the subpipes folder](https://github.ibm.com/org-ids/cd-pipeline-kubernetes/blob/master/breakglass/subpipe/README.md)
