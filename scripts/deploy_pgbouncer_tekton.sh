@@ -7,6 +7,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+set -eou pipefail
 CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
 TARGET=${TARGET:-gitlab}
 ENVIRONMENT=${ENVIRONMENT:-development}
