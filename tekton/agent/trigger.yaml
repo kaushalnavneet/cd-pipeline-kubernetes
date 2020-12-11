@@ -180,7 +180,7 @@ spec:
       value: ""
     - name: skipVA
       value: "false"
-   - name: skipOldAgentBuild
+    - name: skipOldAgentBuild
       default: "true"
     - name: skipNewAgentBuild
       default: "false"
