@@ -21,7 +21,7 @@ spec:
       containers:
       - name: travis-registry
         imagePullPolicy: IfNotPresent
-        image: us.icr.io/devopsotc/travis-registry:1.0
+        image: us.icr.io/devopsotc/travis-registry:1.1
         ports:
         - containerPort: 5000
         volumeMounts:
