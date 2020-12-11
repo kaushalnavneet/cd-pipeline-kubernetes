@@ -190,7 +190,7 @@ spec:
         docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
         docker push ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION}${ENV_TAG}
         echo "###########################################"
-  - name: buildCurrentAgent
+  - name: build-current-agent
     image: $(params.runBaseImage)
     volumeMounts:
       - mountPath: /var/run/
