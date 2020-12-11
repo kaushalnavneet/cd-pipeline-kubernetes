@@ -130,7 +130,6 @@ spec:
             exit 1
         fi
 
-        docker push ${IMAGE_NAME}:latest
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker push command for latest tag\"
             exit 1
