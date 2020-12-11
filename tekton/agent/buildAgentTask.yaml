@@ -108,6 +108,7 @@ spec:
     args:
       - |
         set -e
+        echo "Skip: ${SKIP}"
         if [ "${SKIP}" == true ]; then
           echo "Skipping old agent build"
           exit 0
