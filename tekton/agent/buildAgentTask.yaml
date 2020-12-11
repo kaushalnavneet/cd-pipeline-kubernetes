@@ -108,9 +108,6 @@ spec:
     args:
       - |
         set -e
-        echo "=================="
-        env
-        echo "=================="
         if [ "${SKIP}" == true ]; then
           echo "Skipping old agent build"
           exit 0
@@ -257,6 +254,16 @@ spec:
         export GOPATH=`pwd`
         mkdir -p src/github.ibm.com/org-ids
         cd src/github.ibm.com/org-ids
+
+        echo "echo -n $IDS_TOKEN" > ./token.sh
+        chmod +x ./token.sh
+        GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        basename=$(basename ${COMPONENT_REPO})
+        cd ${basename%.*}
+
+        env
+
+        sleep 10m
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
