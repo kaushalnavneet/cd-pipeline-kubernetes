@@ -262,7 +262,8 @@ spec:
         cd ${basename%.*}
 
         env
-
+        ls
+        pwd
         sleep 10m
   - name: run-va
     image: $(params.runBaseImage)
