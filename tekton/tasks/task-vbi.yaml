@@ -111,7 +111,7 @@ spec:
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
         apt-get update && apt-get upgrade -y
-        DEBIAN_FRONTEND=noninteractive apt-get install -y ant maven zip docker-ce=5:18.09.9~3-0~ubuntu-xenial docker-ce-cli=5:18.09.9~3-0~ubuntu-xenial wget netcat-openbsd python make
+        DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce=5:18.09.9~3-0~ubuntu-xenial docker-ce-cli=5:18.09.9~3-0~ubuntu-xenial
 
         DOCKERFILE=${DOCKERFILE}
 
