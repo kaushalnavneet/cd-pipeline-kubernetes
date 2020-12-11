@@ -264,7 +264,7 @@ spec:
         env
         ls
         pwd
-        sleep 10m
+        make docker-build IMG=icr.io/continuous-delivery/pipeline/pipeline-private-worker:0.9.3-dev
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
