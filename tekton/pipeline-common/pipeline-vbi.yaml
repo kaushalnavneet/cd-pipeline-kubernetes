@@ -8,6 +8,7 @@ spec:
     - name: source_branch
     - name: dockerFile
     - name: dockerUsername
+    - name: registryScope
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -31,6 +32,8 @@ spec:
           value: $(params.dockerFile)
         - name: dockerUsername
           value: $(params.dockerUsername)
+        - name: registryScope
+          value: $(params.registryScope)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

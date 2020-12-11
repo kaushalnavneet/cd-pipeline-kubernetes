@@ -8,6 +8,7 @@ spec:
     - name: source_branch
     - name: dockerFile
     - name: dockerUsername
+    - name: registryScope
 
     # CD integration
     - name: api
@@ -100,6 +101,8 @@ spec:
             value: $(params.dockerFile)
           - name: dockerUsername
             value: $(params.dockerUsername)
+          - name: registryScope
+            value: $(params.registryScope)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -115,6 +118,8 @@ spec:
       value: "2x_Dockerfile"
     - name: dockerUsername
       value: "idsorg"
+    - name: registryScope
+      value: global
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
