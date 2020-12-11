@@ -209,9 +209,9 @@ spec:
     - name: skipVA
       value: "true"
     - name: skipOldAgentBuild
-      default: "true"
+      value: "true"
     - name: skipNewAgentBuild
-      default: "false"    
+      value: "false"    
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
