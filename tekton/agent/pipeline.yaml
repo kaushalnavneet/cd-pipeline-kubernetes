@@ -22,6 +22,10 @@ spec:
       description: tag for the final dockerhub image
     - name: skipVA
       description: skip VA 
+    - name: skipOldAgentBuild
+      description: skip old agent
+    - name: skipNewAgentBuild
+      description: skip new agent
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -47,6 +51,10 @@ spec:
         value: $(params.envTag)
       - name: skipVA
         value: $(params.skipVA)
+      - name: skipOldAgentBuild
+        value: $(params.skipOldAgentBuild)
+      - name: skipNewAgentBuild
+        value: $(params.skipNewAgentBuild)
     workspaces:
     - name: task-pvc
       workspace: pipeline-pvc 

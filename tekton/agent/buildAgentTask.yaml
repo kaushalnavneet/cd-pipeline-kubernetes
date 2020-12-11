@@ -32,6 +32,10 @@ spec:
       default: ''
     - name: dockerhubPassword
     - name: envTag
+    - name: skipOldAgentBuild
+      default: "false"
+    - name: skipNewAgentBuild
+      default: "true"
     - name: skipVA
     - name: registryUrl
       default: us.icr.io
@@ -98,10 +102,16 @@ spec:
         value: $(params.envTag)
       - name: DOCKER_HOST
         value: "unix:///var/run/docker.sock"
+      - name: SKIP
+        value: $(params.skipOldAgentBuild)
     command: ["/bin/bash", "-c"]
     args:
       - |
         set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping old agent build"
+          exit 0
+        fi
 
         export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
 
@@ -180,6 +190,80 @@ spec:
         docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
         docker push ${DOCKERHUB_IMAGE_NAME}:${AGENT_VERSION}${ENV_TAG}
         echo "###########################################"
+  - name: build-current-agent
+    image: $(params.runBaseImage)
+    volumeMounts:
+      - mountPath: /var/run/
+        name: dind-socket
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: IDS_TOKEN
+        value: $(params.idsToken)
+      - name: COMPONENT_REPO
+        value: $(params.componentRepo)
+      - name: COMPONENT_REVISION
+        value: $(params.componentRevision)
+      - name: IMAGE_URL
+        value: $(params.imageUrl)
+      - name: API_KEY
+        value: $(params.accountApiKey1308775)
+      - name: ACCOUNT_REGION
+        value: $(params.accountRegion)
+      - name: BUILD_CLUSTER
+        value: $(params.buildCluster)
+      - name: DOCKER_USERNAME
+        value: $(params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(params.accountApiKey1416501)
+      - name: DOCKER_IMAGE
+        value: $(params.runBaseImage)
+      - name: OPERATOR_SDK
+        value: "true"
+      - name: EXTRA_DOCKER_OPTS
+        value: $(params.extraDockerOpts)
+      - name: IDS_USER
+        value: $(params.idsUser)
+      - name: ARTIFACTORY_TOKEN_BASE64
+        value: $(params.artifactoryToken)
+      - name: ARTIFACTORY_ID
+        value: $(params.artifactoryId)
+      - name: CONSOLE_AUTH_TOKEN
+        value: $(params.consoleAuthToken)
+      - name: DOCKERHUB_USERNAME
+        value: idsorg
+      - name: DOCKERHUB_PASSWORD
+        value: $(params.dockerhubPassword)
+      - name: DOCKERHUB_IMAGE_NAME
+        value: ibmcom/pipeline-private-worker
+      - name: ENV_TAG
+        value: $(params.envTag)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
+      - name: SKIP
+        value: $(params.skipNewAgentBuild)
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping new agent build"
+          exit 0
+        fi
+        export HOME=/root && [ -f /root/.nvm/nvm.sh ] && chmod +x /root/.nvm/nvm.sh && source /root/.nvm/nvm.sh
+
+        export GOPATH=`pwd`
+        mkdir -p src/github.ibm.com/org-ids
+        cd src/github.ibm.com/org-ids
+
+        echo "echo -n $IDS_TOKEN" > ./token.sh
+        chmod +x ./token.sh
+        GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        basename=$(basename ${COMPONENT_REPO})
+        cd ${basename%.*}
+
+        env
+
+        sleep 10m
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
