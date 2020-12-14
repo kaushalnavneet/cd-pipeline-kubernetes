@@ -217,8 +217,6 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: DOCKER_IMAGE
         value: $(params.runBaseImage)
-      - name: OPERATOR_SDK
-        value: "true"
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
       - name: IDS_USER
@@ -262,7 +260,8 @@ spec:
         cd ${basename%.*}
 
         IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
-        ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
+        ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
+        ibmcloud cr region-set global
 
         docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_IMAGE%%/*}
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
