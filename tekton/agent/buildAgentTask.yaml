@@ -264,7 +264,11 @@ spec:
         env
         ls
         pwd
-        make docker-build IMG=icr.io/continuous-delivery/pipeline/pipeline-private-worker:0.9.3-dev
+        AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
+
+        make docker-build IMG=${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
+        echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
+        docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
