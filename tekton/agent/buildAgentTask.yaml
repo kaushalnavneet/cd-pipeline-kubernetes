@@ -261,8 +261,9 @@ spec:
 
         IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
         ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
-        ibmcloud cr login
         ibmcloud cr region-set global
+        ibmcloud cr login
+
 
         # docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_IMAGE%%/*}
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
