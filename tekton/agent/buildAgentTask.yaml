@@ -271,8 +271,7 @@ spec:
         make docker-build IMG=${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
 
         echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
-
-        sleep 5m;
+        
         docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
   - name: run-va
     image: $(params.runBaseImage)
