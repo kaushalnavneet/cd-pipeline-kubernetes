@@ -108,6 +108,7 @@ spec:
     args:
       - |
         set -e
+        env
         if [ "${SKIP}" == true ]; then
           echo "Skipping old agent build"
           exit 0
@@ -271,7 +272,7 @@ spec:
         make docker-build IMG=${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
 
         echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
-        
+
         docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
   - name: run-va
     image: $(params.runBaseImage)
