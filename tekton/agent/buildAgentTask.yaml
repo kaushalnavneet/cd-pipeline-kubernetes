@@ -217,8 +217,6 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: DOCKER_IMAGE
         value: $(params.runBaseImage)
-      - name: OPERATOR_SDK
-        value: "true"
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
       - name: IDS_USER
@@ -261,10 +259,20 @@ spec:
         basename=$(basename ${COMPONENT_REPO})
         cd ${basename%.*}
 
-        env
-        ls
-        pwd
-        make docker-build IMG=icr.io/continuous-delivery/pipeline/pipeline-private-worker:0.9.3-dev
+        IBM_CLOUD_API=${IBM_CLOUD_API:-cloud.ibm.com}
+        ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
+        ibmcloud cr region-set global
+        ibmcloud cr login
+
+
+        # docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_IMAGE%%/*}
+        AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
+
+        make docker-build IMG=${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
+
+        echo ${AGENT_VERSION}${ENV_TAG} > /artifacts/appVersion
+
+        docker push ${IMAGE_URL}:${AGENT_VERSION}${ENV_TAG}
   - name: run-va
     image: $(params.runBaseImage)
     imagePullPolicy: IfNotPresent
