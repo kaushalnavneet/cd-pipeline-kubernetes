@@ -130,7 +130,7 @@ spec:
         set +x
         ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
   sidecars:
-    - image: docker:dind
+    - image: docker:19-dind
       name: server
       securityContext:
         privileged: true

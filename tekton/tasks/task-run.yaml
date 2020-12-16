@@ -212,7 +212,7 @@ spec:
 
         docker push ${IMAGE_URL}:latest
   sidecars:
-    - image: docker:dind
+    - image: docker:19-dind
       name: server
       command:
         - dockerd-entrypoint.sh

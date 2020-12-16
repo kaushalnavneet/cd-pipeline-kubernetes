@@ -147,7 +147,7 @@ spec:
         docker push icr.io/continuous-delivery/pipeline/pipeline-base-image:${IMAGE_TAG}
         docker push icr.io/continuous-delivery/pipeline/pipeline-base-image:latest
   sidecars:
-    - image: docker:dind
+    - image: docker:19-dind
       name: server
       command:
         - dockerd-entrypoint.sh

@@ -341,7 +341,7 @@ spec:
         fi
 
   sidecars:
-    - image: docker:dind
+    - image: docker:19-dind
       name: server
       command:
         - dockerd-entrypoint.sh
