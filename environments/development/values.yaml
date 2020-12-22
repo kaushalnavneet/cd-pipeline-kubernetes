@@ -518,7 +518,7 @@ pipeline:
       enabled: false
     preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
     terminationGracePeriodSeconds: 4000
-    travisDockerTag: d24ab858f8407ae7119d9fa9945bf9f7bde6f64e-202012112130UTC
+    travisDockerTag: 97de6482613abed65120ba272095f0afd0e0477f-202012221341UTC
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
