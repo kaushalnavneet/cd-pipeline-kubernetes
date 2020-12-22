@@ -74,6 +74,10 @@ rm -f .pgpass
 set -x
 helm init -c --stable-repo-url https://charts.helm.sh/stable
 helm repo add gitlab https://charts.gitlab.io/
+helm repo add github https://charts.github.io/
+helm repo add github https://prometheus-community.github.io/helm-charts
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
 helm repo update
 helm dep up
 
