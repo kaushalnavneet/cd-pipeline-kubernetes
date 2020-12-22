@@ -146,7 +146,7 @@ spec:
         helm dep up ${COMPONENT_NAME}
         set -x
         set +e
-        if [ ! helm list ${COMPONENT_NAME} ] ; then
+        if ! helm list ${COMPONENT_NAME}; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
           set -e
