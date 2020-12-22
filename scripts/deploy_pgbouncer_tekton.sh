@@ -101,8 +101,8 @@ if [ -d cr/$ENVIRONMENT ]; then
   APP_VERSION=$( kubectl get -n${CHART_NAMESPACE} deployment ${COMPONENT_NAME} -ojson \
     | jq -r '.spec.template.spec.containers[] | select(.name == "pgbouncer").image' \
     | cut -f2 -d: )
-  echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}"
-  echo "${COMPONENT_NAME},${APP_VERSION},${APPLICATION_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
+  echo "${COMPONENT_NAME},${APP_VERSION},${APP_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}"
+  echo "${COMPONENT_NAME},${APP_VERSION},${APP_VERSION},${CLUSTER_NAME},${PIPELINE_RUN_URL}" >>"cr/$ENVIRONMENT/${RUN_ID}.csv"
 
   git config --global user.email "idsorg@us.ibm.com"
   git config --global user.name "IDS Organization"
