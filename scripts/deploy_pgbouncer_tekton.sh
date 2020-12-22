@@ -18,7 +18,7 @@ COMPONENT_NAME=gitlab-pgbouncer
 
 # install vault
 curl -o v.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_linux_amd64.zip
-unzip v.zip
+unzip -o v.zip
 rm v.zip
 
 export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
