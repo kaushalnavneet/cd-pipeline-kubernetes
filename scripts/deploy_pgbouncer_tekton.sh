@@ -73,6 +73,7 @@ rm -f .pgpass
 
 helm init -c
 helm repo add gitlab https://charts.gitlab.io/
+helm repo update
 helm dep up
 
 helm upgrade ${TARGET} ./charts/pgbouncer  \
