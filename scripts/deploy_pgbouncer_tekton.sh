@@ -74,7 +74,7 @@ rm -f .pgpass
 set -x
 helm init -c --stable-repo-url https://charts.helm.sh/stable
 helm repo add gitlab https://charts.gitlab.io/
-helm dep up
+#helm dep up
 
 helm upgrade ${TARGET} ./charts/pgbouncer  \
   --install \
