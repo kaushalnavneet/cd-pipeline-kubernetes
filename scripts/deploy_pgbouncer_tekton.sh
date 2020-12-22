@@ -91,6 +91,7 @@ if [ ${CR_DIRECTORY} == "" ]; then
   exit 0
 fi
 
+set +e
 cd ${CR_DIRECTORY}
 if [ -d cr/$ENVIRONMENT ]; then
   # save information for CR
