@@ -147,7 +147,8 @@ spec:
         helm dep up ${COMPONENT_NAME}
         set -x
         set +e
-        if ! helm list ${COMPONENT_NAME}; then
+        chartExists=$(helm list ${COMPONENT_NAME})
+        if [ -z $chartExists ]; then
           deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
           echo "DELETED HELM: $deleted"
           set -e
