@@ -43,4 +43,17 @@ RUN curl -o vault.zip https://releases.hashicorp.com/vault/1.1.1/vault_1.1.1_lin
     mv ./vault /usr/local/bin &&  \
     rm vault.zip
 
+# Install yq 2.4.1
+ENV YQ2_VERSION=2.4.1
+RUN wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/download/${YQ2_VERSION}/yq_linux_amd64 \
+    && mv yq2_linux_amd64 /usr/bin/yq2 \
+    && chmod +x /usr/bin/yq2 \
+    && ln -s /usr/bin/yq2 /usr/bin/yq
+
+# Install yq 3.4.1
+ENV YQ3_VERSION=3.4.1
+RUN wget --quiet -O yq3_linux_amd64 https://github.com/mikefarah/yq/releases/download/${YQ3_VERSION}/yq_linux_amd64 \
+    && mv yq3_linux_amd64 /usr/bin/yq3 \
+    && chmod +x /usr/bin/yq3
+
 CMD bash
