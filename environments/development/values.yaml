@@ -148,6 +148,7 @@ pipeline:
         ENABLE_RECORD_QUEUE_TIME: true
         GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
         RC_URL: https://resource-controller.test.cloud.ibm.com
+        ENABLE_DSTB_LOCK: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
