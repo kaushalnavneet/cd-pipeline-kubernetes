@@ -266,6 +266,7 @@ pipeline:
         SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         ENABLE_TIMER_TRIGGER: true
         ENABLE_TEKTON_PUBLIC_WORKERS: true
+        ENABLE_TEKTON_PUBLIC_WORKERS_CLASSIC: true
         ENABLE_MULTI_REPO: true
         TEKTON_OPENAPI_ENABLED: true
         ENABLE_GENERIC_WEBHOOK: true
