@@ -149,6 +149,7 @@ pipeline:
         GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
         RC_URL: https://resource-controller.test.cloud.ibm.com
         ENABLE_DISTRIBUTED_LOCK: true
+        NO_REPORTING_QUEUE: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -498,7 +499,7 @@ pipeline:
         bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         bluemix_iam_client_ribbon_IsSecure: true
         bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
-        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.stage1.bluemix.net
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.test.cloud.ibm.com
         pipeline_ui_ribbon_listOfServers: pipeline-ui
         pipeline_ui_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         pipeline_ui_ribbon_IsSecure: false
