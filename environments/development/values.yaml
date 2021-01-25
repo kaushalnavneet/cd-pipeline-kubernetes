@@ -151,7 +151,7 @@ pipeline:
         ENABLE_DISTRIBUTED_LOCK: true
         NO_REPORTING_QUEUE: true
         ENABLE_SLACK_INT_TEKTON: true
-        LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com"
+        LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
