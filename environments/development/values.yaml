@@ -184,6 +184,7 @@ pipeline:
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
         TEKTON_MONITOR: true
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
