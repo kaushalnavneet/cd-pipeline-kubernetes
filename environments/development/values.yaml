@@ -196,6 +196,7 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-iam_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-session-secret-api-key_do_not_version
     configmap:
       data:
         AMQP_EXCHANGE: pipeline
