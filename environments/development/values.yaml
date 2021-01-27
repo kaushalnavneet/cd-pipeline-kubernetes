@@ -42,6 +42,8 @@ pipeline:
         ENABLE_CLOUDANT_QUEUE: true
         ENABLE_MESSAGE_COMPRESSION: true
         PUBLIC_QUEUE_ID: "6f97df8f-5727-4a2b-bb71-541ba8e3f71f"
+        S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
+        S3_STORAGE_REGION: us-standard
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -78,8 +80,6 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
         NODE_MODULES_CACHE: false
         S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
-        S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
-        S3_STORAGE_REGION: us-standard
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
   otc-github-relay-pub:
@@ -133,8 +133,6 @@ pipeline:
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
         AGENT_VERSION: "0.9.3-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
-        S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
-        S3_STORAGE_REGION: us-standard
         ENABLE_S3_STORAGE: true
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
         DISABLE_TRIGGER_ENDPOINT: true
@@ -307,8 +305,6 @@ pipeline:
         NODE_ENV: staging-us-south
         RUN_ARS_K8S: true
         S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
-        S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
-        S3_STORAGE_REGION: us-standard
         SSL: true
         STATUS_TIMEOUT: "4500"
         USE_S3: true
