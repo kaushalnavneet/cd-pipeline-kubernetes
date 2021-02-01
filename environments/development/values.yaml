@@ -20,6 +20,7 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/pipeline-common-do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-toolchain-api-keys_do_not_version
     probes:
       enabled: true
       liveness:
