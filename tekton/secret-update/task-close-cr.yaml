@@ -1,0 +1,64 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: task-close-cr
+spec:
+  params:
+    - name: cr-skip
+    - name: slack-finish-description
+    - name: slack-icon
+    - name: slack-username
+    - name: sn-close-notes
+    - name: sn-region
+    - name: sn-url
+    - name: zone-names
+  workspaces:
+    - name: task-pvc
+      mountPath: /workspace
+  steps:
+    - name: close-cr
+      image: ibmcom/pipeline-base-image:2.6
+      imagePullPolicy: Always
+      env:
+        - name: GIT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: cd-secret
+              key: GIT_TOKEN
+        - name: SKIP
+          value: $(params.cr-skip)
+        - name: SLACK_WEBHOOK
+          valueFrom:
+            secretKeyRef:
+              name: cd-secret
+              key: SLACK_WEBHOOK
+        - name: SN_CLOSE_NOTES
+          value: $(params.sn-close-notes)
+        - name: SN_CLOSE_NOTICE_TEXT
+          value: $(params.slack-finish-description)
+        - name: SN_ICON
+          value: $(params.slack-icon)
+        - name: SN_REGION
+          value: $(params.sn-region)
+        - name: SN_SLACK_USERNAME
+          value: $(params.slack-username)
+        - name: SN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: cd-secret
+              key: SN_TOKEN
+        - name: SN_URL
+          value: $(params.sn-url)
+        - name: ZONE_NAMES
+          value: $(params.zone-names)
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          if [ "${SKIP}" == true ]; then
+            echo "Skipping CR"
+            exit 0
+          fi
+          export SN_CLOSE_NOTICE_TEXT="${SN_CLOSE_NOTICE_TEXT} [${ZONE_NAMES}]"
+          cd /workspace
+          chmod u+x ./otc-deploy/k8s/scripts/snticket/close_sn_ticket.sh
+          . "$_"
