@@ -1,0 +1,78 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: pipeline-template
+spec:
+  params:
+    - name: registry-region
+      description: the registry region
+    - name: registry-namespace
+      description: the namespace where the image resides
+    - name: image-name
+      description: nsme of the image
+    - name: image-tag
+      description: tag of the image
+  resourcetemplates:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: artifactory-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: otc-sa
+      imagePullSecrets:
+      - name: artifactory-secret
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: agentbuild-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "pipeline-template"
+      spec:
+        pipelineRef:
+            name: sign-image-pipeline
+        serviceAccountName: otc-sa
+        params:
+          - name: registry-region
+            value: $(params.registry-region)
+          - name: registry-namespace
+            value: $(params.registry-namespace)
+          - name: image-name
+            value: $(params.image-name)
+          - name: image-tag
+            value: $(params.image-tag)
+          - name: vault-secret
+            value: $(params.vault-secret)
+          - name: accountapikey1416501
+            value: $(params.API_KEY_1416501)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: sign-agent-image-binding
+spec:
+  params:
+    - name: registry-region
+      value: us-south
+    - name: registry-namespace
+      value: continuous-delivery
+    - name: image-name
+      value: pipeline/pipeline-private-worker
+    - name: image-tag
+      value: 0.9.4-dev
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: sign-agent-image
+spec:
+  triggers:
+    - binding:
+        name: sign-agent-image-binding
+      template:
+        name: pipeline-template

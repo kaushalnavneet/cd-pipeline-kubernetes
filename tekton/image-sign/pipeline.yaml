@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: sign-image-pipeline
+spec:
+  params:
+    - name: vault-secret
+      description: Vault path of pfx file
+    - name: registry-region
+      description: the ids token to use to clone repos
+    - name: registry-namespace
+      description: the namespace of the registry containing storing the images
+    - name: image-name
+      description: name of the image
+    - name: image-tag
+      description: the required tag name
+    - name: accountapikey1416501
+      description: api key for prod cluster / CR
+  tasks:
+  - name: image-sign
+    taskRef:
+      name: ciso-image-sign
+    params:
+      - name: vault-secret
+        value: $(params.vault-secret)
+      - name: registry-region
+        value: $(params.registry-region)
+      - name: registry-namespace
+        value: $(params.registry-namespace)
+      - name: image-name
+        value: $(params.image-name)
+      - name: image-tag
+        value: $(params.image-tag)
+      - name: accountapikey1416501
+        value: $(params.accountapikey1416501)

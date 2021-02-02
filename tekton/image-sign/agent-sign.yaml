@@ -1,0 +1,170 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: ciso-image-sign
+spec:
+  params:
+    - name: vault-secret
+      default: ''
+    - name: registry-region
+      default: ''
+    - name: registry-namespace
+      default: ''
+    - name: image-name
+      default: ''
+    - name: image-tag
+      default: ''
+    - name: accountapikey1416501
+      default: ''
+    - name: ibmcloud-api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: evidence
+      default: 'signature-evidence.json'
+    - name: pipeline-debug
+      description: Pipeline debug mode
+      default: "0"
+  stepTemplate:
+    env:
+      - name: PIPELINE_DEBUG
+        value: $(params.pipeline-debug)
+  results:
+    - name: exit-code
+      description: The exit-code of the script
+    - name: status
+      description: The status based on exit-code
+    - name: signature
+      description: Signature data file name
+  steps:
+    - name: sign-image
+      image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/csso-image-sign:1.0.0@sha256:cb22e6ad6b3469155719f6bf09bde641208a1e349e5ccc09407204bb069f7b4e
+      env:
+        - name: VAULT_SECRET
+          value: $(params.vault-secret)
+        - name: REGISTRY_REGION
+          value: $(params.registry-region)
+        - name: REGISTRY_NAMESPACE
+          value: $(params.registry-namespace)
+        - name: IMAGE_NAME
+          value: $(params.image-name)
+        - name: IMAGE_TAG
+          value: $(params.image-tag)
+        - name: API
+          value: $(params.ibmcloud-api)
+        - name: IBM_CLOUD_API_KEY
+          value: $(params.accountapikey1416501)
+      # yamllint disable rule:line-length
+      script: |
+          #!/bin/bash
+          set +e
+          #Required parameters
+          #VAULT_SECRET - ciso secret
+          #IBM_CLOUD_API_KEY - access ibm cloud apikey
+          #IMAGE_NAME - name of the image
+          #IMAGE_TAG - the required tag name
+          #REGISTRY_NAMESPACE - the namespace of the registry containing storing the images
+
+          env
+          
+          TARGET_REGION=$(echo "${REGISTRY_REGION}" | awk -F ":" '{print $NF}')
+          ibmcloud login -a ${API} --apikey ${IBM_CLOUD_API_KEY} -r ${TARGET_REGION}
+          ibmcloud cr region-set global
+
+       
+          #REGISTRY_URL - the registry URL e.g. us.icr.io, de.icr.io
+          REGISTRY_URL=$(ibmcloud cr info | grep -w 'Container Registry' | awk '{print $3;}' | grep -w 'icr')
+
+          echo "IMAGE_NAME $IMAGE_NAME"
+          echo "IMAGE_TAG $IMAGE_TAG"
+          echo "REGISTRY_NAMESPACE $REGISTRY_NAMESPACE"
+          echo "REGISTRY_URL $REGISTRY_URL"
+          network_access=$(curl https://w3.ibm.com)
+          if [[ "${network_access}" ]]; then
+            echo "CISO service reachable"
+          else
+            echo "No access to internal network. Check that the worker has access"
+          fi
+
+          KEY_NAME="temp.pfx"
+          echo "RESTORING KEY DATA"
+          echo -n "$VAULT_SECRET" | base64 -d > $KEY_NAME
+          mv ./$KEY_NAME /etc/ekm
+          echo "****************"
+
+          #extract alias
+          ALIAS=$(ucl list | grep -m 1 Private)
+          if [[ "$ALIAS" ]]; then
+            echo "Certificate found"
+          else
+            STR=$(ucl list)
+            if grep -q "Error" <<< "$STR"; then
+              echo "Cannot access CISO partition."
+              echo "Ensure that CISO account has been setup and that the client key secret is correct"
+            else
+              echo "Ensure that your CISO partition has a signing certifcate provisioned"
+            fi
+          fi
+          ALIAS=${ALIAS#*"UID="}
+          ALIAS=$(echo $ALIAS | head -n1 | sed -e 's/\s.*$//')
+          echo "Alias: $ALIAS"
+
+          gpgconf --kill all
+          ucl pgp-key -u ${ALIAS}
+          FINGERPRINT=$(gpg2 -k)
+          FINGERPRINT=${FINGERPRINT#*"[SCEA]"}
+          FINGERPRINT=$(echo $FINGERPRINT | head -n1 | sed -e 's/\s.*$//')
+          SIGNING_DIR="signing"
+          mkdir ${SIGNING_DIR}
+
+          SIGNING_KEY=${FINGERPRINT}
+
+          if [[ "$SIGNING_KEY" ]]; then
+              echo "SIGNING REPO"
+              skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY} --src-creds iamapikey:${IBM_CLOUD_API_KEY} --sign-by ${SIGNING_KEY}
+          else
+              echo "No key found. Unable to sign"
+          fi
+          PASS=$?
+          echo $PASS | tee $(results.exit-code.path)
+          if [[ "$SIGNING_KEY" && "$PASS" == 0 ]]; then
+            echo "No issues were found"
+            REG=${REGISTRY_URL}
+            IAMBEARER=$(ibmcloud iam oauth-tokens | awk '/IAM/ { print $4; }')
+            NAME=${REGISTRY_NAMESPACE}/${IMAGE_NAME}
+            TOKEN=$(curl -s \
+            -F "service=registry" \
+            -F "grant_type=password" \
+            -F "client_id=curlsig" \
+            -F "username=iambearer" \
+            -F "password=${IAMBEARER}" \
+            -F "scope=repository:${NAME}:pull" \
+            https://${REG}/oauth/token | jq -r .token)
+
+            echo "TARGET REG $REG"
+            echo "NAMESPACE $NAME"
+            TMP_DIGEST=$(skopeo inspect --creds iamapikey:${IBM_CLOUD_API_KEY} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG})
+            TMP_DIGEST=$(echo "$TMP_DIGEST" | jq -r '.Digest' | sed 's/sha256://g')
+            DIGEST="sha256:${TMP_DIGEST}"
+
+            SIGNATURES=$(curl -s -H "Authorization: Bearer ${TOKEN}" https://${REG}/extensions/v2/${NAME}/signatures/${DIGEST} | jq '.signatures')
+
+            COUNT=$(echo "${SIGNATURES}" | jq '. | length')
+            INDEX=$(echo "$((COUNT - 1))")
+            echo "SIGNATURE INDEX ${INDEX}"
+
+            SIGNATURE_DATA=$(echo "$SIGNATURES" | jq --arg jq_index "$INDEX" '.[$jq_index|tonumber]')
+            echo -n success | tee $(results.status.path)
+
+            #create evidence json
+            cd /artifacts
+            echo ${SIGNATURE_DATA} > $(params.evidence)
+            echo -n $(params.evidence) | tee $(results.signature.path)
+          else
+            echo "Signing failed."
+            cd /artifacts
+            echo -n failure | tee $(results.status.path)
+            echo {} > $(params.evidence)
+            echo -n $(params.evidence) | tee $(results.signature.path)
+          fi
+      # yamllint enable rule:line-length
