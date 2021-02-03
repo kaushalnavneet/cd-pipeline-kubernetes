@@ -296,13 +296,11 @@ pipeline:
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
         TIAM_CLIENT_ID: "pipeline"
-        TIAM_CLIENT_SECRET: "4858955f38db094b8b8d8a1a75e0ad6afbfafad44088973e"
         TIAM_URL: http://otc-tiam/identity/v1
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
         USE_NEW_RELIC: true
-        vcap_pipeline_secret: "4858955f38db094b8b8d8a1a75e0ad6afbfafad44088973e"
         log4js_logmet_component: pipeline-ui-k8s
         log4js_syslog_appender_product: pipeline-ui-k8s-ys1-dev
         MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
