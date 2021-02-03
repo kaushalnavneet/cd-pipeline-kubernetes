@@ -61,6 +61,7 @@ spec:
         echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY} -r ${REGION} 
 
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -77,6 +78,7 @@ spec:
             return 1
         }
         cluster_config ${CLUSTER_NAME}
+        set -e
 
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh 
         ${SCRIPT_DIRECTORY}/scripts/healthcheck.sh ${CLUSTER_NAMESPACE} ${SOURCE_DIRECTORY}/cr/components.txt

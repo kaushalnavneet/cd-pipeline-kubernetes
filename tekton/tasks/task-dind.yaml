@@ -103,6 +103,7 @@ spec:
         IMAGE_URL=${IMAGE_NAME}:${IMAGE_TAG}
         DOCKERFILE=${DOCKERFILE}
 
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -119,6 +120,7 @@ spec:
             return 1
         }
         cluster_config ${CLUSTER_NAME}
+        set -e
 
         kubectl --namespace otc-dev get pods 
         kubectl --namespace otc-dev port-forward $(kubectl --namespace otc-dev get pods | grep docker | awk '{print $1;}') 2375:2375 > /dev/null 2>&1 &

@@ -122,6 +122,7 @@ spec:
         ls -F
         ls -F cd-pipeline-kubernetes
 
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -139,6 +140,7 @@ spec:
         }
         cluster_config ${CLUSTER_NAME}
 
+        set -e
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
         echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
         if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then

@@ -69,6 +69,7 @@ spec:
         ibmcloud plugin install -f kubernetes-service
         ibmcloud login -a ${API} -r ${ENVIRONMENT} --apikey ${API_KEY}
 
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -85,6 +86,7 @@ spec:
             return 1
         }
         cluster_config ${CLUSTER_NAME}
+        set -e
 
         RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
         kubectl -n${CLUSTER_NAMESPACE} rollout restart deployment ${SERVICE_NAME}

@@ -139,6 +139,7 @@ spec:
 
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -155,6 +156,7 @@ spec:
             return 1
         }
         cluster_config ${DRY_RUN_CLUSTER}
+        set -e
 
         if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
           echo "Major & minor version and chart repo vars need to be set"

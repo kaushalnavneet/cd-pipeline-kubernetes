@@ -92,6 +92,7 @@ spec:
         set +x
         ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
         set -x
+        set +e
         function cluster_config() {
             # 1 - cluster name
             for iteration in {1..30}
@@ -108,7 +109,6 @@ spec:
             return 1
         }
         cluster_config ${CLUSTER_NAME}
-        set +e
         chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
         bash ${SCRIPT_DIRECTORY}/scripts/deploy_cryptomining-tool.sh
 
