@@ -130,7 +130,22 @@ spec:
         echo Logging into Deployment account
         ibmcloud login --apikey ${API_KEY} -r ${REGION}
 
-        ibmcloud ks cluster config  --cluster ${CLUSTER_NAME} --skip-rbac
+        function cluster_config() {
+            # 1 - cluster name
+            for iteration in {1..30}
+            do
+                echo "Running cluster config for cluster $1: $iteration / 30"
+                ibmcloud ks cluster config --cluster $1
+                if [[ $? -eq 0 ]]; then
+                    return 0
+                else
+                    echo "Cluster config for $1 failed. Trying again..."
+                    sleep 5
+                fi
+            done
+            return 1
+        }
+        cluster_config ${CLUSTER_NAME}
 
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
         echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
