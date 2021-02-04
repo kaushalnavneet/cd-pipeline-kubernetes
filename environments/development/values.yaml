@@ -21,7 +21,6 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/pipeline-common-do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-toolchain-api-keys_do_not_version
-      - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     probes:
       enabled: true
       liveness:
@@ -103,7 +102,7 @@ pipeline:
     - otc-pipeline-broker
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker_2021_01_11_21h58m40s
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker_2021_02_04_15h59m27s
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
@@ -200,6 +199,7 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
       - generic/project/continuous-delivery-dev/otc-components/development/common-session-secret-api-key_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     configmap:
       data:
         AMQP_EXCHANGE: pipeline
@@ -324,6 +324,7 @@ pipeline:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_10_30_10h17m45s
       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     probes:
       liveness:
         path: "/pipeline/version"
