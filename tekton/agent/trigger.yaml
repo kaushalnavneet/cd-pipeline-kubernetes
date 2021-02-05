@@ -223,3 +223,30 @@ spec:
         name: agent-0.18.1-pipeline-binding-dev
       template:
         name: pipeline-template
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: agent-0.20.1-pipeline-binding-dev
+spec:
+  params:
+    - name: componentRevision
+      value: bog/0.20.1_tekton
+    - name: envTag
+      value: -dev
+    - name: skipVA
+      value: "true"
+    - name: skipOldAgentBuild
+      value: "true"
+    - name: skipNewAgentBuild
+      value: "false"    
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: manual-agent-0.20.1-listener-dev
+spec:
+  triggers:
+    - binding:
+        name: agent-0.20.1-pipeline-binding-dev
+      template:
+        name: pipeline-template
