@@ -223,6 +223,7 @@ spec:
         name: agent-0.18.1-pipeline-binding-dev
       template:
         name: pipeline-template
+---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
