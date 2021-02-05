@@ -103,6 +103,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker_2021_02_04_15h59m27s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-iam_do_not_version
     configmap:
       data:
         DASHBOARD_URL: /devops/pipelines
