@@ -130,6 +130,10 @@ spec:
             value: $(params.skipDeploy)
           - name: helmOptions
             value: $(params.helmOptions)
+          - name: artifactoryTokenBase64
+            value: $(params.ARTIFACTORY_TOKEN_BASE64)
+          - name: artifactoryId
+            value: $(params.ARTIFACTORY_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -169,10 +173,6 @@ spec:
       value: "true"
     - name: skipDeploy
       value: "false"
-    - name: artifactoryTokenBase64
-      value: $(params.ARTIFACTORY_TOKEN_BASE64)
-    - name: artifactoryId
-      value: $(params.ARTIFACTORY_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
