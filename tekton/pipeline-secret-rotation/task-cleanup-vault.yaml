@@ -1,0 +1,79 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup-vault
+spec:
+  params:
+    - name: environment
+    - name: config_directory
+    - name: script_directory
+  stepTemplate:
+    env:
+      - name: PIPELINE_RUN_URL
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
+      - name: ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_ROLE_ID
+      - name: GITHUB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
+      - name: SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_SECRET_ID
+  workspaces:
+  - name: output
+    mountPath: /workspace 
+  steps:
+  - name: cleanup-vault
+    image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: CONFIG_DIRECTORY
+        value: $(params.config_directory)
+      - name: SCRIPT_DIRECTORY
+        value: $(params.script_directory)
+      - name: BLADE_SECRET_PATH
+        value: "pipeline.blade-pipeline-broker.vault.secretPaths"
+      - name: COMMON_SECRET_PATH
+        value: "pipeline.common.vaultcommon.secretPaths"
+      - name: DEVX_SECRET_PATH
+        value: "pipeline.pipeline-support-service.vault.secretPaths"
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e -o pipefail
+
+        . ${SCRIPT_DIRECTORY}/scripts/rotation/rotate_api_secret.sh
+
+        # update blade-pipeline-broker secret
+        blade_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${BLADE_SECRET_PATH} blade-pipeline-broker)
+        echo "blade vault path: ${blade_vault_path}"
+        blade_tempfile=$(mktemp)
+        read_vault_path ${blade_vault_path} ${blade_tempfile}
+        remove_previous ${blade_tempfile}
+        updating_vault ${blade_tempfile} ${blade_vault_path}
+        rm ${blade_tempfile}
+
+        # update shared pipeline secret
+        pipeline_common_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${COMMON_SECRET_PATH} pipeline-common)
+        echo "common vault path: ${pipeline_common_vault_path}"
+        pipeline_common_tempfile=$(mktemp)
+        read_vault_path ${pipeline_common_vault_path} ${pipeline_common_tempfile}
+        remove_previous ${pipeline_common_tempfile}
+        updating_vault ${pipeline_common_tempfile} ${pipeline_common_vault_path}
+        rm ${pipeline_common_tempfile}
+
+        # pipeline-support-service vault is not cleanup as the devx team needs time to update to the new value

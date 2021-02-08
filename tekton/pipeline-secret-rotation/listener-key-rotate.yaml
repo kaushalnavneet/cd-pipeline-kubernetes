@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: trigger-binding-key-rotation
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: event-listener-key-rotation
+spec:
+  triggers:
+    - binding:
+        name: trigger-binding-key-rotation
+      template:
+        name: trigger-template-key-rotation

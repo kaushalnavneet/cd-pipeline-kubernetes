@@ -1,0 +1,191 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: open-cr-secret-rotation
+spec:
+  params:
+    - name: environment
+      default: 'development'
+    - name: snUrl
+      default: 'https://watson.service-now.com'
+    - name: deployChannel
+      default: '#devops-otc-deployment'
+    - name: tocChannel
+      default: '#devops-cd-cie'
+    - name: cr_priority
+      default: "moderate"
+    - name: cr_type
+      default: "standard"
+  results:
+    - name: cr_id
+      description: the cr id that was created by the task
+  stepTemplate:
+    env:
+      - name: PIPELINE_TRIGGERING_USER
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: SN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SN_TOKEN
+      - name: SLACK_DEPLOY_HOOK
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SLACK_DEPLOY_HOOK
+  workspaces:
+  - name: output
+    mountPath: /workspace 
+  steps:
+  - name: open-cr
+    image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: DEPLOY_TARGET
+        value: $(params.environment)
+      - name: SN_URL
+        value: $(params.snUrl)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: CR_PRIORITY
+        value: $(params.cr_priority)
+      - name: CR_TYPE
+        value: $(params.cr_type)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        if [ $ENVIRONMENT == "development" ]; then
+          echo "Skip CR creation for development environment"
+          CR_ID="no cr"
+          echo -n $CR_ID | tee $(results.cr_id.path)
+          exit 0
+        fi
+        if [ $ENVIRONMENT == "dev" ]; then
+          echo "Skip CR creation for dev environment"
+          CR_ID="no cr"
+          echo -n $CR_ID | tee $(results.cr_id.path)
+          exit 0
+        fi
+
+        set -e
+
+        if [ -z ${CR_TYPE} ]; then
+          CR_TYPE="standard"
+        fi
+        if [ -z ${CR_PRIORITY} ]; then
+          CR_PRIORITY="moderate"
+        fi
+        ibmcloud config --check-version=false
+        echo Logging into ibmcloud
+        ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
+        BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
+
+        SYSTEM="continuous-delivery-pipeline"
+        CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
+        PURPOSE="To rotate the pipeline broker secret, pipeline shared secret and devx secret that are used by pipeline apps in Continuous Delivery service."
+
+        if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
+            ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
+        else
+            ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
+        fi
+
+        # set CR time for 1 hour
+        S_DATE=$(( $(date +%s) + 5 ))
+        E_DATE=$(( $(date +%s) + 4*3600 ))
+
+        export TMP=/tmp/tmp_$$.json
+
+        # tag message adds link to ServiceNow query using deploy commit hash in the description field
+        cat - >"$TMP" <<HERE
+        {
+          "assignedto": "$ASSIGNED_TO",
+          "system": "$SYSTEM",
+          "impact": "N/A",
+          "outageduration": "0 00:00:00",
+          "priority": "${CR_PRIORITY}",
+          "environment": "$CRN",
+          "purpose": "$PURPOSE",
+          "description": "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values.",
+          "backoutplan": "Restore the previous secret values in vault and restart the deployments that use them.",
+          "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
+          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
+          "deploymentready": "yes",
+          "type": "${CR_TYPE}"
+        }
+        HERE
+
+        echo "Opening CR with:"
+        cat "$TMP"
+
+        RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/create" \
+            --silent --show-error)
+
+        echo "RESPONSE: ${RESPONSE}"
+        CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+        echo "CR ID: ${CR_ID}"
+
+        sleep 10
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/implement" \
+            --silent --show-error)
+        
+        echo "Checking ServiceNow change request state..."
+
+        sleep 10
+
+        RESPONSE=$(curl -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            "$SN_URL/api/ibmwc/v2/change/$CR_ID/read" \
+            --silent --show-error)
+
+        CR_STATE=$(jq --raw-output ".result.state | select (.!=null)" <<< "$RESPONSE")
+        echo "ServiceNow change request is in $CR_STATE state."
+
+        echo -n $CR_ID | tee $(results.cr_id.path)
+
+        SN_ICON=":delivery-pipeline:"
+
+        ICON=${SN_ICON:=":mario-pipe-5339:"}
+        SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
+
+        cat << EOF > message.json
+        {
+          "channel": "${SLACK_DEPLOY_CHANNEL}",
+          "text": "${ENVIRONMENT}: ${PURPOSE} \n",
+          "username": "${SLACK_USERNAME}", 
+          "icon_emoji": "${ICON}",
+          "attachments": [
+            {
+              "title": "ServiceNow",
+              "type": "mrkdwn",
+              "text": "ChangeRequest ticket opened: <${SN_URL}/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}|${CR_ID}>"
+            }
+          ]
+        }
+        EOF
+
+        echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
+        curl -X POST -H "Content-Type: application/json" \
+            -d @message.json \
+            ${SLACK_DEPLOY_HOOK}
+
