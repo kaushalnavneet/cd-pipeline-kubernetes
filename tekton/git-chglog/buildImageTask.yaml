@@ -1,0 +1,110 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: chglog-build-image-task
+spec:
+  params:
+    - name: accountRegion
+      default: us-south
+    - name: imageUrl
+    - name: registryUrl
+      default: us.icr.io
+    - name: registryNamespace
+      default: devopsotc
+    - name: imageName
+      default: ''
+    - name: accountApiKey1308775
+    - name: dockerUsername
+      default: iamapikey
+    - name: accountApiKey1416501
+    - name: runBaseImage
+      default: us.icr.io/opentoolchain/cd-build-base:go1.15
+    - name: extraDockerOpts
+      default: --no-cache --pull
+    - name: dockerhubPassword
+  steps:
+  - name: build-push-image
+    image: $(params.runBaseImage)
+    volumeMounts:
+      - mountPath: /var/run/
+        name: dind-socket
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: IMAGE_URL
+        value: $(params.imageUrl)
+      - name: IMAGE_REGISTRY
+        value: $(params.registryUrl)
+      - name: IMAGE_NAMESPACE
+        value: $(params.registryNamespace)
+      - name: IMAGE_NAME
+        value: $(params.imageName)
+      - name: API_KEY
+        value: $(params.accountApiKey1308775)
+      - name: ACCOUNT_REGION
+        value: $(params.accountRegion)
+      - name: DOCKER_USERNAME
+        value: $(params.dockerUsername)
+      - name: DOCKER_PASSWORD
+        value: $(params.accountApiKey1416501)
+      - name: EXTRA_DOCKER_OPTS
+        value: $(params.extraDockerOpts)
+      - name: DOCKERHUB_USERNAME
+        value: idsorg
+      - name: DOCKERHUB_PASSWORD
+        value: $(params.dockerhubPassword)
+      - name: DOCKERHUB_IMAGE_NAME
+        value: ibmcom/git-chglog
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e
+
+        mkdir -p src/github.ibm.com/org-ids
+        cd src/github.ibm.com/org-ids
+
+        cp -a /work cd-pipeline-kubernetes
+
+        IBM_CLOUD_API=cloud.ibm.com
+        IMAGE_URL=${IMAGE_URL:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_NAME}}
+        DOCKERFILE=cd-pipeline-kubernetes/docker/git-chglog/Dockerfile
+        CONTEXT=${DOCKERFILE}/../context
+
+        ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
+
+        echo "Building using local Docker"
+
+        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
+        echo "Dockerfile: ${DOCKERFILE}"
+        docker build ${CONTEXT} ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL} -f ${DOCKERFILE}
+        if [ $? -ne 0 ]; then
+            echo \"Failed during execution of docker build command\"
+            exit 1
+        fi
+
+        docker push ${IMAGE_URL}
+
+        echo "###########################################"
+        echo ${IMAGE_URL} ${DOCKERHUB_IMAGE_NAME}
+        docker tag ${IMAGE_URL} ${DOCKERHUB_IMAGE_NAME}
+
+        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
+        docker push ${DOCKERHUB_IMAGE_NAME}
+        echo "###########################################"
+  sidecars:
+    - image: docker:19-dind
+      name: server
+      command:
+        - dockerd-entrypoint.sh
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        - --mtu=1400
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /var/run/
+          name: dind-socket
+  volumes:
+    - name: dind-socket
+      emptyDir: {}

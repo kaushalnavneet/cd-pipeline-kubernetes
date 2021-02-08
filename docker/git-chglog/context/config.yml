@@ -1,0 +1,10 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: dummyURL
+options:
+  commits:
+    sort_by: Author.Date
+  merges:
+    pattern: ".*"

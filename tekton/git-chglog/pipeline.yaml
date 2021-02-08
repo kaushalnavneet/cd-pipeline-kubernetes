@@ -1,0 +1,52 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: generate-log-pipeline
+spec:
+  params:
+    - name: componentRepo
+      description: The component repo url
+    - name: componentRevision
+      description: The component revision
+    - name: accountApiKey1416501
+      description: api key for prod cluster / CR
+    - name: accountApiKey1308775
+      description: api key for docker build machine
+    - name: idsToken
+      description: the ids token to use to clone repos
+    - name: imageUrl
+      description: The url of the alpine image with git-chglog
+    - name: dockerhubPassword
+      description: password for docker hub
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+  - name: chglog-build-image
+    taskRef:
+      name:  chglog-build-image-task
+    params:
+      - name: imageUrl
+        value: $(params.imageUrl)
+      - name: accountApiKey1308775
+        value: $(params.accountApiKey1308775)
+      - name: accountApiKey1416501
+        value: $(params.accountApiKey1416501)
+      - name: dockerhubPassword
+        value: $(params.dockerhubPassword)
+  - name: generate-log
+    taskRef:
+      name:  generate-log-task
+    runAfter:
+      - chglog-build-image
+    params:
+      - name: idsToken
+        value: $(params.idsToken)
+      - name: imageUrl
+        value: $(params.imageUrl)
+      - name: componentRepo
+        value: $(params.componentRepo)
+      - name: componentRevision
+        value: $(params.componentRevision)
+    workspaces:
+    - name: task-pvc
+      workspace: pipeline-pvc

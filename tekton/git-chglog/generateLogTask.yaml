@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: generate-log-task
+spec:
+  params:
+    - name: imageUrl
+    - name: componentRepo
+    - name: componentRevision
+      default: master
+    - name: idsToken
+workspaces:
+  - name: task-pvc
+    mountPath: /artifacts
+steps:
+  - name: generate-log-task
+    image: $(params.imageUrl)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: IDS_TOKEN
+        value: $(params.idsToken)
+      - name: COMPONENT_REPO
+        value: $(params.componentRepo)
+      - name: COMPONENT_REVISION
+        value: $(params.componentRevision)
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e
+
+        cd /root
+        mkdir -p src/github.ibm.com/org-ids
+        cd src/github.ibm.com/org-ids
+        echo "echo -n $IDS_TOKEN" > ./token.sh
+        chmod +x ./token.sh
+        GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        REPO_NAME=${$(basename ${COMPONENT_REPO})%.*}
+        cd $REPO_NAME
+        mv $HOME/.chglog .
+        sed -i "s/dummyURL/${COMPONENT_REPO%.*}/" .chglog/config.yml
+
+        git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > /artifacts/changelog.md
+        cat /artifacts/changelog.md

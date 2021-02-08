@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: chglog-pipeline-template
+spec:
+  params:
+    - name: componentRevision
+      description: the branch for the git repo
+    - name: componentRepo
+      description: the git repo for which the changelog will be generated
+  resourcetemplates:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: otc-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: otc-sa
+      imagePullSecrets:
+      - name: otc-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: chglog-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  1Mi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: chglog-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "chglog-pipeline-template"
+      spec:
+        pipelineRef:
+            name: generate-log-pipeline
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: chglog-$(uid)-pvc
+        serviceAccountName: otc-sa
+        params:
+          - name: componentRepo
+            value: $(params.componentRepo)
+          - name: componentRevision
+            value: $(params.componentRevision)
+          - name: idsToken
+            value: $(params.IDS_TOKEN)
+          - name: imageUrl
+            value: icr.io/continuous-delivery/pipeline/chglog-pipeline
+          - name: accountApiKey1308775
+            value: $(params.API_KEY_1308775)
+          - name: accountApiKey1416501
+            value: $(params.API_KEY_1416501)
+          - name: dockerhubPassword
+            value: $(params.DOCKERHUB_PASSWORD)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: chglog-pwa-binding-pwa-prod
+spec:
+  params:
+    - name: componentRevision
+      value: master
+    - name: componentRepo
+      value: https://github.ibm.com/org-ids/private-worker-agent.git
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: chglog-pwa-listener-prod
+spec:
+  triggers:
+    - binding:
+        name: chglog-pwa-binding-pwa-prod
+      template:
+        name: chglog-pipeline-template
