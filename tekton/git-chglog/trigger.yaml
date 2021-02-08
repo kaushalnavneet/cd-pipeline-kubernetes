@@ -61,8 +61,6 @@ spec:
             value: $(params.API_KEY_1308775)
           - name: accountApiKey1416501
             value: $(params.API_KEY_1416501)
-          - name: dockerhubPassword
-            value: $(params.DOCKERHUB_PASSWORD)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
