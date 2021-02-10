@@ -162,7 +162,7 @@ spec:
     - name: source_repo
       value: "https://gitlab.com/org-ids/gitlab.git"
     - name: source_branch
-      value: "cd-prod"
+      value: "cd-prod-13-5"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
