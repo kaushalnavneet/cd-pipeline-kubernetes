@@ -175,7 +175,7 @@ metadata:
 spec:
   params:
     - name: componentRevision
-      value: integration
+      value: 0.18.1_tekton
     - name: envTag
       value: ""
     - name: skipVA
@@ -199,28 +199,28 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: agent-0.18.1-pipeline-binding-dev
+  name: agent-0.20.1-pipeline-binding-prod
 spec:
   params:
     - name: componentRevision
-      value: master
+      value: integration
     - name: envTag
-      value: -dev
+      value: ""
     - name: skipVA
-      value: "true"
+      value: "false"
     - name: skipOldAgentBuild
       value: "true"
     - name: skipNewAgentBuild
-      value: "false"    
+      value: "false"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: manual-agent-0.18.1-listener-dev
+  name: manual-agent-0.20.1-listener-prod
 spec:
   triggers:
     - binding:
-        name: agent-0.18.1-pipeline-binding-dev
+        name: agent-0.20.1-pipeline-binding-prod
       template:
         name: pipeline-template
 ---
@@ -231,7 +231,7 @@ metadata:
 spec:
   params:
     - name: componentRevision
-      value: bog/0.20.1_tekton
+      value: master
     - name: envTag
       value: -dev
     - name: skipVA
