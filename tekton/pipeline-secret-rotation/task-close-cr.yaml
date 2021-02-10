@@ -70,7 +70,7 @@ spec:
         CR_CLOSE_CATEGORY=successful
 
         echo "Closing ServiceNow change request $CR_ID ..."
-
+        export TMP=/tmp/tmp_$$.txt
         cat - >"$TMP" <<HERE
         {
             "closecategory": "$CR_CLOSE_CATEGORY",
