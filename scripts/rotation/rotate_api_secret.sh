@@ -170,6 +170,7 @@ function update_broker() {
     echo "Invoke \"${trigger_name}\" trigger"
     case "$1" in
             dev)
+            echo "Run otc-api pipeline for dev"
     local result=$(curl -s  --silent --location --request POST ${pipeline_url} -H "Content-Type: application/json" -H "Authorization: ${bearer_token}" \
 --data-raw "$(cat << EOF
 {
@@ -193,6 +194,7 @@ EOF
 )")
                 ;;
             developement)
+            echo "Run otc-api pipeline for development"
     local result=$(curl -s  --silent --location --request POST ${pipeline_url} -H "Content-Type: application/json" -H "Authorization: ${bearer_token}" \
 --data-raw "$(cat << EOF
 {
@@ -216,6 +218,7 @@ EOF
 )")
                 ;;
             *)
+            echo "Run otc-api pipeline for prod"
     local result=$(curl -s  --silent --location --request POST ${pipeline_url} -H "Content-Type: application/json" -H "Authorization: ${bearer_token}" \
 --data-raw "$(cat << EOF
 {
