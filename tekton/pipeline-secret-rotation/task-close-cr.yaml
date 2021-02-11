@@ -45,6 +45,8 @@ spec:
         value: $(params.environment)
       - name: CR_ID
         value: $(params.cr_id)
+      - name: SLACK_DEPLOY_CHANNEL
+        value: $(params.deployChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
