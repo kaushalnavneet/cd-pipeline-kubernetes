@@ -29,11 +29,6 @@ spec:
         valueFrom:
           fieldRef:
             fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
-      - name: API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: OPEN_CR_API_KEY
       - name: SN_TOKEN
         valueFrom:
           secretKeyRef:
@@ -93,10 +88,6 @@ spec:
         if [ -z ${CR_PRIORITY} ]; then
           CR_PRIORITY="moderate"
         fi
-        ibmcloud config --check-version=false
-        echo Logging into ibmcloud
-        ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
-        BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
 
         SYSTEM="continuous-delivery-pipeline"
         CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
