@@ -9,8 +9,10 @@ spec:
     - name: script_branch
     - name: script_directory
     - name: config_repo
+      default: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
     - name: config_directory
+      default: "devops-config"
     - name: environment
     - name: clusterNamespace
       default: "opentoolchain"
