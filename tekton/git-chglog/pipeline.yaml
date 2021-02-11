@@ -16,8 +16,6 @@ spec:
       description: the ids token to use to clone repos
     - name: imageUrl
       description: The url of the alpine image with git-chglog
-    - name: dockerhubPassword
-      description: password for docker hub
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -31,8 +29,6 @@ spec:
         value: $(params.accountApiKey1308775)
       - name: accountApiKey1416501
         value: $(params.accountApiKey1416501)
-      - name: dockerhubPassword
-        value: $(params.dockerhubPassword)
   - name: generate-log
     taskRef:
       name:  generate-log-task

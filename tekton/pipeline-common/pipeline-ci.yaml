@@ -20,6 +20,7 @@ spec:
     - name: skipBuild
     - name: skipVA
     - name: skipDeploy
+    - name: skipChglog
     - name: dockerFile
       default: ''
     - name: runBaseImage
@@ -80,8 +81,20 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc 
-    - name: build
+    - name: generate-changelog
       runAfter: [clone-config-repo,clone-charts-repo]
+      taskRef:
+        name:  chglog
+      params:
+        - name: source_repo
+          value: $(params.source_repo)
+        - name: skipChglog
+          value: $(params.skipChglog)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: build
+      runAfter: [generate-changelog]
       taskRef:
         name:  run-base
       params:

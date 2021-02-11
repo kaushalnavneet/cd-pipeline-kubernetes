@@ -21,7 +21,6 @@ spec:
       default: us.icr.io/opentoolchain/cd-build-base:go1.15
     - name: extraDockerOpts
       default: --no-cache --pull
-    - name: dockerhubPassword
   steps:
   - name: build-push-image
     image: $(params.runBaseImage)
@@ -48,12 +47,6 @@ spec:
         value: $(params.accountApiKey1416501)
       - name: EXTRA_DOCKER_OPTS
         value: $(params.extraDockerOpts)
-      - name: DOCKERHUB_USERNAME
-        value: idsorg
-      - name: DOCKERHUB_PASSWORD
-        value: $(params.dockerhubPassword)
-      - name: DOCKERHUB_IMAGE_NAME
-        value: ibmcom/git-chglog
       - name: DOCKER_HOST
         value: "unix:///var/run/docker.sock"
     command: ["/bin/bash", "-c"]
@@ -65,13 +58,18 @@ spec:
         cd src/github.ibm.com/org-ids
 
         cp -a /work cd-pipeline-kubernetes
+        cd cd-pipeline-kubernetes
+        git pull
+        cd ..
 
         IBM_CLOUD_API=cloud.ibm.com
         IMAGE_URL=${IMAGE_URL:-${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_NAME}}
         DOCKERFILE=cd-pipeline-kubernetes/docker/git-chglog/Dockerfile
-        CONTEXT=${DOCKERFILE}/../context
+        CONTEXT=cd-pipeline-kubernetes/docker/git-chglog/context
 
-        ibmcloud login -a ${IBM_CLOUD_API} --apikey ${API_KEY} -r ${ACCOUNT_REGION}
+        ibmcloud login -a ${IBM_CLOUD_API} -r ${ACCOUNT_REGION} --apikey ${DOCKER_PASSWORD}
+        ibmcloud cr region-set global
+        ibmcloud cr login
 
         echo "Building using local Docker"
 
@@ -84,14 +82,6 @@ spec:
         fi
 
         docker push ${IMAGE_URL}
-
-        echo "###########################################"
-        echo ${IMAGE_URL} ${DOCKERHUB_IMAGE_NAME}
-        docker tag ${IMAGE_URL} ${DOCKERHUB_IMAGE_NAME}
-
-        docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-        docker push ${DOCKERHUB_IMAGE_NAME}
-        echo "###########################################"
   sidecars:
     - image: docker:19-dind
       name: server

@@ -126,6 +126,8 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
+          - name: skipChglog
+            value: $(params.skipChglog)
           - name: artifactoryTokenBase64
             value: $(params.ARTIFACTORY_TOKEN_BASE64)
           - name: artifactoryId
@@ -172,6 +174,8 @@ spec:
     - name: skipVA
       value: "true"
     - name: skipDeploy
+      value: "false"
+    - name: skipChglog
       value: "false"
 ---
 apiVersion: tekton.dev/v1beta1

@@ -9,10 +9,10 @@ spec:
     - name: componentRevision
       default: master
     - name: idsToken
-workspaces:
+  workspaces:
   - name: task-pvc
     mountPath: /artifacts
-steps:
+  steps:
   - name: generate-log-task
     image: $(params.imageUrl)
     imagePullPolicy: IfNotPresent
@@ -33,11 +33,13 @@ steps:
         cd src/github.ibm.com/org-ids
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
-        GIT_ASKPASS=./token.sh git clone --single-branch --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
-        REPO_NAME=${$(basename ${COMPONENT_REPO})%.*}
+        GIT_ASKPASS=./token.sh git clone --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
+        REPO_NAME=$(basename ${COMPONENT_REPO%.*})
         cd $REPO_NAME
         mv $HOME/.chglog .
-        sed -i "s/dummyURL/${COMPONENT_REPO%.*}/" .chglog/config.yml
+        sed -i "s#dummyURL#${COMPONENT_REPO%.*}#" .chglog/config.yml
 
+        echo Here is the changelog of ${REPO_NAME}
+        printf "\n\n\n\n"
         git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > /artifacts/changelog.md
         cat /artifacts/changelog.md
