@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: chglog
+spec:
+  params:
+    - name: source_repo
+    - name: skipChglog
+      default: "false"
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: chglog
+    image: icr.io/continuous-delivery/pipeline/chglog-pipeline
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: SOURCE_REPO
+        value: $(params.source_repo)
+      - name: SKIP
+        value: $(params.skipChglog)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping changelog generation"
+          exit 0
+        fi
+        SOURCE_DIRECTORY=$(basename ${SOURCE_REPO%.*})
+        cd "${SOURCE_DIRECTORY}"
+        mv $HOME/.chglog .
+        sed -i "s#dummyURL#${SOURCE_REPO%.*}#" .chglog/config.yml
+
+        git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > changelog.txt
