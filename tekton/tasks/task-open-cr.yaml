@@ -27,6 +27,8 @@ spec:
       default: "moderate"
     - name: cr_type
       default: "standard"
+    - name: override_cr_description
+      default: 'false'
   stepTemplate:
     env:
       - name: PIPELINE_TRIGGERING_USER
@@ -55,7 +57,7 @@ spec:
             key: SLACK_TOC_HOOK
   workspaces:
   - name: task-pvc
-    mountPath: /workspace 
+    mountPath: /workspace
   steps:
   - name: open-cr
     image: $(params.deployBaseImage)
@@ -83,10 +85,13 @@ spec:
         value: $(params.cr_priority)
       - name: CR_TYPE
         value: $(params.cr_type)
+      - name: OVERRIDE_CR_DESCRIPTION
+        value: $(params.override_cr_description)
+        default: 'false'
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
-      - | 
+      - |
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
@@ -115,7 +120,9 @@ spec:
         CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
         PURPOSE="Continuous Delivery deployment of Pipeline to public environment ($DEPLOY_TARGET: $DEPLOY_CLUSTERS)."
 
-        if [ -r /workspace/deployment.txt ]; then
+        if [ ! -z "$OVERRIDE_CR_DESCRIPTION" -a "$OVERRIDE_CR_DESCRIPTION" != "false" ]; then
+          DEPLOY_PACKAGE=$OVERRIDE_CR_DESCRIPTION
+        elif [ -r /workspace/deployment.txt ]; then
           DEPLOY_PACKAGE="$( </workspace/deployment.txt )"
         else
           DEPLOY_PACKAGE="https://github.ibm.com/org-ids/pipeline-config/tree/$(git rev-parse HEAD)"
@@ -146,7 +153,7 @@ spec:
           "description": "$PURPOSE\nDescription/Plan: Delivering changes for:\n$DEPLOY_PACKAGE",
           "backoutplan": "Revert changes and re-deploy.",
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
-          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
+          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")",
           "deploymentready": "yes",
           "type": "${CR_TYPE}"
         }
@@ -187,7 +194,7 @@ spec:
         do
           git push
           rc=$?
-          if [[ $rc == 0 ]]; then 
+          if [[ $rc == 0 ]]; then
             break;
           fi
           n=$[$n+1]
@@ -216,7 +223,7 @@ spec:
             echo "ServiceNow change request is not in 'Scheduled' state (state: $CR_STATE)"
             exit 1
         fi
-        
+
         # add au-syd E2E tests via a CTASK
         echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
         curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000&&sort_order=desc" \
@@ -251,7 +258,7 @@ spec:
             echo "Failed: $RESPONSE"
             exit 1
         fi
-        
+
         echo Created task $CTASK_ID. Closing...
 
         PAYLOAD=$(jq --null-input "$(cat <<HERE
@@ -292,7 +299,7 @@ spec:
             -H "Content-Type:application/json" \
             --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/implement" \
             --silent --show-error)
-        
+
         echo "Checking ServiceNow change request state..."
 
         RESPONSE=$(curl -H "Authorization:Bearer $SN_TOKEN" \
@@ -328,7 +335,7 @@ spec:
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
-      - | 
+      - |
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
@@ -336,7 +343,7 @@ spec:
         ID_FILE=cr/$ENVIRONMENT/cr_id
         SN_TICKET_ID=$(<$ID_FILE)
         SN_ICON=":delivery-pipeline:"
-        
+
         NOTICE_TEXT="Continuous Delivery deployment of Pipeline to public environment ($DEPLOY_TARGET: $DEPLOY_CLUSTERS)."
 
         ICON=${SN_ICON:=":mario-pipe-5339:"}
@@ -346,7 +353,7 @@ spec:
         {
           "channel": "${SLACK_DEPLOY_CHANNEL}",
           "text": "${NOTICE_TEXT} \n",
-          "username": "${SLACK_USERNAME}", 
+          "username": "${SLACK_USERNAME}",
           "icon_emoji": "${ICON}",
           "attachments": [
             {

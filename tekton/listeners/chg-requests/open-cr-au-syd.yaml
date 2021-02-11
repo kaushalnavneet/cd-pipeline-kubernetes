@@ -13,6 +13,8 @@ spec:
     - name: tocChannel
     - name: deployChannel
     - name: prodRepos
+    - name: override_cr_description
+      default: false
 
     # CD integration
     - name: api
@@ -116,6 +118,8 @@ spec:
             value: $(params.CR_PRIORITY)
           - name: cr_type
             value: $(params.CR_TYPE)
+          - name: override_cr_description
+            value: $(params.override_cr_description)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

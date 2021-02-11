@@ -21,6 +21,8 @@ spec:
       default: "moderate"
     - name: cr_type
       default: "standard"
+    - name: override_cr_description
+      default: 'false'
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -36,7 +38,7 @@ spec:
           value: $(params.charts_directory)
       workspaces:
       - name: output
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
     - name: get-deployment-info
       runAfter: [clone-charts-repo]
       taskRef:
@@ -48,7 +50,7 @@ spec:
           value: $(params.prodRepos)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
     - name: open-cr
       runAfter: [get-deployment-info]
       taskRef:
@@ -72,7 +74,9 @@ spec:
           value: $(params.cr_priority)
         - name: cr_type
           value: $(params.cr_type)
+        - name: override_cr_description
+          value: $(params.override_cr_description)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
 

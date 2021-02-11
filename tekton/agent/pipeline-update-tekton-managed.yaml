@@ -1,0 +1,124 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-deploy-tekton-managed
+spec:
+  params:
+    - name: update_agent
+      default: "true"
+    - name: update_kata
+      default: "false"
+    - name: kata_repo
+      default: "https://github.ibm.com/org-ids/kata-deploy.git"
+    - name: kata_branch
+      default: "master"
+    - name: kata_directory
+      default: "kata-deploy"
+    - name: region
+    - name: target_domain
+      default: 'devops.cloud.ibm.com'
+    - name: set_worker_offline
+      default: 'true'
+    - name: run_commands
+      default: 'false'
+    - name: clusterName1
+    - name: skipDeploy1
+    - name: clusterName2
+    - name: skipDeploy2
+    - name: clusterName3
+    - name: skipDeploy3
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: clone-kata-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.kata_repo)
+        - name: branch
+          value: $(params.kata_branch)
+        - name: directory-name
+          value: $(params.kata_directory)
+      workspaces:
+        - name: output
+          workspace: pipeline-pvc
+    - name: update-managed-worker-1
+      runAfter: [clone-kata-repo]
+      taskRef:
+        name: update-managed-worker
+      params:
+        - name: update_agent
+          value: $(params.update_agent)
+        - name: update_kata
+          value: $(params.update_kata)
+        - name: kata_directory
+          value: $(params.kata_directory)
+        - name: region
+          value: $(params.region)
+        - name: target_domain
+          value: $(params.target_domain)
+        - name: set_worker_offline
+          value: $(params.set_worker_offline)
+        - name: run_commands
+          value: $(params.run_commands)
+        - name: skipDeploy
+          value: $(params.skipDeploy1)
+        - name: clusterName
+          value: $(params.clusterName1)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: update-managed-worker-2
+      runAfter: [update-managed-worker-1]
+      taskRef:
+        name: update-managed-worker
+      params:
+        - name: update_agent
+          value: $(params.update_agent)
+        - name: update_kata
+          value: $(params.update_kata)
+        - name: kata_directory
+          value: $(params.kata_directory)
+        - name: region
+          value: $(params.region)
+        - name: target_domain
+          value: $(params.target_domain)
+        - name: set_worker_offline
+          value: $(params.set_worker_offline)
+        - name: run_commands
+          value: $(params.run_commands)
+        - name: skipDeploy
+          value: $(params.skipDeploy2)
+        - name: clusterName
+          value: $(params.clusterName2)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: update-agent-and-kata-3
+      runAfter: [update-managed-worker-2]
+      taskRef:
+        name: update-managed-worker
+      params:
+        - name: update_agent
+          value: $(params.update_agent)
+        - name: update_kata
+          value: $(params.update_kata)
+        - name: kata_directory
+          value: $(params.kata_directory)
+        - name: region
+          value: $(params.region)
+        - name: target_domain
+          value: $(params.target_domain)
+        - name: set_worker_offline
+          value: $(params.set_worker_offline)
+        - name: run_commands
+          value: $(params.run_commands)
+        - name: skipDeploy
+          value: $(params.skipDeploy3)
+        - name: clusterName
+          value: $(params.clusterName3)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+

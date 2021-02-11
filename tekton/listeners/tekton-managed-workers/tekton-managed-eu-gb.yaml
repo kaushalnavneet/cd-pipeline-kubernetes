@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tekton-managed-worker-eu-gb
+spec:
+  triggers:
+    - bindings:
+        - name: region
+          value: "eu-gb"
+        - name: environment
+          value: "prod-eu-gb"
+        - name: clusterName1
+          value: otc-tektonpw-lon04-prod
+        - name: skipDeploy1
+          value: "false"
+        - name: clusterName2
+          value: otc-tektonpw-lon05-prod
+        - name: skipDeploy2
+          value: "false"
+        - name: clusterName3
+          value: otc-tektonpw-lon06-prod
+        - name: skipDeploy3
+          value: "false"
+      template:
+        name: tekton-managed-trigger-template

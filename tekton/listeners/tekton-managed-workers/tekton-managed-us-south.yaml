@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tekton-managed-worker-us-south
+spec:
+  triggers:
+    - bindings:
+        - name: region
+          value: "us-south"
+        - name: environment
+          value: "prod-us-south"
+        - name: clusterName1
+          value: otc-tektonpw-dal10-prod
+        - name: skipDeploy1
+          value: "false"
+        - name: clusterName2
+          value: otc-tektonpw-dal12-prod
+        - name: skipDeploy2
+          value: "false"
+        - name: clusterName3
+          value: otc-tektonpw-dal13-prod
+        - name: skipDeploy3
+          value: "false"
+      template:
+        name: tekton-managed-trigger-template

@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tekton-managed-worker-dev
+spec:
+  triggers:
+    - bindings:
+        - name: region
+          value: "us-south"
+        - name: environment
+          value: "dev-us-south"
+        - name: clusterName1
+          value: otc-tektonpw-us-south-dev
+        - name: skipDeploy1
+          value: "false"
+        - name: clusterName2 #skip only one managed worker on dev
+          value: otc-tektonpw-us-south-dev
+        - name: skipDeploy2
+          value: "true"
+        - name: clusterName3 #skip only one managed worker on dev
+          value: otc-tektonpw-us-south-dev
+        - name: skipDeploy3
+          value: "true"
+        - name: target_domain
+          value: "devops.dev.cloud.ibm.com"
+      template:
+        name: tekton-managed-trigger-template

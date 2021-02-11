@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tekton-managed-worker-jp-tok
+spec:
+  triggers:
+    - bindings:
+        - name: region
+          value: "jp-tok"
+        - name: environment
+          value: "prod-jp-tok"
+        - name: clusterName1
+          value: otc-tektonpw-tok02-prod
+        - name: skipDeploy1
+          value: "false"
+        - name: clusterName2
+          value: otc-tektonpw-tok04-prod
+        - name: skipDeploy2
+          value: "false"
+        - name: clusterName3
+          value: otc-tektonpw-tok05-prod
+        - name: skipDeploy3
+          value: "false"
+      template:
+        name: tekton-managed-trigger-template
