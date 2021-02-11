@@ -67,6 +67,7 @@ spec:
       stringData:
         API_KEY: $(params.toolchainApikey)
         DEPLOY_API_KEY: $(params.DEPLOY_API_KEY)
+        OPEN_CR_API_KEY: $(params.OPEN_CR_API_KEY)
         VAULT_SIDEKICK_ROLE_ID: $(params.VAULT_SIDEKICK_ROLE_ID)
         VAULT_SIDEKICK_SECRET_ID: $(params.VAULT_SIDEKICK_SECRET_ID)
         IDS_TOKEN: $(params.IDS_TOKEN)

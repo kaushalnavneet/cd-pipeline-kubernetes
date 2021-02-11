@@ -33,7 +33,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: cd-secret
-            key: DEPLOY_API_KEY
+            key: OPEN_CR_API_KEY
       - name: SN_TOKEN
         valueFrom:
           secretKeyRef:
