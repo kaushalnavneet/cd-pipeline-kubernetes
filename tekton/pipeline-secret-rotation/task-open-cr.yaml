@@ -16,6 +16,10 @@ spec:
       default: "moderate"
     - name: cr_type
       default: "standard"
+    - name: description
+      default: "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values."
+    - name: purpose
+      default: "To rotate the pipeline broker secret, pipeline shared secret and devx secret that are used by pipeline apps in Continuous Delivery service."
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -60,6 +64,10 @@ spec:
         value: $(params.cr_priority)
       - name: CR_TYPE
         value: $(params.cr_type)
+      - name: DESCRIPTION
+        value: $(params.description)
+      - name: PURPOSE
+        value: $(params.purpose)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -92,7 +100,6 @@ spec:
 
         SYSTEM="continuous-delivery-pipeline"
         CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
-        PURPOSE="To rotate the pipeline broker secret, pipeline shared secret and devx secret that are used by pipeline apps in Continuous Delivery service."
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
             ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
@@ -116,8 +123,8 @@ spec:
           "priority": "${CR_PRIORITY}",
           "environment": "$CRN",
           "purpose": "$PURPOSE",
-          "description": "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values.",
-          "backoutplan": "Restore the previous secret values in vault and restart the deployments that use them.",
+          "description": "$DESCRIPTION",
+          "backoutplan": "Restore the previous secret values in vault and restart the pods that use them.",
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
           "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
           "deploymentready": "yes",

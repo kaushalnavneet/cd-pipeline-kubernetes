@@ -22,6 +22,18 @@ function generate_new_broker_value() {
     fi
 }
 
+function generate_new_iam_api_key() {
+    # 1 - temporary file that contains the vault entry contents
+    # 2 - new secret
+    local new_value=$2
+    local old_value=$(cat $1 | jq -r .auth__ibmIdApiKey)
+    local previous_value=$(cat $1 | jq 'has("PREVIOUS_auth__ibmIdApiKey")')
+    if [ ${previous_value} == "false" ]; then
+        local new_content=$(cat $1 | jq --arg iamkey $new_value '. + {auth__ibmIdApiKey: $iamkey}' | jq --arg previous $old_value '. + {PREVIOUS_auth__ibmIdApiKey: $previous}')
+        echo $new_content | jq . > $1
+    fi
+}
+
 function generate_new_shared_value() {
     # 1 - temporary file that contains the vault entry contents
     # 2 - new secret
@@ -284,6 +296,14 @@ function restart_pods() {
     for deployment in "${deployments[@]}"; do
         kubectl -n $1 rollout status deployment/$deployment -w
     done    
+    echo "restart pods done"
+}
+
+function restart_pods_consumption() {
+    # 1 - namespace
+    echo "rollout restart for pipreline-consumption"
+    kubectl -n $1 rollout restart statefulset/pipeline-consumption
+    kubectl -n $1 rollout status statefulset/pipeline-consumption -w
     echo "restart pods done"
 }
 

@@ -1,0 +1,126 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: trigger-template-key-rotation-consumption
+spec:
+  params:
+    - name: deploy_apikey
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: environment
+    - name: clusterNamespace
+      default: "opentoolchain"
+    - name: clusterName1
+    - name: skipCluster1
+      default: "false"
+    - name: clusterName2
+      default: ""
+    - name: skipCluster2
+      default: "false"
+    - name: clusterName3
+      default: ""
+    - name: skipCluster3
+      default: "false"
+    - name: config_repo
+    - name: config_directory
+
+    # CD integration
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: API
+      default: https://cloud.ibm.com
+  resourcetemplates:
+    # PVC definition like pre-tekton-0.10.1
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: key-rotation-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  5Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.API)
+        REGION: $(params.toolchainRegion)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.toolchainApikey)
+        DEPLOY_API_KEY: $(params.DEPLOY_API_KEY)
+        VAULT_SIDEKICK_ROLE_ID: $(params.VAULT_SIDEKICK_ROLE_ID)
+        VAULT_SIDEKICK_SECRET_ID: $(params.VAULT_SIDEKICK_SECRET_ID)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN)
+        SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
+        NEW_IAM_API_KEY: $(params.NEW_IAM_API_KEY)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: key-rotation-$(params.environment)-$(uid)
+      spec:
+        pipelineRef:
+          name: pipeline-secret-rotation-consumption
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: key-rotation-$(uid)-pvc
+        params:
+          - name: script_repo
+            value: https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+          - name: script_branch
+            value: master
+          - name: script_directory
+            value: script-cd-pipeline-kubernetes
+          - name: config_repo
+            value: $(params.config_repo)
+          - name: config_branch
+            value: master
+          - name: config_directory
+            value: $(params.config_directory)
+          - name: environment
+            value: $(params.environment)
+          - name: clusterNamespace
+            value: opentoolchain
+          - name: clusterName1
+            value: $(params.clusterName1)
+          - name: skipCluster1
+            value: $(params.skipCluster1)
+          - name: clusterName2
+            value: $(params.clusterName2)
+          - name: skipCluster2
+            value: $(params.skipCluster2)
+          - name: clusterName3
+            value: $(params.clusterName3)
+          - name: skipCluster3
+            value: $(params.skipCluster3)
