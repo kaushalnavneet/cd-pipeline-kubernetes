@@ -27,8 +27,6 @@ spec:
       default: ""
     - name: skipCluster3
       default: "false"
-    - name: config_repo
-    - name: config_directory
 
     # CD integration
     - name: apikey

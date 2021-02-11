@@ -10,8 +10,6 @@ spec:
       default: 'https://watson.service-now.com'
     - name: deployChannel
       default: '#devops-otc-deployment'
-    - name: tocChannel
-      default: '#devops-cd-cie'
     - name: cr_priority
       default: "moderate"
     - name: cr_type
@@ -63,6 +61,8 @@ spec:
         value: $(params.description)
       - name: PURPOSE
         value: $(params.purpose)
+      - name: SLACK_DEPLOY_CHANNEL
+        value: $(params.deployChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -136,6 +136,7 @@ spec:
         echo "RESPONSE: ${RESPONSE}"
         CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
         echo "CR ID: ${CR_ID}"
+        echo "https://watson.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}"
 
         sleep 10
         RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
@@ -160,6 +161,7 @@ spec:
         echo "ServiceNow change request is in $CR_STATE state."
 
         echo -n $CR_ID | tee $(results.cr_id.path)
+        echo ""
 
         SN_ICON=":delivery-pipeline:"
 
@@ -186,4 +188,3 @@ spec:
         curl -X POST -H "Content-Type: application/json" \
             -d @message.json \
             ${SLACK_DEPLOY_HOOK}
-
