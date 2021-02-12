@@ -33,5 +33,5 @@ spec:
         mv $HOME/.chglog .
         sed -i "s#dummyURL#${SOURCE_REPO%.*}#" .chglog/config.yml
 
-        git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > changelog.txt
-        cat changelog.txt
+        git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > .chglog/changelog.txt
+        cat .chglog/changelog.txt
