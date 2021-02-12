@@ -21,6 +21,7 @@ spec:
     - name: skipVA
     - name: skipDeploy
     - name: skipChglog
+      default: "true"
     - name: dockerFile
       default: ''
     - name: runBaseImage
