@@ -34,10 +34,10 @@ spec:
         echo "echo -n $IDS_TOKEN" > ./token.sh
         chmod +x ./token.sh
         GIT_ASKPASS=./token.sh git clone --branch ${COMPONENT_REVISION} ${COMPONENT_REPO}
-        REPO_NAME=$(basename ${COMPONENT_REPO%.*})
+        REPO_NAME=$(basename ${COMPONENT_REPO} | cut -d. -f1)
         cd $REPO_NAME
         mv $HOME/.chglog .
-        sed -i "s#dummyURL#${COMPONENT_REPO%.*}#" .chglog/config.yml
+        sed -i "s#dummyURL#${COMPONENT_REPO}#" .chglog/config.yml
 
         echo Here is the changelog of ${REPO_NAME}
         printf "\n\n\n\n"
