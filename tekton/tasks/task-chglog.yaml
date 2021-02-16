@@ -31,7 +31,7 @@ spec:
         SOURCE_DIRECTORY=$(basename ${SOURCE_REPO} | cut -d. -f1)
         cd "${SOURCE_DIRECTORY}"
         mv $HOME/.chglog .
-        sed -i "s#dummyURL#${SOURCE_REPO}#" .chglog/config.yml
+        sed -i "s#dummyURL#${SOURCE_REPO%/*}/${SOURCE_DIRECTORY}#" .chglog/config.yml
 
         git-chglog $(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1)).. > .chglog/changelog.txt
         cat .chglog/changelog.txt

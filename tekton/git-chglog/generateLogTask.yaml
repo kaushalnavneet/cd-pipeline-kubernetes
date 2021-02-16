@@ -37,7 +37,7 @@ spec:
         REPO_NAME=$(basename ${COMPONENT_REPO} | cut -d. -f1)
         cd $REPO_NAME
         mv $HOME/.chglog .
-        sed -i "s#dummyURL#${COMPONENT_REPO}#" .chglog/config.yml
+        sed -i "s#dummyURL#${COMPONENT_REPO%/*}/${SREPO_NAME}#" .chglog/config.yml
 
         echo Here is the changelog of ${REPO_NAME}
         printf "\n\n\n\n"
