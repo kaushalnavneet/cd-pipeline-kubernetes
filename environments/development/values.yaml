@@ -137,7 +137,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         LOG_SERVICE_URL: https://pipeline-log-service.us-south.devops.dev.cloud.ibm.com
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.10.0-dev"
+        AGENT_VERSION: "0.9.3-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         ENABLE_S3_STORAGE: true
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
@@ -524,7 +524,7 @@ pipeline:
       enabled: false
     preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
     terminationGracePeriodSeconds: 4000
-    travisDockerTag: 7c80b2804f643e4498f538a09f00003f3234f6d2-202101081504UTC
+    travisDockerTag: dee07aae7bc25113ea944ca1103431eb67a5b725-202102152225UTC
     configmap:
       data:
         AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
