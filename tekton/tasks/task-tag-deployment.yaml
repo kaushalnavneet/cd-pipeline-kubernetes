@@ -22,7 +22,7 @@ spec:
   - name: task-pvc
     mountPath: /workspace 
   steps:
-  - name: tag-deployment
+  - name: prod-cloning
     image: $(params.deployBaseImage)
     imagePullPolicy: IfNotPresent
     env:
@@ -50,21 +50,70 @@ spec:
             exit 0
         fi
 
-        TAG=prod-$( date +%Y%m%d-%H%M )
-        echo 'tagging with' $TAG
-
         IFS=',' read -ra REPOS <<<$PROD_REPOS
         for REPO in ${REPOS[@]}; do
             if [ $REPO == "pgbouncer" ]; then
               continue
             fi
-            echo Tagging repo $REPO
-            REPO_URL=https://github.ibm.com/org-ids/${REPO}
+            echo Cloning repo $REPO
             REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/${REPO}.git
             git clone -b integration "$REPO_URL_AUTH"
+        done
+  - name: tag-chglog
+    image: icr.io/continuous-delivery/pipeline/chglog-pipeline
+    imagePullPolicy: IfNotPresent
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        set -e
+        [ ! -d tmp_info ] && exit 0
+        cd tmp_info
+
+        git config --global user.email "empty@ibm.com"
+
+        TAG=prod-$( date +%Y%m%d-%H%M )
+        echo 'tagging with' $TAG
+
+        for REPO in *; do
+            echo Tagging repo $REPO
+            REPO_URL=https://github.ibm.com/org-ids/${REPO}
             pushd $REPO
-            git tag "$TAG"
+            SECOND_LATEST_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1))
+            git tag "$TAG" -m "Empty Message"
+            cp -r $HOME/.chglog .
+            sed -i "s#dummyURL#${REPO_URL}#" .chglog/config.yml
+            git-chglog $TAG.. > ./temp.txt
+            cat temp.txt
+
+            TITLE="Changelog in the tag message.\n\n[Comparison against previous tag](https://github.ibm.com/org-ids/${REPO}/compare/${SECOND_LATEST_TAG}...${TAG}) . \n"
+            sed -i "1s#^#${TITLE}\n#" ./temp.txt
+            cat temp.txt
+
+            rm -rf .chglog
+            git tag "$TAG" ${TAG}^{} -f -F ./temp.txt
+            rm ./temp.txt
+            popd
+        done
+  - name: tag-deployment
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+
+        [ ! -d tmp_info ] && exit 0
+        cd tmp_info
+
+        for REPO in *; do
+            pushd $REPO
+            echo Pushing to repo $REPO
             git push --tags
             popd
         done
-
