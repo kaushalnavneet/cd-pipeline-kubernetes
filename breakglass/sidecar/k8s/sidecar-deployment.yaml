@@ -1,0 +1,103 @@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: localpipelineSidecar
+subjects:
+- kind: ServiceAccount
+  name: agent-localpipeline
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: agent-localpipeline
+  namespace: default
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: master-volume
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 64Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/tektonlocal-k8s-volume"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: master-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 64Gi
+  storageClassName:
+    local-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tekton-localpipeline-sidecar
+  name: tekton-localpipeline-sidecar
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: tekton-localpipeline-sidecar
+  template:
+    metadata:
+      labels:
+        app: tekton-localpipeline-sidecar
+    spec:
+      serviceAccountName: agent-localpipeline
+      volumes:
+      - name: store-volume
+        persistentVolumeClaim:
+          claimName: master-volume
+      containers:
+      - image: thebog/bogtest:0.2
+        imagePullPolicy: Always
+        name: localsidecar
+        ports:
+        - containerPort: 5555
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - name: store-volume
+          mountPath: /data
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tekton-localpipeline-sidecar
+  name: tekton-localpipeline-sidecar
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 5555
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    app: tekton-localpipeline-sidecar
+ 

@@ -1,0 +1,27 @@
+
+##########################################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2014, 2020. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+##########################################################################################
+FROM registry.access.redhat.com/ubi8/nodejs-12:latest
+
+USER root
+
+RUN yum update -y \
+    && yum remove nodejs.x86_64 nodejs-docs.noarch nodejs-full-i18n.x86_64 nodejs-nodemon.noarch nodejs-devel.x86_64 nodejs-packaging.noarch -y \
+    && curl -sL https://rpm.nodesource.com/setup_12.x | bash - \
+    && yum install hostname wget procps nodejs iputils -y \
+    && yum remove -y mariadb-connector-c \
+    && yum clean all -y
+
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+
+CMD node index.js
+EXPOSE 5555
