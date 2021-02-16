@@ -1,4 +1,4 @@
-FROM ibmcom/websphere-liberty:20.0.0.6-full-java8-ibmjava-ubi
+FROM ibmcom/websphere-liberty:20.0.0.12-full-java8-ibmjava-ubi
 
 USER root
 
