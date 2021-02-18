@@ -52,23 +52,6 @@ pipeline:
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
   pipeline-log-service:
     replicas: 1
-    resources:
-      limits:
-        cpu: 500m
-        memory: 2Gi
-      requests:
-        cpu: 100m
-        memory: 1Gi
-    probes:
-      enabled: true
-      liveness:
-        initialDelay: 30
-        periodSeconds: 15
-        timeoutSeconds: 15
-      readiness:
-        initialDelay: 5
-        periodSeconds: 15
-        timeoutSeconds: 5
     revisionHistoryLimit: 3
     vault:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
