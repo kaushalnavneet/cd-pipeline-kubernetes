@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: trigger-binding-cleanup-devx
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: event-listener-key-rotation
+spec:
+  triggers:
+    - binding:
+        name: trigger-binding-cleanup-devx
+      template:
+        name: trigger-template-cleanup-devx
