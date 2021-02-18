@@ -6,7 +6,7 @@ metadata:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: event-listener-key-rotation
+  name: event-listener-cleanup-devx
 spec:
   triggers:
     - binding:
