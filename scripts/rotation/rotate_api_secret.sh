@@ -76,6 +76,12 @@ function remove_previous_pipeline_common() {
     echo $newresult > $1
 }
 
+function remove_previous_pipeline_support_service() {
+    # 1 - temporary file that contains the vault entry contents
+    local newresult=$(cat $1 | jq 'del(.PREVIOUS_DEVX_BASIC_AUTH_TOKEN)' | jq .)
+    echo $newresult > $1
+}
+
 function revert_vault_broker_secret() {
     # 1 - vault path
     export VAULT_TOKEN=$(vault write -field=token auth/approle/login role_id=${ROLE_ID} secret_id=${SECRET_ID})
@@ -292,19 +298,23 @@ function restart_pods() {
         echo "rollout restart for $deployment"
         kubectl -n $1 rollout restart deployment/$deployment
     done
+    echo "rollout restart for pipeline-consumption"
+    kubectl -n $1 rollout restart statefulset/pipeline-consumption
 
     for deployment in "${deployments[@]}"; do
         kubectl -n $1 rollout status deployment/$deployment -w
     done    
     echo "restart pods done"
+
+    kubectl -n $1 rollout status statefulset/pipeline-consumption -w
+    echo "restart pipeline-consumption pod done"
 }
 
-function restart_pods_consumption() {
-    # 1 - namespace
-    echo "rollout restart for pipreline-consumption"
-    kubectl -n $1 rollout restart statefulset/pipeline-consumption
-    kubectl -n $1 rollout status statefulset/pipeline-consumption -w
-    echo "restart pods done"
+function restart_pipeline_support_service_pods() {
+    echo "rollout restart for pipeline-support-service"
+    kubectl -n $1 rollout restart deployment/pipeline-support-service
+    kubectl -n $1 rollout status deployment/pipeline-support-service -w
+    echo "restart pipeline-support-service pods done"
 }
 
 function cluster_config() {

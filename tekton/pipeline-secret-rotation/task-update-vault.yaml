@@ -28,6 +28,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: VAULT_SIDEKICK_SECRET_ID
+      - name: NEW_IAM_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: NEW_IAM_API_KEY
   workspaces:
   - name: output
     mountPath: /workspace 
@@ -50,6 +55,8 @@ spec:
         value: "pipeline.common.vaultcommon.secretPaths"
       - name: DEVX_SECRET_PATH
         value: "pipeline.pipeline-support-service.vault.secretPaths"
+      - name: CONSUMPTION_SECRET_PATH
+        value: "pipeline.pipeline-consumption.vault.secretPaths"
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -90,3 +97,13 @@ spec:
         generate_new_devx_value ${devx_tempfile} ${new_secret}
         updating_vault ${devx_tempfile} ${devx_vault_path}
         rm ${devx_tempfile}
+
+        # update pipeline-consumption secret
+        consumption_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${CONSUMPTION_SECRET_PATH} pipeline-consumption)
+        echo "pipeline-consumption vault path: ${consumption_vault_path}"
+        consumption_tempfile=$(mktemp)
+        read_vault_path ${consumption_vault_path} ${consumption_tempfile}
+        save_backup ${consumption_tempfile} ${consumption_vault_path}
+        generate_new_iam_api_key ${consumption_tempfile} ${NEW_IAM_API_KEY}
+        updating_vault ${consumption_tempfile} ${consumption_vault_path}
+        rm ${consumption_tempfile}

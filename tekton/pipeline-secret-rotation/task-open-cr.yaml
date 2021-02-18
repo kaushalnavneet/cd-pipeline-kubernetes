@@ -15,9 +15,9 @@ spec:
     - name: cr_type
       default: "standard"
     - name: description
-      default: "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values."
+      default: "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values. Update iam api key value in pipeline-consumption vault, restart pipeline-consumption pod."
     - name: purpose
-      default: "To rotate the pipeline broker secret, pipeline shared secret and devx secret that are used by pipeline apps in Continuous Delivery service."
+      default: "To rotate the pipeline broker secret, pipeline shared secret, devx secret and pipeline consumption iam api key secret that is used by pipeline-consumption app in Continuous Delivery service"
   results:
     - name: cr_id
       description: the cr id that was created by the task

@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: update-vault-consumption
+  name: cleanup-devx-vault
 spec:
   params:
     - name: environment
@@ -28,16 +28,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: VAULT_SIDEKICK_SECRET_ID
-      - name: NEW_IAM_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: NEW_IAM_API_KEY
   workspaces:
   - name: output
     mountPath: /workspace 
   steps:
-  - name: update-vault
+  - name: cleanup-vault
     image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
     imagePullPolicy: IfNotPresent
     env:
@@ -49,22 +44,21 @@ spec:
         value: $(params.config_directory)
       - name: SCRIPT_DIRECTORY
         value: $(params.script_directory)
-      - name: CONSUMPTION_SECRET_PATH
-        value: "pipeline.pipeline-consumption.vault.secretPaths"
+      - name: DEVX_SECRET_PATH
+        value: "pipeline.pipeline-support-service.vault.secretPaths"
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
-      - | 
+      - |
         set -e -o pipefail
 
         . ${SCRIPT_DIRECTORY}/scripts/rotation/rotate_api_secret.sh
 
-        # update pipeline-consumption secret
-        consumption_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${CONSUMPTION_SECRET_PATH} pipeline-consumption)
-        echo "pipeline-consumption vault path: ${consumption_vault_path}"
-        consumption_tempfile=$(mktemp)
-        read_vault_path ${consumption_vault_path} ${consumption_tempfile}
-        save_backup ${consumption_tempfile} ${consumption_vault_path}
-        generate_new_iam_api_key ${consumption_tempfile} ${NEW_IAM_API_KEY}
-        updating_vault ${consumption_tempfile} ${consumption_vault_path}
-        rm ${consumption_tempfile}
+        # cleanup pipeline-support-service
+        pipeline_support_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${DEVX_SECRET_PATH} pipeline-support-service)
+        echo "pipeline-support-service vault path: ${pipeline_support_vault_path}"
+        pipeline_support_tempfile=$(mktemp)
+        read_vault_path ${pipeline_support_vault_path} ${pipeline_support_tempfile}
+        remove_previous_pipeline_support_service ${pipeline_support_tempfile}
+        updating_vault ${pipeline_support_tempfile} ${pipeline_support_vault_path}
+        rm ${pipeline_support_tempfile}

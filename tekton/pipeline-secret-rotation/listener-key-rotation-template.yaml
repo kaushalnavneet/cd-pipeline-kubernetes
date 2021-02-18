@@ -70,6 +70,7 @@ spec:
         IDS_TOKEN: $(params.IDS_TOKEN)
         SN_TOKEN: $(params.SN_TOKEN)
         SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
+        NEW_IAM_API_KEY: $(params.NEW_IAM_API_KEY)
     - apiVersion: v1
       kind: Secret
       metadata:

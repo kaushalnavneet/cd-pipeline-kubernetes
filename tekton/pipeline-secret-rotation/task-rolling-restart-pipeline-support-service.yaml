@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: rolling-restart-consumption
+  name: rolling-restart-support-service
 spec:
   params:
     - name: clusterName
@@ -65,7 +65,7 @@ spec:
 
         cluster_config ${CLUSTER_NAME}
         if [ $? -eq 0 ]; then
-          restart_pods_consumption ${CLUSTER_NAMESPACE}
+          restart_pipeline_support_service_pods ${CLUSTER_NAMESPACE}
         else
           echo "result: $result"
           exit 1
