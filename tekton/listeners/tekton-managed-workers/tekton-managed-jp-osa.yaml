@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tekton-managed-worker-jp-osa
+spec:
+  triggers:
+    - bindings:
+        - name: region
+          value: "jp-osa"
+        - name: environment
+          value: "prod-jp-osa"
+        - name: clusterName1
+          value: otc-tektonpw-osa21-prod
+        - name: skipDeploy1
+          value: "false"
+        - name: clusterName2
+          value: otc-tektonpw-osa22-prod
+        - name: skipDeploy2
+          value: "false"
+        - name: clusterName3
+          value: otc-tektonpw-osa23-prod
+        - name: skipDeploy3
+          value: "false"
+      template:
+        name: tekton-managed-trigger-template
