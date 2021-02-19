@@ -57,7 +57,7 @@ pipeline:
       # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
     probes:
       liveness:
         path: "/api/version"
@@ -92,7 +92,7 @@ pipeline:
     replicas: 1
     vault:
       secretPaths:
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
       - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_10_24_20h12m54s
     configmap:
       data:
@@ -126,8 +126,8 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
-       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
+       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
        - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
@@ -155,8 +155,8 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
-        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
+        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
     configmap:
       data:
         NEW_RELIC_APP_NAME: Pipeline Event Service - YS1
@@ -195,8 +195,8 @@ pipeline:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2020_11_23_19h55m26s
       - generic/project/continuous-delivery-dev/otc-components/development/common-iam_do_not_version
-      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-session-secret-api-key_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     configmap:
@@ -292,7 +292,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_11_09_14h44m53s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
     probes:
       liveness:
         path: "/codestation/v2/artifacts/version"
@@ -321,8 +321,8 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_10_30_10h17m45s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
       - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     probes:
       liveness:
@@ -519,7 +519,7 @@ pipeline:
     vault:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
-      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_2019_03_04_13h14m20s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
     probes:
       enabled: false
     preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
@@ -541,7 +541,7 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_2020_09_15_20h11m00s
+        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
         - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-support-service/pipeline-support-service_2021_02_08_21h24m56s
     configmap:
       data:
