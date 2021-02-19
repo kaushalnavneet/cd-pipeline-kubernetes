@@ -137,6 +137,10 @@ spec:
             value: $(params.ICD_REDIS_STORE)
           - name: qr-store
             value: $(params.QR_STORE)
+          - name: mavenUserPassword
+            value: $(params.MAVEN_USER_PASSWORD)
+          - name: mavenUserId
+            value: $(params.MAVEN_USER_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

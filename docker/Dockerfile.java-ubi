@@ -1,6 +1,6 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2020. All Rights Reserved.
+# (c) Copyright IBM Corporation 2020, 2021. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -13,6 +13,8 @@ ARG DEVELOPMENT=true
 ARG JQ_VERSION=jq-1.5
 ARG ICD_REDIS_STORE
 ARG QR_STORE
+ARG MAVEN_USER_ID
+ARG MAVEN_USER_PASSWORD
 
 ADD . /work/warbuild
 
@@ -21,7 +23,14 @@ ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /w
 
 COPY build_info.json /work/warbuild/src/main/resources/
 
-# publish logmet and qradar jars to local maven repo
+ENV MAVEN_USERID=$MAVEN_USER_ID
+ENV MAVEN_USERPASSWORD=$MAVEN_USER_PASSWORD
+
+RUN mkdir -p $HOME/.m2 \
+    && mv settings.xml $HOME/.m2/settings.xml \
+    && sed -i "s/MAVEN_USER_ID/${MAVEN_USERID}/g" $HOME/.m2/settings.xml \
+    && sed -i "s/MAVEN_USER_PASSWORD/${MAVEN_USERPASSWORD}/g" $HOME/.m2/settings.xml
+
 RUN mvn -B clean package
 
 # Create jks files based on secure properties
