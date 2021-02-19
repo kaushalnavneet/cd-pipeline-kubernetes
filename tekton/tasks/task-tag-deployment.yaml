@@ -84,11 +84,9 @@ spec:
             cp -r $HOME/.chglog .
             sed -i "s#dummyURL#${REPO_URL}#" .chglog/config.yml
             git-chglog $TAG.. > ./temp.txt
-            cat temp.txt
 
             TITLE="Changelog in the tag message.\n\n[Comparison against previous tag](https://github.ibm.com/org-ids/${REPO}/compare/${SECOND_LATEST_TAG}...${TAG}) . \n"
             sed -i "1s#^#${TITLE}\n#" ./temp.txt
-            cat temp.txt
 
             rm -rf .chglog
             git tag "$TAG" ${TAG}^{} -f -F ./temp.txt
