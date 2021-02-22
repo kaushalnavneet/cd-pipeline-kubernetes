@@ -6,7 +6,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM 1.15.8-alpine3.13
+FROM golang:1.15.8-alpine3.13
 
 ARG OPERATOR_RELEASE_VERSION=v0.16.0
 ENV LANG=en_US.UTF-8
