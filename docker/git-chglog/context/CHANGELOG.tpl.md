@@ -4,7 +4,7 @@
 {{- if .Unreleased.MergeCommits}}
 ### Changes
 {{ range .Unreleased.MergeCommits -}}
-- {{ .Header }}({{.Hash.Long}})
+- {{ .Header }}([{{.Hash.Short}}]({{$.Info.RepositoryURL}}/commit/{{.Hash.Long}}))
 {{ end }}
 {{ end -}}
 
@@ -16,7 +16,7 @@
 {{- if .MergeCommits}}
 ### Changes
 {{ range .MergeCommits -}}
-- {{ .Header }} ({{.Hash.Long}})
+- {{ .Header }}([{{.Hash.Short}}]({{$.Info.RepositoryURL}}/commit/{{.Hash.Long}}))
 {{ end }}
 {{ end -}}
 
