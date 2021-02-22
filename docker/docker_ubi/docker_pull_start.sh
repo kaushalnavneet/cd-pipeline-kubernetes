@@ -1,5 +1,7 @@
 #!/bin/bash
-
+## 
+# used by Dockerfile.docker_ubi
+##
 function pullImage {
   local vbi_name=$1
   local version=$2

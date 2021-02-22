@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# used inside private-worker-service (when an agent is created)
+##
 FROM registry.access.redhat.com/ubi8:latest
 
 USER root

@@ -6,7 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-#FROM registry.access.redhat.com/ubi8:latest
+## 
+# Used to build base image for travis-docker image
+##
 FROM registry.access.redhat.com/ubi7/ubi:latest
 
 USER root

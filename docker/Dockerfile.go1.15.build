@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# used to build travis-worker image
+##
 FROM golang:1.15.8-alpine3.13
 
 ARG OPERATOR_RELEASE_VERSION=v0.16.0

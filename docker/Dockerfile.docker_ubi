@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# used for travis-docker base image (docker container in travis-workers)
+##
 FROM us.icr.io/opentoolchain/travis-worker:run
 
 ARG TINI_VERSION=v0.16.1

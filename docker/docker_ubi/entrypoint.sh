@@ -7,6 +7,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# used by Dockerfile.docker_ubi
+##
 
 if [ -d /etc/secrets ]; then
     for file in /etc/secrets/*.secret; do

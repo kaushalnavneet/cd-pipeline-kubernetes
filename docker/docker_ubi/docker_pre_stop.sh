@@ -1,4 +1,7 @@
 #!/bin/bash
+## 
+# used by Dockerfile.docker_ubi
+##
 echo "Shutting down.." > /proc/1/fd/1
 
 jobs=$(docker ps | tail -n+2)

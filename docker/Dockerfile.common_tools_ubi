@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+##
+# Used for tekton pipeline job as a base image with minimal tooling in it
+##
 FROM registry.access.redhat.com/ubi8:latest
 
 USER root

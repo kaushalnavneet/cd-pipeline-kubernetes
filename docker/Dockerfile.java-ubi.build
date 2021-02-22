@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# used to build java apps
+##
 FROM ibmjava:8-sdk
 
 ARG TINI_VERSION=v0.16.1

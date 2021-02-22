@@ -6,7 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-
+## 
+# Used to build java apps (pipeline-service)
+##
 FROM us.icr.io/opentoolchain/cd-build-base:java-ubi as build
 
 ARG DEVELOPMENT=true

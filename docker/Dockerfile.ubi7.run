@@ -6,6 +6,9 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
+## 
+# Used to build base image for travis-docker image
+##
 FROM us.icr.io/opentoolchain/travis-worker:base
 
 COPY start_docker_daemon.sh /usr/bin/start_docker_daemon.sh
