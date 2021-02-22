@@ -68,6 +68,8 @@ spec:
       - |
         set -e
         [ ! -d tmp_info ] && exit 0
+        REPO_URL_AUTH=https://x-oauth-basic:$IDS_TOKEN@github.ibm.com/org-ids/pipeline-changelog.git
+        git clone "$REPO_URL_AUTH" --single-branch
         cd tmp_info
 
         git config --global user.email "empty@ibm.com"
@@ -76,23 +78,29 @@ spec:
         echo 'tagging with' $TAG
 
         for REPO in *; do
+            mkdir -p /workspace/pipeline-changelog/${REPO}
             echo Tagging repo $REPO
             REPO_URL=https://github.ibm.com/org-ids/${REPO}
             pushd $REPO
+            GIT_COMMIT=$(git rev-parse --verify HEAD)
             SECOND_LATEST_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1))
             git tag "$TAG" -m "Empty Message"
             cp -r $HOME/.chglog .
             sed -i "s#dummyURL#${REPO_URL}#" .chglog/config.yml
-            git-chglog $TAG.. > ./temp.txt
+            git-chglog $TAG.. > /workspace/pipeline-changelog/${REPO}/${GIT_COMMIT}.md
 
             TITLE="Changelog in the tag message.\n\n[Comparison against previous tag](https://github.ibm.com/org-ids/${REPO}/compare/${SECOND_LATEST_TAG}...${TAG}) . \n"
-            sed -i "1s#^#${TITLE}\n#" ./temp.txt
+            sed -i "1d;2s#^#${TITLE}\n#" /workspace/pipeline-changelog/${REPO}/${GIT_COMMIT}.md
 
             rm -rf .chglog
-            git tag "$TAG" ${TAG}^{} -f -F ./temp.txt
-            rm ./temp.txt
+            git tag "$TAG" ${TAG}^{} -f -F /workspace/pipeline-changelog/${REPO}/${GIT_COMMIT}.md
+            sed -i "1,4d" /workspace/pipeline-changelog/${REPO}/${GIT_COMMIT}.md
             popd
         done
+        cd ../pipeline-changelog
+        git add .
+        git commit -m "Changes in ${TAG}"
+        git push origin master
   - name: tag-deployment
     image: $(params.deployBaseImage)
     imagePullPolicy: IfNotPresent
