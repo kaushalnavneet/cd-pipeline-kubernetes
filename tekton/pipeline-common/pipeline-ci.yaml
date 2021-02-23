@@ -39,9 +39,9 @@ spec:
     - name: qr-store
       default: ''
     - name: mavenUserPassword
-      value: ''
+      default: ''
     - name: mavenUserId
-      value: ''
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
