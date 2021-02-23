@@ -131,6 +131,8 @@ spec:
           value: $(params.mavenUserPassword)
         - name: mavenUserId
           value: $(params.mavenUserId)
+        - name: addChglogUrl
+          value: "true"
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

@@ -39,6 +39,8 @@ spec:
       default: ''
     - name: mavenUserPassword
       default: ''
+    - name: addChglogUrl
+      default: "false"
   stepTemplate:
     env:
       - name: API
@@ -144,6 +146,8 @@ spec:
         value: $(params.mavenUserPassword)
       - name: MAVEN_USER_ID
         value: $(params.mavenUserId)
+      - name: ADD_CHGLOG_URL
+        value: $(params.addChglogUrl)
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -181,7 +185,10 @@ spec:
         echo ${APPLICATION_VERSION} > /workspace/appVersion
         echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
         echo ${APPLICATION_VERSION} > .pipeline_build_id
-        echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"}" > build_info.json
+        if [ "${ADD_CHGLOG_URL}" == true ]; then
+          CHANGELOG_URL=",\"Changelog\" : \"https://github.ibm.com/org-ids/pipeline-changelog/blob/master/${SOURCE_DIRECTORY}/${GIT_COMMIT}.md\""
+        fi
+        echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"${CHANGELOG_URL}}" > build_info.json
         
         docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
         # For some reason this doesn't get repulled in docker engine
