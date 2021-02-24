@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: support-jp-osa-trigger
+  name: support-jp-osa-trigger-dev
 spec:
   params:
     - name: charts_repo
