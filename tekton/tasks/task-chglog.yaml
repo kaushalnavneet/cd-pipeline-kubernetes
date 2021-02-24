@@ -13,7 +13,7 @@ spec:
   steps:
   - name: chglog
     image: icr.io/continuous-delivery/pipeline/chglog-pipeline
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     env:
       - name: SOURCE_REPO
         value: $(params.source_repo)

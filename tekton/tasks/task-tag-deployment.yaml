@@ -61,7 +61,7 @@ spec:
         done
   - name: tag-chglog
     image: icr.io/continuous-delivery/pipeline/chglog-pipeline
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:

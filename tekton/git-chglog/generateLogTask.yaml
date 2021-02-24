@@ -15,7 +15,7 @@ spec:
   steps:
   - name: generate-log-task
     image: $(params.imageUrl)
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     env:
       - name: IDS_TOKEN
         value: $(params.idsToken)
