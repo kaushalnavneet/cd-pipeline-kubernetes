@@ -20,8 +20,6 @@ spec:
     - name: skipBuild
     - name: skipVA
     - name: skipDeploy
-    - name: skipChglog
-      default: "true"
     - name: dockerFile
       default: ''
     - name: runBaseImage
@@ -93,8 +91,6 @@ spec:
       params:
         - name: source_repo
           value: $(params.source_repo)
-        - name: skipChglog
-          value: $(params.skipChglog)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
