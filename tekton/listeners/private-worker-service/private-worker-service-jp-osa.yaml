@@ -1,0 +1,183 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: private-worker-service-jp-osa-trigger-dev
+spec:
+  params:
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: config_repo
+    - name: config_branch
+    - name: config_directory
+    - name: imageUrl
+    - name: environment
+    - name: clusterNamespace
+    - name: clusterName1
+    - name: skipDeploy1
+    - name: clusterName2
+    - name: skipDeploy2
+    - name: clusterName3
+    - name: skipDeploy3
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+        REGION: $(params.toolchainRegion)
+        RESOURCE_GROUP: $(params.resourceGroup)
+        TOOLCHAIN_ID: $(params.toolchainId)
+        IDS_USER: $(params.IDS_USER)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        API_KEY_1308775: $(params.API_KEY_1308775)
+        API_KEY_1651315: $(params.API_KEY_1651315)
+        DEPLOY_API_KEY: $(params.API_KEY_1416501)
+        REGISTRY_API_KEY: $(params.API_KEY_1416501)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.charts_branch)-pws-jp-osa-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.charts_branch)-pws-jp-osa-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "private-worker-service-jp-osa-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-deploy-chart
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-pws-jp-osa-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
+          - name: config_repo
+            value: $(params.config_repo)
+          - name: config_branch
+            value: $(params.config_branch)
+          - name: config_directory
+            value: $(params.config_directory)
+          - name: imageUrl
+            value: $(params.imageUrl)
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
+          - name: environment
+            value: $(params.environment)
+          - name: clusterName1
+            value: $(params.clusterName1)
+          - name: skipDeploy1
+            value: $(params.skipDeploy1)
+          - name: clusterName2
+            value: $(params.clusterName2)
+          - name: skipDeploy2
+            value: $(params.skipDeploy2)
+          - name: clusterName3
+            value: $(params.clusterName3)
+          - name: skipDeploy3
+            value: $(params.skipDeploy3)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: private-worker-service-jp-osa-binding-dev
+spec:
+  params:
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: charts_branch
+      value: "master"
+    - name: charts_directory
+      value: "pipeline-config"
+    - name: config_repo
+      value: "https://github.ibm.com/ids-env/devops-config.git"
+    - name: config_branch
+      value: "master"
+    - name: config_directory
+      value: "devops-config"
+    - name: imageUrl
+      value: "us.icr.io/devopsotc/private-worker-service"
+    - name: environment
+      value: "jp-osa"
+    - name: clusterNamespace
+      value: opentoolchain
+    - name: clusterName1
+      value: otc-osa21-prod
+    - name: skipDeploy1
+      value: "false"
+    - name: clusterName2
+      value: otc-osa22-prod
+    - name: skipDeploy2
+      value: "false"
+    - name: clusterName3
+      value: otc-osa23-prod
+    - name: skipDeploy3
+      value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: private-worker-service-jp-osa-dev
+spec:
+  triggers:
+    - binding:
+        name: private-worker-service-jp-osa-binding-dev
+      template:
+        name: private-worker-service-jp-osa-trigger-dev
