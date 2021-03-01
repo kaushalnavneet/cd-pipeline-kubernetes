@@ -15,6 +15,7 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
+    - name: dockerFile
 
     # CD integration
     - name: api
@@ -136,6 +137,8 @@ spec:
             value: $(params.CONSOLE_AUTH_TOKEN)
           - name: helmOptions
             value: $(params.helmOptions)
+          - name: dockerFile
+            value: $(params.dockerFile)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -175,6 +178,8 @@ spec:
       value: "true"
     - name: skipDeploy
       value: "false"
+    - name: dockerFile
+      value: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs12ubi"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
