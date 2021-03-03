@@ -1,0 +1,20 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2020, 2021. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
+## 
+# Runtime image for node.js 12 based applications
+##
+FROM registry.access.redhat.com/ubi8/nodejs-12:latest
+
+USER root
+
+RUN yum update -y \
+    && yum install hostname wget procps iputils -y \
+    && yum clean all -y
+
+RUN adduser -s /bin/bash -d /home/node -U node
