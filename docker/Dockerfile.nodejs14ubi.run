@@ -9,15 +9,12 @@
 ## 
 # Runtime image for node.js 14 based applications
 ##
-FROM registry.access.redhat.com/ubi8/nodejs-12:latest
+FROM registry.access.redhat.com/ubi8/nodejs-14:latest
 
 USER root
 
 RUN yum update -y \
-    && yum remove nodejs.x86_64 nodejs-docs.noarch nodejs-full-i18n.x86_64 nodejs-nodemon.noarch nodejs-devel.x86_64 nodejs-packaging.noarch -y \
-    && curl -sL https://rpm.nodesource.com/setup_14.x | bash - \
-    && yum install hostname wget procps nodejs iputils -y \
-    && yum remove -y mariadb-connector-c \
+    && yum install hostname wget procps iputils -y \
     && yum clean all -y
 
 RUN adduser -s /bin/bash -d /home/node -U node
