@@ -50,6 +50,7 @@ else
     ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 fi
 
+set -x
 kubectl -n${CHART_NAMESPACE} get secret ${TARGET}-postgres-secret
 if [ $? -eq 0 ]; then
   kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
