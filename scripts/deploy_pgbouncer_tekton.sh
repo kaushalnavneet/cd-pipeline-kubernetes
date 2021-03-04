@@ -50,10 +50,15 @@ else
     ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 fi
 
-kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
-echo "Creating '${TARGET}-postgres-secret' secret..."
-kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-postgres-secret --from-literal=postgres-password=${PG_PASSWORD}
+kubectl -n${CHART_NAMESPACE} get secret ${TARGET}-postgres-secret
+if [ $? -eq 0 ]; then
+  kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
+  echo "Creating '${TARGET}-postgres-secret' secret..."
+  kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-postgres-secret --from-literal=postgres-password=${PG_PASSWORD}
+fi
 
+kubectl -n${CHART_NAMESPACE} get secret ${TARGET}-pgbouncer-secret
+if [ $? -eq 0 ]; then
 kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-pgbouncer-secret
 echo "Creating '${TARGET}-pgbouncer-secret' secret..."
 cat << EOF > userlist.txt
@@ -70,6 +75,8 @@ EOF
 kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-pgbouncer-secret  --from-file=userlist.txt --from-file=.pgpass
 rm -f userlist.txt
 rm -f .pgpass
+fi
+
 
 set -x
 helm init -c --stable-repo-url https://charts.helm.sh/stable
