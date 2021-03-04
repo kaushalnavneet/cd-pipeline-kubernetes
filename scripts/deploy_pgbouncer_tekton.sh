@@ -50,7 +50,7 @@ else
     ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 fi
 
-set -x
+set +e
 kubectl -n${CHART_NAMESPACE} get secret ${TARGET}-postgres-secret
 if [ $? -eq 0 ]; then
   kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-postgres-secret
@@ -78,7 +78,7 @@ rm -f userlist.txt
 rm -f .pgpass
 fi
 
-
+set -e
 set -x
 helm init -c --stable-repo-url https://charts.helm.sh/stable
 helm repo add gitlab https://charts.gitlab.io/
