@@ -1,36 +1,38 @@
-    - apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: cd-config
-      data:
-        API: $(params.api)
-        REGION: $(params.toolchainRegion)
-        RESOURCE_GROUP: $(params.resourceGroup)
-        TOOLCHAIN_ID: $(params.toolchainId)
-        IDS_USER: $(params.IDS_USER)
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: cd-secret
-      type: Opaque
-      stringData:
-        API_KEY: $(params.API_KEY_1416501)
-        API_KEY_1308775: $(params.API_KEY_1308775)
-        API_KEY_1651315: $(params.API_KEY_1651315)
-        DEPLOY_API_KEY: $(params.API_KEY_1651315)
-        IDS_TOKEN: $(params.IDS_TOKEN)
-
-    # k8s resources to be able to pull docker image from a specific container registry
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: private-registry-secret
-      type: kubernetes.io/dockerconfigjson
-      data:
-        .dockerconfigjson: $(params.dockerconfigjson)
-    - apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: docker-build-sa
-      imagePullSecrets:
-        - name: private-registry-secret
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: cd-config
+  data:
+    API: $(params.api)
+    REGION: $(params.toolchainRegion)
+    RESOURCE_GROUP: $(params.resourceGroup)
+    TOOLCHAIN_ID: $(params.toolchainId)
+    IDS_USER: $(params.IDS_USER)
+---
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: cd-secret
+  type: Opaque
+  stringData:
+    API_KEY: $(params.API_KEY_1416501)
+    API_KEY_1308775: $(params.API_KEY_1308775)
+    API_KEY_1651315: $(params.API_KEY_1651315)
+    DEPLOY_API_KEY: $(params.API_KEY_1651315)
+    IDS_TOKEN: $(params.IDS_TOKEN)
+---
+# k8s resources to be able to pull docker image from a specific container registry
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: private-registry-secret
+  type: kubernetes.io/dockerconfigjson
+  data:
+    .dockerconfigjson: $(params.dockerconfigjson)
+---
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: docker-build-sa
+  imagePullSecrets:
+    - name: private-registry-secret
