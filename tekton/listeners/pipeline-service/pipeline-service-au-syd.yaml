@@ -167,7 +167,7 @@ spec:
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: 'otc-syd05-prod'
+      value: otc-syd05-prod
     - name: skipDeploy3
       value: "false"
 ---
