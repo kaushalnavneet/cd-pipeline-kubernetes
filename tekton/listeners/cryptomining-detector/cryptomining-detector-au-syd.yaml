@@ -185,15 +185,15 @@ spec:
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-pw-au-syd-prod
+      value: otc-pw-syd04-prod
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: 'none'
+      value: otc-pw-syd05-prod
     - name: skipDeploy3
-      value: "true"
+      value: "false"
     - name: helmVersion
-      value: "v2.14.3"
+      value: "v2.16.6"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
