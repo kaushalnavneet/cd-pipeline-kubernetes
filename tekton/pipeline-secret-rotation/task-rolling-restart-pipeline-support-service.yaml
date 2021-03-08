@@ -65,7 +65,7 @@ spec:
 
         cluster_config ${CLUSTER_NAME}
         if [ $? -eq 0 ]; then
-          restart_pipeline_support_service_pods ${CLUSTER_NAMESPACE}
+          restart_pods ${CLUSTER_NAMESPACE}
         else
           echo "result: $result"
           exit 1

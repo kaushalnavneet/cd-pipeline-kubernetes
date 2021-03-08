@@ -46,6 +46,8 @@ spec:
         value: $(params.script_directory)
       - name: DEVX_SECRET_PATH
         value: "pipeline.pipeline-support-service.vault.secretPaths"
+      - name: COMMON_SECRET_PATH
+        value: "pipeline.common.vaultcommon.secretPaths"
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -55,10 +57,19 @@ spec:
         . ${SCRIPT_DIRECTORY}/scripts/rotation/rotate_api_secret.sh
 
         # cleanup pipeline-support-service
-        pipeline_support_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${DEVX_SECRET_PATH} pipeline-support-service)
-        echo "pipeline-support-service vault path: ${pipeline_support_vault_path}"
-        pipeline_support_tempfile=$(mktemp)
-        read_vault_path ${pipeline_support_vault_path} ${pipeline_support_tempfile}
-        remove_previous_pipeline_support_service ${pipeline_support_tempfile}
-        updating_vault ${pipeline_support_tempfile} ${pipeline_support_vault_path}
-        rm ${pipeline_support_tempfile}
+        #pipeline_support_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${DEVX_SECRET_PATH} pipeline-support-service)
+        #echo "pipeline-support-service vault path: ${pipeline_support_vault_path}"
+        #pipeline_support_tempfile=$(mktemp)
+        #read_vault_path ${pipeline_support_vault_path} ${pipeline_support_tempfile}
+        #remove_previous_pipeline_support_service ${pipeline_support_tempfile}
+        #updating_vault ${pipeline_support_tempfile} ${pipeline_support_vault_path}
+        #rm ${pipeline_support_tempfile}
+        
+        # update shared pipeline secret
+        pipeline_common_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${COMMON_SECRET_PATH} pipeline-common)
+        echo "common vault path: ${pipeline_common_vault_path}"
+        pipeline_common_tempfile=$(mktemp)
+        read_vault_path ${pipeline_common_vault_path} ${pipeline_common_tempfile}
+        remove_previous_pipeline_common ${pipeline_common_tempfile}
+        updating_vault ${pipeline_common_tempfile} ${pipeline_common_vault_path}
+        rm ${pipeline_common_tempfile}
