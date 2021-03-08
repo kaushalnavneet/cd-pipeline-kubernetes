@@ -31,7 +31,8 @@ ENV MAVEN_USERPASSWORD=$MAVEN_USER_PASSWORD
 RUN mkdir -p $HOME/.m2 \
     && mv settings.xml $HOME/.m2/settings.xml \
     && sed -i "s/MAVEN_USER_ID/${MAVEN_USERID}/g" $HOME/.m2/settings.xml \
-    && sed -i "s/MAVEN_USER_PASSWORD/${MAVEN_USERPASSWORD}/g" $HOME/.m2/settings.xml
+    && export REAL_MAVEN_USERPASSWORD=$(echo -n ${MAVEN_USERPASSWORD} | base64 -d ) \
+    && sed -i "s/MAVEN_USER_PASSWORD/${REAL_MAVEN_USERPASSWORD}/g" $HOME/.m2/settings.xml
 
 RUN mvn -B clean package
 
