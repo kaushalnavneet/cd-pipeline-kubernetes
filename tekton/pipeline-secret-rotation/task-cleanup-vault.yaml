@@ -72,7 +72,7 @@ spec:
         echo "common vault path: ${pipeline_common_vault_path}"
         pipeline_common_tempfile=$(mktemp)
         read_vault_path ${pipeline_common_vault_path} ${pipeline_common_tempfile}
-        remove_previous_pipeline_common ${pipeline_common_tempfile}
+        remove_previous ${pipeline_common_tempfile}
         updating_vault ${pipeline_common_tempfile} ${pipeline_common_vault_path}
         rm ${pipeline_common_tempfile}
 
