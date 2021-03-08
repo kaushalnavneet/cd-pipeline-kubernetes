@@ -147,8 +147,8 @@ spec:
             value: $(params.ICD_REDIS_STORE)
           - name: qr-store
             value: $(params.QR_STORE)
-          - name: mavenUserPassword
-            value: $(params.MAVEN_USER_PASSWORD)
+          - name: artifactoryTokenBase64
+            value: $(params.ARTIFACTORY_TOKEN_BASE64)
           - name: mavenUserId
             value: $(params.MAVEN_USER_ID)
 ---

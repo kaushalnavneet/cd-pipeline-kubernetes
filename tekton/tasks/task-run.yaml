@@ -37,8 +37,6 @@ spec:
       default: ''
     - name: mavenUserId
       default: ''
-    - name: mavenUserPassword
-      default: ''
     - name: addChglogUrl
       default: "false"
   stepTemplate:
@@ -142,8 +140,6 @@ spec:
         value: $(params.qr-store)
       - name: DOCKER_HOST
         value: "unix:///var/run/docker.sock"
-      - name: MAVEN_USER_PASSWORD
-        value: $(params.mavenUserPassword)
       - name: MAVEN_USER_ID
         value: $(params.mavenUserId)
       - name: ADD_CHGLOG_URL
@@ -206,8 +202,7 @@ spec:
             COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
             --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" \
             --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
-            --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}" \
-            --build-arg "MAVEN_USER_PASSWORD=${MAVEN_USER_PASSWORD}"
+            --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
 
         fi
         if [ $? -ne 0 ]; then

@@ -36,8 +36,6 @@ spec:
       default: ''
     - name: qr-store
       default: ''
-    - name: mavenUserPassword
-      default: ''
     - name: mavenUserId
       default: ''
   workspaces:
@@ -121,8 +119,6 @@ spec:
           value: $(params.icd-redis-store)
         - name: qr-store
           value: $(params.qr-store)
-        - name: mavenUserPassword
-          value: $(params.mavenUserPassword)
         - name: mavenUserId
           value: $(params.mavenUserId)
       workspaces:
