@@ -136,7 +136,7 @@ spec:
     - name: environment
       value: "au-syd"
     - name: deployClusters
-      value: 'otc-syd01-prod,otc-au-syd-prod (otc-pw-syd01-prod,otc-pw-au-syd-prod for travis-workers and cryptomining detector)'
+      value: 'otc-syd01-prod,otc-syd04-prod,otc-syd05-prod (otc-pw-syd01-prod,otc-pw-syd04-prod,otc-pw-syd05-prod for travis-workers and cryptomining detector)'
     - name: snUrl
       value: 'https://watsontest.service-now.com'
     - name: tocChannel
