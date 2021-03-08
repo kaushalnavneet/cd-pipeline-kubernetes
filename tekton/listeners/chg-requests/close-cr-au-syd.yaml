@@ -132,7 +132,7 @@ spec:
     - name: environment
       value: "au-syd"
     - name: deployClusters
-      value: 'otc-syd01-prod,otc-au-syd-prod'
+      value: 'otc-syd01-prod,otc-syd04-prod,otc-syd05-prod'
     - name: snUrl
       value: 'https://watsontest.service-now.com'
     - name: tocChannel
