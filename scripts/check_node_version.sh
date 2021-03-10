@@ -20,7 +20,7 @@ checkNodeVersion() {
 }
 
 IFS=','
-apps="blade-pipeline-broker,otc-github-relay-pub,otc-github-relay-sub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-ui,private-worker-service,pipeline-support-service"
+apps="blade-pipeline-broker,otc-github-relay-pub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-ui,private-worker-service,pipeline-support-service"
 #apps="pipeline-support-service"
 
 for app in $apps
