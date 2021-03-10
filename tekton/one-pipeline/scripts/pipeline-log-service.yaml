@@ -5,7 +5,8 @@ setup:
   script: |
     #!/usr/bin/env bash
 
-    echo "Hi!"
+    echo "Hi! Sleeping"
+    sleep 5m
     GH_TOKEN=$(cat "$WORKSPACE/git-token")
     OWNER=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.owner_id' /toolchain/toolchain.json)
     REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
