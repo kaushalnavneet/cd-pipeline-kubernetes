@@ -4,6 +4,11 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     env | sort
     set -x
 fi
+
+API=$(cat /config/API)
+REGISTRY_REGION=$(cat /config/REGION)
+BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
