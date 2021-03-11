@@ -5,10 +5,11 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+# grab env vars from config map
 API=$(cat /config/API)
 REGISTRY_REGION=$(cat /config/REGION)
 BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-
+IMAGE_URL=$(cat /config/IMAGE_URL)
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
