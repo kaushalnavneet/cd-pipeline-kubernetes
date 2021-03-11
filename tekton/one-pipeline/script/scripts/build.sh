@@ -5,67 +5,125 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
-# grab env vars from config map
-API=$(cat /config/API)
-REGISTRY_REGION=$(cat /config/REGION)
-API_KEY=$(cat /config/API_KEY_1416501)
-DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
-API_KEY_1308775=$(cat /config/API_KEY_1308775)
-BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
-IDS_USER=$(cat /config/IDS_USER)
-IDS_TOKEN=$(cat /config/IDS_TOKEN)
-# other env vars that used to be passed in to task
-HOME="/root"
-IMAGE_NAME=$(cat /config/IMAGE_NAME)
-echo $IMAGE_NAME
-        # value: $(params.imageName)
-# IMAGE_TAG
-#         value: $(params.imageTag)
-# APPLICATION_VERSION
-#         value: $(params.imageTag)
-# IMAGE_URL=$(cat /config/IMAGE_URL)
-# REGISTRY_URL
-#         value: $(params.registryUrl)
-# REGISTRY_NAMESPACE
-#         value: $(params.registryNamespace)
-# REGISTRY_REGION
-#         value: $(params.registryRegion)
-# SOURCE_DIRECTORY
-#         value: $(params.source_directory)
-# DOCKERFILE
-#         value: $(params.dockerFile)
-# DOCKER_IMAGE
-#         value: $(params.runBaseImage)
-# DOCKER_USERNAME
-#         value: $(params.dockerUsername)
-# EXTRA_DOCKER_OPTS
-#         value: $(params.extraDockerOpts)
-# BUILD_CLUSTER
-#         value: $(params.buildCluster)
-# ENVIRONMENT
-#         value: $(params.environment)
-#       # used for pipeline-ui build
-# ARTIFACTORY_TOKEN_BASE64
-#         value: $(params.artifactoryTokenBase64)
-# ARTIFACTORY_ID
-#         value: $(params.artifactoryId)
-# CONSOLE_AUTH_TOKEN
-#         value: $(params.consoleAuthToken)
-#       # can we get rid of this?
-# OPERATOR_SDK
-#         value: ''
-# ICD_REDIS_STORE
-#         value: $(params.icd-redis-store)
-# QR_STORE
-#         value: $(params.qr-store)
-# DOCKER_HOST
-#         value: "unix:///var/run/docker.sock"
-# MAVEN_USER_ID
-#         value: $(params.mavenUserId)
-# ADD_CHGLOG_URL
-#         value: $(params.addChglogUrl)
+initDefaults() {
+    IMAGE_NAME=""
+    BUILD_CLUSTER=""
+    EXTRA_DOCKER_OPTS="--no-cache"
+    ENVIRONMENT="development"
+    ARTIFACTORY_TOKEN_BASE64=""
+    ARTIFACTORY_ID=""
+    CONSOLE_AUTH_TOKEN=""
+    ICD_REDIS_STORE=""
+    QR_STORE=""
+    MAVEN_USER_ID=""
+    ADD_CHGLOG_URL="false"
 
+    if [ -f "/config/IMAGE_NAME" ]; then
+        IMAGE_NAME=$(cat /config/IMAGE_NAME) 
+    fi
+
+    if [ -f "/config/BUILD_CLUSTER" ]; then
+        BUILD_CLUSTER=$(cat /config/BUILD_CLUSTER) 
+    fi
+
+    if [ -f "/config/EXTRA_DOCKER_OPTS" ]; then
+        EXTRA_DOCKER_OPTS=$(cat /config/EXTRA_DOCKER_OPTS) 
+    fi
+
+    if [ -f "/config/ENVIRONMENT" ]; then
+        ENVIRONMENT=$(cat /config/ENVIRONMENT) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_TOKEN_BASE64" ]; then
+        ARTIFACTORY_TOKEN_BASE64=$(cat /config/ARTIFACTORY_TOKEN_BASE64) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_ID" ]; then
+        ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID) 
+    fi
+    if [ -f "/config/CONSOLE_AUTH_TOKEN" ]; then
+        CONSOLE_AUTH_TOKEN=$(cat /config/CONSOLE_AUTH_TOKEN) 
+    fi
+
+    if [ -f "/config/ICD_REDIS_STORE" ]; then
+        ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE) 
+    fi
+    if [ -f "/config/QR_STORE" ]; then
+        QR_STORE=$(cat /config/QR_STORE) 
+    fi
+
+    if [ -f "/config/MAVEN_USER_ID" ]; then
+        MAVEN_USER_ID=$(cat /config/MAVEN_USER_ID) 
+    fi
+    if [ -f "/config/ADD_CHGLOG_URL" ]; then
+        ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL) 
+    fi
+}
+
+initEnvVars() {
+    # grab env vars from config map
+    API=$(cat /config/API)
+    REGISTRY_REGION=$(cat /config/REGION)
+    API_KEY=$(cat /config/API_KEY_1416501)
+    DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+    API_KEY_1308775=$(cat /config/API_KEY_1308775)
+    BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    IDS_USER=$(cat /config/IDS_USER)
+    IDS_TOKEN=$(cat /config/IDS_TOKEN)
+}
+
+# other env vars that used to be passed in to task, check they exist and use defaults otherwise
+# init default values, overwrite if in config map too
+
+
+initEnvVars
+
+initDefaults
+  
+HOME="/root"
+if [ -f "/config/IMAGE_TAG" ]; then
+        APPLICATION_VERSION=$(cat /config/IMAGE_TAG) 
+fi
+
+if [ -f "/config/IMAGE_URL" ]; then
+        IMAGE_URL=$(cat /config/IMAGE_URL) 
+fi
+
+if [ -f "/config/REGISTRY_URL" ]; then
+        REGISTRY_URL=$(cat /config/REGISTRY_URL) 
+fi
+
+if [ -f "/config/REGISTRY_NAMESPACE" ]; then
+        REGISTRY_NAMESPACE=$(cat /config/REGISTRY_NAMESPACE) 
+fi
+
+if [ -f "/config/REGISTRY_REGION" ]; then
+        REGISTRY_REGION=$(cat /config/REGISTRY_REGION) 
+fi
+
+if [ -f "/config/SOURCE_DIRECTORY" ]; then
+        SOURCE_DIRECTORY=$(cat /config/SOURCE_DIRECTORY) 
+fi
+
+if [ -f "/config/DOCKERFILE" ]; then
+        DOCKERFILE=$(cat /config/DOCKERFILE) 
+fi
+
+if [ -f "/config/DOCKER_IMAGE" ]; then
+        DOCKER_IMAGE=$(cat /config/DOCKER_IMAGE) 
+fi
+
+if [ -f "/config/DOCKER_USERNAME" ]; then
+        DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
+fi
+
+OPERATOR_SDK=""
+DOCKER_HOST="unix:///var/run/docker.sock"
+
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>"
+env
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>"
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
