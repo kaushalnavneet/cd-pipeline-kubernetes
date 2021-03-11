@@ -22,6 +22,7 @@ setup:
 
 test:
   abort_on_failure: false
+  configmap: cd-config
   image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
   script: |
     #!/usr/bin/env bash
@@ -30,6 +31,7 @@ test:
 
 containerize:
   dind: true
+  configmap: cd-config
   image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
   script: |
     #!/usr/bin/env bash
@@ -44,6 +46,7 @@ containerize:
 
 deploy:
   image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  configmap: cd-config
   script: |
     #!/usr/bin/env bash
 
