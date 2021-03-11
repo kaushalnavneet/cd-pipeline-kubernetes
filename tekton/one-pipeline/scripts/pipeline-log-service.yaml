@@ -11,15 +11,23 @@ setup:
     CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
     CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
     echo $CONFIG_REPO $CONFIG_BRANCH $CONFIG_DIRECTORY
+
+    . "${ONE_PIPELINE_PATH}"/git/get_credentials "$WORKSPACE/secrets/git-token"
+
+    . /"${ONE_PIPELINE_PATH}"/git/clone_repo \
+    "$CONFIG_REPO" \
+    "$CONFIG_BRANCH"
+
+
     echo ">>>>>>>>>>>>>>>>>>>"
 
-    GH_TOKEN=$(cat "$WORKSPACE/git-token")
-    OWNER=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.owner_id' /toolchain/toolchain.json)
-    REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
+    # GH_TOKEN=$(cat "$WORKSPACE/git-token")
+    # OWNER=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.owner_id' /toolchain/toolchain.json)
+    # REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
 
-    curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO/branches/master/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
+    # curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO/branches/master/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
 
-    npm ci
+    # npm ci
 
 test:
   abort_on_failure: false
