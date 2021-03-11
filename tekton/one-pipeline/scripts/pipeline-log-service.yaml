@@ -1,17 +1,18 @@
 version: '1'
 
 setup:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
+  image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
 
-    echo "Hi! Sleeping"
-    echo /config/CONFIG_REPO
-    echo /config/CONFIG_BRANCH
-    echo /config/CONFIG_DIRECTORY
-    
-    sleep 5m
+    echo ">>>>>>>>>>>>>>>>>>>"
+    CONFIG_REPO=$(cat /config/CONFIG_REPO)
+    CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
+    CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
+    echo $CONFIG_REPO $CONFIG_BRANCH $CONFIG_DIRECTORY
+    echo ">>>>>>>>>>>>>>>>>>>"
+
     GH_TOKEN=$(cat "$WORKSPACE/git-token")
     OWNER=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.owner_id' /toolchain/toolchain.json)
     REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
