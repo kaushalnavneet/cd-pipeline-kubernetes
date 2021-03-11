@@ -12,13 +12,11 @@ setup:
     CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
     echo $CONFIG_REPO $CONFIG_BRANCH $CONFIG_DIRECTORY
 
-    . "${ONE_PIPELINE_PATH}"/git/get_credentials "$WORKSPACE/secrets/git-token"
-
-    . /"${ONE_PIPELINE_PATH}"/git/clone_repo \
-    "$CONFIG_REPO" \
-    "$CONFIG_BRANCH"
-
-
+    IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    echo "echo -n $IDS_TOKEN" > ./token.sh
+    chmod +x ./token.sh
+    GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CONFIG_BRANCH} ${CONFIG_REPO}   
+    
     echo ">>>>>>>>>>>>>>>>>>>"
 
     # GH_TOKEN=$(cat "$WORKSPACE/git-token")
