@@ -8,8 +8,64 @@ fi
 # grab env vars from config map
 API=$(cat /config/API)
 REGISTRY_REGION=$(cat /config/REGION)
+API_KEY=$(cat /config/API_KEY_1416501)
+DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+API_KEY_1308775=$(cat /config/API_KEY_1308775)
 BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-IMAGE_URL=$(cat /config/IMAGE_URL)
+TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+IDS_USER=$(cat /config/IDS_USER)
+IDS_TOKEN=$(cat /config/IDS_TOKEN)
+# other env vars that used to be passed in to task
+HOME="/root"
+IMAGE_NAME=$(cat /config/IMAGE_NAME)
+echo $IMAGE_NAME
+        # value: $(params.imageName)
+# IMAGE_TAG
+#         value: $(params.imageTag)
+# APPLICATION_VERSION
+#         value: $(params.imageTag)
+# IMAGE_URL=$(cat /config/IMAGE_URL)
+# REGISTRY_URL
+#         value: $(params.registryUrl)
+# REGISTRY_NAMESPACE
+#         value: $(params.registryNamespace)
+# REGISTRY_REGION
+#         value: $(params.registryRegion)
+# SOURCE_DIRECTORY
+#         value: $(params.source_directory)
+# DOCKERFILE
+#         value: $(params.dockerFile)
+# DOCKER_IMAGE
+#         value: $(params.runBaseImage)
+# DOCKER_USERNAME
+#         value: $(params.dockerUsername)
+# EXTRA_DOCKER_OPTS
+#         value: $(params.extraDockerOpts)
+# BUILD_CLUSTER
+#         value: $(params.buildCluster)
+# ENVIRONMENT
+#         value: $(params.environment)
+#       # used for pipeline-ui build
+# ARTIFACTORY_TOKEN_BASE64
+#         value: $(params.artifactoryTokenBase64)
+# ARTIFACTORY_ID
+#         value: $(params.artifactoryId)
+# CONSOLE_AUTH_TOKEN
+#         value: $(params.consoleAuthToken)
+#       # can we get rid of this?
+# OPERATOR_SDK
+#         value: ''
+# ICD_REDIS_STORE
+#         value: $(params.icd-redis-store)
+# QR_STORE
+#         value: $(params.qr-store)
+# DOCKER_HOST
+#         value: "unix:///var/run/docker.sock"
+# MAVEN_USER_ID
+#         value: $(params.mavenUserId)
+# ADD_CHGLOG_URL
+#         value: $(params.addChglogUrl)
+
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
