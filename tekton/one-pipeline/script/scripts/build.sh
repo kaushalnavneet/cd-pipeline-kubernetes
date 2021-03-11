@@ -123,7 +123,8 @@ export DOCKER_HOST="unix:///var/run/docker.sock"
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
-sleep 3m
+
+cd /workspace/app
 cd "${SOURCE_DIRECTORY}"
 #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
 #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
