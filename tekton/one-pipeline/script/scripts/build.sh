@@ -119,7 +119,7 @@ if [ -f "/config/DOCKER_USERNAME" ]; then
 fi
 
 export OPERATOR_SDK=""
-export DOCKER_HOST="unix:///var/run/docker.sock"
+#export DOCKER_HOST="unix:///var/run/docker.sock"
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
@@ -157,13 +157,13 @@ if [ "${ADD_CHGLOG_URL}" == true ]; then
 fi
 echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"${CHANGELOG_URL}}" > build_info.json
 
-docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
-# For some reason this doesn't get repulled in docker engine
-#docker pull ${DOCKER_IMAGE}
-if [ $? -ne 0 ]; then
-    echo \"Failed during execution of docker pull command\"
-    exit 1
-fi
+# docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
+# # For some reason this doesn't get repulled in docker engine
+# #docker pull ${DOCKER_IMAGE}
+# if [ $? -ne 0 ]; then
+#     echo \"Failed during execution of docker pull command\"
+#     exit 1
+# fi
 
 echo "Dockerfile: ${DOCKERFILE}"
 if [ "$OPERATOR_SDK" == true ]; then
