@@ -18,6 +18,7 @@ cd "${SOURCE_DIRECTORY}"
 ibmcloud config --check-version=false
 ibmcloud plugin install -f container-registry
 ibmcloud plugin install -f kubernetes-service
+env
 ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${BUILD_CLUSTER_KEY}
 ibmcloud cr login
 
