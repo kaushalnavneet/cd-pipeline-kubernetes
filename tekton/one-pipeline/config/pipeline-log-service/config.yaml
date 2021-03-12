@@ -20,6 +20,7 @@
     SKIPBUILD: "false"
     SKIPVA: "true"
     SKIPDEPLOY: "false"
+    DOCKERFILE: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs12ubi"
     # original config map values
     API: "https://cloud.ibm.com"
     REGION: "us-south"
