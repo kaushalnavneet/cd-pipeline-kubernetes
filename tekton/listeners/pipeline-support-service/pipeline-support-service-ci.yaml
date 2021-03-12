@@ -179,7 +179,7 @@ spec:
     - name: skipDeploy
       value: "false"
     - name: dockerFile
-      value: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs12ubi"
+      value: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
