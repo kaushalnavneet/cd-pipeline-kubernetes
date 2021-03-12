@@ -8,6 +8,7 @@ fi
 initDefaults() {
     export IMAGE_NAME=""
     export BUILD_CLUSTER=""
+    export DOCKER_USERNAME="iamapikey"
     export EXTRA_DOCKER_OPTS="--no-cache"
     export ENVIRONMENT="development"
     export ARTIFACTORY_TOKEN_BASE64=""
@@ -24,6 +25,10 @@ initDefaults() {
 
     if [ -f "/config/BUILD_CLUSTER" ]; then
         export BUILD_CLUSTER=$(cat /config/BUILD_CLUSTER) 
+    fi
+
+    if [ -f "/config/DOCKER_USERNAME" ]; then
+            export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
     fi
 
     if [ -f "/config/EXTRA_DOCKER_OPTS" ]; then
@@ -114,9 +119,7 @@ if [ -f "/config/DOCKER_IMAGE" ]; then
         export DOCKER_IMAGE=$(cat /config/DOCKER_IMAGE) 
 fi
 
-if [ -f "/config/DOCKER_USERNAME" ]; then
-        export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
-fi
+
 
 export OPERATOR_SDK=""
 #export DOCKER_HOST="unix:///var/run/docker.sock"
@@ -157,7 +160,7 @@ if [ "${ADD_CHGLOG_URL}" == true ]; then
 fi
 echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"${CHANGELOG_URL}}" > build_info.json
 
-# docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
+docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
 # # For some reason this doesn't get repulled in docker engine
 # #docker pull ${DOCKER_IMAGE}
 # if [ $? -ne 0 ]; then
