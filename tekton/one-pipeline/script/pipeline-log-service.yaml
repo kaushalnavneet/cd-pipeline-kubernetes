@@ -7,16 +7,20 @@ setup:
     #!/usr/bin/env bash
 
     echo ">>>>>>>>>>>>>>>>>>>"
+    pwd
+    echo "1"
     CONFIG_REPO=$(cat /config/CONFIG_REPO)
     CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
     CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
     echo $CONFIG_REPO $CONFIG_BRANCH $CONFIG_DIRECTORY
-
+    echo "2"
     IDS_TOKEN=$(cat /config/IDS_TOKEN)
     echo "echo -n $IDS_TOKEN" > ./token.sh
     chmod +x ./token.sh
+    ls 
     GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CONFIG_BRANCH} ${CONFIG_REPO}   
-    
+    echo "3"
+    ls
     sleep 2m;
     echo ">>>>>>>>>>>>>>>>>>>"
 
