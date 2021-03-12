@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 echo ">>>>>>>>>>>>>>>>>>>"
+pushd .
 pwd
 echo "Cloning Config Repo"
 cd /workspace/app/pipeline-log-service
@@ -21,4 +22,5 @@ echo $CHARTS_REPO $CHARTS_REPO $CHARTS_DIRECTORY
 GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CHARTS_BRANCH} ${CHARTS_REPO}   
 
 ls
+cd /workspace/app/one-pipeline-config-repo
 echo ">>>>>>>>>>>>>>>>>>>"
