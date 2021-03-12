@@ -9,6 +9,8 @@ setup:
     echo ">>>>>>>>>>>>>>>>>>>"
     pwd
     echo "1"
+
+    cd /workspace/app
     CONFIG_REPO=$(cat /config/CONFIG_REPO)
     CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
     CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
@@ -21,7 +23,7 @@ setup:
     GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CONFIG_BRANCH} ${CONFIG_REPO}   
     echo "3"
     ls
-    sleep 2m;
+    sleep 3m;
     echo ">>>>>>>>>>>>>>>>>>>"
 
 
