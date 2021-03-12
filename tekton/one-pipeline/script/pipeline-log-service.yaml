@@ -9,7 +9,7 @@ setup:
     echo ">>>>>>>>>>>>>>>>>>>"
     pwd
     echo "Cloning Config Repo"
-    cd /workspace/app
+    cd /workspace/app/pipeline-log-service
     CONFIG_REPO=$(cat /config/CONFIG_REPO)
     CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
     CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
