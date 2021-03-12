@@ -23,7 +23,7 @@ spec:
     - name: dockerFile
       default: ''
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs12
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs14
     - name: artifactoryTokenBase64
       default: ''
     - name: artifactoryId
