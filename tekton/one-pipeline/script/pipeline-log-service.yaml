@@ -17,6 +17,7 @@ setup:
     chmod +x ./token.sh
     GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CONFIG_BRANCH} ${CONFIG_REPO}   
     
+    sleep 2m;
     echo ">>>>>>>>>>>>>>>>>>>"
 
 
