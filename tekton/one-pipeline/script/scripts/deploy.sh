@@ -103,6 +103,7 @@ echo "1"
 pwd
 ls
 
+cd /workspace/app
 cd "${SOURCE_DIRECTORY}"
 WORKDIR=${WORKDIR:-/work}
 
