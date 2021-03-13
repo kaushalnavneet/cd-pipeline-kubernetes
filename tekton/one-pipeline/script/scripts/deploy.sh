@@ -61,14 +61,9 @@ initDefaults() {
 initEnvVars() {
     # grab env vars from config map
     export API=$(cat /config/API)
-    export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1416501)
-    export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
-    export API_KEY_1308775=$(cat /config/API_KEY_1308775)
-    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    export REGION=$(cat /config/REGION)
+    export API_KEY=$(cat /config/API_KEY_1651315)
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
-    export IDS_USER=$(cat /config/IDS_USER)
-    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
