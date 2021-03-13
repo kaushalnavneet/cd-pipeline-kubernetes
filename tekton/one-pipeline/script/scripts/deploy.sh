@@ -99,9 +99,16 @@ if [ "${SKIP}" == true ]; then
     exit 0
 fi
 
-cd /workspace/app
+echo "1"
+pwd
+ls
+
 cd "${SOURCE_DIRECTORY}"
 WORKDIR=${WORKDIR:-/work}
+
+echo "2"
+pwd
+ls
 
 ibmcloud config --check-version=false
 ibmcloud plugin install -f container-service
