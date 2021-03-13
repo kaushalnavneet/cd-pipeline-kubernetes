@@ -44,8 +44,7 @@ deploy:
       set -x
     fi
 
-    source scripts/deploy_setup.sh
-    source scripts/deploy.sh
+    source ./tekton/one-pipeline/script/scripts/deploy.sh
 
 acceptance-test:
   abort_on_failure: false

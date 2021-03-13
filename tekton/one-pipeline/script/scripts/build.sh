@@ -206,5 +206,3 @@ echo -n "$IMAGE_URL" > ../image
 if which save_artifact >/dev/null; then
   save_artifact app-image type=image "name=${IMAGE_URL}" "digest=${DIGEST}"
 fi
-
-sleep 5m
