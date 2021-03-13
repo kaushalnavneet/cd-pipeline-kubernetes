@@ -152,7 +152,7 @@ fi
 if [ -z "$APPLICATION_VERSION" ]; then
     APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}"
 fi
-echo ${APPLICATION_VERSION} > /workspace/appVersion
+echo ${APPLICATION_VERSION} > /workspace/app/appVersion
 echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 if [ "${ADD_CHGLOG_URL}" == true ]; then

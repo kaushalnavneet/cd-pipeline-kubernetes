@@ -119,7 +119,7 @@ IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
 COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
 
 if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-    APPLICATION_VERSION=$( cat /workspace/appVersion )
+    APPLICATION_VERSION=$( cat /workspace/app/appVersion )
     if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
     ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
     APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
