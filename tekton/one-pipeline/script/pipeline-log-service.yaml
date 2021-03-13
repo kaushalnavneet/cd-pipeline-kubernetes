@@ -33,7 +33,7 @@ containerize:
     source ./tekton/one-pipeline/script/scripts/build.sh
 
 deploy:
-  image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  image: us.icr.io/opentoolchain/cd-deploy-base:deploy
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
