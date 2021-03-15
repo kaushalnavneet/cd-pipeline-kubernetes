@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo ">>>>>>>>>>>>>>>>>>>"
-pushd .
+
 pwd
 echo "Cloning Config Repo"
 cd /workspace/app/pipeline-log-service

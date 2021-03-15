@@ -33,7 +33,7 @@ containerize:
     source ./tekton/one-pipeline/script/scripts/build.sh
 
 deploy:
-  image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  image: us.icr.io/opentoolchain/cd-deploy-base:deploy
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
@@ -44,8 +44,7 @@ deploy:
       set -x
     fi
 
-    source scripts/deploy_setup.sh
-    source scripts/deploy.sh
+    source ./tekton/one-pipeline/script/scripts/deploy.sh
 
 acceptance-test:
   abort_on_failure: false
@@ -53,14 +52,16 @@ acceptance-test:
   script: |
     #!/usr/bin/env bash
 
-    source /root/.nvm/nvm.sh
-    npm ci
-    export APP_URL=$(cat ../app-url)
-    npm run acceptance-test
+    # source /root/.nvm/nvm.sh
+    # npm ci
+    # export APP_URL=$(cat ../app-url)
+    # npm run acceptance-test
 
-release:
-  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
-  script: |
-    #!/usr/bin/env bash
+      echo "Acceptance Tests"
 
-    source scripts/release.sh
+# release:
+#   image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
+#   script: |
+#     #!/usr/bin/env bash
+
+#     source scripts/release.sh
