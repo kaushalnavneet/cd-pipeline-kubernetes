@@ -187,7 +187,7 @@ spec:
     - name: dockerFile
       value: "Dockerfile.travis-worker.ubi"
     - name: runBaseImage
-      value: us.icr.io/opentoolchain/cd-build-base:go1.15
+      value: us.icr.io/opentoolchain/cd-build-base:go1.16
     - name: syd_auto_deploy_token
       value: ""
     - name: syd_auto_deploy_url

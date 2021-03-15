@@ -18,7 +18,7 @@ spec:
       default: iamapikey
     - name: accountApiKey1416501
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:go1.15
+      default: us.icr.io/opentoolchain/cd-build-base:go1.16
     - name: extraDockerOpts
       default: --no-cache --pull
   steps:
