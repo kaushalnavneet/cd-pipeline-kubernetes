@@ -38,7 +38,7 @@ RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubuserconten
 RUN curl -OJL https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_RELEASE_VERSION}/operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 RUN chmod +x operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu && cp operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 
-ENV IBMCLOUD_VERSION='1.2.3'
+ENV IBMCLOUD_VERSION='1.4.0'
 RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     export PATH=/opt/IBM/cf/bin:$PATH && \
