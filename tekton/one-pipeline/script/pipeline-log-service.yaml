@@ -64,4 +64,4 @@ release:
   script: |
     #!/usr/bin/env bash
 
-    source scripts/release.sh
+    source ./tekton/one-pipeline/script/scripts/release.sh
