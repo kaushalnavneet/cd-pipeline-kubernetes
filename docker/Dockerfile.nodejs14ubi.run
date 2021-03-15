@@ -14,7 +14,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-14:latest
 USER root
 
 RUN yum update -y \
-    && yum install hostname wget procps iputils -y \
+    && yum install hostname wget procps iputils git -y \
     && yum clean all -y
 
 RUN adduser -s /bin/bash -d /home/node -U node
