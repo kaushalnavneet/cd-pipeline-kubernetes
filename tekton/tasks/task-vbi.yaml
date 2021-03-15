@@ -149,20 +149,19 @@ spec:
   sidecars:
     - image: docker:19-dind
       name: server
-      command:
-        - dockerd-entrypoint.sh
-        - dockerd
-        - --host=unix:///var/run/docker.sock
-        - --mtu=1400
       securityContext:
         privileged: true
+      command: ["sh", "-c"]
+      args:
+      - if [[ $(df -PT /var/lib/docker | awk 'NR==2 {print $2}') == virtiofs ]]; then 
+          apk add e2fsprogs && 
+          truncate -s 20G /tmp/disk.img && 
+          mkfs.ext4 /tmp/disk.img && 
+          mount /tmp/disk.img /var/lib/docker; fi &&
+        dockerd-entrypoint.sh --mtu=1400 --host=unix:///var/run/docker.sock;
       volumeMounts:
-        - mountPath: /var/lib/docker
-          name: dind-storage
         - mountPath: /var/run/
           name: dind-socket
   volumes:
-    - name: dind-storage
-      emptyDir: {}
     - name: dind-socket
       emptyDir: {}
