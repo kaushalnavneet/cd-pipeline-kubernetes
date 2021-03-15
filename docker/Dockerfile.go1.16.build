@@ -48,9 +48,9 @@ RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/blu
     mkdir -p /usr/local/Bluemix/bin/cfcli && \
     mkdir -p /usr/local/ibmcloud/bin/cfcli
 
-RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.178 && \
-    ibmcloud plugin install container-registry -r Bluemix -v 0.1.497 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.47 && \
+RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
+    ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
+    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.50 && \
     ibmcloud plugin list
 
 RUN mkdir -p /work/component/export
@@ -68,5 +68,5 @@ RUN wget --no-check-certificate https://github.com/stedolan/jq/releases/download
 RUN helm init --client-only
 
 RUN go get -u github.com/FiloSottile/gvt
-RUN go get github.com/alecthomas/gometalinter
 RUN go get github.com/stretchr/testify/assert
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.38.0 && golangci-lint --version
