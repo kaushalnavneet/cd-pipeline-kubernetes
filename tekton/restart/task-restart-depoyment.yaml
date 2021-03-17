@@ -92,11 +92,11 @@ spec:
           cluster_config ${CLUSTER_NAME}
           set -e
 
-          RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
+          RS=$( kubectl -n ${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
           echo Restarting ${SERVICE_NAME}
-          kubectl -n${CLUSTER_NAMESPACE} rollout restart ${SERVICE_TYPE} ${SERVICE_NAME}
+          kubectl -n ${CLUSTER_NAMESPACE} rollout restart ${SERVICE_TYPE} ${SERVICE_NAME}
           echo Checking status...
-          kubectl -n${CLUSTER_NAMESPACE} rollout status ${SERVICE_TYPE} ${SERVICE_NAME}
+          kubectl -n ${CLUSTER_NAMESPACE} rollout status ${SERVICE_TYPE} ${SERVICE_NAME}
           echo Restart complete
-          kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
+          kubectl -n ${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
           set +x
