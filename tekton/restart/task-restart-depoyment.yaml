@@ -8,6 +8,8 @@ spec:
       default: us-south
     - name: serviceName
       default: pipeline-service
+    - name: serviceType
+      default: ""
     - name: clusterName
       default: otc-us-south-dev
     - name: clusterNamespace
@@ -15,9 +17,9 @@ spec:
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
     - name: environment
-      default: 'development'
+      default: "development"
     - name: skipDeploy
-      default: 'false'
+      default: "false"
   stepTemplate:
     env:
       - name: API
@@ -31,73 +33,73 @@ spec:
             name: cd-secret
             key: API_KEY
   workspaces:
-  - name: task-pvc
-    mountPath: /workspace 
+    - name: task-pvc
+      mountPath: /workspace
   steps:
-  - name: deploy
-    image: $(params.deployBaseImage)
-    imagePullPolicy: IfNotPresent
-    env:
-      - name: HOME
-        value: "/root"
-      - name: REGISTRY_REGION
-        value: $(params.registryRegion)
-      - name: SKIP
-        value: $(params.skipDeploy)
-      - name: SERVICE_NAME
-        value: $(params.serviceName)
-      - name: CLUSTER_NAME
-        value: $(params.clusterName)
-      - name: CLUSTER_NAMESPACE
-        value: $(params.clusterNamespace)
-      - name: ENVIRONMENT
-        value: $(params.environment)
-    workingDir: /workspace
-    command: ["/bin/bash", "-c"]
-    args:
-      - | 
-        export HOME=/root
-        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
-        set -e
-        if [ "${SKIP}" == true ]; then
-          echo "Skipping restart"
-          exit 0
-        fi
-        cd /workspace
+    - name: deploy
+      image: $(params.deployBaseImage)
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: HOME
+          value: "/root"
+        - name: REGISTRY_REGION
+          value: $(params.registryRegion)
+        - name: SKIP
+          value: $(params.skipDeploy)
+        - name: SERVICE_NAME
+          value: $(params.serviceName)
+        - name: CLUSTER_NAME
+          value: $(params.clusterName)
+        - name: CLUSTER_NAMESPACE
+          value: $(params.clusterNamespace)
+        - name: ENVIRONMENT
+          value: $(params.environment)
+      workingDir: /workspace
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          export HOME=/root
+          [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+          set -e
+          if [ "${SKIP}" == true ]; then
+            echo "Skipping restart"
+            exit 0
+          fi
+          cd /workspace
 
-        ibmcloud config --check-version=false
-        ibmcloud plugin install -f kubernetes-service
-        ibmcloud login -a ${API} -r ${ENVIRONMENT} --apikey ${API_KEY}
+          ibmcloud config --check-version=false
+          ibmcloud plugin install -f kubernetes-service
+          ibmcloud login -a ${API} -r ${ENVIRONMENT} --apikey ${API_KEY}
 
-        set +e
-        function cluster_config() {
-            # 1 - cluster name
-            for iteration in {1..30}
-            do
-                echo "Running cluster config for cluster $1: $iteration / 30"
-                ibmcloud ks cluster config --cluster $1
-                if [[ $? -eq 0 ]]; then
-                    return 0
-                else
-                    echo "Cluster config for $1 failed. Trying again..."
-                    sleep 5
-                fi
-            done
-            return 1
-        }
-        cluster_config ${CLUSTER_NAME}
-        set -e
+          set +e
+          function cluster_config() {
+              # 1 - cluster name
+              for iteration in {1..30}
+              do
+                  echo "Running cluster config for cluster $1: $iteration / 30"
+                  ibmcloud ks cluster config --cluster $1
+                  if [[ $? -eq 0 ]]; then
+                      return 0
+                  else
+                      echo "Cluster config for $1 failed. Trying again..."
+                      sleep 5
+                  fi
+              done
+              return 1
+          }
+          cluster_config ${CLUSTER_NAME}
+          set -e
 
-        RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
-        kubectl -n${CLUSTER_NAMESPACE} rollout restart deployment ${SERVICE_NAME}
-        i=0
-        while kubectl -n${CLUSTER_NAMESPACE} get pods | grep $RS >/dev/null 2>&1 ; do
-          if (( i>40 )); then break; fi
-          echo Checking ${i}
-          kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u
-          sleep 15
-          (( i=i+1 ))
-        done
-        echo Restart complete
-        kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
-        set +x
+          RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
+          kubectl -n${CLUSTER_NAMESPACE} rollout restart deployment ${SERVICE_NAME}
+          i=0
+          while kubectl -n${CLUSTER_NAMESPACE} get pods | grep $RS >/dev/null 2>&1 ; do
+            if (( i>40 )); then break; fi
+            echo Checking ${i}
+            kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u
+            sleep 15
+            (( i=i+1 ))
+          done
+          echo Restart complete
+          kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
+          set +x

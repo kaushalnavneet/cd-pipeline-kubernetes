@@ -58,7 +58,7 @@ spec:
       spec:
         resources:
           requests:
-            storage:  15Gi
+            storage: 15Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
@@ -86,6 +86,8 @@ spec:
             value: $(params.environment)
           - name: serviceName
             value: $(params.serviceName)
+          - name: serviceType
+            value: $(params.serviceType)
           - name: clusterName1
             value: $(params.clusterName1)
           - name: skipDeploy1

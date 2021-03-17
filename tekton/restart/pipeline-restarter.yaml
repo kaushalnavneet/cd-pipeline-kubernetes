@@ -6,6 +6,7 @@ spec:
   params:
     - name: environment
     - name: serviceName
+    - name: serviceType
     - name: clusterName1
     - name: skipDeploy1
     - name: clusterName2
@@ -13,18 +14,20 @@ spec:
     - name: clusterName3
     - name: skipDeploy3
     - name: clusterNamespace
-      default: 'opentoolchain'
+      default: "opentoolchain"
   workspaces:
-  - name: pipeline-pvc
+    - name: pipeline-pvc
   tasks:
     - name: restart-cluster-1
       taskRef:
-        name:  restart-deployment
+        name: restart-deployment
       params:
         - name: environment
           value: $(params.environment)
         - name: serviceName
           value: $(params.serviceName)
+        - name: serviceType
+          value: $(params.serviceType)
         - name: skipDeploy
           value: $(params.skipDeploy1)
         - name: clusterName
@@ -32,17 +35,19 @@ spec:
         - name: clusterNamespace
           value: $(params.clusterNamespace)
       workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
+        - name: task-pvc
+          workspace: pipeline-pvc
     - name: restart-cluster-2
       runAfter: [restart-cluster-1]
       taskRef:
-        name:  restart-deployment
+        name: restart-deployment
       params:
         - name: environment
           value: $(params.environment)
         - name: serviceName
           value: $(params.serviceName)
+        - name: serviceType
+          value: $(params.serviceType)
         - name: skipDeploy
           value: $(params.skipDeploy2)
         - name: clusterName
@@ -50,17 +55,19 @@ spec:
         - name: clusterNamespace
           value: $(params.clusterNamespace)
       workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
+        - name: task-pvc
+          workspace: pipeline-pvc
     - name: restart-cluster-3
       runAfter: [restart-cluster-2]
       taskRef:
-        name:  restart-deployment
+        name: restart-deployment
       params:
         - name: environment
           value: $(params.environment)
         - name: serviceName
           value: $(params.serviceName)
+        - name: serviceType
+          value: $(params.serviceType)
         - name: skipDeploy
           value: $(params.skipDeploy3)
         - name: clusterName
@@ -68,6 +75,5 @@ spec:
         - name: clusterNamespace
           value: $(params.clusterNamespace)
       workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc 
-
+        - name: task-pvc
+          workspace: pipeline-pvc
