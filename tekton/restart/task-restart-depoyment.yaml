@@ -48,6 +48,8 @@ spec:
           value: $(params.skipDeploy)
         - name: SERVICE_NAME
           value: $(params.serviceName)
+        - name: SERVICE_TYPE
+          value: $(params.serviceType)
         - name: CLUSTER_NAME
           value: $(params.clusterName)
         - name: CLUSTER_NAMESPACE
@@ -91,15 +93,10 @@ spec:
           set -e
 
           RS=$( kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u | head -1 )
-          kubectl -n${CLUSTER_NAMESPACE} rollout restart deployment ${SERVICE_NAME}
-          i=0
-          while kubectl -n${CLUSTER_NAMESPACE} get pods | grep $RS >/dev/null 2>&1 ; do
-            if (( i>40 )); then break; fi
-            echo Checking ${i}
-            kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}  | rev | cut -f2- -d- | rev | sort -u
-            sleep 15
-            (( i=i+1 ))
-          done
+          echo Restarting ${SERVICE_NAME}
+          kubectl -n${CLUSTER_NAMESPACE} rollout restart ${SERVICE_TYPE} ${SERVICE_NAME}
+          echo Checking status...
+          kubectl -n${CLUSTER_NAMESPACE} rollout status ${SERVICE_TYPE} ${SERVICE_NAME}
           echo Restart complete
           kubectl -n${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
           set +x
