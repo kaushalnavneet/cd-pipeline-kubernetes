@@ -137,13 +137,13 @@ spec:
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-au-syd-prod
+      value: otc-syd04-prod
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: 'none'
+      value: otc-syd05-prod
     - name: skipDeploy3
-      value: "true"
+      value: "false"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
