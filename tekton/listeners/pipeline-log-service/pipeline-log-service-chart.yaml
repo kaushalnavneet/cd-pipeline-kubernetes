@@ -138,6 +138,8 @@ spec:
             value: $(params.syd_auto_deploy_token)
           - name: syd_auto_deploy_url
             value: $(params.syd_auto_deploy_url)
+          - name: dockerFile
+            value: $(params.dockerFile)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
