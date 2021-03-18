@@ -9,7 +9,7 @@ spec:
     - name: serviceName
       default: pipeline-service
     - name: serviceType
-      default: ""
+      default: deployment
     - name: clusterName
       default: otc-us-south-dev
     - name: clusterNamespace
@@ -96,7 +96,7 @@ spec:
           echo Restarting ${SERVICE_NAME}
           kubectl -n ${CLUSTER_NAMESPACE} rollout restart ${SERVICE_TYPE} ${SERVICE_NAME}
           echo Checking status...
-          kubectl -n ${CLUSTER_NAMESPACE} rollout status ${SERVICE_TYPE} ${SERVICE_NAME}
+          kubectl -n ${CLUSTER_NAMESPACE} rollout status ${SERVICE_TYPE} ${SERVICE_NAME} -w
           echo Restart complete
           kubectl -n ${CLUSTER_NAMESPACE} get pods | grep ${SERVICE_NAME}
           set +x
