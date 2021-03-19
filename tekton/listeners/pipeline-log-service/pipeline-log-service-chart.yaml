@@ -140,6 +140,7 @@ spec:
             value: $(params.staging_auto_deploy_url)
           - name: dockerFile
             value: $(params.dockerFile)
+---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
