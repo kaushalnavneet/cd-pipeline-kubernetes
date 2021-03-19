@@ -18,8 +18,8 @@ spec:
     - name: config_branch
     - name: config_directory
     - name: runBaseImage
-    - name: syd_auto_deploy_token
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_token
+    - name: staging_auto_deploy_url
 
     # CD integration
     - name: api
@@ -83,7 +83,7 @@ spec:
       spec:
         resources:
           requests:
-            storage:  15Gi
+            storage: 15Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
@@ -139,10 +139,10 @@ spec:
             value: $(params.dockerFile)
           - name: runBaseImage
             value: $(params.runBaseImage)
-          - name: syd_auto_deploy_token
-            value: $(params.syd_auto_deploy_token)
-          - name: syd_auto_deploy_url
-            value: $(params.syd_auto_deploy_url)
+          - name: staging_auto_deploy_token
+            value: $(params.staging_auto_deploy_token)
+          - name: staging_auto_deploy_url
+            value: $(params.staging_auto_deploy_url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -188,9 +188,9 @@ spec:
       value: "Dockerfile.travis-worker.ubi"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:go1.15
-    - name: syd_auto_deploy_token
+    - name: staging_auto_deploy_token
       value: ""
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_url
       value: ""
 ---
 apiVersion: tekton.dev/v1beta1

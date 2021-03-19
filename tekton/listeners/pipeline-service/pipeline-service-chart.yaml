@@ -19,8 +19,8 @@ spec:
     - name: config_directory
     - name: imageName
     - name: imageTag
-    - name: syd_auto_deploy_token
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_token
+    - name: staging_auto_deploy_url
 
     # CD integration
     - name: api
@@ -84,7 +84,7 @@ spec:
       spec:
         resources:
           requests:
-            storage:  15Gi
+            storage: 15Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
@@ -139,10 +139,10 @@ spec:
             value: $(params.skipVA)
           - name: runBaseImage
             value: $(params.runBaseImage)
-          - name: syd_auto_deploy_token
-            value: $(params.syd_auto_deploy_token)
-          - name: syd_auto_deploy_url
-            value: $(params.syd_auto_deploy_url)
+          - name: staging_auto_deploy_token
+            value: $(params.staging_auto_deploy_token)
+          - name: staging_auto_deploy_url
+            value: $(params.staging_auto_deploy_url)
           - name: icd-redis-store
             value: $(params.ICD_REDIS_STORE)
           - name: qr-store
@@ -187,16 +187,16 @@ spec:
     - name: imageUrl
       value: "us.icr.io/devopsotc/pipeline-service"
     - name: environment
-      value: "au-syd"
+      value: "jp-osa"
     - name: skipBuild
       value: "false"
     - name: skipVA
       value: "false"
     - name: runBaseImage
       value: us.icr.io/opentoolchain/cd-build-base:java-ubi
-    - name: syd_auto_deploy_token
+    - name: staging_auto_deploy_token
       value: ""
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_url
       value: ""
 ---
 apiVersion: tekton.dev/v1beta1
