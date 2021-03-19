@@ -1,12 +1,12 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: auto-deploy-au-syd
+  name: auto-deploy-staging
 spec:
   params:
-    - name: syd_auto_deploy_token
+    - name: staging_auto_deploy_token
       description: the token used to call generic webhook url
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_url
       description: the generic webhook url
   steps:
     - name: auto-deploy
@@ -14,24 +14,24 @@ spec:
       imagePullPolicy: IfNotPresent
       env:
         - name: AUTO_DEPLOY_TOKEN
-          value: $(params.syd_auto_deploy_token)
+          value: $(params.staging_auto_deploy_token)
         - name: AUTO_DEPLOY_URL
-          value: $(params.syd_auto_deploy_url)
+          value: $(params.staging_auto_deploy_url)
       command: ["/bin/bash", "-c"]
       args:
         - |
-          echo "checking existence of syd_auto_deploy_url"
+          echo "checking existence of staging_deploy_url"
           if [ -z "$AUTO_DEPLOY_URL" ] && [ -z "$AUTO_DEPLOY_TOKEN" ]; then
-                echo "syd_auto_deploy_token or syd_auto_deploy_url is empty, cannot auto deploy to au-syd"
+                echo "staging_auto_deploy_token or staging_auto_deploy_url is empty, cannot auto deploy to staging"
           else
-                echo "Triggering auto deployment to AU-SYD"
-                RESPONSE=$(curl --request POST $AUTO_DEPLOY_URL -H "au-syd-token:$AUTO_DEPLOY_TOKEN")
+                echo "Triggering auto deployment to STAGING"
+                RESPONSE=$(curl --request POST $AUTO_DEPLOY_URL -H "staging-token:$AUTO_DEPLOY_TOKEN")
 
                 PIPELINE_RUN_ID=$(jq --raw-output ".id" <<< "$RESPONSE")
 
                 if [[ ! "$PIPELINE_RUN_ID" ]]; then
                     echo "Failed: $RESPONSE"
                 else 
-                    echo "Deploying to AU_SYD at pipelinerun $PIPELINE_RUN_ID"
+                    echo "Deploying to STAGING at pipelinerun $PIPELINE_RUN_ID"
                 fi
           fi

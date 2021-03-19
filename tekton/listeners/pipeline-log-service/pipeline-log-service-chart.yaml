@@ -16,8 +16,8 @@ spec:
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: syd_auto_deploy_token
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_token
+    - name: staging_auto_deploy_url
 
     # CD integration
     - name: api
@@ -81,7 +81,7 @@ spec:
       spec:
         resources:
           requests:
-            storage:  15Gi
+            storage: 15Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
@@ -134,13 +134,12 @@ spec:
             value: $(params.environment)
           - name: skipVA
             value: $(params.skipVA)
-          - name: syd_auto_deploy_token
-            value: $(params.syd_auto_deploy_token)
-          - name: syd_auto_deploy_url
-            value: $(params.syd_auto_deploy_url)
+          - name: staging_auto_deploy_token
+            value: $(params.staging_auto_deploy_token)
+          - name: staging_auto_deploy_url
+            value: $(params.staging_auto_deploy_url)
           - name: dockerFile
             value: $(params.dockerFile)
----
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
@@ -174,14 +173,14 @@ spec:
     - name: imageUrl
       value: "us.icr.io/devopsotc/pipeline-log-service"
     - name: environment
-      value: "au-syd"
+      value: "jp-osa"
     - name: skipBuild
       value: "false"
     - name: skipVA
       value: "false"
-    - name: syd_auto_deploy_token
+    - name: staging_auto_deploy_token
       value: ""
-    - name: syd_auto_deploy_url
+    - name: staging_auto_deploy_url
       value: ""
 ---
 apiVersion: tekton.dev/v1beta1
