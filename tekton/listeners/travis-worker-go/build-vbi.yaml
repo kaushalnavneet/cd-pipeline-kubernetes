@@ -115,7 +115,7 @@ spec:
     - name: source_branch
       value: "master"
     - name: dockerFile
-      value: "2x_Dockerfile"
+      value: $(params.dockerFile)
     - name: dockerUsername
       value: "idsorg"
     - name: registryScope
