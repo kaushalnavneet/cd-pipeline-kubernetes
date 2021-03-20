@@ -114,8 +114,6 @@ spec:
             value: $(params.prodRepos)
           - name: e2eBuildId
             value: $(params.E2E_BUILD_ID)
-          - name: e2eBuildId
-            value: $(params.E2E_BUILD_ID)
           - name: cr_priority
             value: $(params.CR_PRIORITY)
           - name: cr_type

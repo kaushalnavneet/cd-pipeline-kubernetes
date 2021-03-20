@@ -47,7 +47,7 @@ spec:
       stringData:
         API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
-        SN_TOKEN: $(params.SN_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN_TEST)
         SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
         SLACK_TOC_HOOK: $(params.SLACK_TOC_HOOK)
 
@@ -114,8 +114,6 @@ spec:
             value: $(params.prodRepos)
           - name: e2eBuildId
             value: $(params.E2E_BUILD_ID)
-          - name: e2eBuildId
-            value: $(params.E2E_BUILD_ID)
           - name: cr_priority
             value: $(params.CR_PRIORITY)
           - name: cr_type
@@ -140,7 +138,7 @@ spec:
     - name: deployClusters
       value: 'otc-osa21-prod,otc-osa22-prod,otc-osa23-prod (otc-pw-osa21-prod,otc-pw-osa22-prod,otc-pw-osa23-prod for travis-workers and cryptomining detector)'
     - name: snUrl
-      value: 'https://watson.service-now.com'
+      value: 'https://watsontest.service-now.com'
     - name: tocChannel
       value: '#devops-cd-cie'
     - name: deployChannel
