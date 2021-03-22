@@ -151,6 +151,24 @@ pipeline:
         NO_REPORTING_QUEUE: true
         ENABLE_SLACK_NOTIFICATION: true
         LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com
+  tekton-pipeline-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Tekton Pipeline Service - YS1
+        USE_NEW_RELIC: true
+        IAM_URL: https://iam.test.cloud.ibm.com
+        TEKTON_PIPELINE_SERVICE_URL: https://tekton-pipeline-service.us-south.devops.dev.cloud.ibm.com
+        LOG_SERVICE_URL: http://pipeline-log-service
+        TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        ENABLE_DISTRIBUTED_LOCK: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
