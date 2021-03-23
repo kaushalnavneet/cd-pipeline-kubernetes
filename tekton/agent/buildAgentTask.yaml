@@ -24,12 +24,6 @@ spec:
       default: --no-cache --pull
     - name: idsUser
       default: idsorg
-    - name: artifactoryToken
-      default: ''
-    - name: artifactoryId
-      default: ''
-    - name: consoleAuthToken
-      default: ''
     - name: dockerhubPassword
     - name: envTag
     - name: skipOldAgentBuild
@@ -66,11 +60,6 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: ARTIFACTORY_AUTH_BASE64
-      - name: CONSOLE_AUTH_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: CONSOLE_AUTH_TOKEN
   workspaces:
   - name: task-pvc
     mountPath: /artifacts
@@ -181,7 +170,7 @@ spec:
         go mod vendor
         operator-sdk build ${IMAGE_URL}:${APPLICATION_VERSION}
         else
-        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID} --build-arg CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}
+        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  --build-arg ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64} --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" --build-arg ARTIFACTORY_ID=${ARTIFACTORY_ID}
         fi
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"

@@ -14,7 +14,6 @@ initDefaults() {
     export ARTIFACTORY_TOKEN_BASE64=""
     export ARTIFACTORY_AUTH_BASE64=""
     export ARTIFACTORY_ID=""
-    export CONSOLE_AUTH_TOKEN=""
     export ICD_REDIS_STORE=""
     export QR_STORE=""
     export MAVEN_USER_ID=""
@@ -50,9 +49,6 @@ initDefaults() {
 
     if [ -f "/config/ARTIFACTORY_ID" ]; then
         export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID) 
-    fi
-    if [ -f "/config/CONSOLE_AUTH_TOKEN" ]; then
-        export CONSOLE_AUTH_TOKEN=$(cat /config/CONSOLE_AUTH_TOKEN) 
     fi
 
     if [ -f "/config/ICD_REDIS_STORE" ]; then
@@ -180,8 +176,8 @@ else
     docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg \
     COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
     --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" \
-    --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}" \
-    --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
+    --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
+    --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
 
 fi
 if [ $? -ne 0 ]; then

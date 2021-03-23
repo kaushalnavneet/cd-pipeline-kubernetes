@@ -50,7 +50,6 @@ spec:
         SLACK_WEBHOOK: $(params.SLACK_WEBHOOK)
         ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
         ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
-        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1

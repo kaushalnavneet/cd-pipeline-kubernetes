@@ -14,8 +14,8 @@ FROM us.icr.io/opentoolchain/cd-build-base:nodejs14ubi as build
 ARG IDS_TOKEN
 ARG IDS_USER
 ARG ARTIFACTORY_TOKEN_BASE64
+ARG ARTIFACTORY_AUTH_BASE64
 ARG ARTIFACTORY_ID
-ARG CONSOLE_AUTH_TOKEN
 
 ADD . /work/component
 

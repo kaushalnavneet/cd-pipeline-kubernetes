@@ -89,11 +89,6 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: ARTIFACTORY_AUTH_BASE64
-      - name: CONSOLE_AUTH_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: CONSOLE_AUTH_TOKEN
   workspaces:
   - name: task-pvc
     mountPath: /workspace 

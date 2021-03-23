@@ -57,7 +57,6 @@ spec:
         IDS_TOKEN: $(params.IDS_TOKEN)
         ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
         ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
-        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
@@ -132,12 +131,6 @@ spec:
             value: $(params.skipVA)
           - name: skipDeploy
             value: $(params.skipDeploy)
-          - name: artifactoryTokenBase64
-            value: $(params.ARTIFACTORY_TOKEN_BASE64)
-          - name: artifactoryId
-            value: $(params.ARTIFACTORY_ID)
-          - name: consoleAuthToken
-            value: $(params.CONSOLE_AUTH_TOKEN)
           - name: helmOptions
             value: $(params.helmOptions)
 ---
