@@ -38,6 +38,7 @@ spec:
         REGION: $(params.toolchainRegion)
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
+        ARTIFACTORY_ID: $(params.ARTIFACTORY_ID)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -47,6 +48,9 @@ spec:
         APPSCAN_API_KEY_SECRET: $(params.APPSCAN_API_KEY_SECRET)
         API_KEY: $(params.API_KEY_1416501)
         SLACK_WEBHOOK: $(params.SLACK_WEBHOOK)
+        ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
+        ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
+        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1

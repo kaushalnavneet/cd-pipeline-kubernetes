@@ -25,12 +25,6 @@ spec:
       default: --no-cache
     - name: environment
       default: 'development'
-    - name: artifactoryTokenBase64
-      default: ''
-    - name: artifactoryId
-      default: ''
-    - name: consoleAuthToken
-      default: ''
     - name: icd-redis-store
       default: ''
     - name: qr-store
@@ -86,6 +80,26 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+      - name: ARTIFACTORY_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: ARTIFACTORY_ID
+      - name: ARTIFACTORY_TOKEN_BASE64
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_TOKEN_BASE64
+      - name: ARTIFACTORY_AUTH_BASE64
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_AUTH_BASE64
+      - name: CONSOLE_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CONSOLE_AUTH_TOKEN
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -124,13 +138,6 @@ spec:
         value: $(params.buildCluster)
       - name: ENVIRONMENT
         value: $(params.environment)
-      # used for pipeline-ui build
-      - name: ARTIFACTORY_TOKEN_BASE64
-        value: $(params.artifactoryTokenBase64)
-      - name: ARTIFACTORY_ID
-        value: $(params.artifactoryId)
-      - name: CONSOLE_AUTH_TOKEN
-        value: $(params.consoleAuthToken)
       # can we get rid of this?
       - name: OPERATOR_SDK
         value: ''
@@ -200,9 +207,9 @@ spec:
         else 
           docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_URL}:${APPLICATION_VERSION} -f ${DOCKERFILE} --build-arg \
             COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
-            --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" \
-            --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
-            --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
+            --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" \
+            --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "CONSOLE_AUTH_TOKEN=${CONSOLE_AUTH_TOKEN}" \
+            --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
 
         fi
         if [ $? -ne 0 ]; then

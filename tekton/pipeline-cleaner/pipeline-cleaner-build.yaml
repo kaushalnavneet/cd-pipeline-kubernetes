@@ -17,13 +17,7 @@ spec:
     - name: dockerFile
       default: ''
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
-    - name: artifactoryTokenBase64
-      default: ''
-    - name: artifactoryId
-      default: ''
-    - name: consoleAuthToken
-      default: ''
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
     - name: helmOptions
       default: ''
   workspaces:
@@ -73,12 +67,6 @@ spec:
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: consoleAuthToken
-          value: $(params.consoleAuthToken)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

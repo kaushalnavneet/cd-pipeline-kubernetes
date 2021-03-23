@@ -49,6 +49,7 @@ spec:
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
         DRY_RUN_CLUSTER: otc-us-south-dal13-stage
+        ARTIFACTORY_ID: $(params.ARTIFACTORY_ID)
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -61,6 +62,9 @@ spec:
         DEPLOY_API_KEY: $(params.API_KEY_1651315)
         IDS_TOKEN: $(params.IDS_TOKEN)
         DRY_RUN_API_KEY: $(params.API_KEY_1308775)
+        ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
+        ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
+        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
@@ -134,12 +138,6 @@ spec:
             value: $(params.skipBuild)
           - name: environment
             value: $(params.environment)
-          - name: artifactoryTokenBase64
-            value: $(params.ARTIFACTORY_TOKEN_BASE64)
-          - name: artifactoryId
-            value: $(params.ARTIFACTORY_ID)
-          - name: consoleAuthToken
-            value: $(params.CONSOLE_AUTH_TOKEN)
           - name: skipVA
             value: $(params.skipVA)
           - name: staging_auto_deploy_token

@@ -19,6 +19,8 @@ spec:
         S3_STORAGE_ENDPOINT: $(params.S3_STORAGE_ENDPOINT)
         CLEAN_TASK_MODULE: $(params.CLEAN_TASK_MODULE)
         REQUEST_TIMEOUT: $(params.REQUEST_TIMEOUT)
+        ARTIFACTORY_ID: $(params.ARTIFACTORY_ID)
+
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -31,6 +33,9 @@ spec:
         PIPELINE_CLEANER_IAM: $(params.PIPELINE_CLEANER_IAM)
         CLOUDANT_IAM_API_KEY: $(params.CLOUDANT_IAM_API_KEY)
         PIPELINE_BASIC_AUTH_TOKEN: $(params.PIPELINE_BASIC_AUTH_TOKEN)
+        ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
+        ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
+        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1

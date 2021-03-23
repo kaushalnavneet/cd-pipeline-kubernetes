@@ -20,10 +20,6 @@ spec:
     - name: reportToSlackFile
       description: the script for this component to report results to slack
       default: send_report_to_slack.sh
-    - name: artifactoryId
-      description: the name of the artifactory id
-    - name: artifactoryTokenBase64
-      description: the artifactory token
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -53,10 +49,6 @@ spec:
           value: $(params.buildScriptFile)
         - name: reportToSlackFile
           value: $(params.reportToSlackFile)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
       workspaces:
       - name: task-volume
         workspace: pipeline-pvc 

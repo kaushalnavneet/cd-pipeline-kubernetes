@@ -24,12 +24,6 @@ spec:
       default: ''
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs14
-    - name: artifactoryTokenBase64
-      default: ''
-    - name: artifactoryId
-      default: ''
-    - name: consoleAuthToken
-      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -91,12 +85,6 @@ spec:
           value: ''
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: consoleAuthToken
-          value: $(params.consoleAuthToken)
         - name: skipMocha
           value: $(params.skipMocha)
       workspaces:

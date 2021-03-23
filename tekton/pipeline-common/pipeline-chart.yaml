@@ -24,12 +24,6 @@ spec:
       default: ""
     - name: runBaseImage
       default: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
-    - name: artifactoryTokenBase64
-      default: ""
-    - name: artifactoryId
-      default: ""
-    - name: consoleAuthToken
-      default: ""
     - name: staging_auto_deploy_token
       default: ""
     - name: staging_auto_deploy_url
@@ -115,12 +109,6 @@ spec:
           value: ""
         - name: environment
           value: $(params.environment)
-        - name: artifactoryTokenBase64
-          value: $(params.artifactoryTokenBase64)
-        - name: artifactoryId
-          value: $(params.artifactoryId)
-        - name: consoleAuthToken
-          value: $(params.consoleAuthToken)
         - name: icd-redis-store
           value: $(params.icd-redis-store)
         - name: qr-store

@@ -10,6 +10,21 @@ spec:
       description: tag for the final dockerhub image
   resourcetemplates:
     - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        ARTIFACTORY_ID: $(params.ARTIFACTORY_ID)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
+        ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
+        CONSOLE_AUTH_TOKEN: $(params.CONSOLE_AUTH_TOKEN)
+    - apiVersion: v1
       kind: Secret
       metadata:
         name: otc-registry-secret

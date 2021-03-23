@@ -25,12 +25,6 @@ spec:
       default: --no-cache
     - name: environment
       default: 'development'
-    - name: artifactoryTokenBase64
-      default: ''
-    - name: artifactoryId
-      default: ''
-    - name: consoleAuthToken
-      default: ''
     - name: skipMocha
       default: 'true'
   stepTemplate:
@@ -80,6 +74,26 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+      - name: ARTIFACTORY_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: ARTIFACTORY_ID
+      - name: ARTIFACTORY_TOKEN_BASE64
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_TOKEN_BASE64
+      - name: ARTIFACTORY_AUTH_BASE64
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_AUTH_BASE64
+      - name: CONSOLE_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: CONSOLE_AUTH_TOKEN
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -118,13 +132,6 @@ spec:
         value: $(params.buildCluster)
       - name: ENVIRONMENT
         value: $(params.environment)
-      # used for pipeline-ui build
-      - name: ARTIFACTORY_TOKEN_BASE64
-        value: $(params.artifactoryTokenBase64)
-      - name: ARTIFACTORY_ID
-        value: $(params.artifactoryId)
-      - name: CONSOLE_AUTH_TOKEN
-        value: $(params.consoleAuthToken)
       # can we get rid of this?
       - name: OPERATOR_SDK
         value: ''
