@@ -146,7 +146,7 @@ spec:
   
         ibmcloud cr login
         BASE_IMAGE_NAME="pipeline-base-image"
-        if [ "${USE_UBI}" == true ];
+        if [ "${USE_UBI}" == true ]; then
           BASE_IMAGE_NAME="pipeline-base-ubi"
         fi
 
