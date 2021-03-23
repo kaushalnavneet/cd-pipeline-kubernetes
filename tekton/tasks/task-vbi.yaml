@@ -125,21 +125,19 @@ spec:
             exit 1
         fi
 
-        docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
-        docker push ${IMAGE_NAME}:${IMAGE_TAG}
-        if [ $? -ne 0 ]; then
-            echo \"Failed during execution of docker push tagged image command\"
-            exit 1
-        fi
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
-        if [ $? -ne 0 ]; then
-            echo \"Failed during execution of docker push command for latest tag\"
-            exit 1
-        fi
-        docker push ${IMAGE_NAME}:latest
-        if [ $? -ne 0 ]; then
-            echo \"Failed during execution of docker push latest image command\"
-            exit 1
+        if [ "${USE_UBI}" == false ]; then
+          docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+          docker push ${IMAGE_NAME}:${IMAGE_TAG}
+          if [ $? -ne 0 ]; then
+              echo \"Failed during execution of docker push tagged image command\"
+              exit 1
+          fi
+          docker push ${IMAGE_NAME}:latest
+          if [ $? -ne 0 ]; then
+              echo \"Failed during execution of docker push latest image command\"
+              exit 1
+          fi
         fi
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
