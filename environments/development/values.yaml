@@ -193,6 +193,8 @@ pipeline:
     probes:
       readiness:
         path: "/version"
+      liveness:
+        path: "/status"
     configmap:
       data:
         NODE_ENV: development
