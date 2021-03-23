@@ -14,6 +14,8 @@ spec:
       default: us-south
     - name: registryScope
       default: 'global'
+    - name: useUbi
+      default: "false"
   stepTemplate:
     env:
       - name: API
@@ -93,6 +95,8 @@ spec:
         value: "unix:///var/run/docker.sock"
       - name: REGISTRY_SCOPE
         value: $(params.registryScope)
+      - name: USE_UBI
+        value: $(params.useUbi)
     workingDir: /workspace
     volumeMounts:
       - mountPath: /var/run/
@@ -123,29 +127,35 @@ spec:
 
         docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
         docker push ${IMAGE_NAME}:${IMAGE_TAG}
-        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
-        docker push ${IMAGE_NAME}:latest
         if [ $? -ne 0 ]; then
-            echo \"Failed during execution of docker push command\"
+            echo \"Failed during execution of docker push tagged image command\"
             exit 1
         fi
-
+        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker push command for latest tag\"
             exit 1
         fi
-
+        docker push ${IMAGE_NAME}:latest
+        if [ $? -ne 0 ]; then
+            echo \"Failed during execution of docker push latest image command\"
+            exit 1
+        fi
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
         ibmcloud cr region-set ${REGISTRY_SCOPE}
   
         ibmcloud cr login
-        docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/pipeline-base-image:latest
-        docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/pipeline-base-image:${IMAGE_TAG}
+        BASE_IMAGE_NAME="pipeline-base-image"
+        if [ "${USE_UBI}" == true ];
+          BASE_IMAGE_NAME="pipeline-base-ubi"
+        fi
 
-        docker push icr.io/continuous-delivery/pipeline/pipeline-base-image:${IMAGE_TAG}
-        docker push icr.io/continuous-delivery/pipeline/pipeline-base-image:latest
+        docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:latest
+        docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:${IMAGE_TAG}
+        docker push icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:${IMAGE_TAG}
+        docker push icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:latest
   sidecars:
     - image: docker:19-dind
       name: server

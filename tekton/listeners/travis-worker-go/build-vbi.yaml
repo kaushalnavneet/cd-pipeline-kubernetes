@@ -9,6 +9,7 @@ spec:
     - name: dockerFile
     - name: dockerUsername
     - name: registryScope
+    - name: useUbi
 
     # CD integration
     - name: api
@@ -103,6 +104,8 @@ spec:
             value: $(params.dockerUsername)
           - name: registryScope
             value: $(params.registryScope)
+          - name: useUbi
+            value: $(params.useUbi)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -120,6 +123,8 @@ spec:
       value: "idsorg"
     - name: registryScope
       value: $(params.REGISTRY_SCOPE)
+    - name: useUbi
+      value: $(params.useUbi)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
