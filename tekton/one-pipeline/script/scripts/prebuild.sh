@@ -3,7 +3,8 @@ echo ">>>>>>>>>>>>>>>>>>>"
 
 pwd
 echo "Cloning Config Repo"
-cd /workspace/app/pipeline-log-service
+WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
+cd /workspace/app/${WORK_DIR}
 CONFIG_REPO=$(cat /config/CONFIG_REPO)
 CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
 CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)

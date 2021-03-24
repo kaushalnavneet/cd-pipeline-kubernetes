@@ -6,7 +6,7 @@
     # private-worker-service-binding-dev binding values
     SOURCE_REPO: "https://github.ibm.com/org-ids/private-worker-service.git"
     SOURCE_BRANCH:  "master"
-    SOURCE_DIRECTORY: "pipeline-log-service"
+    SOURCE_DIRECTORY: "private-worker-service"
     CHARTS_REPO: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     CHARTS_BRANCH: "master"
     CHARTS_DIRECTORY: "private-worker-service/cd-pipeline-kubernetes"
