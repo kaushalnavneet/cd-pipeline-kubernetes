@@ -60,7 +60,7 @@ spec:
             git clone -b integration "$REPO_URL_AUTH"
         done
   - name: tag-chglog
-    image: icr.io/continuous-delivery/pipeline/chglog-pipeline
+    image: icr.io/continuous-delivery/util-images/chglog-image:1.0
     imagePullPolicy: Always
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
