@@ -4,55 +4,26 @@
     name: cd-config
   data:
     # private-worker-service-binding-dev binding values
-    SOURCE_REPO: "https://github.ibm.com/org-ids/pipeline-log-service.git"
+    SOURCE_REPO: "https://github.ibm.com/org-ids/private-worker-service.git"
     SOURCE_BRANCH:  "master"
-    SOURCE_DIRECTORY: "pipeline-log-service"
+    SOURCE_DIRECTORY: "private-worker-service"
     CHARTS_REPO: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     CHARTS_BRANCH: "master"
-    CHARTS_DIRECTORY: "pipeline-log-service/cd-pipeline-kubernetes"
+    CHARTS_DIRECTORY: "private-worker-service/cd-pipeline-kubernetes"
     CONFIG_REPO: "https://github.ibm.com/ids-env/devops-config.git"
     CONFIG_BRANCH: "master"
-    CONFIG_DIRECTORY: "pipeline-log-service/devops-config"
-    IMAGE_URL: "us.icr.io/opentoolchain/pipeline-log-service"
+    CONFIG_DIRECTORY: "private-worker-service/devops-config"
+    IMAGE_URL: "us.icr.io/opentoolchain/private-worker-service"
     ENVIRONMENT: "development"
     CLUSTERNAME: "otc-us-south-dev"
     CLUSTERNAMESPACE: "opentoolchain"
     SKIPBUILD: "false"
     SKIPVA: "true"
     SKIPDEPLOY: "false"
+    DOCKERFILE: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs12ubi"
     # original config map values
     API: "https://cloud.ibm.com"
     REGION: "us-south"
     RESOURCE_GROUP: "f778a8021f114465aff0e39885cff51a"
     TOOLCHAIN_ID: "63189b8f-7c6f-4c17-9c3f-2481763314a4"
     IDS_USER: "idsorg"
----
-# not used at the moment
-apiVersion: v1
-kind: Secret
-metadata:
-  name: cd-secret
-type: Opaque
-stringData:
-  API_KEY: $(params.API_KEY_1416501)
-  API_KEY_1308775: $(params.API_KEY_1308775)
-  API_KEY_1651315: $(params.API_KEY_1651315)
-  DEPLOY_API_KEY: $(params.API_KEY_1651315)
-  IDS_TOKEN: $(params.IDS_TOKEN)
----    
-# not used at the moment
-apiVersion: v1
-kind: Secret
-metadata:
-  name: private-registry-secret
-type: kubernetes.io/dockerconfigjson
-data:
-  .dockerconfigjson: $(params.dockerconfigjson)
----
-# not used at the moment
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: docker-build-sa
-imagePullSecrets:
-  - name: private-registry-secret

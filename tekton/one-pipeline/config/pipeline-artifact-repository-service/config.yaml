@@ -3,17 +3,17 @@
   metadata:
     name: cd-config
   data:
-    # pipeline-log-service-binding-dev binding values
-    SOURCE_REPO: "https://github.ibm.com/org-ids/pipeline-log-service.git"
+    # pipeline-artifact-repository-service-binding-dev binding values
+    SOURCE_REPO: "https://github.ibm.com/org-ids/pipeline-artifact-repository-service.git"
     SOURCE_BRANCH:  "master"
-    SOURCE_DIRECTORY: "pipeline-log-service"
+    SOURCE_DIRECTORY: "pipeline-artifact-repository-service"
     CHARTS_REPO: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
     CHARTS_BRANCH: "master"
-    CHARTS_DIRECTORY: "pipeline-log-service/cd-pipeline-kubernetes"
+    CHARTS_DIRECTORY: "pipeline-artifact-repository-service/cd-pipeline-kubernetes"
     CONFIG_REPO: "https://github.ibm.com/ids-env/devops-config.git"
     CONFIG_BRANCH: "master"
-    CONFIG_DIRECTORY: "pipeline-log-service/devops-config"
-    IMAGE_URL: "us.icr.io/opentoolchain/pipeline-log-service"
+    CONFIG_DIRECTORY: "pipeline-artifact-repository-service/devops-config"
+    IMAGE_URL: "us.icr.io/opentoolchain/pipeline-artifact-repository-service"
     ENVIRONMENT: "development"
     CLUSTERNAME: "otc-us-south-dev"
     CLUSTERNAMESPACE: "opentoolchain"

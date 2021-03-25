@@ -48,6 +48,7 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         ENABLE_SECRET_PICKER: true
         SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        TEKTON_PIPELINE_SERVICE_HOST: http://tekton-pipeline-service
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
   pipeline-log-service:

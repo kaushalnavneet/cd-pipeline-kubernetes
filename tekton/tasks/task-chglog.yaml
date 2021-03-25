@@ -12,7 +12,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: chglog
-    image: icr.io/continuous-delivery/pipeline/chglog-pipeline
+    image: icr.io/continuous-delivery/util-images/chglog-image:1.0
     imagePullPolicy: Always
     env:
       - name: SOURCE_REPO
