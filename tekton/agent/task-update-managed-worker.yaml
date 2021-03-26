@@ -61,7 +61,7 @@ spec:
         - name: RUN_COMMANDS
           value: $(params.run_commands)
       workingDir: /workspace
-      command: ["/bin/bash", "-c"]
+      command: ['/bin/bash', '-c']
       args:
         - |
           export HOME=/root
@@ -96,27 +96,34 @@ spec:
 
           if [[ "$UPDATE_KATA" == "true" ]]
           then
-            kubectl patch workeragent $(kubectl get workeragents.devops.cloud.ibm.com -oname | sed "s/.*\///") --type='merge' -p '{"spec": {"paused": true}}'
-            while kubectl get namespaces -l app=workeragent | grep pw; do sleep 10; done
-            kubectl label node --all kata-deploy-
-            while kubectl -n kube-system get pod | grep kata; do sleep 10; done
-            kubectl apply -f ${KATA_DIRECTORY}/config/
-            kubectl label node --all kata-deploy=true
-            sleep 15
+            echo Comparing kata versions...
+            target=$(yq r config/200-kata-deploy.yaml 'spec.template.spec.containers[0].image')
+            current=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image)
+            echo Current version = $current
+            echo Target version = $target
+            if ! [[ $current == $target ]] 
+            then
+              echo Update required... updating kata version
+              kubectl patch workeragent $(kubectl get workeragents.devops.cloud.ibm.com -oname | sed "s/.*\///") --type='merge' -p '{"spec": {"paused": true}}'
+              while kubectl get namespaces -l app=workeragent | grep pw; do sleep 10; done
+              kubectl label node --all kata-deploy-
+              while kubectl -n kube-system get pod | grep kata; do sleep 10; done
+              kubectl apply -f ${KATA_DIRECTORY}/config/
+              kubectl label node --all kata-deploy=true
+              sleep 15
+            fi
           fi
 
           if [[ "$UPDATE_AGENT" == "true" ]]
           then
             kubectl apply --filename "https://private-worker-service.${REGION}.${TARGET_DOMAIN}/update"
-            updaterJobs=($(kubectl get jobs | grep agent-updater | awk '{ print $1 }'))
-            for updaterJob in "${updaterJobs[@]}"
-            do
-              echo "Waiting for job ${updaterJob} to complete"
-              while kubectl -n default get pod | grep ${updaterJob}; do sleep 10; done
-              echo "Job ${updaterJob} is complete"
-            done
+            sleep 10
+            updaterPod=$(kubectl get pods | grep agent-updater | awk '{ print $1 }')
+            echo "Waiting for pod ${updaterPod} to complete"
+            while [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) != "Failed" ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
+            echo "Pod ${updaterPod} is complete"
             sleep 15
-          fi
+          fi 
 
           kubectl wait -l app=private-worker-agent --for=condition=ready pod --timeout=-1s -n tekton-pipelines
           kubectl wait -l app=tekton-pipelines-controller --for=condition=ready pod --timeout=-1s -n tekton-pipelines
