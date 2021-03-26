@@ -120,7 +120,7 @@ spec:
             sleep 10
             updaterPod=$(kubectl get pods | grep agent-updater | awk '{ print $1 }')
             echo "Waiting for pod ${updaterPod} to complete"
-            while [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) != "Failed" ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
+            while [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Completed) ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
             echo "Pod ${updaterPod} is complete"
             sleep 15
           fi 
