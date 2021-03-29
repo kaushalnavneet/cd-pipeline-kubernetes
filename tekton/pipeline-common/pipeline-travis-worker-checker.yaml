@@ -102,5 +102,21 @@ spec:
           value: 'false'
       workspaces:
       - name: task-pvc
+        workspace: pipeline-pvc
+    - name: tw-check-osa
+      runAfter: [clone-script-repo]
+      taskRef:
+        name: travis-worker-check
+      params:
+        - name: script_directory
+          value: $(params.script_directory)
+        - name: regions
+          value: osa
+        - name: cluster_region
+          value: jp-osa
+        - name: skip
+          value: 'false'
+      workspaces:
+      - name: task-pvc
         workspace: pipeline-pvc 
 
