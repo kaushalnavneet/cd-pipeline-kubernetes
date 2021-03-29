@@ -153,7 +153,7 @@ spec:
         docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:latest
         docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:${IMAGE_TAG}
         docker push icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:${IMAGE_TAG}
-        docker push icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:latest
+        #docker push icr.io/continuous-delivery/pipeline/${BASE_IMAGE_NAME}:latest
   sidecars:
     - image: docker:19-dind
       name: server
