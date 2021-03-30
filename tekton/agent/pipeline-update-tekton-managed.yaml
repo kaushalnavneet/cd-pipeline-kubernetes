@@ -27,6 +27,10 @@ spec:
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
+    - name: clusterName4
+      default: ''
+    - name: skipDeploy4
+      default: 'true'
   workspaces:
     - name: pipeline-pvc
   tasks:
@@ -95,7 +99,7 @@ spec:
       workspaces:
         - name: task-pvc
           workspace: pipeline-pvc
-    - name: update-agent-and-kata-3
+    - name: update-managed-worker-3
       runAfter: [update-managed-worker-2]
       taskRef:
         name: update-managed-worker
@@ -118,6 +122,32 @@ spec:
           value: $(params.skipDeploy3)
         - name: clusterName
           value: $(params.clusterName3)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+      - name: update-managed-worker-4
+      runAfter: [update-managed-worker-3]
+      taskRef:
+        name: update-managed-worker
+      params:
+        - name: update_agent
+          value: $(params.update_agent)
+        - name: update_kata
+          value: $(params.update_kata)
+        - name: kata_directory
+          value: $(params.kata_directory)
+        - name: region
+          value: $(params.region)
+        - name: target_domain
+          value: $(params.target_domain)
+        - name: set_worker_offline
+          value: $(params.set_worker_offline)
+        - name: run_commands
+          value: $(params.run_commands)
+        - name: skipDeploy
+          value: $(params.skipDeploy4)
+        - name: clusterName
+          value: $(params.clusterName4)
       workspaces:
         - name: task-pvc
           workspace: pipeline-pvc
