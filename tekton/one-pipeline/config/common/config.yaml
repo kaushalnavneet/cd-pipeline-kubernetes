@@ -1,0 +1,23 @@
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: cd-config
+  data:
+    SOURCE_BRANCH:  "master"
+    CHARTS_REPO: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    CHARTS_BRANCH: "master"
+    CONFIG_REPO: "https://github.ibm.com/ids-env/devops-config.git"
+    CONFIG_BRANCH: "master"
+    ENVIRONMENT: "development"
+    CLUSTERNAME: "otc-us-south-dev"
+    CLUSTERNAMESPACE: "opentoolchain"
+    SKIPBUILD: "false"
+    SKIPVA: "true"
+    SKIPDEPLOY: "false"
+    DOCKERFILE: "cd-pipeline-kubernetes/docker/Dockerfile.nodejs12ubi"
+    # original config map values
+    API: "https://cloud.ibm.com"
+    REGION: "us-south"
+    RESOURCE_GROUP: "f778a8021f114465aff0e39885cff51a"
+    TOOLCHAIN_ID: "63189b8f-7c6f-4c17-9c3f-2481763314a4"
+    IDS_USER: "idsorg"
