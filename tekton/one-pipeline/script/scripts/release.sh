@@ -9,9 +9,6 @@ if [ -f "/config/DEV_MODE" ]; then
 fi
 
 if [[ -z $DEV_MODE ]]; then
-    echo "Dev Mode - nothing to release"
-else
-
     export GHE_TOKEN="$(cat ../git-token)"
     export COMMIT_SHA="$(cat /config/git-commit)"
     export APP_NAME="$(cat /config/app-name)"
@@ -70,4 +67,6 @@ else
         --version="$(cat /config/version)" \
         --name="${APP_NAME}" \
         --app-artifacts="${APP_ARTIFACTS}"
+else 
+    echo "Dev Mode - skipping"
 fi
