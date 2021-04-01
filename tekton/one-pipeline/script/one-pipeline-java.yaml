@@ -1,0 +1,67 @@
+version: '1'
+
+setup:
+  image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  configmap: cd-config
+  script: |
+    #!/usr/bin/env bash
+    echo "Done"
+
+
+test:
+  abort_on_failure: false
+  configmap: cd-config
+  image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  script: |
+    #!/usr/bin/env bash
+
+    echo "Tests"
+
+containerize:
+  dind: true
+  configmap: cd-config
+  image: us.icr.io/opentoolchain/cd-build-base:java-ubi
+  script: |
+    #!/usr/bin/env bash
+
+    if [[ "$PIPELINE_DEBUG" == 1 ]]; then
+      trap env EXIT
+      env
+      set -x
+    fi
+    source ./tekton/one-pipeline/script/scripts/prebuild.sh
+    source ./tekton/one-pipeline/script/scripts/build.sh
+
+deploy:
+  image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+  configmap: cd-config
+  script: |
+    #!/usr/bin/env bash
+
+    if [[ "$PIPELINE_DEBUG" == 1 ]]; then
+      trap env EXIT
+      env
+      set -x
+    fi
+
+    source ./tekton/one-pipeline/script/scripts/deploy.sh
+
+acceptance-test:
+  abort_on_failure: false
+  image:  us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+  script: |
+    #!/usr/bin/env bash
+
+    # source /root/.nvm/nvm.sh
+    # npm ci
+    # export APP_URL=$(cat ../app-url)
+    # npm run acceptance-test
+
+      echo "Acceptance Tests"
+
+release:
+  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
+  script: |
+    #!/usr/bin/env bash
+
+    source ./tekton/one-pipeline/script/scripts/release.sh
