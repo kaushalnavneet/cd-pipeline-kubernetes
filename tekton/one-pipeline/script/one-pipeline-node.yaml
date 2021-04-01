@@ -23,7 +23,7 @@ containerize:
   image: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
   script: |
     #!/usr/bin/env bash
-
+    echo "--- Node Build ---"
     if [[ "$PIPELINE_DEBUG" == 1 ]]; then
       trap env EXIT
       env

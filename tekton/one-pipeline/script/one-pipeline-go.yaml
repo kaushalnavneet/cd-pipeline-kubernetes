@@ -23,7 +23,7 @@ containerize:
   image: us.icr.io/opentoolchain/cd-build-base:go1.16
   script: |
     #!/usr/bin/env bash
-
+    echo "--- Go Build ---"
     if [[ "$PIPELINE_DEBUG" == 1 ]]; then
       trap env EXIT
       env
