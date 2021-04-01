@@ -18,7 +18,12 @@ initDefaults() {
     export QR_STORE=""
     export MAVEN_USER_ID=""
     export ADD_CHGLOG_URL="false"
+    export DOCKERFILE="cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
 
+    if [ -f "/config/DOCKERFILE" ]; then
+        export DOCKERFILE=$(cat /config/DOCKERFILE) 
+    fi
+    
     if [ -f "/config/IMAGE_NAME" ]; then
         export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
     fi
