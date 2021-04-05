@@ -158,7 +158,7 @@ spec:
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-rabbitmq-dev
+      value: otc-pw-us-south-dev
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
@@ -166,7 +166,7 @@ spec:
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: otc-pw-lon06-prod
+      value: otc-pw-us-south-dev
     - name: skipDeploy3
       value: "true"
 ---
