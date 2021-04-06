@@ -550,7 +550,7 @@ pipeline:
       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
     probes:
       enabled: false
-    preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' > /proc/1/fd/1; kill -s INT 1; echo 'Waiting...' > /proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
+    preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' >/proc/1/fd/1; kill -s INT 1; echo 'Waiting...' >/proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
     terminationGracePeriodSeconds: 4000
     travisDockerTag: 8a62d5a603ae3ebfbd86bf4705433f84e8119569-202103191640UTC
     configmap:
