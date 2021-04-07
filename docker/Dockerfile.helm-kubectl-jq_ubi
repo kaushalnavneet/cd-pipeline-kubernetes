@@ -1,6 +1,6 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2020. All Rights Reserved.
+# (c) Copyright IBM Corporation 2020, 2021. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -17,8 +17,8 @@ RUN yum update -y \
     && yum install wget -y \
     && yum clean all -y
 
-ENV KUBE_LATEST_VERSION="v1.19.2"
-ENV HELM_VERSION="v3.3.4"
+ENV KUBE_LATEST_VERSION="v1.20.5"
+ENV HELM_VERSION="v3.5.3"
 RUN wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBE_LATEST_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
