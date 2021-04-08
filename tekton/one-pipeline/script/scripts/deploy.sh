@@ -99,7 +99,8 @@ if [ "${SKIP}" == true ]; then
     exit 0
 fi
 if [[ -z $DEV_MODE ]]; then
-    exit "Skipping Deploy in integration pipeline"
+    echo "Skipping Deploy in integration pipeline"
+    exit 0
 fi
 echo "1"
 pwd
