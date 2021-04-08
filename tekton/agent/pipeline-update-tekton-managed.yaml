@@ -125,7 +125,7 @@ spec:
       workspaces:
         - name: task-pvc
           workspace: pipeline-pvc
-      - name: update-managed-worker-4
+    - name: update-managed-worker-4
       runAfter: [update-managed-worker-3]
       taskRef:
         name: update-managed-worker
