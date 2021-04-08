@@ -20,6 +20,10 @@ initDefaults() {
     export ADD_CHGLOG_URL="false"
     export DOCKERFILE="cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
 
+    if [ -f "/config/CHARTS_REPO" ]; then
+        export CHARTS_REPO=$(cat /config/CHARTS_REPO) 
+    fi
+
     if [ -f "/config/DOCKERFILE" ]; then
         export DOCKERFILE=$(cat /config/DOCKERFILE) 
     fi
@@ -33,7 +37,7 @@ initDefaults() {
     fi
 
     if [ -f "/config/DOCKER_USERNAME" ]; then
-            export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
+        export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
     fi
 
     if [ -f "/config/EXTRA_DOCKER_OPTS" ]; then
