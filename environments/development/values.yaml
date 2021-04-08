@@ -170,6 +170,12 @@ pipeline:
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
         ENABLE_DISTRIBUTED_LOCK: true
+        DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
+        ENCRYPTER_PAYLOAD_ENCRYPT: "false"
+        REDIS_TIMEOUT: 3000
+        ENABLE_SECRET_BY_REF: true
+        TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
+        ENABLE_MESSAGE_COMPRESSION: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
