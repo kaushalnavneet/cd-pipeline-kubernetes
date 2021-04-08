@@ -108,13 +108,14 @@ spec:
           if [[ "$UPDATE_KATA" == "true" ]]
           then
             echo Comparing kata versions...
-            target=$(yq r config/200-kata-deploy.yaml 'spec.template.spec.containers[0].image')
+            target=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml)
+            read -ra tar <<<"$target"
             current=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image)
             echo Current version = $current
-            echo Target version = $target
-            if ! [[ $current == $target ]] 
+            echo Target version = ${tar[0]}
+            if ! [[ "$current" == "${tar[0]}" ]] 
             then
-              echo Update required... updating kata version
+              echo Update required - updating kata version
               kubectl patch workeragent $(kubectl get workeragents.devops.cloud.ibm.com -oname | sed "s/.*\///") --type='merge' -p '{"spec": {"paused": true}}'
               while kubectl get namespaces -l app=workeragent | grep pw; do sleep 10; done
               kubectl label node --all kata-deploy-
