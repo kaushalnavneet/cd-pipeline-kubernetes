@@ -164,6 +164,20 @@ if [[ -z $DEV_MODE ]]; then
         # using regular worker, no signature
         APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
     fi
+
+    # Install cocoa cli
+    function installCocoa() {
+        local cocoaVersion=1.5.0
+        echo "Installing cocoa cli $cocoaVersion"
+        curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${cocoaVersion}"
+        cp cocoa-linux-* /usr/local/bin/cocoa
+        chmod +x /usr/local/bin/cocoa
+        export PATH="$PATH:/usr/local/bin/"
+        echo "Done"
+        echo
+    }
+    
+    installCocoa
     cocoa inventory add \
         --environment="${INVENTORY_BRANCH}" \
         --artifact="${ARTIFACT}" \
