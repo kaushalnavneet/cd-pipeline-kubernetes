@@ -83,7 +83,8 @@ initEnvVars() {
     # grab env vars from config map
     export API=$(cat /config/API)
     export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1308775)
+    export API_KEY=$(cat /config/API_KEY_1416501)
+    export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
     export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
     export API_KEY_1308775=$(cat /config/API_KEY_1308775)
     export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
