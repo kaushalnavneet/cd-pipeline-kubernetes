@@ -5,64 +5,64 @@
 #
 
 if [ -f "/config/DEV_MODE" ]; then
-    export DEV_MODE=$(cat /config/DEV_MODE) 
+    export DEV_MODE=$(cat /config/DEV_MODE)
 fi
 
 initDefaults() {
     export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
 
     if [ -f "/config/CHARTS_REPO" ]; then
-        export CHARTS_REPO=$(cat /config/CHARTS_REPO) 
+        export CHARTS_REPO=$(cat /config/CHARTS_REPO)
     fi
 
     if [ -f "/config/DOCKERFILE" ]; then
-        export DOCKERFILE=$(cat /config/DOCKERFILE) 
+        export DOCKERFILE=$(cat /config/DOCKERFILE)
     fi
     
     if [ -f "/config/IMAGE_NAME" ]; then
-        export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
+        export IMAGE_NAME=$(cat /config/IMAGE_NAME)
     fi
 
     if [ -f "/config/BUILD_CLUSTER" ]; then
-        export BUILD_CLUSTER=$(cat /config/BUILD_CLUSTER) 
+        export BUILD_CLUSTER=$(cat /config/BUILD_CLUSTER)
     fi
 
     if [ -f "/config/DOCKER_USERNAME" ]; then
-        export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
+        export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME)
     fi
 
     if [ -f "/config/EXTRA_DOCKER_OPTS" ]; then
-        export EXTRA_DOCKER_OPTS=$(cat /config/EXTRA_DOCKER_OPTS) 
+        export EXTRA_DOCKER_OPTS=$(cat /config/EXTRA_DOCKER_OPTS)
     fi
 
     if [ -f "/config/ENVIRONMENT" ]; then
-        export ENVIRONMENT=$(cat /config/ENVIRONMENT) 
+        export ENVIRONMENT=$(cat /config/ENVIRONMENT)
     fi
 
     if [ -f "/config/ARTIFACTORY_TOKEN_BASE64" ]; then
-        export ARTIFACTORY_TOKEN_BASE64=$(cat /config/ARTIFACTORY_TOKEN_BASE64) 
+        export ARTIFACTORY_TOKEN_BASE64=$(cat /config/ARTIFACTORY_TOKEN_BASE64)
     fi
 
     if [ -f "/config/ARTIFACTORY_AUTH_BASE64" ]; then
-        export ARTIFACTORY_AUTH_BASE64=$(cat /config/ARTIFACTORY_AUTH_BASE64) 
+        export ARTIFACTORY_AUTH_BASE64=$(cat /config/ARTIFACTORY_AUTH_BASE64)
     fi
 
     if [ -f "/config/ARTIFACTORY_ID" ]; then
-        export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID) 
+        export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID)
     fi
 
     if [ -f "/config/ICD_REDIS_STORE" ]; then
-        export ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE) 
+        export ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE)
     fi
     if [ -f "/config/QR_STORE" ]; then
-        export QR_STORE=$(cat /config/QR_STORE) 
+        export QR_STORE=$(cat /config/QR_STORE)
     fi
 
     if [ -f "/config/MAVEN_USER_ID" ]; then
-        export MAVEN_USER_ID=$(cat /config/MAVEN_USER_ID) 
+        export MAVEN_USER_ID=$(cat /config/MAVEN_USER_ID)
     fi
     if [ -f "/config/ADD_CHGLOG_URL" ]; then
-        export ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL) 
+        export ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL)
     fi
 }
 
@@ -81,6 +81,7 @@ initEnvVars() {
     export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
     export MINOR_VERSION=$(cat /config/MINOR_VERSION)
     export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
+    export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
