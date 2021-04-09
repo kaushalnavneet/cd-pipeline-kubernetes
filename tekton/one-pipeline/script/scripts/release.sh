@@ -123,6 +123,12 @@ if [[ -z $DEV_MODE ]]; then
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
     cd /workspace/app/${WORK_DIR}
 
+    IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    echo "echo -n $IDS_TOKEN" > ./token.sh
+    chmod +x ./token.sh
+
+    GIT_ASKPASS=./token.sh git clone --single-branch --branch master https://github.ibm.com/org-ids/pipeline-config.git
+
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}

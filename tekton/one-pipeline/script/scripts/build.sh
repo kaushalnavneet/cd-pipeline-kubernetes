@@ -190,19 +190,19 @@ else
 
 fi
 if [ $? -ne 0 ]; then
-    echo \"Failed during execution of docker build command\"
+    echo "Failed during execution of docker build command"
     exit 1
 fi
 
 docker tag ${IMAGE_URL}:${APPLICATION_VERSION} ${IMAGE_URL}:latest
 if [ $? -ne 0 ]; then
-    echo \"Failed during execution of docker tag command\"
+    echo "Failed during execution of docker tag command"
     exit 1
 fi
 
 docker push ${IMAGE_URL}:${APPLICATION_VERSION}
 if [ $? -ne 0 ]; then
-    echo \"Failed during execution of docker push command\"
+    echo "Failed during execution of docker push command"
     exit 1
 fi
 
