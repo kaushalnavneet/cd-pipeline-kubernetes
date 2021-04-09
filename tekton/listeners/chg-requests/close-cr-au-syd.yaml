@@ -136,9 +136,9 @@ spec:
     - name: snUrl
       value: 'https://watson.service-now.com'
     - name: tocChannel
-      value: '#devops-deploy-syd'
+      value: '#devops-cd-cie'
     - name: deployChannel
-      value: '#devops-deploy-syd'
+      value: '#devops-otc-deployment'
     - name: e2eApplicationId
       value: 'Pipeline'
 ---
