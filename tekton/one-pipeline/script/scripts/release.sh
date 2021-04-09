@@ -216,18 +216,6 @@ if [[ -z $DEV_MODE ]]; then
         mkdir -p $CHART_REPO_ABS/charts
         helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
 
-        cd $CHART_REPO_ABS
-        echo "Updating Helm Chart Repository index"
-        touch charts/index.yaml
-
-        if [ "$PRUNE_CHART_REPO" == "true" ]; then
-        NUMBER_OF_VERSION_KEPT=${NUMBER_OF_VERSION_KEPT:-3}
-        echo "Keeping last ${NUMBER_OF_VERSION_KEPT} versions of ${COMPONENT_NAME} component"
-        ls -v charts/${COMPONENT_NAME}* | head -n -${NUMBER_OF_VERSION_KEPT} | xargs rm
-        fi
-
-        helm repo index charts --url https://$IDS_TOKEN@raw.github.ibm.com/$CHART_ORG/$CHART_REPO/master/charts
-
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
         git push
