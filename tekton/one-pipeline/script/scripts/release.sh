@@ -8,6 +8,98 @@ if [ -f "/config/DEV_MODE" ]; then
         export DEV_MODE=$(cat /config/DEV_MODE) 
 fi
 
+
+initDefaults() {
+    export IMAGE_NAME=""
+    export BUILD_CLUSTER=""
+    export DOCKER_USERNAME="iamapikey"
+    export EXTRA_DOCKER_OPTS="--no-cache"
+    export ENVIRONMENT="development"
+    export ARTIFACTORY_TOKEN_BASE64=""
+    export ARTIFACTORY_AUTH_BASE64=""
+    export ARTIFACTORY_ID=""
+    export ICD_REDIS_STORE=""
+    export QR_STORE=""
+    export MAVEN_USER_ID=""
+    export ADD_CHGLOG_URL="false"
+    export DOCKERFILE="cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
+
+    if [ -f "/config/CHARTS_REPO" ]; then
+        export CHARTS_REPO=$(cat /config/CHARTS_REPO) 
+    fi
+
+    if [ -f "/config/DOCKERFILE" ]; then
+        export DOCKERFILE=$(cat /config/DOCKERFILE) 
+    fi
+    
+    if [ -f "/config/IMAGE_NAME" ]; then
+        export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
+    fi
+
+    if [ -f "/config/BUILD_CLUSTER" ]; then
+        export BUILD_CLUSTER=$(cat /config/BUILD_CLUSTER) 
+    fi
+
+    if [ -f "/config/DOCKER_USERNAME" ]; then
+        export DOCKER_USERNAME=$(cat /config/DOCKER_USERNAME) 
+    fi
+
+    if [ -f "/config/EXTRA_DOCKER_OPTS" ]; then
+        export EXTRA_DOCKER_OPTS=$(cat /config/EXTRA_DOCKER_OPTS) 
+    fi
+
+    if [ -f "/config/ENVIRONMENT" ]; then
+        export ENVIRONMENT=$(cat /config/ENVIRONMENT) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_TOKEN_BASE64" ]; then
+        export ARTIFACTORY_TOKEN_BASE64=$(cat /config/ARTIFACTORY_TOKEN_BASE64) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_AUTH_BASE64" ]; then
+        export ARTIFACTORY_AUTH_BASE64=$(cat /config/ARTIFACTORY_AUTH_BASE64) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_ID" ]; then
+        export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID) 
+    fi
+
+    if [ -f "/config/ICD_REDIS_STORE" ]; then
+        export ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE) 
+    fi
+    if [ -f "/config/QR_STORE" ]; then
+        export QR_STORE=$(cat /config/QR_STORE) 
+    fi
+
+    if [ -f "/config/MAVEN_USER_ID" ]; then
+        export MAVEN_USER_ID=$(cat /config/MAVEN_USER_ID) 
+    fi
+    if [ -f "/config/ADD_CHGLOG_URL" ]; then
+        export ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL) 
+    fi
+}
+
+initEnvVars() {
+    # grab env vars from config map
+    export API=$(cat /config/API)
+    export REGISTRY_REGION=$(cat /config/REGION)
+    export API_KEY=$(cat /config/API_KEY_1416501)
+    export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+    export API_KEY_1308775=$(cat /config/API_KEY_1308775)
+    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    export IDS_USER=$(cat /config/IDS_USER)
+    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+}
+
+# other env vars that used to be passed in to task, check they exist and use defaults otherwise
+# init default values, overwrite if in config map too
+
+
+initEnvVars
+
+initDefaults
+
 if [[ -z $DEV_MODE ]]; then
     export GHE_TOKEN="$(cat ../git-token)"
     export COMMIT_SHA="$(cat /config/git-commit)"
