@@ -56,6 +56,9 @@ initDefaults() {
     if [ -f "/config/HELM_OPTIONS" ]; then
         export HELM_OPTIONS=$(cat /config/HELM_OPTIONS) 
     fi
+    if [ -f "/config/DEV_MODE" ]; then
+        export DEV_MODE=$(cat /config/DEV_MODE) 
+    fi
 }
 
 initEnvVars() {

@@ -5,9 +5,8 @@
 #
 
 if [ -f "/config/DEV_MODE" ]; then
-        export DEV_MODE=$(cat /config/DEV_MODE) 
+    export DEV_MODE=$(cat /config/DEV_MODE) 
 fi
-
 
 initDefaults() {
     export IMAGE_NAME=""
@@ -23,6 +22,7 @@ initDefaults() {
     export MAVEN_USER_ID=""
     export ADD_CHGLOG_URL="false"
     export DOCKERFILE="cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
+    export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
 
     if [ -f "/config/CHARTS_REPO" ]; then
         export CHARTS_REPO=$(cat /config/CHARTS_REPO) 
@@ -83,7 +83,7 @@ initEnvVars() {
     # grab env vars from config map
     export API=$(cat /config/API)
     export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1416501)
+    export API_KEY=$(cat /config/API_KEY_1308775)
     export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
     export API_KEY_1308775=$(cat /config/API_KEY_1308775)
     export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
