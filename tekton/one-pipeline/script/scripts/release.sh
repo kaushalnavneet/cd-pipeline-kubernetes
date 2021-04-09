@@ -9,19 +9,6 @@ if [ -f "/config/DEV_MODE" ]; then
 fi
 
 initDefaults() {
-    export IMAGE_NAME=""
-    export BUILD_CLUSTER=""
-    export DOCKER_USERNAME="iamapikey"
-    export EXTRA_DOCKER_OPTS="--no-cache"
-    export ENVIRONMENT="development"
-    export ARTIFACTORY_TOKEN_BASE64=""
-    export ARTIFACTORY_AUTH_BASE64=""
-    export ARTIFACTORY_ID=""
-    export ICD_REDIS_STORE=""
-    export QR_STORE=""
-    export MAVEN_USER_ID=""
-    export ADD_CHGLOG_URL="false"
-    export DOCKERFILE="cd-pipeline-kubernetes/docker/Dockerfile.nodejs14ubi"
     export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
 
     if [ -f "/config/CHARTS_REPO" ]; then
@@ -130,6 +117,11 @@ if [[ -z $DEV_MODE ]]; then
         APP_REPO_NAME=${APP_REPO##*/}
         export APP_REPO_NAME=${APP_REPO_NAME%.git}
     fi
+    set -x
+    cd /workspace/app/${WORK_DIR}
+    echo ">>>>>>>>>>>>>>>>>>>"
+    ls -la
+    echo ">>>>>>>>>>>>>>>>>>>"
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
