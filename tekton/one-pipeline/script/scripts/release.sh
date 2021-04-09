@@ -118,6 +118,7 @@ if [[ -z $DEV_MODE ]]; then
         export APP_REPO_NAME=${APP_REPO_NAME%.git}
     fi
     set -x
+    WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
     cd /workspace/app/${WORK_DIR}
     echo ">>>>>>>>>>>>>>>>>>>"
     ls -la
@@ -128,12 +129,11 @@ if [[ -z $DEV_MODE ]]; then
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
     
     IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
-    COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
 
     if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
         APPLICATION_VERSION=$( cat /workspace/app/appVersion )
         if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+        ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${APP_NAME} > _allImages
         APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
         fi
     fi
@@ -143,10 +143,10 @@ if [[ -z $DEV_MODE ]]; then
 
     CHART_REPO=$( basename $CHARTS_REPO .git )
     CHART_REPO_ABS=$(pwd)/${CHART_REPO}
-    CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${COMPONENT_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
+    CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
 
-    printf "Publishing chart ${COMPONENT_NAME},\nversion ${CHART_VERSION},\n for cluster ${DRY_RUN_CLUSTER},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
+    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\n for cluster ${DRY_RUN_CLUSTER},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
 
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
@@ -177,18 +177,18 @@ if [[ -z $DEV_MODE ]]; then
 
     #specific tag
     tmp=$(mktemp)
-    yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+    yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
 
     #specific image
-    yq --yaml-output --arg image "${IMAGE_URL}" '.pipeline.image.repository=$image' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+    yq --yaml-output --arg image "${IMAGE_URL}" '.pipeline.image.repository=$image' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
 
-    yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${COMPONENT_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/Chart.yaml
+    yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${APP_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/Chart.yaml
 
     helm init -c --stable-repo-url https://charts.helm.sh/stable
-    helm dep up ${COMPONENT_NAME}
+    helm dep up ${APP_NAME}
     echo "=========================================================="
     echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
-    if helm upgrade ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run --debug; then
+    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run --debug; then
         echo "helm upgrade --dry-run done"
     else
         echo "helm upgrade --dry-run failed"
@@ -208,7 +208,7 @@ if [[ -z $DEV_MODE ]]; then
     do
         git -C $CHART_REPO_ABS pull --no-edit
         mkdir -p $CHART_REPO_ABS/charts
-        helm package ${COMPONENT_NAME} -d $CHART_REPO_ABS/charts
+        helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
 
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
