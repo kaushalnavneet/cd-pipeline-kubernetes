@@ -80,6 +80,7 @@ initEnvVars() {
     export IDS_TOKEN=$(cat /config/IDS_TOKEN)
     export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
     export MINOR_VERSION=$(cat /config/MINOR_VERSION)
+    export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
@@ -120,9 +121,6 @@ if [[ -z $DEV_MODE ]]; then
     set -x
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
     cd /workspace/app/${WORK_DIR}
-    echo ">>>>>>>>>>>>>>>>>>>"
-    ls -la
-    echo ">>>>>>>>>>>>>>>>>>>"
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
@@ -146,7 +144,7 @@ if [[ -z $DEV_MODE ]]; then
     CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
 
-    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\n for cluster ${DRY_RUN_CLUSTER},\nnamespace ${CHART_NAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
+    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTERNAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
 
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
@@ -187,8 +185,8 @@ if [[ -z $DEV_MODE ]]; then
     helm init -c --stable-repo-url https://charts.helm.sh/stable
     helm dep up ${APP_NAME}
     echo "=========================================================="
-    echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CHART_NAMESPACE}."
-    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CHART_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --install --dry-run --debug; then
+    echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTERNAMESPACE}."
+    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
         echo "helm upgrade --dry-run done"
     else
         echo "helm upgrade --dry-run failed"
