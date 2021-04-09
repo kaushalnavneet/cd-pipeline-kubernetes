@@ -91,6 +91,8 @@ initEnvVars() {
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
     export IDS_USER=$(cat /config/IDS_USER)
     export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
+    export MINOR_VERSION=$(cat /config/MINOR_VERSION)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
@@ -147,7 +149,7 @@ if [[ -z $DEV_MODE ]]; then
     git config --global user.name "IDS Organization"
     git config --global push.default matching
 
-    CHART_REPO=$( basename $CHART_REPO .git )
+    CHART_REPO=$( basename $CHARTS_REPO .git )
     CHART_REPO_ABS=$(pwd)/${CHART_REPO}
     CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${COMPONENT_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
