@@ -1,0 +1,19 @@
+{{- define "pipeline.common.sidecar.tpl" -}}
+{{- if .Values.sidecar }}
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+{{ template "common.metadata" . }}
+spec:
+  workloadSelector:
+    labels:
+      app: {{ template "common.fullname" . }}
+  egress:
+  - hosts:
+    - "*/*"
+  outboundTrafficPolicy:
+    {{ toYaml .Values.sidecar.outboundTrafficPolicy | indent 4 | trim }}  
+{{- end -}}
+{{- end -}}
+{{- define "pipeline.common.sidecar" -}}
+{{- template "common.util.merge" (append . "pipeline.common.sidecar.tpl") -}}
+{{- end -}}
