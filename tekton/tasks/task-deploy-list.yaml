@@ -41,7 +41,7 @@ spec:
         DIR=$( mktemp -d )
         cd $DIR
 
-        PROD_REPOS=blade-pipeline-broker,otc-github-relay-pub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-ui,private-worker-service,travis-worker-go,pipeline-support-service,cryptomining-detector
+        PROD_REPOS=blade-pipeline-broker,otc-github-relay-pub,pipeline-artifact-repository-service,pipeline-consumption,pipeline-event-service,pipeline-log-service,pipeline-service,pipeline-ui,private-worker-service,travis-worker-go,pipeline-support-service,cryptomining-detector,tekton-pipeline-service
 
         printf 'Deliver changes for:\n' 
 

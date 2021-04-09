@@ -2,7 +2,7 @@
 
 export VAULT_ADDR=https://vserv-eu.sos.ibm.com:8200
 unset VAULT_TOKEN
-ALL_APPS=blade-pipeline-broker,pipeline-artifact-repository-service,pipeline-service,pipeline-ui,private-worker-service,pipeline-event-service,pipeline-support-service
+ALL_APPS=blade-pipeline-broker,pipeline-artifact-repository-service,pipeline-service,pipeline-ui,private-worker-service,pipeline-event-service,pipeline-support-service,tekton-pipeline-service
 OLDIFS=$IFS
 
 function generate_new_secret() {
@@ -289,7 +289,7 @@ EOF
 
 function restart_pods() {
     # 1 - namespace
-    # restart all pods for blade-pipeline-broker,pipeline-artifact-repository-service,pipeline-service,pipeline-ui,private-worker-service,pipeline-event-service,pipeline-support-service
+    # restart all pods for blade-pipeline-broker,pipeline-artifact-repository-service,pipeline-service,pipeline-ui,private-worker-service,pipeline-event-service,pipeline-support-service,tekton-pipeline-service
     IFS=',' read -ra deployments <<< $ALL_APPS
 	IFS=$OLDIFS
 
