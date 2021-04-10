@@ -64,6 +64,9 @@ initDefaults() {
     if [ -f "/config/ADD_CHGLOG_URL" ]; then
         export ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL)
     fi
+    if [ -f "/config/IMAGE_URL" ]; then
+        export IMAGE_URL=$(cat /config/IMAGE_URL) 
+    fi
 }
 
 initEnvVars() {
