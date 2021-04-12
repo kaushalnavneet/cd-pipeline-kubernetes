@@ -140,7 +140,7 @@ spec:
         }
         cluster_config ${CLUSTER_NAME}
 
-        set -e
+        set -eo pipefail
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
         echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
         if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then
