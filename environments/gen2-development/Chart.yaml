@@ -1,0 +1,6 @@
+name: gen2-development
+description: Gen2 Development environment properties
+version: 1.0.0
+home: https://github.ibm.com/org-ids/cd-pipeline-kubernetes
+sources:
+    - https://github.ibm.com/org-ids/cd-pipeline-kubernetes

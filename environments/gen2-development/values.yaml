@@ -1,0 +1,587 @@
+pipeline:
+  common:
+    basedomains: 
+    - domain: us-south-gen2.devops.dev.cloud.ibm.com
+      tlsSecret: star.us-south-gen2.devops.dev.cloud.ibm.com
+      hostNameSuffix: ""
+    - domain: stage1.ng.bluemix.net
+      tlsSecret: star.stage1.ng.bluemix.net
+      hostNameSuffix: ""
+    resources:
+      limits:
+        cpu: 100m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+      memory: 1Gi
+    vault:
+      sidekickImageTag: 38dfea5b362e506e60becc91c9988c9d569e8014-202005112130UTC
+    vaultcommon:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/common/pipeline-common-do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-cloudant_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-toolchain-api-keys_do_not_version
+    probes:
+      enabled: true
+      liveness:
+        initialDelay: 30
+        periodSeconds: 15
+        timeoutSeconds: 5
+      readiness:
+        enabled: true
+        initialDelay: 5
+        periodSeconds: 15
+        timeoutSeconds: 10
+    configmap:
+      data:
+        PORT: 8080
+        USE_K8S: true
+        SECGRP: GRP3DEVS
+        CLOUDANT_URL: 'https://4db52ca4-20f6-4067-94d0-c098b9a18795-bluemix.cloudantnosqldb.appdomain.cloud'
+        CONSOLE_URL: 'https://dev.console.test.cloud.ibm.com'
+        ENV_ID: 'ibm:ys1:us-south'
+        ENABLE_CLOUDANT_QUEUE: true
+        ENABLE_MESSAGE_COMPRESSION: true
+        PUBLIC_QUEUE_ID: "6f97df8f-5727-4a2b-bb71-541ba8e3f71f"
+        S3_STORAGE_ENDPOINT: https://s3.us.cloud-object-storage.appdomain.cloud
+        S3_STORAGE_REGION: us-standard
+        ENABLE_SECRET_BY_REF: true
+        ENABLE_SECRET_PICKER: true
+        SECRETS_API_URL: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        TEKTON_PIPELINE_SERVICE_HOST: http://tekton-pipeline-service
+        TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
+        VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
+  pipeline-log-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      # when this pipeline-log-service path is updated, also update it in pgbouncer_values.yaml
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-log-service/pipeline-log-service_2020_11_13_10h43m12s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+    probes:
+      liveness:
+        path: "/api/version"
+      readiness:
+        path: "/api/status"
+    configmap:
+      data:
+        AMQP_PREFETCH: "1"
+        ARCHIVE_QUEUE_NAME: reporting.archive
+        ARCHIVE_TYPE: s3ObjectStorage
+        CA_FILE: ''
+        CERT_FILE: keys/server.crt
+        CIPHER_ALGORITHM: aes-128-cbc
+        DB_CA_PEM: ''
+        DB_HOST: gitlab-pgbouncer
+        DB_NAME: compose
+        DB_PORT: "6432"
+        DB_TYPE: postgresql
+        DB_USER: pipe02
+        HMAC_ALGORITHM: sha1
+        KEY_FILE: keys/server.key
+        LOGS_EXCHANGE_NAME: reporting
+        LOGS_QUEUE_MSG_TTL: "7200000"
+        LOGS_QUEUE_NAME: reporting.jobs.logs
+        LOGS_ROUTING_KEY: reporting.jobs.logs
+        NEW_RELIC_APP_NAME: Pipeline Log Service - GEN2
+        NODE_MODULES_CACHE: false
+        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
+        USE_HTTP: true
+        PAYLOAD_ENCRYPT: true
+  otc-github-relay-pub:
+    replicas: 1
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/otc-github-relay-pub/otc-github-relay-pub_2019_10_24_20h12m54s
+    configmap:
+      data:
+        LOG4JS_CONFIG_PATH: app/assets/log4js.yml
+        MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
+        NEW_RELIC_APP_NAME: otc-webhook-relay - GEN2
+        POST_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline/triggers/
+  blade-pipeline-broker:
+    replicas: 1
+    revisionHistoryLimit: 3
+    extrahosts:
+    - otc-pipeline-broker
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/blade-pipeline-broker/blade-pipeline-broker_2021_02_04_15h59m27s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-iam_do_not_version
+    configmap:
+      data:
+        DASHBOARD_URL: /devops/pipelines
+        NEW_RELIC_APP_NAME: Pipeline Broker - GEN2
+        LMS_API_URL: http://lms-api/v1/messaging
+        PIPELINE_API_URL: http://pipeline-service/pipeline
+        PRIVATE_WORKER_API_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        EXT_PIPELINE_API_URL: https://pipeline-service.us-south-gen2.devops.dev.cloud.ibm.com/pipeline
+        PIPELINE_UI_SERVER_URL: https://pipeline-ui.us-south-gen2.devops.dev.cloud.ibm.com
+        enableTekton: true
+        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        DEBUG: cloudant:plugins:iamauth
+  private-worker-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Private Worker - GEN2
+        USE_NEW_RELIC: true
+        IAM_URL: https://iam.test.cloud.ibm.com
+        PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        LOG_SERVICE_URL: http://pipeline-log-service
+        LOG_USE_HTTP: true
+        AGENT_VERSION_RANGE: ">=0.4.0-dev"
+        AGENT_VERSION: "0.9.3-dev"
+        TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
+        ENABLE_S3_STORAGE: true
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        DISABLE_TRIGGER_ENDPOINT: true
+        EVENT_SERVICE_URL: https://pipeline-event-service.us-south-gen2.devops.dev.cloud.ibm.com
+        ENABLE_RECORD_QUEUE_TIME: true
+        GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
+        RC_URL: https://resource-controller.test.cloud.ibm.com
+        ENABLE_DISTRIBUTED_LOCK: true
+        NO_REPORTING_QUEUE: true
+        ENABLE_SLACK_NOTIFICATION: true
+        LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com
+  tekton-pipeline-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Tekton Pipeline Service - GEN2
+        USE_NEW_RELIC: true
+        IAM_URL: https://iam.test.cloud.ibm.com
+        TEKTON_PIPELINE_SERVICE_URL: https://tekton-pipeline-service.us-south-gen2.devops.dev.cloud.ibm.com
+        LOG_SERVICE_URL: http://pipeline-log-service
+        TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        ENABLE_DISTRIBUTED_LOCK: true
+        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        ENCRYPTER_PAYLOAD_ENCRYPT: "false"
+        REDIS_TIMEOUT: 3000
+        ENABLE_SECRET_BY_REF: true
+        TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
+        ENABLE_MESSAGE_COMPRESSION: true
+  pipeline-event-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Pipeline Event Service - GEN2
+        USE_NEW_RELIC: true
+        PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        ENABLE_RATE_LIMIT: false
+        ENABLE_RUN_ENDPOINT: true
+  pipeline-consumption:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-consumption/pipeline-consumption_2021_01_28_17h07m39s
+    probes:
+      readiness:
+        path: "/version"
+      liveness:
+        path: "/status"
+    configmap:
+      data:
+        NODE_ENV: development
+        OTC_API_URL: http://otc-api/api/v1
+        PIPELINE_API_URL: http://pipeline-service/pipeline
+        PRIVATE_WORKER_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        auth__ibmId: pipeauto@us.ibm.com
+        apiTest__monitorInterval: "60000"
+        useResourceGroups: true
+        TEKTON_MONITOR: true
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+  pipeline-ui:
+    replicas: 1
+    revisionHistoryLimit: 3
+    probes:
+      readiness:
+        path: "/version"
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-ui/pipeline-ui_2020_11_23_19h55m26s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-iam_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-session-secret-api-key_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
+    configmap:
+      data:
+        AMQP_EXCHANGE: pipeline
+        AMQP_QUEUE: pipeline-ui.
+        AMQP_MSG_EXP_TIME: "3000"
+        ARS_URL: https://pipeline-artifact-repository-service.us-south-gen2.devops.dev.cloud.ibm.com/codestation/v2
+        BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
+        BLUEMIX_URL: https://dev.console.test.cloud.ibm.com
+        BSS_CHECKED: true
+        BSS_ENFORCED: true
+        CF_DOMAIN: stage1.ng.bluemix.net
+        CONSUMPTION_MONITOR_DB: pipeline-consumption-api-suite
+        CONSUMPTION_MONITOR_HOST: http://pipeline-consumption
+        CS_VERSION: "2"
+        DISABLE_REGION_CACHE: true
+        ENABLE_ACCESS_CONTROL: true
+        ENABLE_CONTAINER_REGISTRY_BUILDER_TYPE: true
+        ENABLE_CUSTOM_IMAGES_JOB_TYPES: true
+        ENABLE_K8S_DEPLOYER_TYPE: true
+        ENABLE_CURATED_FEATURE: true
+        ENABLE_PR_TRIGGER: true
+        IAM_CLIENT_ID: otc
+        IAM_GLOBAL_URL: https://iam.test.cloud.ibm.com
+        IS_DEV: false
+        GITHUB_SERVICES: github,githubpublic,github_integrated,githubconsolidated
+        GITLAB_SERVICES: hostedgit,gitlab
+        BITBUCKET_SERVICES: bitbucketgit
+        PRIVATE_WORKER_SERVICES: private_worker
+        K8S_REGIONS: ''
+        NEW_RELIC_APP_NAME: Pipeline UI - GEN2
+        PIPELINE_URL: http://pipeline-service/pipeline
+        SESSION_CACHE_NAME: main-cache
+        SESSION_KEY: opsConsole.sid
+        SESSION_TTL: "86400"
+        TIAM_URL: http://otc-tiam/identity/v1
+        UAA_CLIENT_ID: otcclient
+        U_SERVICES_DOMAIN: stage1.ng.bluemix.net
+        USE_HTTP: true
+        USE_NEW_RELIC: true
+        MCCP_REGINAL_PROD_HOST: https://mccp.ng.bluemix.net
+        ENV_ID: ibm:ys1:us-south
+        PAYLOAD_ENCRYPT: true
+        PERFORMANCE_DEBUG: true
+        REDIS_ENCRYPT: true
+        ENABLE_MCCP_REGION_FEATURE: true
+        IAM_CLIENT_ID_PROD: otc
+        IAM_CLIENT_ID_INT: otc
+        OTC_API_URL: http://otc-api
+        OPTIMIZELY_ID: "7964536850"
+        PIPELINE_PAGE_IN_REACT: true
+        EXECUTION_PAGE_IN_REACT: true
+        DOCKER_IMAGES: "2.12,2.11,2.10,2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2.0, 1.0"
+        LEGACY_DOCKER_IMAGE: "1.0"
+        LATEST_DOCKER_IMAGE: "2.12"
+        DEFAULT_BASE_IMAGE_VERSION_FROM_CONFIG: "latest"
+        DOCKER_IMAGES_UBI: "3.0"
+        LATEST_DOCKER_IMAGE_UBI: "3.0"
+        ENABLE_IMAGE_TYPE_CHOICE: true
+        ENABLE_CONFIG_REACT: true
+        PIPELINE_API: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline
+        HOOKURL: https://otc-github-relay-pub.us-south-gen2.devops.dev.cloud.ibm.com
+        ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
+        PRIVATE_WORKER: true
+        PRIVATE_WORKER_API: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        ORG_BSS_HOST: http://continuous-delivery-bss
+        RG_BSS_HOST: http://cd-broker
+        ENABLE_RG_ENTITLEMENT: true
+        ENABLE_REDUX_DEBUG: true
+        TEKTON_UI: true
+        ENABLE_SECRET_BY_REF: false
+        ENABLE_SECRET_PICKER: true
+        SECRETS_API_URL: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        ENABLE_TIMER_TRIGGER: true
+        ENABLE_TEKTON_PUBLIC_WORKERS: true
+        ENABLE_TEKTON_PUBLIC_WORKERS_CLASSIC: true
+        ENABLE_MULTI_REPO: true
+        TEKTON_OPENAPI_ENABLED: true
+        ENABLE_GENERIC_WEBHOOK: true
+        TEKTON_CUSTOM_PIPELINE_RUNS: true
+        ENABLE_EVENT_SERVICE: true
+        ENABLE_TRIGGER_DISABLED: true
+        CLOUD_PAL_LAYOUT: true
+        SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south-gen2.devops.dev.cloud.ibm.com
+        LINTER_ENABLE: true
+        ECHO_ENABLED: true
+        LOG4JS_WATCHER_INTERVAL: 180000
+        TEKTON_PUBLIC_WORKER_VERSION: v0.18.1
+        NEW_CONFIGURATION_LOGIC: true
+        ENABLE_LOCAL_RUN: true
+        ENABLE_TWO_CONCURRENT_RUNS: true
+        ENABLE_NEW_PROPERTIES_DESIGN: true
+  pipeline-artifact-repository-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-artifact-repository-service/pipeline-artifact-repository-service_2020_11_09_14h44m53s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+    probes:
+      liveness:
+        path: "/codestation/v2/artifacts/version"
+      readiness:
+        path: "/codestation/v2/artifacts/version"
+    configmap:
+      data:
+        amqp__enabled: true
+        amqp__queue: reporting.codestation
+        CIPHER_ALGORITHM: aes-128-cbc
+        HMAC_ALGORITHM: sha1
+        LOG_LEVEL: debug
+        NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - GEN2-dev
+        NODE_ENV: staging-us-south
+        RUN_ARS_K8S: true
+        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
+        SSL: true
+        STATUS_TIMEOUT: "4500"
+        USE_S3: true
+        PAYLOAD_ENCRYPT: true
+        CLOUDANT_DATABASE: ars-staging
+        ORG_URI: https://api.stage1.ng.bluemix.net/v2/organizations
+  pipeline-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-service/pipeline-service_2020_10_30_10h17m45s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
+    probes:
+      liveness:
+        path: "/pipeline/version"
+      readiness:
+        path: "/pipeline/version"
+    configmap:
+      data:
+        newrelic_env: GEN2-k8s
+        AMQP_LISTENERS_DISABLED: false
+        JBP_CONFIG_IBMJDK: "version: 1.8.+"
+        serverHttpPort: 8080
+        serverHttpsPort: 443
+        serverRootDir: /deployRoot/${p:environment.name}/${p:application/serverName}
+        serverJava: /opt/ibm/ibm-java-x86_64-70/jre
+        ldapRealm: x
+        ldapHost: x
+        ltpaCookie: x
+        ltpaPassword: x
+        ltpaKeysFile: x
+        com_ibm_team_integration_pipeline_loginRedirectUrl: https://psdev.login.jazz.net/psso/proxy/jazzlogin
+        com_ibm_team_integration_pipeline_jazzhub_url: https://dev02.hub.jazz.net
+        jenkins_client_ribbon_listOfServers: ''
+        cf_client_ribbon_listOfServers: api.ng.bluemix.net:443
+        jazzhub_client_ribbon_listOfServers: dev02.hub.jazz.net:443
+        jazzhub_login_client_ribbon_listOfServers: psdev.login.jazz.net:443
+        bluemix_client_ribbon_listOfServers: ace.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_db: cloudant
+        com_ibm_team_integration_pipeline_db_cloudant_database: pipeline
+        com_ibm_team_integration_pipeline_encrypt_payload_enabled: true
+        com_ibm_team_integration_pipeline_encrypt_rpc_payload_enabled: false
+        com_ibm_team_integration_pipeline_encrypt_redis_payload_enabled: true
+        mqttUrl: ssl://169.55.35.183:8883
+        mqttUser: guest
+        com_ibm_team_integration_pipeline_build_jenkins_context_root: /build
+        com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
+        com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
+        contextPath: /pipelines
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.us-south-gen2.devops.dev.cloud.ibm.com:443
+        cleanup_disabled: false
+        cleanup_buildsToKeep: 10
+        cleanup_deploysToKeep: 10
+        com_ibm_team_integration_pipeline_logHTTPTraffic: false
+        jobTimeout: 60
+        com_ibm_team_integration_pipeline_billing_disabled: false
+        com_ibm_team_integration_pipeline_jazzhub_billing_user: DevOps
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_redirectUrl: https://dev02.hub.jazz.net/trust/authorize
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_clientId: jazzhuborionclient
+        gitAdminUser: gerr1tsldev
+        jazzhubAdminUser: jazzhubadmin
+        jenkinsAdminUser: pipeline
+        com_ibm_team_integration_pipeline_messaging_amqp_disabled: false
+        com_ibm_team_integration_pipeline_messaging_amqp_listeners_disabled: true
+        com_ibm_team_integration_pipeline_messaging_amqp_exchange: pipeline
+        com_ibm_team_integration_pipeline_messaging_amqp_routePrefix: pipelines.
+        ice_client_ribbon_listOfServers: api-ice.stage1.ng.bluemix.net:443
+        cleanup_stageExecutionsToKeep: 10
+        docker_client_ribbon_listOfServers: 169.55.35.171:40000,169.55.34.134:40000,169.55.34.152:40000,169.55.34.141:40000,169.55.35.180:40000,169.55.35.189:40000,192.155.248.226:40000
+        com_ibm_team_integration_pipeline_jazzhub_auth_token_client: pipeline
+        jazzhub_token_client_ribbon_listOfServers: psdev.private.login.jazz.net:443
+        com_ibm_team_integration_pipeline_cloud_bluemix_oauth_restrictedRegions: [{"ibm:ys1:eu-gb": {"id": "jazzhuborionclient", "secret": "STAGE1secret", "redirectUrl": "https://dev01.hub.jazz.net/trust/authorize"}}]
+        com_ibm_team_integration_pipeline_jazzhub_auth_token_loginUrl: https://psdev.login.jazz.net/auth/v1/login
+        com_ibm_team_integration_pipeline_security_scmProxyService_url: https://otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
+        scm_proxy_service_client_ribbon_listOfServers: otc-pipeline-scm-proxy.stage1.ng.bluemix.net:443
+        log_service_client_ribbon_listOfServers: pipeline-log-service
+        log_service_client_ribbon_IsSecure: false
+        log_archiver_service_client_ribbon_listOfServers: pipeline-log-archiver
+        log_archiver_service_client_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_toolchain_region: ibm:ys1:us-south
+        com_ibm_team_integration_pipeline_toolchain_enabled: false
+        com_ibm_team_integration_pipeline_server_url: https://dev.console.test.cloud.ibm.com/devops/pipelines
+        com_ibm_team_integration_pipeline_server_ui_url: https://dev.console.test.cloud.ibm.com/devops/pipelines
+        com_ibm_team_integration_pipeline_toolchain_capability_slack_icon: ''
+        com_ibm_team_integration_pipeline_features_executionEngine: Engine2
+        toolchain_client_ribbon_listOfServers: ''
+        com_ibm_team_integration_pipeline_features_context: Blade
+        com_ibm_team_integration_pipeline_features_stage_queue: true
+        tiam_client_ribbon_listOfServers: otc-tiam
+        tiam_client_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
+        com_ibm_team_integration_pipeline_eventLogging_enabled: false
+        com_ibm_team_integration_pipeline_eventLogging_path: /var/log/pipeline-event-logging
+        com_ibm_team_integration_pipeline_eventLogging_frequencyInSeconds: 30
+        com_ibm_team_integration_pipeline_eventLogging_httpEnabled: false
+        com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
+        mccp_client_ribbon_listOfServers: mccp.ng.bluemix.net:443
+        mccp_client_ribbon_IsSecure: true
+        blade_toolchain_client_ribbon_listOfServers: otc-api
+        blade_toolchain_client_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
+        com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
+        com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
+        com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
+        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub.us-south-gen2.devops.dev.cloud.ibm.com
+        debug_script: false
+        artifact_size_limit: 0
+        artifact_file_limit: 0
+        newRelicJvmOption: -javaagent:/deployRoot/${p:environment.name}/${p:application/serverName}/wlp/usr/servers/${p:application/serverName}/newrelic/newrelic.jar
+        com_ibm_team_integration_pipeline_server_job_status_updates_logging_enabled: false
+        com_ibm_team_integration_pipeline_github_branchPerPage: 50
+        com_ibm_team_integration_pipeline_db_cloudant_connections_ext: 20
+        com_ibm_team_integration_pipeline_db_cloudant_connections_pipeline: 30
+        com_ibm_team_integration_pipeline_db_cloudant_connections_stage: 30
+        com_ibm_team_integration_pipeline_db_cloudant_timeout: 1000
+        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline
+        useKeystoreEncodings: false
+        com_ibm_team_integration_pipeline_events_threadCount: 3
+        codestation_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        log_archiver_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        source_changes_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        tests_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        scm_proxy_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        blade_toolchain_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        ice_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        logs_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        toolchain_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        tiam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        mccp_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        cf_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bluemix_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        nossl_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        com_ibm_team_integration_pipeline_toolchain_events_disabled: false
+        com_ibm_team_integration_pipeline_cloud_cf_version: 2
+        com_ibm_team_integration_pipeline_redis_disabled: false
+        com_ibm_team_integration_pipeline_sshtunnel_disabled: true
+        com_ibm_team_integration_pipeline_stage_creationLimit: 30
+        com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
+        log4jRootlogger: INFO, console
+        bss_service_client_ribbon_listOfServers: continuous-delivery-bss
+        bss_service_client_ribbon_IsSecure: false
+        bss_service_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bss_service_client_rg_ribbon_listOfServers: cd-broker
+        bss_service_client_rg_ribbon_IsSecure: false
+        bss_service_client_rg_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        com_ibm_team_integration_pipeline_bss_disabled: false
+        com_ibm_team_integration_pipeline_bss_timeout: 10000
+        com_ibm_team_integration_pipeline_security_bssWhiteList: ''
+        com_ibm_team_integration_pipeline_engine2_logArchiveQueue: reporting.archive
+        com_ibm_team_integration_pipeline_migration_users: ''
+        com_ibm_team_integration_pipeline_rest_notifications_tokenAuth: false
+        cfAppRetryAttempts: 3
+        codestation_dark_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        codestation_dark_client_ribbon_listOfServers: pipeline-artifact-repository-service.stage1.ng.bluemix.net:443
+        com_ibm_team_integration_pipeline_codestation_api_version: 2
+        gitlab_client_ribbon_listOfServers: git.stage1.ng.bluemix.net:443
+        gitlab_client_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        com_ibm_team_integration_pipeline_auth_tiam_accessControlDisabled: false
+        com_ibm_team_integration_pipeline_features_launchDarkly_sdkKey: sdk-322d7e2d-59d8-4eda-a2ba-0fa6a0946cd4
+        com_ibm_team_integration_pipeline_cloud_cf_rpcTargets: ''
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_exchange: rpc
+        com_ibm_team_integration_pipeline_cloud_cf_messaging_amqp_rpcServerQueue: ''
+        github_services: github,githubpublic,github_integrated,githubconsolidated
+        com_ibm_team_integration_pipeline_features_launchDarkly_enabled: true
+        codestationReadTimeout: 5000
+        com_ibm_team_integration_pipeline_features_IBMUsers_enabled: false
+        com_ibm_team_integration_pipeline_deploy_deployer_k8s_enabled: true
+        com_ibm_team_integration_pipeline_jazzhub_triggers_disabled: false
+        doppler_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        gitlab_services: hostedgit,gitlab
+        artifacts_useS3: true
+        worker_curatedImages: latest=travis-registry:5000/pipeline-worker:2.12,2.12=travis-registry:5000/pipeline-worker:2.12,2.11=travis-registry:5000/pipeline-worker:2.11,2.10=travis-registry:5000/pipeline-worker:2.10,2.9=travis-registry:5000/pipeline-worker:2.9,2.8=travis-registry:5000/pipeline-worker:2.8,2.7=travis-registry:5000/pipeline-worker:2.7,2.6=travis-registry:5000/pipeline-worker:2.6,2.5=travis-registry:5000/pipeline-worker:2.5,2.4=travis-registry:5000/pipeline-worker:2.4.1,2.3=travis-registry:5000/pipeline-worker:2.3,2.2=travis-registry:5000/pipeline-worker:2.2,2.1=travis-registry:5000/pipeline-worker:master-2019-06-17_13-45-47,2.0=travis-registry:5000/pipeline-worker:master-2019-05-08_19-29-28,1.0=legacy,latestUBI=travis-registry:5000/pipeline-worker:3.0,3.0UBI=travis-registry:5000/pipeline-worker:3.0,
+        # the keys for UBI Images in the map above must have a literal "UBI" suffix
+        lastest_worker_curatedImage_forMetrics: "2.12"
+        lastestUBI_worker_curatedImage_forMetrics: "3.0UBI"
+        worker_dindBase: true
+        worker_globalBaseImage: "latest"
+        enable_pull_request: true
+        enable_secret_by_ref: true
+        secrets_api_url: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        worker_privateworkerqueue: true
+        com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
+        com_ibm_team_integration_pipeline_bss_checkQuotas: true
+        com_ibm_team_integration_pipeline_rg_bss_checkQuotas: true
+        com_ibm_team_integration_pipeline_bss_enforceQuotas: true
+        com_ibm_team_integration_pipeline_json_verification_disabled: false
+        com_ibm_team_integration_pipeline_test_tester_vulnerabilityAdvisor_enabled: true
+        com_ibm_team_integration_pipeline_bss_user: pipeline_server
+        com_ibm_team_integration_pipeline_engine2_enableCustomImage: true
+        bluemix_iam_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        bluemix_iam_client_ribbon_IsSecure: true
+        bluemix_iam_client_ribbon_listOfServers: iam.stage1.bluemix.net:443
+        com_ibm_team_integration_pipeline_auth_iam_pdpurl: https://iam.test.cloud.ibm.com
+        pipeline_ui_ribbon_listOfServers: pipeline-ui
+        pipeline_ui_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        pipeline_ui_ribbon_IsSecure: false
+        pipeline_event_service_ribbon_listOfServers: pipeline-event-service
+        pipeline_event_service_ribbon_CustomSSLSocketFactoryClassName: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
+        pipeline_event_service_ribbon_IsSecure: false
+        com_ibm_team_integration_pipeline_ui_cast_enable: true
+        com_ibm_team_integration_pipeline_server_without_test_server: true
+        com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        bitbucket_server_client_ribbon_ClientClassName: com.ibm.team.integration.pipeline.http.IgnoreCookieClient
+  travis-worker:
+    replicas: 2
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/travis-worker/travis-worker_2019_04_25_15h39m10s
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+    probes:
+      enabled: false
+    preStopCommand: "[\"/bin/bash\", \"-c\", \"echo 'Shutting down...' >/proc/1/fd/1; kill -s INT 1; echo 'Waiting...' >/proc/1/fd/1; tail --pid=1 -f /dev/null\"]"
+    terminationGracePeriodSeconds: 4000
+    travisDockerTag: 8a62d5a603ae3ebfbd86bf4705433f84e8119569-202103191640UTC
+    configmap:
+      data:
+        AMQP_LOGS_QUEUE_MSG_TTL: "7200000"
+        QUEUE_NAME: builds.linux
+        DOCKER_SSH_USER: pipeline
+        DOCKER_RETRY_INTERVAL: "5"
+        STATUS_UPDATE_INTERVAL: 5m
+        POOL_SIZE: "18"
+        HARD_TIMEOUT: 60m
+        LOG_TIMEOUT: 60m
+        PAYLOAD_ENCRYPT: true
+  pipeline-support-service:
+    replicas: 1
+    revisionHistoryLimit: 3
+    vault:
+      secretPaths:
+        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+        - generic/project/continuous-delivery-dev/cd-pipeline/development/pipeline-support-service/pipeline-support-service_2021_02_08_21h24m56s
+    configmap:
+      data:
+        NEW_RELIC_APP_NAME: Pipeline Support Service - GEN2
+        USE_NEW_RELIC: true
+        ENV_ID: ibm:ys1:us-south
+        ENABLE_ECHO: true
+        ENABLE_SYSDIG_METRICS: true
+
