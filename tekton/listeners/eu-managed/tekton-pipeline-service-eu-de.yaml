@@ -75,7 +75,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-pws-eu-de-$(uid)-pvc
+        name: $(params.charts_branch)-tps-eu-de-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -88,7 +88,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-pws-eu-de-$(uid)
+        name: $(params.charts_branch)-tps-eu-de-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "tekton-pipeline-service-eu-de-trigger-dev"
@@ -98,7 +98,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-pws-eu-de-$(uid)-pvc
+              claimName: $(params.charts_branch)-tps-eu-de-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
