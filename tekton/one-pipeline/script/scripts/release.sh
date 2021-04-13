@@ -223,7 +223,7 @@ if [[ -z $DEV_MODE ]]; then
         cd $CHART_REPO_ABS
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
-        #git push
+        git push
         rc=$?
         if [[ $rc == 0 ]]; then 
             break;
@@ -263,6 +263,7 @@ if [[ -z $DEV_MODE ]]; then
         echo "Done"
         echo
     }
+    INVENTORY_BRANCH="staging"
     
     installCocoa
     cocoa inventory add \
