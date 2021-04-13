@@ -175,7 +175,7 @@ if [[ -z $DEV_MODE ]]; then
         return 1
     }
     cluster_config ${DRY_RUN_CLUSTER}
-    set -e
+    set -eo pipefail
 
     if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
         echo "Major & minor version and chart repo vars need to be set"
@@ -183,14 +183,14 @@ if [[ -z $DEV_MODE ]]; then
     fi
 
 
-    #specific tag
-    tmp=$(mktemp)
-    yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
+    #specify tag
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
 
-    #specific image
-    yq --yaml-output --arg image "${IMAGE_URL}" '.pipeline.image.repository=$image' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
+    #specify image
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}"
 
-    yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${APP_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/Chart.yaml
+    #specify version
+    yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
 
     helm init -c --stable-repo-url https://charts.helm.sh/stable
     helm dep up ${APP_NAME}
