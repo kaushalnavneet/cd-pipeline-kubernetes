@@ -254,7 +254,7 @@ if [[ -z $DEV_MODE ]]; then
 
     # Install cocoa cli
     function installCocoa() {
-        local cocoaVersion=1.5.0
+        local cocoaVersion=1.7.0
         echo "Installing cocoa cli $cocoaVersion"
         curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${cocoaVersion}"
         cp cocoa-linux-* /usr/local/bin/cocoa
