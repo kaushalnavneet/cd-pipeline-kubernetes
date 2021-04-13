@@ -223,13 +223,15 @@ if [[ -z $DEV_MODE ]]; then
         git push
         rc=$?
         if [[ $rc == 0 ]]; then 
-        break;
+            break;
         fi
         n=$[$n+1]
         cd $ORIG_DIR
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
-        git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        echo "Clone charts repo"
+        GIT_ASKPASS=./token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        echo "Done cloning charts repo"
     done
 
     if [[ $rc != 0 ]]; then exit $rc; fi
