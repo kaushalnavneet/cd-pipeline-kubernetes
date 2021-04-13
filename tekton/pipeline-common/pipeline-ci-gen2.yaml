@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-ci
+  name: pipeline-ci-gen2
 spec:
   params:
     - name: source_repo
