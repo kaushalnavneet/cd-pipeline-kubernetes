@@ -214,7 +214,9 @@ if [[ -z $DEV_MODE ]]; then
     ORIG_DIR=$(pwd)
     until [ $n -ge 5 ]
     do
+        echo "git pull"
         git -C $CHART_REPO_ABS pull --no-edit
+        echo "git pull done"
         mkdir -p $CHART_REPO_ABS/charts
         helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
 
