@@ -240,7 +240,6 @@ if [[ -z $DEV_MODE ]]; then
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     echo "Adding to inventory"
-    CHART_VERSION=$(yq r -j "$APP_NAME/Chart.yaml" | jq -r '.version')
     ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
     IMAGE_ARTIFACT="$(get_env artifact)"
     SIGNATURE="$(get_env signature "")"
