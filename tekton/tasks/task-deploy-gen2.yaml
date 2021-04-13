@@ -1,0 +1,180 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-gen2
+spec:
+  params:
+    - name: source_directory
+    - name: registryUrl
+      default: us.icr.io
+    - name: registryNamespace
+      default: opentoolchain
+    - name: registryRegion
+      default: us-south
+    - name: imageName
+      default: ''
+    - name: imageTag
+    - name: imageUrl
+    - name: clusterName
+      default: otc-us-south-dev-gen2
+    - name: clusterNamespace
+      default: opentoolchain
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'false'
+    - name: helmOptions
+      default: ''
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: deploy
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: IMAGE_NAME
+        value: $(params.imageName)
+      - name: APPLICATION_VERSION
+        value: $(params.imageTag)
+      - name: IMAGE_URL
+        value: $(params.imageUrl)
+      - name: REGISTRY_URL
+        value: $(params.registryUrl)
+      - name: REGISTRY_NAMESPACE
+        value: $(params.registryNamespace)
+      - name: REGISTRY_REGION
+        value: $(params.registryRegion)
+      - name: SOURCE_DIRECTORY
+        value: $(params.source_directory)
+      - name: SKIP
+        value: $(params.skipDeploy)
+      - name: CLUSTER_NAME
+        value: $(params.clusterName)
+      - name: CLUSTER_NAMESPACE
+        value: $(params.clusterNamespace)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: HELM_OPTIONS
+        value: $(params.helmOptions)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping Deploy"
+          exit 0
+        fi
+        cd "${SOURCE_DIRECTORY}"
+        WORKDIR=${WORKDIR:-/work}
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+
+        IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
+        COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
+
+        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+          APPLICATION_VERSION=$( cat /workspace/appVersion )
+          if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
+            ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
+            APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
+          fi
+        fi
+
+        printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_URL}:${APPLICATION_VERSION}.\n"
+
+        #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
+        #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
+        #[ ! -d devops-config ] && cp cd-pipeline-kubernetes/devops-config .
+        echo directory status
+        pwd
+        ls -F
+        ls -F cd-pipeline-kubernetes
+
+        set +e
+        function cluster_config() {
+            # 1 - cluster name
+            for iteration in {1..30}
+            do
+                echo "Running cluster config for cluster $1: $iteration / 30"
+                ibmcloud ks cluster config --cluster $1
+                if [[ $? -eq 0 ]]; then
+                    return 0
+                else
+                    echo "Cluster config for $1 failed. Trying again..."
+                    sleep 5
+                fi
+            done
+            return 1
+        }
+        cluster_config ${CLUSTER_NAME}
+
+        set -eo pipefail
+        INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
+        echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
+        if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then
+          INGRESS_SUBDOMAIN=$(echo "$INGRESS_SUBDOMAIN" | cut -d',' -f1)
+          echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
+        fi
+
+        INGRESS_SECRET=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress secret:" | awk '{print $3;}')
+        if [[ ${INGRESS_SECRET} == *,* ]];then
+          INGRESS_SECRET=$(echo "$INGRESS_SECRET" | cut -d',' -f1)
+          echo "INGRESS SECRET: $INGRESS_SECRET"
+        fi
+
+        tmp=$(mktemp)
+        yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+
+        helm version
+        kubectl version
+        helm ls
+        helm init -c --stable-repo-url https://charts.helm.sh/stable
+        helm dep up ${COMPONENT_NAME}
+        set -x
+        set +e
+        chartExists=$(helm list ${COMPONENT_NAME})
+        if [ -z $chartExists ]; then
+          deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
+          echo "DELETED HELM: $deleted"
+          set -e
+          if [ ! -z "$deleted" ]; then
+            helm delete --purge ${COMPONENT_NAME}
+          fi
+          helm install ${HELM_OPTIONS} --name ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        else
+          set -e
+          helm upgrade ${HELM_OPTIONS} --force ${COMPONENT_NAME} ${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        fi
+        set +x
