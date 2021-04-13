@@ -220,9 +220,10 @@ if [[ -z $DEV_MODE ]]; then
         mkdir -p $CHART_REPO_ABS/charts
         helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
 
+        cd $CHART_REPO_ABS
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
-        git push
+        #git push
         rc=$?
         if [[ $rc == 0 ]]; then 
             break;
