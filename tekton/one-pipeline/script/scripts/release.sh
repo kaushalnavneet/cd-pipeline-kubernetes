@@ -215,7 +215,7 @@ if [[ -z $DEV_MODE ]]; then
     until [ $n -ge 5 ]
     do
         echo "git pull"
-        git -C $CHART_REPO_ABS pull --no-edit
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git -C $CHART_REPO_ABS pull --no-edit
         echo "git pull done"
         mkdir -p $CHART_REPO_ABS/charts
         helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
@@ -232,7 +232,7 @@ if [[ -z $DEV_MODE ]]; then
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
         echo "Clone charts repo"
-        GIT_ASKPASS=./token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
         echo "Done cloning charts repo"
     done
 
