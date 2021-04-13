@@ -223,7 +223,7 @@ if [[ -z $DEV_MODE ]]; then
         cd $CHART_REPO_ABS
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
-        git push
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git push
         rc=$?
         if [[ $rc == 0 ]]; then 
             break;
