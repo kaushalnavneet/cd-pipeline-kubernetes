@@ -181,7 +181,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: pipeline-support-service-dev
+  name: pipeline-support-service-dev-gen2
 spec:
   triggers:
     - binding:
