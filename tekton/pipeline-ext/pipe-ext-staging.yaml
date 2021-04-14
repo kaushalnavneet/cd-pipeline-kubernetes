@@ -1,0 +1,110 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: ext-staging-trigger-dev
+spec:
+  params:
+    - name: environment
+    - name: api_url
+    - name: extension_url
+    - name: extension_id
+    - name: enable
+    - name: disable
+    - name: brokerSecret
+    - name: verb
+
+  resourcetemplates:
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: ext-staging-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: ext-staging-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "ext-staging-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-extension
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: ext-staging-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: environment
+            value: $(params.environment)
+          - name: api_url
+            value: $(params.api_url)
+          - name: extension_url
+            value: $(params.extension_url)
+          - name: extension_id
+            value: $(params.extension_id)
+          - name: brokerSecret
+            value: $(params.brokerSecret)
+          - name: verb
+            value: $(params.verb)
+          - name: enable
+            value: $(params.enable)
+          - name: disable
+            value: $(params.disable)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: ext-staging-binding-dev
+spec:
+  params:
+    - name: environment
+      value: "staging"
+    - name: api_url
+      value: "https://devops-api.staging.devops.cloud.ibm.com"
+    - name: extension_url
+      value: ""
+    - name: extension_id
+      value: "None"
+    - name: brokerSecret
+      value: $(params.jp_tok_brokerSecret)
+    - name: verb
+      value: "GET"
+    - name: enable
+      value: "false"
+    - name: disable
+      value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: ext-staging-dev
+spec:
+  triggers:
+    - binding:
+        name: ext-staging-binding-dev
+      template:
+        name: ext-staging-trigger-dev
