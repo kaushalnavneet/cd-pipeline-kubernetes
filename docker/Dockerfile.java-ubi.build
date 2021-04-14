@@ -43,26 +43,30 @@ ADD . /work
 RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl
 
-RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get && \
-    chmod +x /tmp/get_helm.sh && \
-    /tmp/get_helm.sh && \
-    rm -fr /tmp/get_helm.sh
+# Install Helm2
+ARG HELM2_VERSION='v2.17.0'
+RUN mkdir -p /tmp/helm_install \
+    && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
+    && chmod 700 get_helm.sh \
+    && ./get_helm.sh --version ${HELM2_VERSION} \
+    && rm -rf /tmp/helm*
 
-ENV IBMCLOUD_VERSION='1.1.0'
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
+ENV IBMCLOUD_VERSION='1.4.0'
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/ibm-cloud-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     export PATH=/opt/IBM/cf/bin:$PATH && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI* && \
     ibmcloud config --check-version false && \
     mkdir -p /usr/local/Bluemix/bin/cfcli && \
-    mkdir -p /usr/local/ibmcloud/bin/cfcli && \
-    ibmcloud plugin install container-service -r Bluemix -v 1.0.118 && \
-    ibmcloud plugin install container-registry -r Bluemix -v 0.1.482 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.44 && \
-    ibmcloud plugin install doi -r Bluemix -v 0.2.5 && \
-    ibmcloud plugin install schematics -r Bluemix -v 1.4.17 && \
-    ibmcloud plugin install cis -r Bluemix -v 1.9.9 && \
+    mkdir -p /usr/local/ibmcloud/bin/cfcli
+
+RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
+    ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
+    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.54 && \
+    ibmcloud plugin install schematics -r Bluemix -v 1.5.4 && \
+    ibmcloud plugin install doi -r Bluemix -v 0.3.1 && \
+    ibmcloud plugin install cis -r Bluemix -v 1.13.2 && \
     ibmcloud cf install -v 6.51.0 --force
 
 RUN ibmcloud --version
