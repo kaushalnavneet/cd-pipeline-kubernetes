@@ -51,6 +51,10 @@ initDefaults() {
         export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID)
     fi
 
+    if [ -f "/config/ARTIFACTORY_API_KEY" ]; then
+        export ARTIFACTORY_API_KEY=$(cat /config/ARTIFACTORY_API_KEY)
+    fi
+
     if [ -f "/config/ICD_REDIS_STORE" ]; then
         export ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE)
     fi
