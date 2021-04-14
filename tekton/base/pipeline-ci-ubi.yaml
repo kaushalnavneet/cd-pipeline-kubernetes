@@ -68,7 +68,7 @@ spec:
         - name: imageTag
           value: nodejs14ubi
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
@@ -98,14 +98,30 @@ spec:
         - name: imageName
           value: cd-deploy-base
         - name: imageTag
-          value: deploy
+          value: onepipeline
         - name: tagSuffix
           value: ''
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
+    - name: deploy-va
+      runAfter: [deploy]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/cd-deploy-base
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
+        - name: imageTag
+          value: onepipeline
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: go
       runAfter: [clone-config-repo]
       taskRef:
@@ -118,7 +134,7 @@ spec:
         - name: imageTag
           value: go1.15
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs12ubi
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
