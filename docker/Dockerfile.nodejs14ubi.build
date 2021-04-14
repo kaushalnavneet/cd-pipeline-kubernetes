@@ -40,7 +40,7 @@ RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googl
     chmod +x /usr/local/bin/kubectl
 
 # Install Helm2
-ARG HELM2_VERSION='v2.17.0'
+ARG HELM2_VERSION='v2.14.3'
 RUN mkdir -p /tmp/helm_install \
     && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
     && chmod 700 get_helm.sh \
