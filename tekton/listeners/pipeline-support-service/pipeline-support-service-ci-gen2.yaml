@@ -140,7 +140,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: pipeline-support-service-binding-dev
+  name: pipeline-support-service-binding-dev-gen2
 spec:
   params:
     - name: source_repo
@@ -185,6 +185,6 @@ metadata:
 spec:
   triggers:
     - binding:
-        name: pipeline-support-service-binding-dev
+        name: pipeline-support-service-binding-dev-gen2
       template:
-        name: pipeline-support-service-trigger-dev
+        name: pipeline-support-service-trigger-dev-gen2
