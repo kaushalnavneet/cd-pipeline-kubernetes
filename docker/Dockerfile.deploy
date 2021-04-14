@@ -1,6 +1,6 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017, 2021. All Rights Reserved.
+# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -11,62 +11,47 @@ FROM alpine
 ENV LANG=en_US.UTF-8
 
 RUN apk update
-RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip
+RUN apk add ca-certificates openssl wget curl bash bash-completion git unzip jq python2 py-pip
 RUN update-ca-certificates  2>/dev/null || true
 RUN apk upgrade
+RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-document - "https://api.github.com/repos/sgerrand/alpine-pkg-glibc/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^\"]+)".*/\1/'); fi && \
+    wget --quiet \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk \
+         https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
+    apk --allow-untrusted --no-cache add glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    rm -f glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk && \
+    /usr/glibc-compat/bin/localedef --force --inputfile ${LANG%.*} --charmap ${LANG#*.} ${LANG}
 
 # Install kubectl
-ARG KUBECTL_VERSION='v1.20.5'
-RUN wget --quiet --output-document=/usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+ARG KUBECTL_VERSION='v1.15.11'
+RUN wget --quiet --output-document=/usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl
 
 # Install Helm2
-ARG HELM2_VERSION='v2.17.0'
+ARG HELM2_VERSION='v2.14.3'
 RUN mkdir -p /tmp/helm_install \
     && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
     && chmod 700 get_helm.sh \
     && ./get_helm.sh --version ${HELM2_VERSION} \
-    && mv /usr/local/bin/helm /usr/local/bin/helm2 \
-    && ln -s /usr/local/bin/helm2 /usr/local/bin/helm \
     && rm -rf /tmp/helm*
 
-
-ENV IBMCLOUD_VERSION='1.4.0'
-RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/ibm-cloud-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
+ENV IBMCLOUD_VERSION='1.1.0'
+RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz  http://public.dhe.ibm.com/cloud/bluemix/cli/bluemix-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     export PATH=/opt/IBM/cf/bin:$PATH && \
     /tmp/Bluemix_CLI/install_bluemix_cli && \
     rm -rf /tmp/Bluemix_CLI* && \
-    ibmcloud config --check-version false && \
-    mkdir -p /usr/local/Bluemix/bin/cfcli && \
-    mkdir -p /usr/local/ibmcloud/bin/cfcli
+    ibmcloud config --check-version false
 
-RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
-    ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.54 && \
-    ibmcloud plugin install schematics -r Bluemix -v 1.5.4 && \
-    ibmcloud plugin install doi -r Bluemix -v 0.3.1 && \
-    ibmcloud plugin install cis -r Bluemix -v 1.13.2 && \
-    ibmcloud cf install -v 6.51.0 --force
-
+RUN ibmcloud plugin install container-service -r Bluemix
+RUN ibmcloud plugin install container-registry -r Bluemix
+RUN ibmcloud plugin install cloud-functions -r Bluemix
+RUN ibmcloud --version
+RUN ibmcloud plugin list
 RUN helm init -c --stable-repo-url https://charts.helm.sh/stable
 
-# Install yq 2.4.1
-ENV YQ2_VERSION=2.4.1
-RUN wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/download/${YQ2_VERSION}/yq_linux_amd64 \
-    && mv yq2_linux_amd64 /usr/bin/yq2 \
-    && chmod +x /usr/bin/yq2 \
-    && ln -s /usr/bin/yq2 /usr/bin/yq
+RUN pip install --upgrade pip 
+RUN pip install yq
 
-# Install JQ 1.x
-ARG JQ_VERSION='1.6'
-RUN wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64 -O /tmp/jq-linux64 \
-    && cp /tmp/jq-linux64 /usr/bin/jq \
-    && chmod +x /usr/bin/jq \
-    && rm -f /tmp/jq-linux64
-
-# Install OpenShift CLI 4.7.5
-RUN curl -sLo /tmp/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux-4.7.5.tar.gz \
-    && tar xzvf /tmp/oc.tar.gz -C /tmp/ \
-    && mv /tmp/oc /usr/local/bin/ \
-    && rm -f /tmp/oc.tar.gz /tmp/oc /tmp/kubectl
+ADD . /work
