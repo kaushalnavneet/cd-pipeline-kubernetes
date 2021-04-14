@@ -271,7 +271,6 @@ if [[ -z $DEV_MODE ]]; then
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
         --name="${APP_NAME}"
-        --type="chart"
     cocoa inventory add \
         --environment="${INVENTORY_BRANCH}" \
         --artifact="${IMAGE_ARTIFACT}" \
@@ -284,6 +283,7 @@ if [[ -z $DEV_MODE ]]; then
         --signature="${SIGNATURE}"
         --type="image"
         --provenance="${IMAGE_ARTIFACT}"
+        --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
     echo "Inventory updated"
 else 
     echo "Dev Mode - skipping"
