@@ -248,14 +248,6 @@ if [[ -z $DEV_MODE ]]; then
     IMAGE_ARTIFACT="$(get_env artifact)"
     SIGNATURE="$(get_env signature "")"
 
-    if [ "$SIGNATURE" ]; then
-        # using TaaS worker
-        APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
-    else
-        # using regular worker, no signature
-        APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
-    fi
-
     # Install cocoa cli
     function installCocoa() {
         local cocoaVersion=1.7.0
@@ -279,6 +271,7 @@ if [[ -z $DEV_MODE ]]; then
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
         --name="${APP_NAME}"
+        --type="chart"
     cocoa inventory add \
         --environment="${INVENTORY_BRANCH}" \
         --artifact="${IMAGE_ARTIFACT}" \
@@ -288,7 +281,9 @@ if [[ -z $DEV_MODE ]]; then
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
         --name="${APP_NAME}_image" \
-        --app-artifacts="${APP_ARTIFACTS}"
+        --signature="${SIGNATURE}"
+        --type="image"
+        --provenance="${IMAGE_ARTIFACT}"
     echo "Inventory updated"
 else 
     echo "Dev Mode - skipping"

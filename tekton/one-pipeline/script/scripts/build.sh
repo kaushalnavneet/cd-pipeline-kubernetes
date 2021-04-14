@@ -209,10 +209,12 @@ fi
 docker push ${IMAGE_URL}:latest
 
 DIGEST="$(docker inspect --format='{{index .RepoDigests 0}}' "${IMAGE_URL}:${APPLICATION_VERSION}" | awk -F@ '{print $2}')"
-echo -n "$DIGEST" > ../image-digest
-echo -n "$APPLICATION_VERSION" > ../image-tags
-echo -n "$IMAGE_URL" > ../image
+echo "DIGEST"
+echo -n "$DIGEST" > /workspace/app/image-digest
+echo -n "$APPLICATION_VERSION" > /workspace/app/image-tags
+echo -n "$IMAGE_URL" > /workspace/app/image
 
 if which save_artifact >/dev/null; then
+  echo "Save artifact: name=${IMAGE_URL} digest=${DIGEST}"
   save_artifact app-image type=image "name=${IMAGE_URL}" "digest=${DIGEST}"
 fi
