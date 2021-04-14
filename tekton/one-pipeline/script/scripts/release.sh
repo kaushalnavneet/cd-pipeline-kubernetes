@@ -270,7 +270,8 @@ if [[ -z $DEV_MODE ]]; then
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="${APP_NAME}"
+        --name="${APP_NAME}" \
+        --type="chart"
     cocoa inventory add \
         --environment="${INVENTORY_BRANCH}" \
         --artifact="${IMAGE_ARTIFACT}" \
@@ -280,9 +281,9 @@ if [[ -z $DEV_MODE ]]; then
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
         --name="${APP_NAME}_image" \
-        --signature="${SIGNATURE}"
-        --type="image"
-        --provenance="${IMAGE_ARTIFACT}"
+        --signature="${SIGNATURE}" \
+        --type="image" \
+        --provenance="${IMAGE_ARTIFACT}" \
         --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
     echo "Inventory updated"
 else 
