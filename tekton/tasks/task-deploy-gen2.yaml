@@ -140,6 +140,8 @@ spec:
         }
         cluster_config ${CLUSTER_NAME}
 
+        oc login -u apikey -p ${API_KEY}
+
         set -eo pipefail
         INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
         echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
@@ -156,6 +158,8 @@ spec:
 
         tmp=$(mktemp)
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+
+        env
 
         helm version
         kubectl version
