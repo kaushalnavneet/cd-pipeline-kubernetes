@@ -164,7 +164,7 @@ spec:
     - name: imageUrl
       value: "us.icr.io/opentoolchain/pipeline-support-service"
     - name: environment
-      value: "development-gen2"
+      value: "gen2-development"
     - name: clusterName
       value: otc-us-south-dev-gen2
     - name: clusterNamespace
