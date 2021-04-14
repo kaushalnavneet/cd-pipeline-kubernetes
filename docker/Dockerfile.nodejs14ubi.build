@@ -63,6 +63,6 @@ RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
     ibmcloud plugin list
 
 RUN ibmcloud --version
-RUN helm init --client-only
+RUN helm init -c --stable-repo-url https://charts.helm.sh/stable
 
 
