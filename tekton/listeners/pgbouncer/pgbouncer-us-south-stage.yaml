@@ -1,24 +1,28 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: log-staging-trigger-dev
+  name: pgbouncer-us-south-preprod-trigger-dev
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
+    - name: source_repo
+    - name: source_branch
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: imageUrl
+    - name: cr_repo
+    - name: cr_branch
+    - name: cr_directory
     - name: environment
-    - name: clusterNamespace
     - name: clusterName1
     - name: skipDeploy1
     - name: clusterName2
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
+    - name: chartNamespace
 
     # CD integration
     - name: api
@@ -28,7 +32,7 @@ spec:
       description: the ibmcloud api key
     - name: toolchainRegion
       description: the ibmcloud region containing the toolchain referencing the repository
-      default: us-south
+      default: us-south-preprod
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -59,12 +63,14 @@ spec:
         DEPLOY_API_KEY: $(params.API_KEY_1416501)
         REGISTRY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
+        VAULT_SIDEKICK_ROLE_ID: $(params.VAULT_SIDEKICK_ROLE_ID)
+        VAULT_SIDEKICK_SECRET_ID: $(params.VAULT_SIDEKICK_SECRET_ID)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: private-registry-secret
+        name: otc-registry-secret
       type: kubernetes.io/dockerconfigjson
       data:
         .dockerconfigjson: $(params.dockerconfigjson)
@@ -73,11 +79,11 @@ spec:
       metadata:
         name: docker-build-sa
       imagePullSecrets:
-        - name: private-registry-secret
+        - name: otc-registry-secret
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-log-staging-$(uid)-pvc
+        name: $(params.source_branch)-pgb-us-south-preprod-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -85,40 +91,45 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-log-staging-$(uid)
+        name: $(params.source_branch)-pgb-us-south-preprod-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "log-staging-trigger-dev"
+          generatedBy: "pgbouncer-us-south-preprod-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-deploy-chart
+          name: pgbouncer-pipeline
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-log-staging-$(uid)-pvc
+              claimName: $(params.source_branch)-pgb-us-south-preprod-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: charts_repo
-            value: $(params.charts_repo)
-          - name: charts_branch
-            value: $(params.charts_branch)
-          - name: charts_directory
-            value: $(params.charts_directory)
+          - name: source_repo
+            value: $(params.source_repo)
+          - name: source_branch
+            value: $(params.source_branch)
+          - name: script_repo
+            value: $(params.script_repo)
+          - name: script_branch
+            value: $(params.script_branch)
+          - name: script_directory
+            value: $(params.script_directory)
           - name: config_repo
             value: $(params.config_repo)
           - name: config_branch
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
-          - name: imageUrl
-            value: $(params.imageUrl)
-          - name: clusterNamespace
-            value: $(params.clusterNamespace)
+          - name: cr_repo
+            value: $(params.cr_repo)
+          - name: cr_branch
+            value: $(params.cr_branch)
+          - name: cr_directory
+            value: $(params.cr_directory)
           - name: environment
             value: $(params.environment)
           - name: clusterName1
@@ -133,30 +144,40 @@ spec:
             value: $(params.clusterName3)
           - name: skipDeploy3
             value: $(params.skipDeploy3)
+          - name: chartNamespace
+            value: $(params.chartNamespace)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: log-staging-binding-dev
+  name: pgbouncer-us-south-preprod-binding-dev
 spec:
   params:
-    - name: charts_repo
-      value: "https://github.ibm.com/org-ids/pipeline-config.git"
-    - name: charts_branch
+    - name: script_repo
+      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: script_branch
       value: "master"
-    - name: charts_directory
-      value: "pipeline-config"
+    - name: script_directory
+      value: "cd-pipeline-kubernetes"
+    - name: source_repo
+      value: "https://gitlab.com/org-ids/gitlab.git"
+    - name: source_branch
+      value: "cd-prod-13-5"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
       value: "devops-config"
-    - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-log-service"
+    - name: cr_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: cr_branch
+      value: "master"
+    - name: cr_directory
+      value: "pipeline-config"
     - name: environment
-      value: "staging"
-    - name: clusterNamespace
+      value: "us-south-preprod"
+    - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
       value: otc-dal10-stage
@@ -174,10 +195,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: log-staging-dev
+  name: pgbouncer-us-south-preprod-dev
 spec:
   triggers:
     - binding:
-        name: log-staging-binding-dev
+        name: pgbouncer-us-south-preprod-binding-dev
       template:
-        name: log-staging-trigger-dev
+        name: pgbouncer-us-south-preprod-trigger-dev

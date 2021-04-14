@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: consumption-staging-trigger-dev
+  name: pipeline-ui-us-south-preprod-trigger-dev
 spec:
   params:
     - name: charts_repo
@@ -77,7 +77,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-consumption-staging-$(uid)-pvc
+        name: $(params.charts_branch)-pu-us-south-preprod-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -90,17 +90,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-consumption-staging-$(uid)
+        name: $(params.charts_branch)-pu-us-south-preprod-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "consumption-staging-trigger-dev"
+          generatedBy: "pipeline-ui-us-south-preprod-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-consumption-staging-$(uid)-pvc
+              claimName: $(params.charts_branch)-pu-us-south-preprod-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
@@ -137,7 +137,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: consumption-staging-binding-dev
+  name: pipeline-ui-us-south-preprod-binding-dev
 spec:
   params:
     - name: charts_repo
@@ -153,9 +153,9 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-consumption"
+      value: "us.icr.io/devopsotc/pipeline-ui"
     - name: environment
-      value: "staging"
+      value: "us-south-preprod"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
@@ -174,10 +174,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: consumption-staging-dev
+  name: pipeline-ui-us-south-preprod-dev
 spec:
   triggers:
     - binding:
-        name: consumption-staging-binding-dev
+        name: pipeline-ui-us-south-preprod-binding-dev
       template:
-        name: consumption-staging-trigger-dev
+        name: pipeline-ui-us-south-preprod-trigger-dev
