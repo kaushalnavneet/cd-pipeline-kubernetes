@@ -130,7 +130,7 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
-    - name: deploy
+    - name: deploy-gen2
       runAfter: [build-va]
       taskRef:
         name: deploy-gen2
