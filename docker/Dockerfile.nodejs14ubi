@@ -41,6 +41,8 @@ RUN rm -rf /home/node/cd-pipeline-kubernetes
 RUN chown -hR node /home/node \
     && chgrp -hR node /home/node 
 
+RUN yum update -y
+
 USER node
 EXPOSE 80
 
