@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: support-us-south-preprod-trigger-dev
+  name: travis-worker-mon01-trigger-dev
 spec:
   params:
     - name: charts_repo
@@ -28,7 +28,7 @@ spec:
       description: the ibmcloud api key
     - name: toolchainRegion
       description: the ibmcloud region containing the toolchain referencing the repository
-      default: us-south
+      default: mon01
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -77,7 +77,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-support-us-south-preprod-$(uid)-pvc
+        name: $(params.charts_branch)-travis-mon01-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -85,22 +85,21 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-support-us-south-preprod-$(uid)
+        name: $(params.charts_branch)-travis-mon01-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "support-us-south-preprod-trigger-dev"
+          generatedBy: "travis-worker-mon01-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-support-us-south-preprod-$(uid)-pvc
+              claimName: $(params.charts_branch)-travis-mon01-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
@@ -137,7 +136,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: support-us-south-preprod-binding-dev
+  name: travis-worker-mon01-binding-dev
 spec:
   params:
     - name: charts_repo
@@ -153,31 +152,31 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-support-service"
+      value: "us.icr.io/devopsotc/travis-worker"
     - name: environment
-      value: "us-south-preprod"
+      value: "mon01"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-dal10-stage
+      value: otc-pw-dal10-stage
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-dal12-stage
+      value: otc-pw-dal12-stage
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: otc-dal13-stage
+      value: otc-pw-dal13-stage
     - name: skipDeploy3
       value: "false"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: support-us-south-preprod-dev
+  name: travis-worker-mon01-dev
 spec:
   triggers:
     - binding:
-        name: support-us-south-preprod-binding-dev
+        name: travis-worker-mon01-binding-dev
       template:
-        name: support-us-south-preprod-trigger-dev
+        name: travis-worker-mon01-trigger-dev

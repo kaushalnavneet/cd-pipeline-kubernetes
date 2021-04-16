@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: log-us-south-preprod-trigger-dev
+  name: event-mon01-trigger-dev
 spec:
   params:
     - name: charts_repo
@@ -28,7 +28,7 @@ spec:
       description: the ibmcloud api key
     - name: toolchainRegion
       description: the ibmcloud region containing the toolchain referencing the repository
-      default: us-south
+      default: mon01
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -77,7 +77,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-log-us-south-preprod-$(uid)-pvc
+        name: $(params.charts_branch)-event-mon01-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -90,17 +90,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-log-us-south-preprod-$(uid)
+        name: $(params.charts_branch)-event-mon01-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "log-us-south-preprod-trigger-dev"
+          generatedBy: "event-mon01-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-deploy-chart
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-log-us-south-preprod-$(uid)-pvc
+              claimName: $(params.charts_branch)-event-mon01-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: charts_repo
@@ -137,7 +137,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: log-us-south-preprod-binding-dev
+  name: event-mon01-binding-dev
 spec:
   params:
     - name: charts_repo
@@ -153,9 +153,9 @@ spec:
     - name: config_directory
       value: "devops-config"
     - name: imageUrl
-      value: "us.icr.io/devopsotc/pipeline-log-service"
+      value: "us.icr.io/devopsotc/pipeline-event-service"
     - name: environment
-      value: "us-south-preprod"
+      value: "mon01"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
@@ -174,10 +174,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: log-us-south-preprod-dev
+  name: event-mon01-dev
 spec:
   triggers:
     - binding:
-        name: log-us-south-preprod-binding-dev
+        name: event-mon01-binding-dev
       template:
-        name: log-us-south-preprod-trigger-dev
+        name: event-mon01-trigger-dev

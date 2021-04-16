@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: tekton-managed-worker-us-south-preprod
+  name: tekton-managed-worker-mon01
 spec:
   triggers:
     - bindings:
         - name: region
-          value: "us-south-preprod"
+          value: "mon01"
         - name: environment
-          value: "us-south-preprod"
+          value: "mon01"
         - name: clusterName1
           value: otc-tektonpw-dal10-stage
         - name: skipDeploy1

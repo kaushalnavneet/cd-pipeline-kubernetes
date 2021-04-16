@@ -1,29 +1,24 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: cryptomining-detector-us-south-preprod-trigger-dev
+  name: private-worker-service-mon01-trigger-dev
 spec:
   params:
-    - name: source_repo
-    - name: source_branch
-    - name: script_repo
-    - name: script_branch
-    - name: script_directory
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
     - name: config_repo
     - name: config_branch
     - name: config_directory
-    - name: cr_repo
-    - name: cr_branch
-    - name: cr_directory
+    - name: imageUrl
     - name: environment
+    - name: clusterNamespace
     - name: clusterName1
     - name: skipDeploy1
     - name: clusterName2
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
-    - name: helmVersion
-    - name: chartNamespace
 
     # CD integration
     - name: api
@@ -33,7 +28,7 @@ spec:
       description: the ibmcloud api key
     - name: toolchainRegion
       description: the ibmcloud region containing the toolchain referencing the repository
-      default: us-south-preprod
+      default: mon01
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -69,7 +64,7 @@ spec:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: otc-registry-secret
+        name: private-registry-secret
       type: kubernetes.io/dockerconfigjson
       data:
         .dockerconfigjson: $(params.dockerconfigjson)
@@ -78,11 +73,11 @@ spec:
       metadata:
         name: docker-build-sa
       imagePullSecrets:
-        - name: otc-registry-secret
+        - name: private-registry-secret
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.source_branch)-crypto-us-south-preprod-$(uid)-pvc
+        name: $(params.charts_branch)-pws-mon01-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -90,45 +85,40 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
+
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.source_branch)-crypto-us-south-preprod-$(uid)
+        name: $(params.charts_branch)-pws-mon01-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "cryptomining-detector-us-south-preprod-trigger-dev"
+          generatedBy: "private-worker-service-mon01-trigger-dev"
       spec:
         pipelineRef:
-          name: cryptomining-pipeline
+          name: pipeline-deploy-chart
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.source_branch)-crypto-us-south-preprod-$(uid)-pvc
+              claimName: $(params.charts_branch)-pws-mon01-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
-          - name: source_repo
-            value: $(params.source_repo)
-          - name: source_branch
-            value: $(params.source_branch)
-          - name: script_repo
-            value: $(params.script_repo)
-          - name: script_branch
-            value: $(params.script_branch)
-          - name: script_directory
-            value: $(params.script_directory)
+          - name: charts_repo
+            value: $(params.charts_repo)
+          - name: charts_branch
+            value: $(params.charts_branch)
+          - name: charts_directory
+            value: $(params.charts_directory)
           - name: config_repo
             value: $(params.config_repo)
           - name: config_branch
             value: $(params.config_branch)
           - name: config_directory
             value: $(params.config_directory)
-          - name: cr_repo
-            value: $(params.cr_repo)
-          - name: cr_branch
-            value: $(params.cr_branch)
-          - name: cr_directory
-            value: $(params.cr_directory)
+          - name: imageUrl
+            value: $(params.imageUrl)
+          - name: clusterNamespace
+            value: $(params.clusterNamespace)
           - name: environment
             value: $(params.environment)
           - name: clusterName1
@@ -143,65 +133,51 @@ spec:
             value: $(params.clusterName3)
           - name: skipDeploy3
             value: $(params.skipDeploy3)
-          - name: helmVersion
-            value: $(params.helmVersion)
-          - name: chartNamespace
-            value: $(params.chartNamespace)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: cryptomining-detector-us-south-preprod-binding-dev
+  name: private-worker-service-mon01-binding-dev
 spec:
   params:
-    - name: script_repo
-      value: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
-    - name: script_branch
+    - name: charts_repo
+      value: "https://github.ibm.com/org-ids/pipeline-config.git"
+    - name: charts_branch
       value: "master"
-    - name: script_directory
-      value: "cd-pipeline-kubernetes"
-    - name: source_repo
-      value: "https://github.ibm.com/org-ids/cryptomining-detector.git"
-    - name: source_branch
-      value: "master"
+    - name: charts_directory
+      value: "pipeline-config"
     - name: config_repo
       value: "https://github.ibm.com/ids-env/devops-config.git"
     - name: config_branch
       value: "master"
     - name: config_directory
       value: "devops-config"
-    - name: cr_repo
-      value: "https://github.ibm.com/org-ids/pipeline-config.git"
-    - name: cr_branch
-      value: "master"
-    - name: cr_directory
-      value: "pipeline-config"
+    - name: imageUrl
+      value: "us.icr.io/devopsotc/private-worker-service"
     - name: environment
-      value: "us-south-preprod"
-    - name: chartNamespace
+      value: "mon01"
+    - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-pw-dal10-stage
+      value: otc-dal10-stage
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
-      value: otc-pw-dal12-stage
+      value: otc-dal12-stage
     - name: skipDeploy2
       value: "false"
     - name: clusterName3
-      value: otc-pw-dal13-stage
+      value: otc-dal13-stage
     - name: skipDeploy3
       value: "false"
-    - name: helmVersion
-      value: "v2.14.3"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: cryptomining-detector-us-south-preprod-dev
+  name: private-worker-service-mon01-dev
 spec:
   triggers:
     - binding:
-        name: cryptomining-detector-us-south-preprod-binding-dev
+        name: private-worker-service-mon01-binding-dev
       template:
-        name: cryptomining-detector-us-south-preprod-trigger-dev
+        name: private-worker-service-mon01-trigger-dev

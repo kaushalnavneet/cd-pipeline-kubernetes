@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: ext-staging-trigger-dev
+  name: ext-mon01-trigger-dev
 spec:
   params:
     - name: environment
@@ -32,7 +32,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: ext-staging-$(uid)-pvc
+        name: ext-mon01-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -45,17 +45,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: ext-staging-$(uid)
+        name: ext-mon01-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "ext-staging-trigger-dev"
+          generatedBy: "ext-mon01-trigger-dev"
       spec:
         pipelineRef:
           name: pipeline-extension
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: ext-staging-$(uid)-pvc
+              claimName: ext-mon01-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: environment
@@ -78,19 +78,19 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: ext-staging-binding-dev
+  name: ext-mon01-binding-dev
 spec:
   params:
     - name: environment
-      value: "staging"
+      value: "mon01"
     - name: api_url
-      value: "https://devops-api.staging.devops.cloud.ibm.com"
+      value: "https://devops-api.mon01.devops.cloud.ibm.com"
     - name: extension_url
       value: ""
     - name: extension_id
       value: "None"
     - name: brokerSecret
-      value: $(params.jp_tok_brokerSecret)
+      value: $(params.mon01_brokerSecret)
     - name: verb
       value: "GET"
     - name: enable
@@ -101,10 +101,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: ext-staging-dev
+  name: ext-mon01-dev
 spec:
   triggers:
     - binding:
-        name: ext-staging-binding-dev
+        name: ext-mon01-binding-dev
       template:
-        name: ext-staging-trigger-dev
+        name: ext-mon01-trigger-dev
