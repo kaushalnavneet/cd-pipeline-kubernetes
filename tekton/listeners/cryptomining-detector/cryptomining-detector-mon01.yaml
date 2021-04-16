@@ -33,7 +33,7 @@ spec:
       description: the ibmcloud api key
     - name: toolchainRegion
       description: the ibmcloud region containing the toolchain referencing the repository
-      default: mon01
+      default: us-south
     - name: resourceGroup
       description: the ibmcloud resource group containing the toolchain referencing the repository
       default: default
@@ -61,7 +61,7 @@ spec:
         API_KEY: $(params.API_KEY_1651315)
         API_KEY_1308775: $(params.API_KEY_1308775)
         API_KEY_1651315: $(params.API_KEY_1651315)
-        DEPLOY_API_KEY: $(params.API_KEY_1416501)
+        DEPLOY_API_KEY: $(params.API_KEY_1651315)
         REGISTRY_API_KEY: $(params.API_KEY_1416501)
         IDS_TOKEN: $(params.IDS_TOKEN)
 
