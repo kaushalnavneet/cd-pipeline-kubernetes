@@ -108,7 +108,7 @@ metadata:
 spec:
   params:
     - name: environment
-      value: "mon01"
+      value: "us-south"
     - name: clusterNamespace
       value: opentoolchain
     - name: clusterName1
