@@ -36,6 +36,8 @@ RUN mkdir -p $HOME/.m2 \
 
 RUN mvn -B clean package
 
+RUN rm $HOME/.m2/settings.xml
+
 # Create jks files based on secure properties
 RUN echo -n ${ICD_REDIS_STORE} | base64 -d >/work/warbuild/serverConf/ICDRedisTruststore.jks \
     && echo -n ${QR_STORE} | base64 -d >/work/warbuild/serverConf/qr.jks
