@@ -130,6 +130,10 @@ spec:
             if [[ "${BX_CR_VA}" == "OK" ]]; then
               break
             fi
+            if [[ "${BX_CR_VA}" == "FAIL" ]]; then
+              echo "VA check failed"
+              break
+            fi
           else
             echo "error while running va check: ${BX_CR_VA}"
           fi

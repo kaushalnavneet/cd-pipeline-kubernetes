@@ -30,10 +30,13 @@ RUN if [ -z ${GLIBC_VERSION+x} ]; then GLIBC_VERSION=$(wget --quiet --output-doc
 RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x /usr/local/bin/kubectl
 
-RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get && \
-    chmod +x /tmp/get_helm.sh && \
-    /tmp/get_helm.sh && \ 
-    rm -fr /tmp/get_helm.sh
+# Install Helm2
+ARG HELM2_VERSION='v2.14.3'
+RUN mkdir -p /tmp/helm_install \
+    && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
+    && chmod 700 get_helm.sh \
+    && ./get_helm.sh --version ${HELM2_VERSION} \
+    && rm -rf /tmp/helm*
 
 RUN curl -OJL https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_RELEASE_VERSION}/operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 RUN chmod +x operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu && cp operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
@@ -50,7 +53,7 @@ RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/
 
 RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
     ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.50 && \
+    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.54 && \
     ibmcloud plugin list
 
 RUN mkdir -p /work/component/export
@@ -65,7 +68,7 @@ RUN wget --no-check-certificate https://github.com/stedolan/jq/releases/download
     && chmod +x /usr/bin/jq \
     && rm -f /tmp/jq-linux64
 
-RUN helm init --client-only
+RUN helm init -c --stable-repo-url https://charts.helm.sh/stable
 
 RUN go get -u github.com/FiloSottile/gvt
 RUN go get github.com/alecthomas/gometalinter

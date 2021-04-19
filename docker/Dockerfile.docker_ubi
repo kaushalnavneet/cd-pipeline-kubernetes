@@ -19,8 +19,13 @@ USER root
 RUN yum install -y procps \
     yum install -y http://mirror.centos.org/centos/7/extras/x86_64/Packages/fuse-overlayfs-0.7.2-6.el7_8.x86_64.rpm \
                    http://mirror.centos.org/centos/7/extras/x86_64/Packages/fuse3-libs-3.6.1-4.el7.x86_64.rpm \ 
-                   http://mirror.centos.org/centos/7/extras/x86_64/Packages/slirp4netns-0.4.3-4.el7_8.x86_64.rpm \
-    && yum update -y \
+                   http://mirror.centos.org/centos/7/extras/x86_64/Packages/slirp4netns-0.4.3-4.el7_8.x86_64.rpm
+
+RUN awk '/nodocs/ { print; print "exclude=docker-*"; next }1' /etc/yum.conf >/etc/yum2.conf \
+    && rm -f /etc/yum.conf \
+    && mv /etc/yum2.conf /etc/yum.conf
+
+RUN yum update -y \
     && yum clean all -y
 
 # build context is from the docker folder parent

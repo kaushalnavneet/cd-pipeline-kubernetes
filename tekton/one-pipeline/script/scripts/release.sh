@@ -51,6 +51,10 @@ initDefaults() {
         export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID)
     fi
 
+    if [ -f "/config/ARTIFACTORY_API_KEY" ]; then
+        export ARTIFACTORY_API_KEY=$(cat /config/ARTIFACTORY_API_KEY)
+    fi
+
     if [ -f "/config/ICD_REDIS_STORE" ]; then
         export ICD_REDIS_STORE=$(cat /config/ICD_REDIS_STORE)
     fi
@@ -175,7 +179,7 @@ if [[ -z $DEV_MODE ]]; then
         return 1
     }
     cluster_config ${DRY_RUN_CLUSTER}
-    set -e
+    set -eo pipefail
 
     if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
         echo "Major & minor version and chart repo vars need to be set"
@@ -183,14 +187,14 @@ if [[ -z $DEV_MODE ]]; then
     fi
 
 
-    #specific tag
-    tmp=$(mktemp)
-    yq --yaml-output --arg appver "${APPLICATION_VERSION}" '.pipeline.image.tag=$appver' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
+    #specify tag
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
 
-    #specific image
-    yq --yaml-output --arg image "${IMAGE_URL}" '.pipeline.image.repository=$image' ${APP_NAME}/values.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/values.yaml
+    #specify image
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}"
 
-    yq --yaml-output --arg chartver "${CHART_VERSION}" '.version=$chartver' ${APP_NAME}/Chart.yaml > "$tmp" && mv "$tmp" ${APP_NAME}/Chart.yaml
+    #specify version
+    yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
 
     helm init -c --stable-repo-url https://charts.helm.sh/stable
     helm dep up ${APP_NAME}
@@ -214,43 +218,39 @@ if [[ -z $DEV_MODE ]]; then
     ORIG_DIR=$(pwd)
     until [ $n -ge 5 ]
     do
-        git -C $CHART_REPO_ABS pull --no-edit
+        echo "git pull"
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git -C $CHART_REPO_ABS pull --no-edit
+        echo "git pull done"
         mkdir -p $CHART_REPO_ABS/charts
         helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
 
+        cd $CHART_REPO_ABS
         git add -A .
         git commit -m "${APPLICATION_VERSION}"
-        git push
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git push
         rc=$?
         if [[ $rc == 0 ]]; then 
-        break;
+            break;
         fi
         n=$[$n+1]
         cd $ORIG_DIR
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
-        git clone https://$IDS_TOKEN@github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        echo "Clone charts repo"
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        echo "Done cloning charts repo"
     done
 
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     echo "Adding to inventory"
-    CHART_VERSION=$(yq r -j "$APP_NAME/Chart.yaml" | jq -r '.version')
     ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
     IMAGE_ARTIFACT="$(get_env artifact)"
     SIGNATURE="$(get_env signature "")"
 
-    if [ "$SIGNATURE" ]; then
-        # using TaaS worker
-        APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
-    else
-        # using regular worker, no signature
-        APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
-    fi
-
     # Install cocoa cli
     function installCocoa() {
-        local cocoaVersion=1.5.0
+        local cocoaVersion=1.7.0
         echo "Installing cocoa cli $cocoaVersion"
         curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${cocoaVersion}"
         cp cocoa-linux-* /usr/local/bin/cocoa
@@ -259,6 +259,7 @@ if [[ -z $DEV_MODE ]]; then
         echo "Done"
         echo
     }
+    INVENTORY_BRANCH="staging"
     
     installCocoa
     cocoa inventory add \
@@ -269,7 +270,8 @@ if [[ -z $DEV_MODE ]]; then
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="${APP_NAME}"
+        --name="${APP_NAME}" \
+        --type="chart"
     cocoa inventory add \
         --environment="${INVENTORY_BRANCH}" \
         --artifact="${IMAGE_ARTIFACT}" \
@@ -279,7 +281,10 @@ if [[ -z $DEV_MODE ]]; then
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
         --name="${APP_NAME}_image" \
-        --app-artifacts="${APP_ARTIFACTS}"
+        --signature="${SIGNATURE}" \
+        --type="image" \
+        --provenance="${IMAGE_ARTIFACT}" \
+        --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
     echo "Inventory updated"
 else 
     echo "Dev Mode - skipping"
