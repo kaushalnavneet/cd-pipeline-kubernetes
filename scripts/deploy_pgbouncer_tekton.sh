@@ -60,7 +60,7 @@ kubectl -n${CHART_NAMESPACE} create secret generic ${TARGET}-postgres-secret --f
 
 
 kubectl -n${CHART_NAMESPACE} get secret ${TARGET}-pgbouncer-secret
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ]; then
   kubectl -n${CHART_NAMESPACE} delete secret ${TARGET}-pgbouncer-secret
 fi
 echo "Creating '${TARGET}-pgbouncer-secret' secret..."
