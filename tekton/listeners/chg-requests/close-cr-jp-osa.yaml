@@ -48,7 +48,7 @@ spec:
         API_KEY_1308775: $(params.API_KEY_1308775)
         API_KEY_1651315: $(params.API_KEY_1651315)
         IDS_TOKEN: $(params.IDS_TOKEN)
-        SN_TOKEN: $(params.SN_TOKEN_TEST)
+        SN_TOKEN: $(params.SN_TOKEN)
         SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
         SLACK_TOC_HOOK: $(params.SLACK_TOC_HOOK)
 
@@ -131,7 +131,7 @@ spec:
     - name: deployClusters
       value: 'otc-osa21-prod,otc-osa22-prod,otc-osa23-prod'
     - name: snUrl
-      value: 'https://watsontest.service-now.com'
+      value: 'https://watson.service-now.com'
     - name: tocChannel
       value: '#devops-cd-cie'
     - name: deployChannel
