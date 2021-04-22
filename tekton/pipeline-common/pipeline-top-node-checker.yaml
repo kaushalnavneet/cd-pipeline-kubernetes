@@ -18,7 +18,7 @@ spec:
         name: top-node-check
       params:
         - name: clusterRegion
-          value: $(params.cluster_region)
+          value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName1)
       workspaces:
@@ -29,7 +29,7 @@ spec:
         name: top-node-check
       params:
         - name: clusterRegion
-          value: $(params.cluster_region)
+          value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName2)
       workspaces:
@@ -40,7 +40,7 @@ spec:
         name: top-node-check
       params:
         - name: clusterRegion
-          value: $(params.cluster_region)
+          value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName3)
       workspaces:
@@ -51,7 +51,7 @@ spec:
         name: top-node-check
       params:
         - name: clusterRegion
-          value: $(params.cluster_region)
+          value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName4)
         - name: skip
