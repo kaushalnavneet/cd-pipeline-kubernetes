@@ -60,9 +60,10 @@ spec:
             done
             return 1
         }
-        clusterconfig=$(cluster_config ${CLUSTER_NAME})
-        if [[ ${clusterconfig} != 0 ]]; then
-          echo "Could not configure the cluster ${CLUSTER_NAME}: ${clusterconfig}"
+        cluster_config ${CLUSTER_NAME}
+        ec=$?
+        if [[ $ec != 0 ]]; then
+          echo "Could not configure the cluster ${CLUSTER_NAME}"
           exit 1
         fi
 
@@ -82,14 +83,15 @@ spec:
         }
 
 
-        lc=$(check_top_node)
-        if [[ $lc == 0 ]]; then
+        check_top_node
+        ec=$?
+        if [[ $ec == 0 ]]; then
           echo "Command run successfully"
           echo $(kubectl top node)
         else
           echo "top node command failed: notify Pagerduty"
           source=$(ic ks cluster get --cluster ${CLUSTER_NAME} --output json | jq .id)
-          if [[ $? != 0 ]]; then
+          if [ -z "${source}"  ]; then
             source = "unknown"
           fi
           echo "source=${source}"
