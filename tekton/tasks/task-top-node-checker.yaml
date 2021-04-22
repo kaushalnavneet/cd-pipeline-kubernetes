@@ -42,7 +42,7 @@ spec:
           echo "Skipping cluster"
           exit 0
         fi
-        ibmcloud login --apikey ${API_KEY} -r ${REGION}
+        ibmcloud login --apikey "${API_KEY}" -r "${REGION}"
 
         set +e
         function cluster_config() {
@@ -50,8 +50,7 @@ spec:
             for iteration in {1..30}
             do
                 echo "Running cluster config for cluster $1: $iteration / 30"
-                ibmcloud ks cluster config --cluster $1
-                if [[ $? -eq 0 ]]; then
+                if ibmcloud ks cluster config --cluster "$1"; then
                     return 0
                 else
                     echo "Cluster config for $1 failed. Trying again..."
@@ -60,7 +59,7 @@ spec:
             done
             return 1
         }
-        cluster_config ${CLUSTER_NAME}
+        cluster_config "${CLUSTER_NAME}"
         ec=$?
         if [[ $ec != 0 ]]; then
           echo "Could not configure the cluster ${CLUSTER_NAME}"
@@ -71,8 +70,7 @@ spec:
             for iteration in {1..5}
             do
                 echo "Running kubectl top node: $iteration / 5"
-                kubectl top node
-                if [[ $? -eq 0 ]]; then
+                if kubectl top node; then
                     return 0
                 else
                     echo "kubectl top node failed. Trying again..."
@@ -89,9 +87,9 @@ spec:
           echo "top node command run successfully"
         else
           echo "top node command failed: notify Pagerduty"
-          source=$(ic ks cluster get --cluster ${CLUSTER_NAME} --output json | jq .id)
+          source=$(ic ks cluster get --cluster "${CLUSTER_NAME}" --output json | jq .id)
           if [ -z "${source}"  ]; then
-            source = "unknown"
+            source="unknown"
           fi
           echo "source=${source}"
           exit 1
@@ -106,6 +104,6 @@ spec:
             "routing_key": "${INTEGRATION_KEY}",
             "event_action": "trigger"
           }
-          EOF
+EOF
           curl -X POST -H 'Content-type: application/json' -d @body.json https://events.pagerduty.com/v2/enqueue
         fi
