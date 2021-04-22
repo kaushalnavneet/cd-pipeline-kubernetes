@@ -93,18 +93,18 @@ spec:
           fi
           echo "source=${source}"
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
-          curl -X POST -H 'Content-type: application/json' \
-          --data-raw "$(cat << EOF
-          {
-            "payload": {
-              "summary": "${SUMMARY}",
-              "severity": "critical",
-              "source": "${source}"
-            },
-            "routing_key": "${INTEGRATION_KEY}",
-            "event_action": "trigger"
-          }
+        PAYLOAD=$(jq --null-input "$(cat << EOF
+        {
+          "payload": {
+            "summary": "${SUMMARY}",
+            "severity": "critical",
+            "source": "${source}"
+          },
+          "routing_key": "${INTEGRATION_KEY}",
+          "event_action": "trigger"
+        }
         EOF
-          )" \
-          https://events.pagerduty.com/v2/enqueue
+        )")
+
+          curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" https://events.pagerduty.com/v2/enqueue
         fi
