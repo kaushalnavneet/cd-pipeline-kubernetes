@@ -1,0 +1,61 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-top-node-checker
+spec:
+  params:
+    - name: clusterName1
+    - name: clusterName2
+    - name: clusterName3
+    - name: clusterName4
+    - name: skipCluster4
+    - name: clusterRegion
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: top-node-check-1
+      taskRef:
+        name: top-node-check
+      params:
+        - name: clusterRegion
+          value: $(params.cluster_region)
+        - name: clusterName
+          value:  $(params.clusterName1)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: top-node-check-2
+      taskRef:
+        name: top-node-check
+      params:
+        - name: clusterRegion
+          value: $(params.cluster_region)
+        - name: clusterName
+          value:  $(params.clusterName2)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: top-node-check-3
+      taskRef:
+        name: top-node-check
+      params:
+        - name: clusterRegion
+          value: $(params.cluster_region)
+        - name: clusterName
+          value:  $(params.clusterName3)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: top-node-check-4
+      taskRef:
+        name: top-node-check
+      params:
+        - name: clusterRegion
+          value: $(params.cluster_region)
+        - name: clusterName
+          value:  $(params.clusterName4)
+        - name: skip
+          value: $(params.skipCluster4)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc

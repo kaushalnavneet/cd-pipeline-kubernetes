@@ -1,0 +1,113 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: top-node-checker-us-south-template
+spec:
+  params:
+    - name: clusterName1
+    - name: clusterName2
+    - name: clusterName3
+    - name: clusterName4
+    - name: skipCluster4
+    - name: clusterRegion
+  
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        IDS_USER: $(params.IDS_USER)
+
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name:  top-node-checker-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: $(clusterRegion)-top-node-checker-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "top-node-checker-template"
+      spec:
+        pipelineRef:
+          name: pipeline-top-node-checker
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: top-node-checker-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: clusterName1
+            value: $(params.clusterName1)
+          - name: clusterName2
+            value: $(params.clusterName2)
+          - name: clusterName3
+            value: $(params.clusterName3)
+          - name: clusterName4
+            value: $(params.clusterName4)
+          - name: clusterRegion
+            value: $(params.clusterRegion)
+          - name: skipCluster4
+            value: "false"
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: top-node-checker-us-south-binding
+spec:
+  params:
+    - name: clusterName1
+      value: otc-tektonpw-dal10-prod
+    - name: clusterName2
+      value: otc-tektonpw-dal12-2-prod
+    - name: clusterName3
+      value: otc-tektonpw-dal12-prod
+    - name: clusterName4
+      value: otc-tektonpw-dal13-prod
+    - name: skipCluster4
+      value: "false"
+    - name: clusterRegion
+      value: us-south
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: top-node-checker-us-south
+spec:
+  triggers:
+    - binding:
+        name: top-node-checker-us-south-binding
+      template:
+        name: top-node-checker-us-south-template
