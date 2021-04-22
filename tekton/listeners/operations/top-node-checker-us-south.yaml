@@ -56,7 +56,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(clusterRegion)-top-node-checker-$(uid)
+        name: $(params.clusterRegion)-top-node-checker-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "top-node-checker-template"
