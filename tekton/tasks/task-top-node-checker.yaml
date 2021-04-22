@@ -104,5 +104,6 @@ spec:
           "event_action": "trigger"
         }
         EOF
-          curl -X POST -H 'Content-type: application/json' -d @body.json https://events.pagerduty.com/v2/enqueue
+          echo ${INTEGRATION_KEY} | cut -c1-7
+          curl -X POST -H 'Content-type: application/json' --data-raw @body.json https://events.pagerduty.com/v2/enqueue
         fi
