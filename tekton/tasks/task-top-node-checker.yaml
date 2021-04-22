@@ -15,6 +15,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: API_KEY
+      - name: INTEGRATION_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: INTEGRATION_KEY   
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -55,12 +60,53 @@ spec:
             done
             return 1
         }
-        cluster_config ${CLUSTER_NAME}
+        cc=$(cluster_config ${CLUSTER_NAME})
+        if [[ ${cc} != 0 ]]; then
+          echo "Could not configure the cluster ${CLUSTER_NAME}"
+          exit 1
+        fi
 
-        kubectl top node
-        lc=$?
+        function check_top_node() {
+            for iteration in {1..5}
+            do
+                echo "Running kubectl top node: $iteration / 5"
+                kubectl top node
+                if [[ $? -eq 0 ]]; then
+                    return 0
+                else
+                    echo "kubectl top node failed. Trying again..."
+                    sleep 5
+                fi
+            done
+            return 1
+        }
+
+
+        lc=$(check_top_node)
         if [[ $lc == 0 ]]; then
+          echo "Command run successfully"
           echo $(kubectl top node)
         else
           echo "top node command failed: notify Pagerduty"
+          source=$(ic ks cluster get --cluster ${CLUSTER_NAME} --output json | jq .id)
+          if [[ $? != 0 ]]; then
+            source = "unknown"
+          fi
+          echo "source=${source}"
+          exit 1
+          SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}" )
+          curl -X POST -H 'Content-type: application/json' \
+          --data-raw "$(cat << EOF
+          {
+            "payload": {
+              "summary": "${SUMMARY}",
+              "severity": "critical",
+              "source": "${source}"
+            },
+            "routing_key": "${INTEGRATION_KEY}",
+            "event_action": "trigger"
+          }
+          EOF
+          )" \
+          https://events.pagerduty.com/v2/enqueue
         fi

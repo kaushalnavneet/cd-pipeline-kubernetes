@@ -27,6 +27,7 @@ spec:
       type: Opaque
       stringData:
         API_KEY: $(params.API_KEY_1416501)
+        INTEGRATION_KEY: $(params.PAGERDUTY_INTEGRATION_KEY)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
@@ -91,9 +92,9 @@ spec:
     - name: clusterName1
       value: otc-tektonpw-dal10-prod
     - name: clusterName2
-      value: otc-tektonpw-dal12-2-prod
-    - name: clusterName3
       value: otc-tektonpw-dal12-prod
+    - name: clusterName3
+      value: otc-tektonpw-dal12-2-prod
     - name: clusterName4
       value: otc-tektonpw-dal13-prod
     - name: skipCluster4
