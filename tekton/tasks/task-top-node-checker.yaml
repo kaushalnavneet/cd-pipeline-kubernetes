@@ -4,7 +4,7 @@ metadata:
   name: top-node-check
 spec:
   params:
-    - name: cluster_region
+    - name: clusterRegion
     - name: clusterName
     - name: skip
       default: 'false'
@@ -24,7 +24,7 @@ spec:
     imagePullPolicy: IfNotPresent
     env:
       - name: REGION
-        value: $(params.cluster_region)
+        value: $(params.clusterRegion)
       - name: CLUSTER_NAME
         value: $(parms.clusterName)
       - name: SKIP
