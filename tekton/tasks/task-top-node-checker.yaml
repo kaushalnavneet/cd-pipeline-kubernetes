@@ -93,6 +93,8 @@ spec:
           fi
           echo "source=${source}"
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
+          echo "${SUMMARY}"
+          INTEGRATION_KEY="ffffe2b62ad54ec9ac370baff2c56aaa"
         PAYLOAD=$(cat << EOF
         {
           "payload": {
@@ -105,6 +107,6 @@ spec:
         }
         EOF
         )
-
+          echo ${PAYLOAD}
           curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" https://events.pagerduty.com/v2/enqueue
         fi
