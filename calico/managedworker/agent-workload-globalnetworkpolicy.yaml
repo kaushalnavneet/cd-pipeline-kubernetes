@@ -18,6 +18,20 @@ spec:
       selector: k8s-app == 'kube-dns' && projectcalico.org/namespace == 'kube-system'
       namespaceSelector: all()
     protocol: TCP
+  - action: Allow
+    destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: TCP
   - action: Deny
     destination:
       selector: ibm.role == 'worker_private' || ibm.role == 'worker_public'

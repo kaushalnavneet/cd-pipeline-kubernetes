@@ -21,6 +21,20 @@ spec:
     protocol: TCP
   - action: Allow
     destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: TCP
+  - action: Allow
+    destination:
       nets:
       - 172.20.0.1/32
   - action: Deny
