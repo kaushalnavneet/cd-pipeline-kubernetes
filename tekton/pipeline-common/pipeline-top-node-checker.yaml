@@ -21,6 +21,8 @@ spec:
           value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName1)
+        - name: skip
+          value: "true"
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -32,6 +34,8 @@ spec:
           value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName2)
+        - name: skip
+          value: "true"
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 
@@ -43,6 +47,8 @@ spec:
           value: $(params.clusterRegion)
         - name: clusterName
           value:  $(params.clusterName3)
+        - name: skip
+          value: "true"
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
