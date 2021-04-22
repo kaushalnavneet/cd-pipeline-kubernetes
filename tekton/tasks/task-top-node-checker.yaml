@@ -105,5 +105,8 @@ spec:
         }
         EOF
           echo ${INTEGRATION_KEY} | cut -c1-7
-          curl -X POST -H 'Content-type: application/json' --data-raw @body.json https://events.pagerduty.com/v2/enqueue
+          if ! curl -X POST -H 'Content-type: application/json' --data-raw @body.json https://events.pagerduty.com/v2/enqueue ; then
+            echo "Notification failed"
+            exit 1
+          fi
         fi
