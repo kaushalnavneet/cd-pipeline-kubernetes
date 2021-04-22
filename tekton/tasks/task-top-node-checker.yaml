@@ -86,8 +86,7 @@ spec:
         check_top_node
         ec=$?
         if [[ $ec == 0 ]]; then
-          echo "Command run successfully"
-          echo $(kubectl top node)
+          echo "top node command run successfully"
         else
           echo "top node command failed: notify Pagerduty"
           source=$(ic ks cluster get --cluster ${CLUSTER_NAME} --output json | jq .id)
