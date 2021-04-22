@@ -93,7 +93,7 @@ spec:
           fi
           echo "source=${source}"
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
-        PAYLOAD=$(jq --null-input "$(cat << EOF
+        PAYLOAD=$(cat << EOF
         {
           "payload": {
             "summary": "${SUMMARY}",
@@ -104,7 +104,7 @@ spec:
           "event_action": "trigger"
         }
         EOF
-        )")
+        )
 
           curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" https://events.pagerduty.com/v2/enqueue
         fi
