@@ -105,4 +105,5 @@ spec:
         EOF
         )
           curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" https://events.pagerduty.com/v2/enqueue
+          exit 1
         fi
