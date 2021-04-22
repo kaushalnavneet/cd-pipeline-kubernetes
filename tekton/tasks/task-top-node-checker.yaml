@@ -71,7 +71,7 @@ spec:
             do
                 echo "Running kubectl top node: $iteration / 5"
                 if kubectl top node; then
-                    return 0
+                    return 1
                 else
                     echo "kubectl top node failed. Trying again..."
                     sleep 5
@@ -92,7 +92,6 @@ spec:
             source="unknown"
           fi
           echo "source=${source}"
-          exit 1
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
           cat << EOF > body.json
           {
