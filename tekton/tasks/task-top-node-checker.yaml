@@ -93,20 +93,18 @@ spec:
           fi
           echo "source=${source}"
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
-        cat << EOF > body.json
-        {
-          "payload": {
-            "summary": "${SUMMARY}",
-            "severity": "critical",
-            "source": "${source}"
-          },
-          "routing_key": "${INTEGRATION_KEY}",
-          "event_action": "trigger"
-        }
+          curl -X POST -H 'Content-type: application/json' \
+          --data-raw "$(cat << EOF
+          {
+            "payload": {
+              "summary": "${SUMMARY}",
+              "severity": "critical",
+              "source": "${source}"
+            },
+            "routing_key": "${INTEGRATION_KEY}",
+            "event_action": "trigger"
+          }
         EOF
-          echo ${INTEGRATION_KEY} | cut -c1-7
-          if ! curl -X POST -H 'Content-type: application/json' --data-raw @body.json https://events.pagerduty.com/v2/enqueue ; then
-            echo "Notification failed"
-            exit 1
-          fi
+          )" \
+          https://events.pagerduty.com/v2/enqueue
         fi
