@@ -87,14 +87,11 @@ spec:
           echo "top node command run successfully"
         else
           echo "top node command failed: notify Pagerduty"
-          source=$(ic ks cluster get --cluster "${CLUSTER_NAME}" --output json | jq .id)
+          source=$(ic ks cluster get --cluster "${CLUSTER_NAME}" --output json | jq -r .id)
           if [ -z "${source}"  ]; then
             source="unknown"
           fi
-          echo "source=${source}"
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}")
-          echo "${SUMMARY}"
-          INTEGRATION_KEY="ffffe2b62ad54ec9ac370baff2c56aaa"
         PAYLOAD=$(cat << EOF
         {
           "payload": {
@@ -107,6 +104,5 @@ spec:
         }
         EOF
         )
-          echo ${PAYLOAD}
           curl -X POST -H 'Content-type: application/json' --data "${PAYLOAD}" https://events.pagerduty.com/v2/enqueue
         fi
