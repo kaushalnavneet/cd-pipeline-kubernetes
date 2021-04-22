@@ -26,7 +26,7 @@ spec:
       - name: REGION
         value: $(params.clusterRegion)
       - name: CLUSTER_NAME
-        value: $(parms.clusterName)
+        value: $(params.clusterName)
       - name: SKIP
         value: $(params.skip)
     workingDir: /workspace
