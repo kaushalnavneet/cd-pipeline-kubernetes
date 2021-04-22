@@ -104,6 +104,6 @@ spec:
             "routing_key": "${INTEGRATION_KEY}",
             "event_action": "trigger"
           }
-EOF
+        EOF
           curl -X POST -H 'Content-type: application/json' -d @body.json https://events.pagerduty.com/v2/enqueue
         fi
