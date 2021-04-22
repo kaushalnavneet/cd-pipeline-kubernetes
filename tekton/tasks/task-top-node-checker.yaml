@@ -97,8 +97,7 @@ spec:
           echo "source=${source}"
           exit 1
           SUMMARY=$(printf "kubectl top node command failed on cluster %s" "${CLUSTER_NAME}" )
-          curl -X POST -H 'Content-type: application/json' \
-          --data-raw "$(cat << EOF
+          cat << EOF > body.json
           {
             "payload": {
               "summary": "${SUMMARY}",
@@ -109,6 +108,5 @@ spec:
             "event_action": "trigger"
           }
           EOF
-          )" \
-          https://events.pagerduty.com/v2/enqueue
+          curl -X POST -H 'Content-type: application/json' https://events.pagerduty.com/v2/enqueue -d @body.json
         fi
