@@ -60,9 +60,9 @@ spec:
             done
             return 1
         }
-        cc=$(cluster_config ${CLUSTER_NAME})
-        if [[ ${cc} != 0 ]]; then
-          echo "Could not configure the cluster ${CLUSTER_NAME}"
+        clusterconfig=$(cluster_config ${CLUSTER_NAME})
+        if [[ ${clusterconfig} != 0 ]]; then
+          echo "Could not configure the cluster ${CLUSTER_NAME}: ${clusterconfig}"
           exit 1
         fi
 
