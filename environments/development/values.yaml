@@ -152,6 +152,7 @@ pipeline:
         NO_REPORTING_QUEUE: true
         ENABLE_SLACK_NOTIFICATION: true
         LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com
+        ENABLE_ENVIRONMENTS: true
   tekton-pipeline-service:
     replicas: 1
     revisionHistoryLimit: 3
@@ -176,6 +177,7 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         ENABLE_MESSAGE_COMPRESSION: true
+        ENABLE_ENVIRONMENTS: true
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
