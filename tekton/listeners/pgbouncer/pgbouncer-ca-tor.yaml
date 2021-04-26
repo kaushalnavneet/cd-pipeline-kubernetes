@@ -180,7 +180,7 @@ spec:
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: otc-tor1-prod
+      value: otc-tor01-prod
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
