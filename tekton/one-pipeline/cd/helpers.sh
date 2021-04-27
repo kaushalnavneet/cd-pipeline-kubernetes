@@ -1,4 +1,5 @@
 function cluster_config() {
+    set +e
     # 1 - cluster name
     for iteration in {1..30}
     do
@@ -15,51 +16,32 @@ function cluster_config() {
 }
 
 function deployComponent() {
-    set -eo pipefail
-    cd "${SOURCE_DIRECTORY}"
-    WORKDIR=${WORKDIR:-/work}
-    VALUES_OPT=""
+    # 1 - component name
+    # 2 - cluster name
+    # 3 - cluster namespace
+    # 4 - environment
+    # 5 - cluster region
+    COMPONENT_NAME="$1"
+    CLUSTER_NAME="$2"
+    CLUSTER_NAMESPACE="$3"
+    ENVIRONMENT="$4"
+    CLUSTER_REGION="$5"
 
-    if [ -z "$REGISTRY_API_KEY" ]; then
-        REGISTRY_API_KEY=$API_KEY
-    fi
+    set -eo pipefail
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
-    echo "Logging in to us.icr.io"
-    ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${REGISTRY_API_KEY}
 
-    if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        [ -r /workspace/appVersion ] && APPLICATION_VERSION=$( cat /workspace/appVersion )
-        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-            ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${COMPONENT_NAME} > _allImages
-            APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
-        fi
-    fi
-
-    printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_URL}:${APPLICATION_VERSION}.\n"
+    printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE}\n"
 
     echo Current Directory: $(pwd)
 
     echo Logging into Deployment account
-    ibmcloud login --apikey ${API_KEY} -r ${REGION}
+    ibmcloud login --apikey ${API_KEY} -r ${CLUSTER_REGION}
 
-    set +e
-    function cluster_config() {
-        # 1 - cluster name
-        for iteration in {1..30}
-        do
-            echo "Running cluster config for cluster $1: $iteration / 30"
-            ibmcloud ks cluster config --cluster $1
-            if [[ $? -eq 0 ]]; then
-                return 0
-            else
-                echo "Cluster config for $1 failed. Trying again..."
-                sleep 5
-            fi
-        done
-        return 1
-    }
-    cluster_config ${CLUSTER_NAME}
+    if ! cluster_config ${CLUSTER_NAME}; then
+        echo "Failed to configure the cluster ${CLUSTER_NAME}"
+       return 1
+    fi
 
     set -eo pipefail
     INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
@@ -90,27 +72,26 @@ function deployComponent() {
     fi
 
     set +e
-    #helm version
     chartExists=$(helm list ${COMPONENT_NAME})
     if [ -z $chartExists ]; then
         deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
         echo "DELETED HELM: $deleted"
         if [ ! -z "$deleted" ]; then
-        helm delete --purge ${COMPONENT_NAME}
+            helm delete --purge ${COMPONENT_NAME}
         fi
         set -e
-        echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+        echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
-        helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+        helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     else
         set -e
-        echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+        echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
-        helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install ${VALUES_OPT} --namespace ${CLUSTER_NAMESPACE} \
+        helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     fi
