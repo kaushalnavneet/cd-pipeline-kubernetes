@@ -1,4 +1,0 @@
-{{- template "pipeline.common.authorizationpolicy" (list . "pipeline.authorizationpolicy") -}}
-{{- define "pipeline.authorizationpolicy" -}}
-{{- $values := .Values -}}
-{{- end -}}
