@@ -15,6 +15,11 @@ function cluster_config() {
     return 1
 }
 
+function get_chart_name() {
+    # 1 - conponent name
+    echo $(cat "${WORKSPACE}/${INVENTORY_REPO_DIRECTORY_NAME}/${1}" | jq -r .artifact | cut -d / -f9)
+}
+
 function deployComponent() {
     # 1 - component name
     # 2 - cluster name
@@ -57,18 +62,19 @@ function deployComponent() {
         echo "INGRESS SECRET: $INGRESS_SECRET"
     fi
 
-    CHART_PATH=$( ls -v charts/"${COMPONENT_NAME}"*.tgz |  tail -n 1 )
+    CHART_NAME=$(get_chart_name "${COMPONENT_NAME}")
     echo Expanding "$CHART_PATH"
     if [ ! -e tmp/${COMPONENT_NAME} ]; then
         mkdir -p tmp ; cd tmp
-        tar zxf ../$CHART_PATH
+        echo "Expanding charts to tmp"
+        tar zxf "${WORKSPACE}/${CHARTS_DIRECTORY}/charts/$CHART_NAME"
         cd ..
         # pick up the environment values fresh if available
         echo "component name=${COMPONENT_NAME}"
         echo "environment=${ENVIRONMENT}"
         echo "current dir=$(pwd)"
-        [ -r "../devops-config/environments/${ENVIRONMENT}/values.yaml" ] && \
-        cp ../devops-config/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+        [ -r "${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
+        cp ${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
     fi
 
     set +e
@@ -82,10 +88,11 @@ function deployComponent() {
         set -e
         echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
-        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
+        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --dry-run"
         helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
-        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET} \
+        --dry-run
     else
         set -e
         echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
@@ -93,6 +100,10 @@ function deployComponent() {
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
         helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
-        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET} \
+        --dry-run
     fi
+
+    echo "Remove tmp directory"
+    rm -rf tmp
 }
