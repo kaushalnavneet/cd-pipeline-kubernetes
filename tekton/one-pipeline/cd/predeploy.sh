@@ -19,6 +19,18 @@ export CHARTS_DIRECTORY=$(cat /config/charts-directory)
 echo $CHARTS_REPO $CHARTS_BRANCH $CHARTS_DIRECTORY
 GIT_ASKPASS=./token.sh git clone --single-branch --branch "${CHARTS_BRANCH}" "${CHARTS_REPO}" "${CHARTS_DIRECTORY}"
 
-echo "pwd=$(pwd)"
-ls -la
-echo ">>>>>>>>>>>>>>>>>>>"
+export CLUSTER_NAME1=$(cat /config/cluster_name1)
+export CLUSTER_NAME2=$(cat /config/cluster_name2)
+export CLUSTER_NAME3=$(cat /config/cluster_name3)
+if [ -z "${CLUSTER_NAME1}" ]; then
+    echo "Cluster 1 is not set"
+    exit 1
+fi
+if [ -z "${CLUSTER_NAME2}" ]; then
+    echo "Cluster 1 is not set"
+    exit 1
+fi
+if [ -z "${CLUSTER_NAME3}" ]; then
+    echo "Cluster 1 is not set"
+    exit 1
+fi

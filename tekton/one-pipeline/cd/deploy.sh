@@ -10,8 +10,8 @@ declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}"))
 for app in "${apps[@]}"; do
     if [[ "$app" != *"_image" ]]; then
         echo "deploy ${app}"
-        deployComponent "${app}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${REGION}" "${REGION}"
-        deployComponent "${app}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${REGION}" "${REGION}"
-        deployComponent "${app}" "${CLUSTER_NAME3}" "${CLUSTER_NAMESPACE}" "${REGION}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME3}" "${CLUSTER_NAMESPACE}" "${REGION}"
     fi
 done
