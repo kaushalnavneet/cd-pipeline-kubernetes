@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/cd/helpers.sh
+source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/cd/helpers.sh"
 echo ">>>>>>>>>>>>>>>>>>>"
 env
 echo ">>>>>>>>>>>>>>>>>>>"
