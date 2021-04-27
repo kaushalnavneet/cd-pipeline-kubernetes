@@ -3,5 +3,6 @@ echo "deploy"
 env
 ls -la
 pwd
-ls -la /artifacts
+cd /workspace/app
+ls -la
 #jq -rc '.[]' /artifacts/deployment-delta-list.json
