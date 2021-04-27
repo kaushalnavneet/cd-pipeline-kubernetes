@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 echo "deploy"
-jq -rc '.[]' /artifacts/deployment-delta-list.json
+env
+ls -la
+pwd
+ls -la /artifacts
+#jq -rc '.[]' /artifacts/deployment-delta-list.json
