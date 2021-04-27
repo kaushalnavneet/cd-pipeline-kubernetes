@@ -11,11 +11,11 @@ setup:
     source ./tekton/one-pipeline/cd/setup.sh
 
 deploy:
-  #image: ibmcom/pipeline-base-image:2.6
   image: us.icr.io/opentoolchain/cd-deploy-base:deploy
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
+    source ./tekton/one-pipeline/cd/predeploy.sh
     source ./tekton/one-pipeline/cd/deploy.sh
 
 acceptance-test:
