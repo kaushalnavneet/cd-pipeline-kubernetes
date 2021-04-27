@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo ">>>>>>>>>>>>>>>>>>>"
-export IDS_TOKEN=$(get_env git-token)
+export IDS_TOKEN=$(cat /config/git-token)
 cd "${WORKSPACE}"
 echo "Cloning Config Repo"
 CONFIG_REPO=$(cat /config/configuration-repo)
