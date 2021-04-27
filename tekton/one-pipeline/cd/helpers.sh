@@ -77,8 +77,8 @@ function deployComponent() {
     fi
 
     set +e
-    chartExists=$(helm list ${COMPONENT_NAME})
-    if [ -z $chartExists ]; then
+    chartExists=$(helm list ${COMPONENT_NAME} | tail -n1 )
+    if [ -z "${chartExists}" ]; then
         deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
         echo "DELETED HELM: $deleted"
         if [ ! -z "$deleted" ]; then
