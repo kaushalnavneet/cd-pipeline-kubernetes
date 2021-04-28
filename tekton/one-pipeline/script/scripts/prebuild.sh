@@ -3,6 +3,12 @@ echo ">>>>>>>>>>>>>>>>>>>"
 env | sort
 pwd
 echo ">>>>>>>>>>>>>>>>>>>"
+
+WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
+cd ${WORKSPACE}/${WORK_DIR}
+echo "Current dir: $(pwd)"
+echo ">>>>>>>>>>>>>>>>>>>"
+
 IDS_TOKEN=$(cat /config/IDS_TOKEN)
 echo "echo -n $IDS_TOKEN" > ./token.sh
 chmod +x ./token.sh
@@ -10,8 +16,6 @@ ls
 echo ">>>>>>>>>>>>>>>>>>>"
 
 echo "Cloning Config Repo"
-WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
-cd ${WORKSPACE}/${WORK_DIR}
 CONFIG_REPO=$(cat /config/CONFIG_REPO)
 CONFIG_BRANCH=$(cat /config/CONFIG_BRANCH)
 CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
