@@ -224,14 +224,14 @@ spec:
             exit 1
         fi
 
-        # add au-syd E2E tests via a CTASK
+        # add mon01 E2E tests via a CTASK
         echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
         curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000&&sort_order=desc" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" >/workspace/tmp_doi.json
         BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | grep integration | head -1 )
         E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
-        E2E_STAGE_ENVIRONMENT=au-syd
+        E2E_STAGE_ENVIRONMENT=mon01
         echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$E2E_STAGE_ENVIRONMENT" \
           -H  "accept: */*" \
