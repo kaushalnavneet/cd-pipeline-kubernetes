@@ -27,6 +27,6 @@ CHARTS_REPO=$(cat /config/CHARTS_REPO)
 CHARTS_BRANCH=$(cat /config/CHARTS_BRANCH)
 CHARTS_DIRECTORY=$(cat /config/CHARTS_DIRECTORY)
 echo $CHARTS_REPO $CHARTS_BRANCH $CHARTS_DIRECTORY
-GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CHARTS_BRANCH} ${CHARTS_REPO} ${$CHARTS_DIRECTORY}
+GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CHARTS_BRANCH} ${CHARTS_REPO} ${CHARTS_DIRECTORY}
 
 cd ${CURRENT_DIR}
