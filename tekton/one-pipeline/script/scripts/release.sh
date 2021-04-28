@@ -104,7 +104,7 @@ initEnvVars
 
 initDefaults
 
-#if [[ -z $DEV_MODE ]]; then
+if [[ -z $DEV_MODE ]]; then
     CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
     CHART_ORG=$(cat ${WORKSPACE}/${WORK_DIR}/chart_org)
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
@@ -132,31 +132,31 @@ initDefaults
     INVENTORY_BRANCH="staging"
     
     installCocoa
-    echo "cocoa inventory add \
-        --environment=\"${INVENTORY_BRANCH}\" \
-        --artifact=\"${ARTIFACT}\" \
-        --repository-url=\"${APP_REPO}\" \
-        --commit-sha=\"${COMMIT_SHA}\" \
-        --build-number=\"${BUILD_NUMBER}\" \
-        --pipeline-run-id=\"${PIPELINE_RUN_ID}\" \
-        --version=\"$(get_env version)\" \
-        --name=\"${APP_NAME}\" \
-        --type=\"chart\""
-    echo "cocoa inventory add \
-        --environment=\"${INVENTORY_BRANCH}\" \
-        --artifact=\"${IMAGE_ARTIFACT}\" \
-        --repository-url=\"${APP_REPO}\" \
-        --commit-sha=\"${COMMIT_SHA}\" \
-        --build-number=\"${BUILD_NUMBER}\" \
-        --pipeline-run-id=\"${PIPELINE_RUN_ID}\" \
-        --version=\"$(get_env version)\" \
-        --name=\"${APP_NAME}_image\" \
-        --signature=\"${SIGNATURE}\" \
-        --type=\"image\" \
-        --provenance=\"${IMAGE_ARTIFACT}\" \
-        --sha256=\"$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)\""
+    cocoa inventory add \
+        --environment="${INVENTORY_BRANCH}" \
+        --artifact="${ARTIFACT}" \
+        --repository-url="${APP_REPO}" \
+        --commit-sha="${COMMIT_SHA}" \
+        --build-number="${BUILD_NUMBER}" \
+        --pipeline-run-id="${PIPELINE_RUN_ID}" \
+        --version="$(get_env version)" \
+        --name="${APP_NAME}" \
+        --type="chart"
+    cocoa inventory add \
+        --environment="${INVENTORY_BRANCH}" \
+        --artifact="${IMAGE_ARTIFACT}" \
+        --repository-url="${APP_REPO}" \
+        --commit-sha="${COMMIT_SHA}" \
+        --build-number="${BUILD_NUMBER}" \
+        --pipeline-run-id="${PIPELINE_RUN_ID}" \
+        --version="$(get_env version)" \
+        --name="${APP_NAME}_image" \
+        --signature="${SIGNATURE}" \
+        --type="image" \
+        --provenance="${IMAGE_ARTIFACT}" \
+        --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
 
     echo "Inventory updated"
-#else 
-#   echo "Dev Mode - skipping"
-#fi
+else 
+   echo "Dev Mode - skipping"
+fi

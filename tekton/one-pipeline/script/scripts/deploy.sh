@@ -123,7 +123,7 @@ if [ "${SKIP}" == true ]; then
     exit 0
 fi
 
-if [[ ! -z $DEV_MODE ]]; then
+if [[ -z $DEV_MODE ]]; then
     export GHE_TOKEN="$(cat ../git-token)"
     export COMMIT_SHA="$(cat /config/git-commit)"
     export APP_NAME="$(cat /config/app-name)"
