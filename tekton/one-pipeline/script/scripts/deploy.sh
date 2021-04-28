@@ -85,7 +85,7 @@ initEnvVars() {
 
     export CHARTS_DIRECTORY="pipeline-config"
 
-    source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/cd/helpers.sh"
+    source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
     export CLUSTER_NAME1=$(cat /config/cluster_name1)
     export CLUSTER_NAME2=$(cat /config/cluster_name2)
     export CLUSTER_NAME3=$(cat /config/cluster_name3)
