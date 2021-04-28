@@ -211,6 +211,7 @@ if [[ ! -z $DEV_MODE ]]; then
 
     pushd ${CHART_REPO_ABS}
     CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
+    echo "CHART_ORG=${CHART_ORG}"
     popd
 
     APPLICATION_VERSION=$(cat ${WORKSPACE}/image-tags)
