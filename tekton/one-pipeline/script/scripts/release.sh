@@ -85,9 +85,6 @@ initEnvVars() {
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
     export IDS_USER=$(cat /config/IDS_USER)
     export IDS_TOKEN=$(cat /config/IDS_TOKEN)
-    export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
-    export MINOR_VERSION=$(cat /config/MINOR_VERSION)
-    export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
     export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
 }
 
@@ -99,149 +96,25 @@ initEnvVars
 
 initDefaults
 
-if [[ -z $DEV_MODE ]]; then
-    export GHE_TOKEN="$(cat ../git-token)"
-    export COMMIT_SHA="$(cat /config/git-commit)"
-    export APP_NAME="$(cat /config/app-name)"
-
+#if [[ -z $DEV_MODE ]]; then
     INVENTORY_REPO="$(cat /config/inventory-url)"
     GHE_ORG=${INVENTORY_REPO%/*}
     export GHE_ORG=${GHE_ORG##*/}
     GHE_REPO=${INVENTORY_REPO##*/}
     export GHE_REPO=${GHE_REPO%.git}
 
-    set +e
-    REPOSITORY="$(cat /config/repository)"
-    TAG="$(cat /config/custom-image-tag)"
-    set -e
-
-    export APP_REPO="$(cat /config/repository-url)"
-    APP_REPO_ORG=${APP_REPO%/*}
-    export APP_REPO_ORG=${APP_REPO_ORG##*/}
-
-    if [[ "${REPOSITORY}" ]]; then
-        export APP_REPO_NAME=$(basename $REPOSITORY .git)
-        APP_NAME=$APP_REPO_NAME
-    else
-        APP_REPO_NAME=${APP_REPO##*/}
-        export APP_REPO_NAME=${APP_REPO_NAME%.git}
-    fi
-    set -x
-    WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
-    cd /workspace/app/${WORK_DIR}
-
-    IDS_TOKEN=$(cat /config/IDS_TOKEN)
-    echo "echo -n $IDS_TOKEN" > ./token.sh
-    chmod +x ./token.sh
-
-    GIT_ASKPASS=./token.sh git clone --single-branch --branch master https://github.ibm.com/org-ids/pipeline-config.git
-
-    ibmcloud config --check-version=false
-    ibmcloud plugin install -f container-service
-    ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
-    
-    IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
-
-    if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        APPLICATION_VERSION=$( cat /workspace/app/appVersion )
-        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${APP_NAME} > _allImages
-        APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
-        fi
-    fi
-    git config --global user.email "idsorg@us.ibm.com"
-    git config --global user.name "IDS Organization"
-    git config --global push.default matching
-
+    APP_NAME="$(cat /config/app-name)"
     CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
-    CHART_REPO_ABS=$(pwd)/${CHART_REPO}
-    CHART_VERSION=$(ls -v ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
-    CHART_VERSION=${CHART_VERSION:=1.0.0}
-
-    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTERNAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
-
-    ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
-
-    set +e
-    function cluster_config() {
-        # 1 - cluster name
-        for iteration in {1..30}
-        do
-            echo "Running cluster config for cluster $1: $iteration / 30"
-            ibmcloud ks cluster config --cluster $1
-            if [[ $? -eq 0 ]]; then
-                return 0
-            else
-                echo "Cluster config for $1 failed. Trying again..."
-                sleep 5
-            fi
-        done
-        return 1
-    }
-    cluster_config ${DRY_RUN_CLUSTER}
-    set -eo pipefail
-
-    if [ -z "${MAJOR_VERSION}" ] ||  [ -z "${MINOR_VERSION}" ] ||  [ -z "${CHART_REPO}" ]; then
-        echo "Major & minor version and chart repo vars need to be set"
-        exit 1
-    fi
-
-
-    #specify tag
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
-
-    #specify image
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}"
-
-    #specify version
-    yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
-
-    helm init -c --stable-repo-url https://charts.helm.sh/stable
-    helm dep up ${APP_NAME}
-    echo "=========================================================="
-    echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTERNAMESPACE}."
-    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
-        echo "helm upgrade --dry-run done"
-    else
-        echo "helm upgrade --dry-run failed"
-        exit 1
-    fi
-
-    echo "Packaging Helm Chart"
-
+ 
     pushd ${CHART_REPO_ABS}
     CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
     popd
 
-    n=0
-    rc=0
-    ORIG_DIR=$(pwd)
-    until [ $n -ge 5 ]
-    do
-        echo "git pull"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git -C $CHART_REPO_ABS pull --no-edit
-        echo "git pull done"
-        mkdir -p $CHART_REPO_ABS/charts
-        helm package ${APP_NAME} -d $CHART_REPO_ABS/charts
+    export COMMIT_SHA="$(cat /config/git-commit)"
+    export APP_REPO="$(cat /config/repository-url)"
 
-        cd $CHART_REPO_ABS
-        git add -A .
-        git commit -m "${APPLICATION_VERSION}"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git push
-        rc=$?
-        if [[ $rc == 0 ]]; then 
-            break;
-        fi
-        n=$[$n+1]
-        cd $ORIG_DIR
-        rm -fr $CHART_REPO_ABS
-        mkdir -p $CHART_REPO_ABS
-        echo "Clone charts repo"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
-        echo "Done cloning charts repo"
-    done
-
-    if [[ $rc != 0 ]]; then exit $rc; fi
+    CHART_VERSION=$(cat ${WORKSPACE}/${WORK_DIR}/chart_version)
+    echo "CHART_VERSION: ${CHART_VERSION}"
 
     echo "Adding to inventory"
     ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
@@ -286,6 +159,6 @@ if [[ -z $DEV_MODE ]]; then
         --provenance="${IMAGE_ARTIFACT}" \
         --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
     echo "Inventory updated"
-else 
-    echo "Dev Mode - skipping"
-fi
+#else 
+#   echo "Dev Mode - skipping"
+#fi

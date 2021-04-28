@@ -27,7 +27,7 @@ initDefaults() {
     if [ -f "/config/DOCKERFILE" ]; then
         export DOCKERFILE=$(cat /config/DOCKERFILE) 
     fi
-    
+
     if [ -f "/config/IMAGE_NAME" ]; then
         export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
     fi
@@ -132,15 +132,10 @@ fi
 
 
 export OPERATOR_SDK=""
-#export DOCKER_HOST="unix:///var/run/docker.sock"
-export HOME=/root
-[ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
 set -e
 
-cd /workspace/app
-cd "${SOURCE_DIRECTORY}"
-#[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
-#[ -d /work ] && cp -a /work cd-pipeline-kubernetes
+cd "${WORKSPACE}/${SOURCE_DIRECTORY}"
+
 ibmcloud config --check-version=false
 ibmcloud plugin install -f container-registry
 ibmcloud plugin install -f kubernetes-service
@@ -162,7 +157,7 @@ fi
 if [ -z "$APPLICATION_VERSION" ]; then
     APPLICATION_VERSION="${GIT_COMMIT}-${TIMESTAMP}"
 fi
-echo ${APPLICATION_VERSION} > /workspace/app/appVersion
+echo ${APPLICATION_VERSION} > "${WORKSPACE}/appVersion"
 echo "Building ${IMAGE_URL}:${APPLICATION_VERSION}"
 echo ${APPLICATION_VERSION} > .pipeline_build_id
 if [ "${ADD_CHGLOG_URL}" == true ]; then
@@ -210,9 +205,9 @@ docker push ${IMAGE_URL}:latest
 
 DIGEST="$(docker inspect --format='{{index .RepoDigests 0}}' "${IMAGE_URL}:${APPLICATION_VERSION}" | awk -F@ '{print $2}')"
 echo "DIGEST"
-echo -n "$DIGEST" > /workspace/app/image-digest
-echo -n "$APPLICATION_VERSION" > /workspace/app/image-tags
-echo -n "$IMAGE_URL" > /workspace/app/image
+echo -n "$DIGEST" > ${WORKSPACE}/image-digest
+echo -n "$APPLICATION_VERSION" > ${WORKSPACE}/image-tags
+echo -n "$IMAGE_URL" > ${WORKSPACE}/image
 
 if which save_artifact >/dev/null; then
   echo "Save artifact: name=${IMAGE_URL} digest=${DIGEST}"
