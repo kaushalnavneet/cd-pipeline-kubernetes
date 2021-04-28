@@ -86,7 +86,9 @@ initEnvVars() {
     export IDS_USER=$(cat /config/IDS_USER)
     export IDS_TOKEN=$(cat /config/IDS_TOKEN)
     export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
-}
+    export COMMIT_SHA="$(cat /config/git-commit)"
+    export APP_REPO="$(cat /config/repository-url)"
+ }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
 # init default values, overwrite if in config map too
@@ -97,11 +99,8 @@ initEnvVars
 initDefaults
 
 #if [[ -z $DEV_MODE ]]; then
+    export GHE_TOKEN="$(cat ../git-token)"
     INVENTORY_REPO="$(cat /config/inventory-url)"
-    GHE_ORG=${INVENTORY_REPO%/*}
-    export GHE_ORG=${GHE_ORG##*/}
-    GHE_REPO=${INVENTORY_REPO##*/}
-    export GHE_REPO=${GHE_REPO%.git}
 
     APP_NAME="$(cat /config/app-name)"
     CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
@@ -110,8 +109,7 @@ initDefaults
     CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
     popd
 
-    export COMMIT_SHA="$(cat /config/git-commit)"
-    export APP_REPO="$(cat /config/repository-url)"
+    WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
 
     CHART_VERSION=$(cat ${WORKSPACE}/${WORK_DIR}/chart_version)
     echo "CHART_VERSION: ${CHART_VERSION}"
