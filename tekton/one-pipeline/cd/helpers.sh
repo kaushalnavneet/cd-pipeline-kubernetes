@@ -16,7 +16,7 @@ function cluster_config() {
 }
 
 function get_chart_name() {
-    # 1 - conponent name
+    # 1 - component name
     echo $(cat "${WORKSPACE}/${INVENTORY_REPO_DIRECTORY_NAME}/${1}" | jq -r .artifact | cut -d / -f9)
 }
 

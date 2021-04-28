@@ -245,7 +245,6 @@ if [[ ! -z $DEV_MODE ]]; then
 
     if [[ $rc != 0 ]]; then exit $rc; fi
 
-
     # need to deploy to preprod environment
     deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}"
     deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}"

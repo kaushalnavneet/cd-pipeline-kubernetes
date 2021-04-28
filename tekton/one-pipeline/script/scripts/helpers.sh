@@ -16,8 +16,8 @@ function cluster_config() {
 }
 
 function get_chart_name() {
-    # 1 - conponent name
-    echo $(ls ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | sort -V | tail -n -1 | cut -d / -f9)
+    # 1 - component name
+    echo $(ls ${CHART_REPO_ABS}/charts/${1}* 2> /dev/null | sort -V | tail -n -1 | cut -d / -f7)
 }
 
 function deployComponent() {
@@ -35,7 +35,7 @@ function deployComponent() {
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
 
-    printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE}\n"
+    printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME} in namespace ${CLUSTER_NAMESPACE}\n"
 
     echo Current Directory: $(pwd)
 
