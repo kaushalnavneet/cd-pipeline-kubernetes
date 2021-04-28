@@ -17,7 +17,7 @@ function cluster_config() {
 
 function get_chart_name() {
     # 1 - conponent name
-    echo $(cat "${WORKSPACE}/${INVENTORY_REPO_DIRECTORY_NAME}/${1}" | jq -r .artifact | cut -d / -f9)
+    echo $(ls ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | sort -V | tail -n -1 | cut -d / -f9)
 }
 
 function deployComponent() {
@@ -65,7 +65,7 @@ function deployComponent() {
     echo Expanding "$CHART_NAME"
     if [ ! -e tmp/${COMPONENT_NAME} ]; then
         mkdir -p tmp ; cd tmp
-        echo "Expanding charts to tmp"
+        echo "Expanding chart ${WORKSPACE}/${CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
         tar zxf "${WORKSPACE}/${CHARTS_DIRECTORY}/charts/$CHART_NAME"
         cd ..
         # pick up the environment values fresh if available
