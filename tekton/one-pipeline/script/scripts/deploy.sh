@@ -202,7 +202,7 @@ if [[ ! -z $DEV_MODE ]]; then
     helm dep up ${APP_NAME}
     echo "=========================================================="
     echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTERNAMESPACE}."
-    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
+    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set jp-osa.enabled=true --install --dry-run --debug; then
         echo "helm upgrade --dry-run done"
     else
         echo "helm upgrade --dry-run failed"
@@ -245,6 +245,10 @@ if [[ ! -z $DEV_MODE ]]; then
     done
 
     if [[ $rc != 0 ]]; then exit $rc; fi
+
+
+    # need to deploy to preprod environment
+
 else
     echo "1"
     pwd
