@@ -29,7 +29,7 @@ containerize:
     source ./tekton/one-pipeline/script/scripts/build.sh
 
 deploy:
-  image: us.icr.io/opentoolchain/cd-deploy-base:onepipeline
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
