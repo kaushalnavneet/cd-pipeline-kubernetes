@@ -321,8 +321,8 @@ else
         echo "INGRESS SECRET: $INGRESS_SECRET"
     fi
 
-    tmp=$(mktemp)
-    yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
+    yq write -i ${COMPONENT_NAME}/values.yaml pipeline.fullnameOverride "${COMPONENT_NAME}"
+    yq write -i ${COMPONENT_NAME}/values.yaml pipeline.nameOverride "${COMPONENT_NAME}"
 
     helm version
     kubectl version
