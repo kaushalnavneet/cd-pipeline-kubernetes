@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo ">>>>>>>>>>>>>>>>>>>"
 env | sort
-pwd
+CURRENT_DIR=$(pwd)
 echo ">>>>>>>>>>>>>>>>>>>"
 
 WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
@@ -29,7 +29,4 @@ CHARTS_DIRECTORY=$(cat /config/CHARTS_DIRECTORY)
 echo $CHARTS_REPO $CHARTS_BRANCH $CHARTS_DIRECTORY
 GIT_ASKPASS=./token.sh git clone --single-branch --branch ${CHARTS_BRANCH} ${CHARTS_REPO}   
 
-echo ">>>>>>>>>>>>>>>>>>>"
-ls
-cd /workspace/app/one-pipeline-config-repo
-echo ">>>>>>>>>>>>>>>>>>>"
+cd ${CURRENT_DIR}
