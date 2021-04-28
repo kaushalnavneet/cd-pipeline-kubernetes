@@ -213,6 +213,7 @@ if [[ ! -z $DEV_MODE ]]; then
     CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
     popd
 
+    APPLICATION_VERSION=$(cat ${WORKSPACE}/image-tags)
     echo "${CHART_VERSION}" > ${WORKSPACE}/${WORK_DIR}/chart_version
     n=0
     rc=0
