@@ -298,7 +298,6 @@ pipeline:
         ENABLE_RG_ENTITLEMENT: true
         ENABLE_REDUX_DEBUG: true
         TEKTON_UI: true
-        ENABLE_SECRET_BY_REF: false
         ENABLE_SECRET_PICKER: true
         SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         ENABLE_TIMER_TRIGGER: true
@@ -319,6 +318,7 @@ pipeline:
         NEW_CONFIGURATION_LOGIC: true
         ENABLE_LOCAL_RUN: true
         ENABLE_TWO_CONCURRENT_RUNS: true
+        ENABLE_ENVIRONMENTS: true
   pipeline-artifact-repository-service:
     replicas: 1
     revisionHistoryLimit: 3
