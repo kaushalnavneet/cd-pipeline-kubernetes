@@ -88,6 +88,12 @@ initEnvVars() {
     export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
     export COMMIT_SHA="$(cat /config/git-commit)"
     export APP_REPO="$(cat /config/repository-url)"
+    export APP_NAME="$(cat /config/app-name)"
+    export GHE_TOKEN="$(cat ../git-token)"
+    INVENTORY_REPO="$(cat /config/inventory-url)"
+    GHE_ORG=${INVENTORY_REPO%/*}
+    export GHE_ORG=${GHE_ORG##*/}
+    export GHE_REPO=${GHE_REPO%.git}
  }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
@@ -99,20 +105,13 @@ initEnvVars
 initDefaults
 
 #if [[ -z $DEV_MODE ]]; then
-    export GHE_TOKEN="$(cat ../git-token)"
-    INVENTORY_REPO="$(cat /config/inventory-url)"
-
-    APP_NAME="$(cat /config/app-name)"
     CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
- 
-    pushd ${CHART_REPO_ABS}
-    CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
-    popd
-
+    CHART_ORG=$(cat ${WORKSPACE}/${WORK_DIR}/chart_org)
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
-
     CHART_VERSION=$(cat ${WORKSPACE}/${WORK_DIR}/chart_version)
+    
     echo "CHART_VERSION: ${CHART_VERSION}"
+    echo "CHART_ORG: ${CHART_ORG}"
 
     echo "Adding to inventory"
     ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
@@ -133,29 +132,30 @@ initDefaults
     INVENTORY_BRANCH="staging"
     
     installCocoa
-    cocoa inventory add \
-        --environment="${INVENTORY_BRANCH}" \
-        --artifact="${ARTIFACT}" \
-        --repository-url="${APP_REPO}" \
-        --commit-sha="${COMMIT_SHA}" \
-        --build-number="${BUILD_NUMBER}" \
-        --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)" \
-        --name="${APP_NAME}" \
-        --type="chart"
-    cocoa inventory add \
-        --environment="${INVENTORY_BRANCH}" \
-        --artifact="${IMAGE_ARTIFACT}" \
-        --repository-url="${APP_REPO}" \
-        --commit-sha="${COMMIT_SHA}" \
-        --build-number="${BUILD_NUMBER}" \
-        --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)" \
-        --name="${APP_NAME}_image" \
-        --signature="${SIGNATURE}" \
-        --type="image" \
-        --provenance="${IMAGE_ARTIFACT}" \
-        --sha256="$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)"
+    echo "cocoa inventory add \
+        --environment=\"${INVENTORY_BRANCH}\" \
+        --artifact=\"${ARTIFACT}\" \
+        --repository-url=\"${APP_REPO}\" \
+        --commit-sha=\"${COMMIT_SHA}\" \
+        --build-number=\"${BUILD_NUMBER}\" \
+        --pipeline-run-id=\"${PIPELINE_RUN_ID}\" \
+        --version=\"$(get_env version)\" \
+        --name=\"${APP_NAME}\" \
+        --type=\"chart\""
+    echo "cocoa inventory add \
+        --environment=\"${INVENTORY_BRANCH}\" \
+        --artifact=\"${IMAGE_ARTIFACT}\" \
+        --repository-url=\"${APP_REPO}\" \
+        --commit-sha=\"${COMMIT_SHA}\" \
+        --build-number=\"${BUILD_NUMBER}\" \
+        --pipeline-run-id=\"${PIPELINE_RUN_ID}\" \
+        --version=\"$(get_env version)\" \
+        --name=\"${APP_NAME}_image\" \
+        --signature=\"${SIGNATURE}\" \
+        --type=\"image\" \
+        --provenance=\"${IMAGE_ARTIFACT}\" \
+        --sha256=\"$(echo -n ${IMAGE_ARTIFACT} | cut -d ':' -f 2)\""
+
     echo "Inventory updated"
 #else 
 #   echo "Dev Mode - skipping"

@@ -212,10 +212,11 @@ if [[ ! -z $DEV_MODE ]]; then
     pushd ${CHART_REPO_ABS}
     CHART_ORG=$( git remote -v | grep push | cut -f4 -d/ )
     echo "CHART_ORG=${CHART_ORG}"
+    echo -n "${CHART_ORG}" > ${WORKSPACE}/${WORK_DIR}/chart_org
     popd
 
     APPLICATION_VERSION=$(cat ${WORKSPACE}/image-tags)
-    echo "${CHART_VERSION}" > ${WORKSPACE}/${WORK_DIR}/chart_version
+    echo -n "${CHART_VERSION}" > ${WORKSPACE}/${WORK_DIR}/chart_version
     n=0
     rc=0
     ORIG_DIR=$(pwd)
