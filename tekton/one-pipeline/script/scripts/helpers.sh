@@ -65,14 +65,15 @@ function deployComponent() {
     echo Expanding "$CHART_NAME"
     if [ ! -e tmp/${COMPONENT_NAME} ]; then
         mkdir -p tmp ; cd tmp
-        echo "Expanding chart ${WORKSPACE}/${CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
-        tar zxf "${WORKSPACE}/${CHARTS_DIRECTORY}/charts/$CHART_NAME"
+        echo "Expanding chart ${WORKSPACE}/${COMPONENT_NAME}/${CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
+        tar zxf "${WORKSPACE}/${COMPONENT_NAME}/${CHARTS_DIRECTORY}/charts/$CHART_NAME"
         cd ..
         # pick up the environment values fresh if available
         echo "component name=${COMPONENT_NAME}"
         echo "environment=${ENVIRONMENT}"
         echo "current dir=$(pwd)"
         [ -r "${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
+        echo "Copy ${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" && \
         cp ${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
     fi
 
