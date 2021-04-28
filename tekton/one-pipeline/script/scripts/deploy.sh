@@ -68,10 +68,10 @@ initEnvVars() {
     export API=$(cat /config/API)
     export REGION=$(cat /config/REGION)
     export API_KEY=$(cat /config/API_KEY_1651315)
+
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
 
-    export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1416501)
+    export REGISTRY_REGION=$(cat /config/REGISTRY_REGION)
     export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
     export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
     export API_KEY_1308775=$(cat /config/API_KEY_1308775)
@@ -82,11 +82,17 @@ initEnvVars() {
     export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
     export MINOR_VERSION=$(cat /config/MINOR_VERSION)
     export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
+
+    export CHARTS_DIRECTORY="pipeline-config"
+
+    source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/cd/helpers.sh"
+    export CLUSTER_NAME1=$(cat /config/cluster_name1)
+    export CLUSTER_NAME2=$(cat /config/cluster_name2)
+    export CLUSTER_NAME3=$(cat /config/cluster_name3)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
 # init default values, overwrite if in config map too
-
 
 initEnvVars
 
@@ -139,17 +145,9 @@ if [[ ! -z $DEV_MODE ]]; then
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
-    ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
     
     IMAGE_URL=${IMAGE_URL:-${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}}
 
-    if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        APPLICATION_VERSION=$( cat /workspace/app/appVersion )
-        if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${APP_NAME} > _allImages
-        APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
-        fi
-    fi
     git config --global user.email "idsorg@us.ibm.com"
     git config --global user.name "IDS Organization"
     git config --global push.default matching
@@ -159,7 +157,7 @@ if [[ ! -z $DEV_MODE ]]; then
     CHART_VERSION=$(ls ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | sort -V | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
 
-    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTERNAMESPACE},\nwith image: ${IMAGE_NAME}:${APPLICATION_VERSION}\n"
+    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTERNAMESPACE}.\n"
 
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
@@ -202,7 +200,7 @@ if [[ ! -z $DEV_MODE ]]; then
     helm dep up ${APP_NAME}
     echo "=========================================================="
     echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTERNAMESPACE}."
-    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set jp-osa.enabled=true --install --dry-run --debug; then
+    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
         echo "helm upgrade --dry-run done"
     else
         echo "helm upgrade --dry-run failed"
@@ -248,7 +246,9 @@ if [[ ! -z $DEV_MODE ]]; then
 
 
     # need to deploy to preprod environment
-
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}"
 else
     echo "1"
     pwd
