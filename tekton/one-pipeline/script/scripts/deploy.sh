@@ -64,36 +64,89 @@ initEnvVars() {
     # grab env vars from config map
     export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
     
-    export API=$(cat /config/API)
-    export API_KEY=$(cat /config/API_KEY_1651315)
-    export REGION=$(cat /config/REGION)
+    if [ -f "/config/API" ]; then
+        export API=$(cat /config/API)
+    fi
 
-    export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    if [ -f "/config/API_KEY_1651315" ]; then
+        export API_KEY=$(cat /config/API_KEY_1651315)
+    fi
+    if [ -f "/config/REGION" ]; then
+        export REGION=$(cat /config/REGION)
+    fi
 
-    export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
+    if [ -f "/config/TOOLCHAIN_ID" ]; then
+        export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    fi
+
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
+    fi
+
+    if [ -f "/config/API_KEY_1416501" ]; then
     export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+    fi
+    if [ -f "/config/API_KEY_1308775" ]; then
     export API_KEY_1308775=$(cat /config/API_KEY_1308775)
-    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-    export IDS_USER=$(cat /config/IDS_USER)
-    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
-    export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
-    export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
-    export MINOR_VERSION=$(cat /config/MINOR_VERSION)
+    fi
 
+    if [ -f "/config/API_KEY_1308775" ]; then
+    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    fi
+
+    if [ -f "/config/IDS_USER" ]; then
+    export IDS_USER=$(cat /config/IDS_USER)
+    fi
+
+    if [ -f "/config/IDS_TOKEN" ]; then
+    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    fi
+
+    if [ -f "/config/CLUSTERNAMESPACE" ]; then
+    export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
+    fi
+
+    if [ -f "/config/MAJOR_VERSION" ]; then
+    export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
+    fi
+
+    if [ -f "/config/MINOR_VERSION" ]; then
+    export MINOR_VERSION=$(cat /config/MINOR_VERSION)
+    fi
 
     source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
 
-    if [[ -z $DEV_MODE ]]; then
-        export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
-        export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
-        export STAGING_REGION=$(cat /config/STAGING_REGION)
-        export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
-        export CLUSTER_NAME1=$(cat /config/cluster_name1)
-        export CLUSTER_NAME2=$(cat /config/cluster_name2)
-        export CLUSTER_NAME3=$(cat /config/cluster_name3)
+    if [ -f "/config/PIPELINE_CHARTS_DIRECTORY" ]; then
+    export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
     fi
 
-    export CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
+    if [ -f "/config/PIPELINE_CHARTS_REPO" ]; then
+    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
+    fi
+
+    if [ -f "/config/STAGING_REGION" ]; then
+    export STAGING_REGION=$(cat /config/STAGING_REGION)
+    fi
+
+    if [ -f "/config/RELEASE_ENVIRONMENT" ]; then
+    export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
+    fi
+
+    if [ -f "/config/cluster_name1" ]; then
+    export CLUSTER_NAME1=$(cat /config/cluster_name1)
+    fi
+
+    if [ -f "/config/cluster_name2" ]; then
+    export CLUSTER_NAME2=$(cat /config/cluster_name2)
+    fi
+
+    if [ -f "/config/cluster_name3" ]; then
+    export CLUSTER_NAME3=$(cat /config/cluster_name3)
+    fi
+
+    if [ -f "/config/CONFIG_DIRECTORY" ]; then
+        export CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
+    fi
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise

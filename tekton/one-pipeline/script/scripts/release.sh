@@ -75,28 +75,85 @@ initDefaults() {
 
 initEnvVars() {
     # grab env vars from config map
-    export API=$(cat /config/API)
-    export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1416501)
-    export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
-    export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
-    export API_KEY_1308775=$(cat /config/API_KEY_1308775)
-    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-    export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
-    export IDS_USER=$(cat /config/IDS_USER)
-    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
-    export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
-    export COMMIT_SHA="$(cat /config/git-commit)"
-    export APP_REPO="$(cat /config/repository-url)"
-    export APP_NAME="$(cat /config/app-name)"
-    export GHE_TOKEN="$(cat ../git-token)"
-    INVENTORY_REPO="$(cat /config/inventory-url)"
-    GHE_ORG=${INVENTORY_REPO%/*}
-    export GHE_ORG=${GHE_ORG##*/}
-    GHE_REPO=${INVENTORY_REPO##*/}
-    export GHE_REPO=${GHE_REPO%.git}
-    export WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
-    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
+    if [ -f "/config/API" ]; then
+        export API=$(cat /config/API)
+    fi
+
+    if [ -f "/config/REGISTRY_REGION" ]; then
+        export REGISTRY_REGION=$(cat /config/REGISTRY_REGION)
+    fi
+
+    if [ -f "/config/REGION" ]; then
+        export REGION=$(cat /config/REGION)
+    fi
+
+    if [ -f "/config/IMAGE_URL" ]; then
+        export API_KEY=$(cat /config/IMAGE_URL)
+    fi
+
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
+    fi
+
+    if [ -f "/config/API_KEY_1416501" ]; then
+        export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+    fi
+
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export API_KEY_1308775=$(cat /config/API_KEY_1308775)
+    fi
+
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    fi
+
+    if [ -f "/config/TOOLCHAIN_ID" ]; then
+        export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    fi
+
+    if [ -f "/config/IDS_USER" ]; then
+        export IDS_USER=$(cat /config/IDS_USER)
+    fi
+
+    if [ -f "/config/IDS_TOKEN" ]; then
+        export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    fi
+
+    if [ -f "/config/CLUSTERNAMESPACE" ]; then
+        export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
+    fi
+
+    if [ -f "/config/git-commit" ]; then
+        export COMMIT_SHA="$(cat /config/git-commit)"
+    fi
+
+    if [ -f "/config/repository-url" ]; then
+        export APP_REPO="$(cat /config/repository-url)"
+    fi
+
+    if [ -f "/config/app-name" ]; then
+        export APP_NAME="$(cat /config/app-name)"
+    fi
+
+    if [ -f "/config/git-token" ]; then
+        export GHE_TOKEN="$(cat ../git-token)"
+    fi
+
+    if [ -f "/config/inventory-url" ]; then
+        INVENTORY_REPO="$(cat /config/inventory-url)"
+        GHE_ORG=${INVENTORY_REPO%/*}
+        export GHE_ORG=${GHE_ORG##*/}
+        GHE_REPO=${INVENTORY_REPO##*/}
+        export GHE_REPO=${GHE_REPO%.git}
+    fi
+
+    if [ -f "/config/SOURCE_DIRECTORY" ]; then
+        export WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
+    fi
+
+    if [ -f "/config/PIPELINE_CHARTS_REPO" ]; then
+        export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
+    fi
  }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
