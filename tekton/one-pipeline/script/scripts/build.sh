@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+exit 0
+
 if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     trap env EXIT
     env | sort
