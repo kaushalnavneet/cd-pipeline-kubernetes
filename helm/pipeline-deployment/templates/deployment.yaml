@@ -16,6 +16,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        traffic.sidecar.istio.io/excludeOutboundPorts: 8200,443
     spec:
       imagePullSecrets:
       - name: otc-registry-secret
