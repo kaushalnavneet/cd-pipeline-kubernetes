@@ -247,7 +247,7 @@ if [[ -z $DEV_MODE ]]; then
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
         echo "Clone charts repo"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone "${PIPELINE_CHARTS_REPO}" $CHART_REPO_ABS
+        GIT_ASKPASS=${WORKSPACE}/${WORK_DIR}/token.sh git clone "${PIPELINE_CHARTS_REPO}" $CHART_REPO_ABS
         echo "Done cloning charts repo"
     done
 
@@ -262,7 +262,7 @@ else
     pwd
     ls
 
-    cd /workspace/app
+    cd ${WORKSPACE}
     cd "${SOURCE_DIRECTORY}"
     WORKDIR=${WORKDIR:-/work}
 
@@ -270,6 +270,7 @@ else
     pwd
     ls
 
+    echo -n d0f4ef952054eb95272be79c229468f4c9685638-202104292140UTC > "${WORKSPACE}/appVersion"
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
@@ -278,7 +279,7 @@ else
     COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
 
     if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        APPLICATION_VERSION=$( cat /workspace/app/appVersion )
+        APPLICATION_VERSION=$( cat "${WORKSPACE}/appVersion" )
         if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
         ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
         APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
