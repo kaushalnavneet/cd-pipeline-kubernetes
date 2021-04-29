@@ -90,6 +90,8 @@ initEnvVars() {
     export CLUSTER_NAME1=$(cat /config/cluster_name1)
     export CLUSTER_NAME2=$(cat /config/cluster_name2)
     export CLUSTER_NAME3=$(cat /config/cluster_name3)
+
+    export CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
@@ -187,12 +189,14 @@ if [[ -z $DEV_MODE ]]; then
         exit 1
     fi
 
+    # retrieve image version
+    IMAGE_TAG=$(cat ${WORKSPACE}/image-tags)
 
     #specify tag
     yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
 
     #specify image
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}"
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}":"${IMAGE_TAG}"
 
     #specify version
     yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
