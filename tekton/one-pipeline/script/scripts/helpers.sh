@@ -65,8 +65,8 @@ function deployComponent() {
     echo Expanding "$CHART_NAME"
     if [ ! -e tmp/${COMPONENT_NAME} ]; then
         mkdir -p tmp ; cd tmp
-        echo "Expanding chart ${WORKSPACE}/${COMPONENT_NAME}/${CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
-        tar zxf "${WORKSPACE}/${COMPONENT_NAME}/${CHARTS_DIRECTORY}/charts/$CHART_NAME"
+        echo "Expanding chart ${WORKSPACE}/${COMPONENT_NAME}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
+        tar zxf "${WORKSPACE}/${COMPONENT_NAME}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME"
         cd ..
         # pick up the environment values fresh if available
         echo "component name=${COMPONENT_NAME}"
