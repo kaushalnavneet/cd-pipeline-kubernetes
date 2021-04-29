@@ -9,7 +9,6 @@ initDefaults() {
    
     export REGISTRY_URL="us.icr.io"
     export REGISTRY_NAMESPACE="opentoolchain"
-    export REGISTRY_REGION="us-south"
     export IMAGE_NAME=""
     export CLUSTER_NAME="otc-us-south-dev"
     export CLUSTER_NAMESPACE="opentoolchain"
@@ -66,12 +65,11 @@ initEnvVars() {
     export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
     
     export API=$(cat /config/API)
-    export REGION=$(cat /config/REGION)
+    export STAGING_REGION=$(cat /config/STAGING_REGION)
     export API_KEY=$(cat /config/API_KEY_1651315)
 
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
 
-    export REGISTRY_REGION=$(cat /config/REGISTRY_REGION)
     export DRY_RUN_API_KEY=$(cat /config/API_KEY_1308775)
     export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
     export API_KEY_1308775=$(cat /config/API_KEY_1308775)
@@ -253,9 +251,9 @@ if [[ -z $DEV_MODE ]]; then
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     # need to deploy to preprod environment
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
 else
     echo "1"
     pwd
