@@ -84,7 +84,6 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        exit 0
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
