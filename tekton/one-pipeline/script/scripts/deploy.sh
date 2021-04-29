@@ -84,6 +84,7 @@ initEnvVars() {
     export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
 
     export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
+    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
 
     source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
     export CLUSTER_NAME1=$(cat /config/cluster_name1)
