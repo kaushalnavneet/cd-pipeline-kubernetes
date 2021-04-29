@@ -5,6 +5,7 @@ setup:
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
+
     echo "Done"
 
 
@@ -23,26 +24,15 @@ containerize:
   image: us.icr.io/opentoolchain/cd-build-base:java-ubi
   script: |
     #!/usr/bin/env bash
-    echo "--- Java Build ---"
-    if [[ "$PIPELINE_DEBUG" == 1 ]]; then
-      trap env EXIT
-      env
-      set -x
-    fi
+
     source ./tekton/one-pipeline/script/scripts/prebuild.sh
     source ./tekton/one-pipeline/script/scripts/build.sh
 
 deploy:
-  image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
-
-    if [[ "$PIPELINE_DEBUG" == 1 ]]; then
-      trap env EXIT
-      env
-      set -x
-    fi
 
     source ./tekton/one-pipeline/script/scripts/deploy.sh
 
@@ -52,15 +42,11 @@ acceptance-test:
   script: |
     #!/usr/bin/env bash
 
-    # source /root/.nvm/nvm.sh
-    # npm ci
-    # export APP_URL=$(cat ../app-url)
-    # npm run acceptance-test
-
-      echo "Acceptance Tests"
+    echo "Acceptance Tests"
 
 release:
-  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7
+  configmap: cd-config
   script: |
     #!/usr/bin/env bash
 
