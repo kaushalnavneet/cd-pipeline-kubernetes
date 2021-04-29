@@ -105,7 +105,7 @@ initEnvVars
 initDefaults
 
 if [[ -z $DEV_MODE ]]; then
-    CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
+    CHART_REPO=$( basename "${PIPELINE_CHARTS_REPO}" .git )
     CHART_ORG=$(cat ${WORKSPACE}/${WORK_DIR}/chart_org)
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
     CHART_VERSION=$(cat ${WORKSPACE}/${WORK_DIR}/chart_version)

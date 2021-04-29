@@ -83,7 +83,7 @@ initEnvVars() {
     export MINOR_VERSION=$(cat /config/MINOR_VERSION)
     export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
 
-    export CHARTS_DIRECTORY="pipeline-config"
+    export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
 
     source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
     export CLUSTER_NAME1=$(cat /config/cluster_name1)
@@ -141,7 +141,7 @@ if [[ -z $DEV_MODE ]]; then
     echo "echo -n $IDS_TOKEN" > ./token.sh
     chmod +x ./token.sh
 
-    GIT_ASKPASS=./token.sh git clone --single-branch --branch master https://github.ibm.com/org-ids/pipeline-config.git
+    GIT_ASKPASS=./token.sh git clone --single-branch --branch master "${PIPELINE_CHARTS_REPO}" "${PIPELINE_CHARTS_DIRECTORY}"
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
@@ -152,7 +152,7 @@ if [[ -z $DEV_MODE ]]; then
     git config --global user.name "IDS Organization"
     git config --global push.default matching
 
-    CHART_REPO=$( basename https://github.ibm.com/org-ids/pipeline-config.git .git )
+    CHART_REPO=$( basename "${PIPELINE_CHARTS_REPO}" .git )
     CHART_REPO_ABS=$(pwd)/${CHART_REPO}
     CHART_VERSION=$(ls ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | sort -V | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
@@ -241,7 +241,7 @@ if [[ -z $DEV_MODE ]]; then
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
         echo "Clone charts repo"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone https://github.ibm.com/$CHART_ORG/$CHART_REPO $CHART_REPO_ABS
+        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone "${PIPELINE_CHARTS_REPO}" $CHART_REPO_ABS
         echo "Done cloning charts repo"
     done
 
