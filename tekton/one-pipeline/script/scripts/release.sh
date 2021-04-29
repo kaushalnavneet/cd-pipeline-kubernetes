@@ -96,6 +96,7 @@ initEnvVars() {
     GHE_REPO=${INVENTORY_REPO##*/}
     export GHE_REPO=${GHE_REPO%.git}
     export WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
+    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
  }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
