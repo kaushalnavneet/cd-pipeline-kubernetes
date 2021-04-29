@@ -340,7 +340,8 @@ else
     kubectl version
     helm ls
     helm init -c --stable-repo-url https://charts.helm.sh/stable
-    helm dep up ${COMPONENT_NAME}
+    echo "helm dep up ${COMPONENT_NAME}"
+    helm dep up ${COMPONENT_NAME} --debug
     set -x
     set +e
     chartExists=$(helm list ${COMPONENT_NAME})
