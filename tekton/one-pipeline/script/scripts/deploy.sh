@@ -84,64 +84,64 @@ initEnvVars() {
     fi
 
     if [ -f "/config/API_KEY_1416501" ]; then
-    export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+        export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
     fi
     if [ -f "/config/API_KEY_1308775" ]; then
-    export API_KEY_1308775=$(cat /config/API_KEY_1308775)
+        export API_KEY_1308775=$(cat /config/API_KEY_1308775)
     fi
 
     if [ -f "/config/API_KEY_1308775" ]; then
-    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+        export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
     fi
 
     if [ -f "/config/IDS_USER" ]; then
-    export IDS_USER=$(cat /config/IDS_USER)
+        export IDS_USER=$(cat /config/IDS_USER)
     fi
 
     if [ -f "/config/IDS_TOKEN" ]; then
-    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+        export IDS_TOKEN=$(cat /config/IDS_TOKEN)
     fi
 
     if [ -f "/config/CLUSTERNAMESPACE" ]; then
-    export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
+        export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
     fi
 
     if [ -f "/config/MAJOR_VERSION" ]; then
-    export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
+        export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
     fi
 
     if [ -f "/config/MINOR_VERSION" ]; then
-    export MINOR_VERSION=$(cat /config/MINOR_VERSION)
+        export MINOR_VERSION=$(cat /config/MINOR_VERSION)
     fi
 
     source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
 
     if [ -f "/config/PIPELINE_CHARTS_DIRECTORY" ]; then
-    export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
+        export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
     fi
 
     if [ -f "/config/PIPELINE_CHARTS_REPO" ]; then
-    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
+        export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
     fi
 
     if [ -f "/config/STAGING_REGION" ]; then
-    export STAGING_REGION=$(cat /config/STAGING_REGION)
+        export STAGING_REGION=$(cat /config/STAGING_REGION)
     fi
 
     if [ -f "/config/RELEASE_ENVIRONMENT" ]; then
-    export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
+        export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
     fi
 
     if [ -f "/config/cluster_name1" ]; then
-    export CLUSTER_NAME1=$(cat /config/cluster_name1)
+        export CLUSTER_NAME1=$(cat /config/cluster_name1)
     fi
 
     if [ -f "/config/cluster_name2" ]; then
-    export CLUSTER_NAME2=$(cat /config/cluster_name2)
+        export CLUSTER_NAME2=$(cat /config/cluster_name2)
     fi
 
     if [ -f "/config/cluster_name3" ]; then
-    export CLUSTER_NAME3=$(cat /config/cluster_name3)
+        export CLUSTER_NAME3=$(cat /config/cluster_name3)
     fi
 
     if [ -f "/config/CONFIG_DIRECTORY" ]; then

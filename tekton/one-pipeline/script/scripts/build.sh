@@ -77,61 +77,76 @@ initDefaults() {
 
 initEnvVars() {
     # grab env vars from config map
-    export API=$(cat /config/API)
-    export REGISTRY_REGION=$(cat /config/REGION)
-    export API_KEY=$(cat /config/API_KEY_1416501)
-    export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
-    export API_KEY_1308775=$(cat /config/API_KEY_1308775)
-    export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
-    export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
-    export IDS_USER=$(cat /config/IDS_USER)
-    export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    if [ -f "/config/API" ]; then
+        export API=$(cat /config/API)
+    fi
+    if [ -f "/config/REGION" ]; then
+        export REGISTRY_REGION=$(cat /config/REGION)
+    fi
+    if [ -f "/config/API_KEY_1416501" ]; then
+        export API_KEY=$(cat /config/API_KEY_1416501)
+    fi
+    if [ -f "/config/API_KEY_1416501" ]; then
+        export DOCKER_PASSWORD=$(cat /config/API_KEY_1416501)
+    fi
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export API_KEY_1308775=$(cat /config/API_KEY_1308775)
+    fi
+    if [ -f "/config/API_KEY_1308775" ]; then
+        export BUILD_CLUSTER_KEY=$(cat /config/API_KEY_1308775)
+    fi
+    if [ -f "/config/TOOLCHAIN_ID" ]; then
+        export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
+    fi
+    if [ -f "/config/IDS_USER" ]; then
+        export IDS_USER=$(cat /config/IDS_USER)
+    fi
+    if [ -f "/config/IDS_TOKEN" ]; then
+        export IDS_TOKEN=$(cat /config/IDS_TOKEN)
+    fi
+
+    export  HOME="/root"
+    if [ -f "/config/IMAGE_TAG" ]; then
+            export APPLICATION_VERSION=$(cat /config/IMAGE_TAG) 
+    fi
+
+    if [ -f "/config/IMAGE_URL" ]; then
+            export IMAGE_URL=$(cat /config/IMAGE_URL) 
+    fi
+
+    if [ -f "/config/REGISTRY_URL" ]; then
+            export REGISTRY_URL=$(cat /config/REGISTRY_URL) 
+    fi
+
+    if [ -f "/config/REGISTRY_NAMESPACE" ]; then
+            export REGISTRY_NAMESPACE=$(cat /config/REGISTRY_NAMESPACE) 
+    fi
+
+    if [ -f "/config/REGISTRY_REGION" ]; then
+            export REGISTRY_REGION=$(cat /config/REGISTRY_REGION) 
+    fi
+
+    if [ -f "/config/SOURCE_DIRECTORY" ]; then
+            export SOURCE_DIRECTORY=$(cat /config/SOURCE_DIRECTORY) 
+    fi
+
+    if [ -f "/config/DOCKERFILE" ]; then
+            export DOCKERFILE=$(cat /config/DOCKERFILE) 
+    fi
+
+    if [ -f "/config/DOCKER_IMAGE" ]; then
+            export DOCKER_IMAGE=$(cat /config/DOCKER_IMAGE) 
+    fi
+
+    export OPERATOR_SDK=""
 }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
 # init default values, overwrite if in config map too
-
-
 initEnvVars
 
 initDefaults
-  
-export  HOME="/root"
-if [ -f "/config/IMAGE_TAG" ]; then
-        export APPLICATION_VERSION=$(cat /config/IMAGE_TAG) 
-fi
 
-if [ -f "/config/IMAGE_URL" ]; then
-        export IMAGE_URL=$(cat /config/IMAGE_URL) 
-fi
-
-if [ -f "/config/REGISTRY_URL" ]; then
-        export REGISTRY_URL=$(cat /config/REGISTRY_URL) 
-fi
-
-if [ -f "/config/REGISTRY_NAMESPACE" ]; then
-        export REGISTRY_NAMESPACE=$(cat /config/REGISTRY_NAMESPACE) 
-fi
-
-if [ -f "/config/REGISTRY_REGION" ]; then
-        export REGISTRY_REGION=$(cat /config/REGISTRY_REGION) 
-fi
-
-if [ -f "/config/SOURCE_DIRECTORY" ]; then
-        export SOURCE_DIRECTORY=$(cat /config/SOURCE_DIRECTORY) 
-fi
-
-if [ -f "/config/DOCKERFILE" ]; then
-        export DOCKERFILE=$(cat /config/DOCKERFILE) 
-fi
-
-if [ -f "/config/DOCKER_IMAGE" ]; then
-        export DOCKER_IMAGE=$(cat /config/DOCKER_IMAGE) 
-fi
-
-
-
-export OPERATOR_SDK=""
 set -e
 
 cd "${WORKSPACE}/${SOURCE_DIRECTORY}"
@@ -166,12 +181,6 @@ fi
 echo "{\"build\": \"$TIMESTAMP\",\"commit\":\"$GIT_COMMIT\",\"appName\" : \"${COMPONENT_NAME}\",\"platform\" : \"Armada\"${CHANGELOG_URL}}" > build_info.json
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${IMAGE_URL%%/*}
-# # For some reason this doesn't get repulled in docker engine
-# #docker pull ${DOCKER_IMAGE}
-# if [ $? -ne 0 ]; then
-#     echo \"Failed during execution of docker pull command\"
-#     exit 1
-# fi
 
 echo "Dockerfile: ${DOCKERFILE}"
 if [ "$OPERATOR_SDK" == true ]; then
