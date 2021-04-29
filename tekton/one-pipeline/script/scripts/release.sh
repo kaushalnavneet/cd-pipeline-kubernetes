@@ -93,6 +93,7 @@ initEnvVars() {
     INVENTORY_REPO="$(cat /config/inventory-url)"
     GHE_ORG=${INVENTORY_REPO%/*}
     export GHE_ORG=${GHE_ORG##*/}
+    GHE_REPO=${INVENTORY_REPO##*/}
     export GHE_REPO=${GHE_REPO%.git}
  }
 
