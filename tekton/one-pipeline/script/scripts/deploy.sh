@@ -269,6 +269,9 @@ else
     echo "2"
     pwd
     ls
+    curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+    chmod 700 get_helm.sh
+    ./get_helm.sh --version v2.14.3
 
     echo -n d0f4ef952054eb95272be79c229468f4c9685638-202104292140UTC > "${WORKSPACE}/appVersion"
     ibmcloud config --check-version=false
