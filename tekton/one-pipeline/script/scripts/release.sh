@@ -95,6 +95,7 @@ initEnvVars() {
     export GHE_ORG=${GHE_ORG##*/}
     GHE_REPO=${INVENTORY_REPO##*/}
     export GHE_REPO=${GHE_REPO%.git}
+    export WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
  }
 
 # other env vars that used to be passed in to task, check they exist and use defaults otherwise
@@ -108,7 +109,6 @@ initDefaults
 if [[ -z $DEV_MODE ]]; then
     CHART_REPO=$( basename "${PIPELINE_CHARTS_REPO}" .git )
     CHART_ORG=$(cat ${WORKSPACE}/${WORK_DIR}/chart_org)
-    WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
     CHART_VERSION=$(cat ${WORKSPACE}/${WORK_DIR}/chart_version)
     
     echo "CHART_VERSION: ${CHART_VERSION}"
