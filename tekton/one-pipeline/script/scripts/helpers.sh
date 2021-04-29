@@ -24,12 +24,13 @@ function deployComponent() {
     # 1 - component name
     # 2 - cluster name
     # 3 - cluster namespace
-    # 4 - environment
+    # 4 - cluster region
+    # 5 - targeted environment
     COMPONENT_NAME="$1"
     CLUSTER_NAME="$2"
     CLUSTER_NAMESPACE="$3"
-    ENVIRONMENT="$4"
     CLUSTER_REGION="$4"
+    ENVIRONMENT="$5"
 
     set -eo pipefail
     ibmcloud config --check-version=false

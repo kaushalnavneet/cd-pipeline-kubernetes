@@ -188,13 +188,16 @@ if [[ -z $DEV_MODE ]]; then
     fi
 
     # retrieve image version
-    IMAGE_ARTIFACT="$(get_env artifact)"
+    APPLICATION_VERSION=$(cat ${WORKSPACE}/image-tags)
+    echo "APPLICATION_VERSION=${APPLICATION_VERSION}"
+    echo "IMAGE_URL=${IMAGE_URL}"
+    echo "CHART_VERSION=${CHART_VERSION}"
 
     #specify tag
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.tag "${APPLICATION_VERSION}"
 
     #specify image
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_ARTIFACT}"
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}"
 
     #specify version
     yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
@@ -218,7 +221,6 @@ if [[ -z $DEV_MODE ]]; then
     echo -n "${CHART_ORG}" > ${WORKSPACE}/${WORK_DIR}/chart_org
     popd
 
-    APPLICATION_VERSION=$(cat ${WORKSPACE}/image-tags)
     echo -n "${CHART_VERSION}" > ${WORKSPACE}/${WORK_DIR}/chart_version
     n=0
     rc=0
@@ -251,9 +253,9 @@ if [[ -z $DEV_MODE ]]; then
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     # need to deploy to preprod environment
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
 else
     echo "1"
     pwd
