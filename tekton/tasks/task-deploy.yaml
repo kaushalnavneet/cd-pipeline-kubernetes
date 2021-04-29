@@ -90,6 +90,7 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
+        echo -n us.icr.io/opentoolchain/pipeline-service:d0f4ef952054eb95272be79c229468f4c9685638-202104292140UTC > /workspace/appVersion
         if [ "${SKIP}" == true ]; then
           echo "Skipping Deploy"
           exit 0
