@@ -293,7 +293,13 @@ else
     echo directory status
     pwd
     ls -F
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     ls -F cd-pipeline-kubernetes
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    ls -F cd-pipeline-kubernetes/environments/development
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    cat cd-pipeline-kubernetes/environments/development/values.yaml
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
     set +e
     function cluster_config() {
