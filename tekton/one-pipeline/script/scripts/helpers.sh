@@ -72,9 +72,9 @@ function deployComponent() {
         echo "component name=${COMPONENT_NAME}"
         echo "environment=${ENVIRONMENT}"
         echo "current dir=$(pwd)"
-        [ -r "${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
-        echo "Copy ${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" && \
-        cp ${WORKSPACE}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+        [ -r "${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
+        echo "Copy ${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" && \
+        cp ${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
     fi
 
     set +e

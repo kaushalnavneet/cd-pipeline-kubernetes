@@ -190,13 +190,13 @@ if [[ -z $DEV_MODE ]]; then
     fi
 
     # retrieve image version
-    IMAGE_TAG=$(cat ${WORKSPACE}/image-tags)
+    IMAGE_ARTIFACT="$(get_env artifact)"
 
     #specify tag
     yq write -i ${APP_NAME}/values.yaml pipeline.image.tag=$appver "${APPLICATION_VERSION}"
 
     #specify image
-    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_URL}":"${IMAGE_TAG}"
+    yq write -i ${APP_NAME}/values.yaml pipeline.image.repository "${IMAGE_ARTIFACT}"
 
     #specify version
     yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
