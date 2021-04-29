@@ -65,7 +65,6 @@ initEnvVars() {
     export DRY_RUN_CLUSTER="otc-us-south-dal13-stage"
     
     export API=$(cat /config/API)
-    export STAGING_REGION=$(cat /config/STAGING_REGION)
     export API_KEY=$(cat /config/API_KEY_1651315)
     export REGION=$(cat /config/REGION)
 
@@ -80,15 +79,19 @@ initEnvVars() {
     export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
     export MAJOR_VERSION=$(cat /config/MAJOR_VERSION)
     export MINOR_VERSION=$(cat /config/MINOR_VERSION)
-    export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
 
-    export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
-    export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
 
     source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/script/scripts/helpers.sh"
-    export CLUSTER_NAME1=$(cat /config/cluster_name1)
-    export CLUSTER_NAME2=$(cat /config/cluster_name2)
-    export CLUSTER_NAME3=$(cat /config/cluster_name3)
+
+    if [[ -z $DEV_MODE ]]; then
+        export PIPELINE_CHARTS_DIRECTORY=$(cat /config/PIPELINE_CHARTS_DIRECTORY)
+        export PIPELINE_CHARTS_REPO=$(cat /config/PIPELINE_CHARTS_REPO)
+        export STAGING_REGION=$(cat /config/STAGING_REGION)
+        export RELEASE_ENVIRONMENT=$(cat /config/RELEASE_ENVIRONMENT)
+        export CLUSTER_NAME1=$(cat /config/cluster_name1)
+        export CLUSTER_NAME2=$(cat /config/cluster_name2)
+        export CLUSTER_NAME3=$(cat /config/cluster_name3)
+    fi
 
     export CONFIG_DIRECTORY=$(cat /config/CONFIG_DIRECTORY)
 }
@@ -247,7 +250,7 @@ if [[ -z $DEV_MODE ]]; then
         rm -fr $CHART_REPO_ABS
         mkdir -p $CHART_REPO_ABS
         echo "Clone charts repo"
-        GIT_ASKPASS=/workspace/app/${WORK_DIR}/token.sh git clone "${PIPELINE_CHARTS_REPO}" $CHART_REPO_ABS
+        GIT_ASKPASS="${WORKSPACE}/${WORK_DIR}/token.sh" git clone "${PIPELINE_CHARTS_REPO}" $CHART_REPO_ABS
         echo "Done cloning charts repo"
     done
 
@@ -258,17 +261,12 @@ if [[ -z $DEV_MODE ]]; then
     deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
     deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
 else
-    echo "1"
-    pwd
-    ls
+    cd "${WORKSPACE}"/"${SOURCE_DIRECTORY}"
 
-    cd /workspace/app
-    cd "${SOURCE_DIRECTORY}"
-    WORKDIR=${WORKDIR:-/work}
-
-    echo "2"
-    pwd
-    ls
+    # need helm 2.14.3 for dev charts
+    curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+    chmod 700 get_helm.sh
+    ./get_helm.sh --version v2.14.3
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
@@ -278,7 +276,7 @@ else
     COMPONENT_NAME=${COMPONENT_NAME:-${IMAGE_URL##*/}}
 
     if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
-        APPLICATION_VERSION=$( cat /workspace/app/appVersion )
+        APPLICATION_VERSION=$( cat "${WORKSPACE}"/appVersion )
         if [[  -z "${APPLICATION_VERSION}" || "${APPLICATION_VERSION}" == "latest" ]]; then
         ibmcloud cr images --restrict ${IMAGE_NAMESPACE}/${COMPONENT_NAME} > _allImages
         APPLICATION_VERSION=$(cat _allImages | grep $(cat _allImages | grep latest | awk '{print $3}') | grep -v latest | awk '{print $2}')
@@ -286,14 +284,6 @@ else
     fi
 
     printf "Deploying release ${COMPONENT_NAME} into cluster ${CLUSTER_NAME},\nnamespace ${CLUSTER_NAMESPACE},\nwith image: ${IMAGE_URL}:${APPLICATION_VERSION}.\n"
-
-    #[ -d /work ] && [ -d cd-pipeline-kubernetes ] && rm -rf cd-pipeline-kubernetes
-    #[ -d /work ] && cp -a /work cd-pipeline-kubernetes
-    #[ ! -d devops-config ] && cp cd-pipeline-kubernetes/devops-config .
-    echo directory status
-    pwd
-    ls -F
-    ls -F cd-pipeline-kubernetes
 
     set +e
     function cluster_config() {
