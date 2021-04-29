@@ -67,6 +67,7 @@ initEnvVars() {
     export API=$(cat /config/API)
     export STAGING_REGION=$(cat /config/STAGING_REGION)
     export API_KEY=$(cat /config/API_KEY_1651315)
+    export REGION=$(cat /config/REGION)
 
     export TOOLCHAIN_ID=$(cat /config/TOOLCHAIN_ID)
 
