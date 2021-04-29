@@ -129,7 +129,6 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Private Worker - YS1
@@ -160,7 +159,6 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Tekton Pipeline Service - YS1
