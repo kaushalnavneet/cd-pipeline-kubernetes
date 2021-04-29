@@ -120,7 +120,13 @@ spec:
         echo directory status
         pwd
         ls -F
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         ls -F cd-pipeline-kubernetes
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+        ls -F cd-pipeline-kubernetes/environments/development
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+        cat cd-pipeline-kubernetes/environments/development/values.yaml
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
         set +e
         function cluster_config() {
@@ -157,11 +163,16 @@ spec:
         tmp=$(mktemp)
         yq --yaml-output --arg stagename "${COMPONENT_NAME}" '. | .pipeline.fullnameOverride=$stagename | .pipeline.nameOverride=$stagename' ${COMPONENT_NAME}/values.yaml > "$tmp" && mv "$tmp" ${COMPONENT_NAME}/values.yaml
 
+        echo ">>>>>>>>>>>>>>>>>>>  ${COMPONENT_NAME}/values.yaml >>>>>>>>>>>>>>>>>>>>"
+        cat ${COMPONENT_NAME}/values.yaml
+        echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+
         helm version
         kubectl version
         helm ls
         helm init -c --stable-repo-url https://charts.helm.sh/stable
-        helm dep up ${COMPONENT_NAME}
+        echo "helm dep up ${COMPONENT_NAME}"
+        elm dep up ${COMPONENT_NAME} --debug
         set -x
         set +e
         chartExists=$(helm list ${COMPONENT_NAME})

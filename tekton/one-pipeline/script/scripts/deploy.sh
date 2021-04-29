@@ -336,6 +336,10 @@ else
     yq write -i ${COMPONENT_NAME}/values.yaml pipeline.fullnameOverride "${COMPONENT_NAME}"
     yq write -i ${COMPONENT_NAME}/values.yaml pipeline.nameOverride "${COMPONENT_NAME}"
 
+    echo ">>>>>>>>>>>>>>>>>>>  ${COMPONENT_NAME}/values.yaml >>>>>>>>>>>>>>>>>>>>"
+    cat ${COMPONENT_NAME}/values.yaml
+    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+
     helm version
     kubectl version
     helm ls
