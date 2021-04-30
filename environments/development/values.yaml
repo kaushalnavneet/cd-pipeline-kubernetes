@@ -86,7 +86,7 @@ pipeline:
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
         NODE_MODULES_CACHE: false
-        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
+        S3_LOGS_BUCKET_NAME: pipeline-logs-dev
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
   otc-github-relay-pub:
@@ -339,7 +339,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
         NODE_ENV: staging-us-south
         RUN_ARS_K8S: true
-        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
+        S3_ARS_BUCKET_NAME: pipeline-artifacts-dev
         SSL: true
         STATUS_TIMEOUT: "4500"
         USE_S3: true
