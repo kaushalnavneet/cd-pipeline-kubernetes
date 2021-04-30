@@ -1,0 +1,12 @@
+{{- template "pipeline.common.virtualservice" (list . "pipeline.virtualservice") -}}
+{{- define "pipeline.virtualservice" -}}
+{{- $values := .Values -}}
+spec:
+  hosts:
+  {{- range $domain := $values.basedomains }}
+  - {{ template "common.fullname" $ }}.{{ .domain }}
+  {{- range $host := $values.extrahosts }}
+  - {{ $host }}{{ $domain.hostNameSuffix }}.{{ $domain.domain }}
+  {{- end }}
+  {{- end }}
+{{- end -}}
