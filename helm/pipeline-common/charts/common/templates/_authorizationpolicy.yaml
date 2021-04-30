@@ -1,0 +1,19 @@
+{{- define "pipeline.common.authorizationpolicy.tpl" -}}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+{{ template "common.metadata" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "common.fullname" . }}
+  action: ALLOW
+  rules:
+  - from:
+    {{ toYaml .Values.authorizationpolicy.allow.from | indent 4 | trim }}
+    to:
+    - operation:
+        ports: ["8080"]
+{{- end -}}
+{{- define "pipeline.common.authorizationpolicy" -}}
+{{- template "common.util.merge" (append . "pipeline.common.authorizationpolicy.tpl") -}}
+{{- end -}}
