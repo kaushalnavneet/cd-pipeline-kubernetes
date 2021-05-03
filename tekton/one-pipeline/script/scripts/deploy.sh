@@ -10,7 +10,6 @@ initDefaults() {
     export REGISTRY_URL="us.icr.io"
     export REGISTRY_NAMESPACE="opentoolchain"
     export IMAGE_NAME=""
-    export CLUSTER_NAME="otc-us-south-dev"
     export CLUSTER_NAMESPACE="opentoolchain"
     export ENVIRONMENT="development"
     export SKIP="false"
@@ -57,6 +56,9 @@ initDefaults() {
     fi
     if [ -f "/config/DEV_MODE" ]; then
         export DEV_MODE=$(cat /config/DEV_MODE) 
+    fi
+    if [ -f "/config/cluster_name" ]; then
+        export CLUSTER_NAME=$(cat /config/cluster_name)
     fi
 }
 
