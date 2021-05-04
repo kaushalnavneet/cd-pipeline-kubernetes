@@ -25,7 +25,7 @@ initDefaults() {
     fi
 
     if [ -f "/config/REGISTRY_REGION" ]; then
-            export REGISTRY_REGION=$(cat /config/REGISTRY_REGION) 
+        export REGISTRY_REGION=$(cat /config/REGISTRY_REGION) 
     fi
 
     if [ -f "/config/IMAGE_NAME" ]; then
@@ -162,15 +162,15 @@ export  HOME="/root"
 
 
 if [ -f "/config/IMAGE_URL" ]; then
-        export IMAGE_URL=$(cat /config/IMAGE_URL) 
+     export IMAGE_URL=$(cat /config/IMAGE_URL) 
 fi
 
 if [ -f "/config/IMAGE_NAME" ]; then
-        export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
+    export IMAGE_NAME=$(cat /config/IMAGE_NAME) 
 fi
 
 if [ -f "/config/SOURCE_DIRECTORY" ]; then
-        export SOURCE_DIRECTORY=$(cat /config/SOURCE_DIRECTORY) 
+    export SOURCE_DIRECTORY=$(cat /config/SOURCE_DIRECTORY) 
 fi
 
 
@@ -312,9 +312,9 @@ if [[ -z $DEV_MODE ]]; then
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     # need to deploy to preprod environment
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
 else
     cd "${WORKSPACE}"/"${SOURCE_DIRECTORY}"
 

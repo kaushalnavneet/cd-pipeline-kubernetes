@@ -31,6 +31,7 @@ function deployComponent() {
     CLUSTER_NAMESPACE="$3"
     CLUSTER_REGION="$4"
     ENVIRONMENT="$5"
+    SOURCE_DIRECTORY="$6"
 
     set -eo pipefail
     ibmcloud config --check-version=false
@@ -66,16 +67,16 @@ function deployComponent() {
     echo Expanding "$CHART_NAME"
     if [ ! -e tmp/${COMPONENT_NAME} ]; then
         mkdir -p tmp ; cd tmp
-        echo "Expanding chart ${WORKSPACE}/${COMPONENT_NAME}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
-        tar zxf "${WORKSPACE}/${COMPONENT_NAME}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME"
+        echo "Expanding chart ${WORKSPACE}/${SOURCE_DIRECTORY}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME to tmp"
+        tar zxf "${WORKSPACE}/${SOURCE_DIRECTORY}/${PIPELINE_CHARTS_DIRECTORY}/charts/$CHART_NAME"
         cd ..
         # pick up the environment values fresh if available
         echo "component name=${COMPONENT_NAME}"
         echo "environment=${ENVIRONMENT}"
         echo "current dir=$(pwd)"
-        [ -r "${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
-        echo "Copy ${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" && \
-        cp ${WORKSPACE}/${COMPONENT_NAME}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
+        [ -r "${WORKSPACE}/${SOURCE_DIRECTORY}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ] && \
+        echo "Copy ${WORKSPACE}/${SOURCE_DIRECTORY}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" && \
+        cp ${WORKSPACE}/${SOURCE_DIRECTORY}/${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml tmp/${COMPONENT_NAME}/charts/${ENVIRONMENT}
     fi
 
     set +e
