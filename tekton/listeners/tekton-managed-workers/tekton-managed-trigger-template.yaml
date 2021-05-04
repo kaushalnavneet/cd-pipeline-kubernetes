@@ -14,6 +14,10 @@ spec:
     - name: skipDeploy2
     - name: clusterName3
     - name: skipDeploy3
+    - name: clusterName4
+      default: ''
+    - name: skipDeploy4
+      default: 'true'
     - name: regionName
     - name: target_domain
       default: 'devops.cloud.ibm.com'
