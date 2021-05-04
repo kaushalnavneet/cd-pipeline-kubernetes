@@ -183,6 +183,12 @@ if [ "${SKIP}" == true ]; then
     exit 0
 fi
 
+
+# need helm 2.14.3 for dev charts
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh --version v2.14.3
+
 if [[ -z $DEV_MODE ]]; then
     export GHE_TOKEN="$(cat ../git-token)"
     export COMMIT_SHA="$(cat /config/git-commit)"
@@ -317,11 +323,6 @@ if [[ -z $DEV_MODE ]]; then
     deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
 else
     cd "${WORKSPACE}"/"${SOURCE_DIRECTORY}"
-
-    # need helm 2.14.3 for dev charts
-    curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-    chmod 700 get_helm.sh
-    ./get_helm.sh --version v2.14.3
 
     ibmcloud config --check-version=false
     ibmcloud plugin install -f container-service
