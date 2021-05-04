@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# need helm 2.14.3
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh --version v2.14.3
+
 source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/cd/helpers.sh"
 export CLUSTER_NAMESPACE=$(cat /config/cluster-namespace)
 export CLUSTER_NAME1=$(cat /config/cluster_name1)
