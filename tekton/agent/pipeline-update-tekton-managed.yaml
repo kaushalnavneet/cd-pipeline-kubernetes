@@ -28,9 +28,9 @@ spec:
     - name: clusterName3
     - name: skipDeploy3
     - name: clusterName4
-      default: ''
+      default: ""
     - name: skipDeploy4
-      default: 'true'
+      default: "true"
   workspaces:
     - name: pipeline-pvc
   tasks:
