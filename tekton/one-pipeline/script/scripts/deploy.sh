@@ -290,6 +290,7 @@ if [[ -z $DEV_MODE ]]; then
     n=0
     rc=0
     ORIG_DIR=$(pwd)
+    set +e
     until [ $n -ge 5 ]
     do
         echo "git pull"
