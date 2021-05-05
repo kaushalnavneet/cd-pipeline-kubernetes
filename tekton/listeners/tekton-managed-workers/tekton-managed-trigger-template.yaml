@@ -123,6 +123,6 @@ spec:
           - name: skipDeploy3
             value: $(params.skipDeploy3)
           - name: clusterName4
-            value: $(params.skipDeploy4)
+            value: $(params.clusterName4)
           - name: skipDeploy4
             value: $(params.skipDeploy4)
