@@ -8,7 +8,7 @@ source "${WORKSPACE}/${ONE_PIPELINE_CONFIG_DIRECTORY_NAME}/tekton/one-pipeline/c
 export CLUSTER_NAMESPACE=$(cat /config/cluster-namespace)
 
 export API_KEY=$(cat /config/ibmcloud-api-key)
-declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}"))
+declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}" | sort ))
 
 for app in "${apps[@]}"; do
     if [[ "$app" != *"_image" ]]; then
