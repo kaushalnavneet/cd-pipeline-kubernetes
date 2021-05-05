@@ -21,5 +21,9 @@ spec:
           value: otc-tektonpw-dal13-stage
         - name: skipDeploy3
           value: "false"
+        - name: clusterName4
+          value: ""
+        - name: skipDeploy4
+          value: "true"
       template:
         name: tekton-managed-trigger-template

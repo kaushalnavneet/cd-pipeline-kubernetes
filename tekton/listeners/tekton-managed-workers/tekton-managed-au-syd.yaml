@@ -21,5 +21,9 @@ spec:
           value: otc-tektonpw-syd05-prod
         - name: skipDeploy3
           value: "false"
+        - name: clusterName4
+          value: ""
+        - name: skipDeploy4
+          value: "true"
       template:
         name: tekton-managed-trigger-template
