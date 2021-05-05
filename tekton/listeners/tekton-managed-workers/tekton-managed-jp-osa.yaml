@@ -22,7 +22,7 @@ spec:
         - name: skipDeploy3
           value: "false"
         - name: clusterName4
-          value: NA
+          value: ""
         - name: skipDeploy4
           value: "true"
       template:
