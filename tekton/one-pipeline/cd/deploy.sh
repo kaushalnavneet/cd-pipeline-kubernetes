@@ -15,7 +15,7 @@ declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}"))
 for app in "${apps[@]}"; do
     if [[ "$app" != *"_image" ]]; then
         echo "deploy ${app}"
-        if [[ "$app" == "travis-worker-go" ]]; then
+        if [[ "$app" == "travis-worker" ]]; then
             export CLUSTER_NAME1="$(echo $CLUSTER_NAME1 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME1 | cut -d - -f2-3)"
             export CLUSTER_NAME2="$(echo $CLUSTER_NAME2 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME2 | cut -d - -f2-3)"
             export CLUSTER_NAME3="$(echo $CLUSTER_NAME3 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME3 | cut -d - -f2-3)"
