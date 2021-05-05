@@ -21,8 +21,6 @@ spec:
           value: otc-tektonpw-us-south-dev
         - name: skipDeploy3
           value: "true"
-        - name: clusterName4
-        - name: skipDeploy4
         - name: target_domain
           value: "devops.dev.cloud.ibm.com"
       template:
