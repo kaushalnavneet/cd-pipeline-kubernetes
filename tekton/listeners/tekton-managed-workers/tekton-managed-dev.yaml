@@ -22,9 +22,7 @@ spec:
         - name: skipDeploy3
           value: "true"
         - name: clusterName4
-          value: NA
         - name: skipDeploy4
-          value: "true"
         - name: target_domain
           value: "devops.dev.cloud.ibm.com"
       template:

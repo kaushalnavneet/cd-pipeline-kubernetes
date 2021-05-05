@@ -22,8 +22,6 @@ spec:
         - name: skipDeploy3
           value: "false"
         - name: clusterName4
-          value: NA
         - name: skipDeploy4
-          value: "true"
       template:
         name: tekton-managed-trigger-template
