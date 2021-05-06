@@ -95,6 +95,9 @@ spec:
           "data": $SUMMARY
         }
         HERE
+
+        echo "tmp file:"
+        cat "$TMP"
         RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
