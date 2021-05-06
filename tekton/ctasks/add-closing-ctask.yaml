@@ -29,7 +29,7 @@ spec:
         name: cd-config
       data:
         CR_ID: $(params.CR_ID)
-        ENVIROMMENT: $(params.ENVIROMMENT)
+        ENVIRONMENT: $(params.ENVIRONMENT)
     - apiVersion: v1
       kind: Secret
       metadata:
