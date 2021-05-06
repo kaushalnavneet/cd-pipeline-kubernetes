@@ -55,7 +55,7 @@ spec:
       - |
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
-        set -eo pipefail
+        set +e
         echo "Given E2E_BUILD_ID: ${E2E_BUILD_ID}"
         ibmcloud config --check-version=false
         echo Logging into ibmcloud
