@@ -69,8 +69,9 @@ spec:
             echo "Failed: missing CR_ID"
             exit 1
         fi
-        if [[ ! "$E2E_BUILD_ID" ]]; then
-            echo "Failed: missing E2E_BUILD_ID"
+
+        if [[ ! "$ENVIRONMENT" ]]; then
+            echo "Failed: missing ENVIRONMENT"
             exit 1
         fi
 
