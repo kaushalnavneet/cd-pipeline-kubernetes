@@ -1,17 +1,17 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: add-preprod-ctask
+  name: add-closing-ctask
 spec:
   params:
     - name: deployBaseImage
       default: us.icr.io/opentoolchain/cd-deploy-base:deploy
     - name: snUrl
       default: 'https://watson.service-now.com'
-    - name: e2eToolchainId
+    - name: toolchainId
       default: 'd5c0676c-55ed-4c25-b763-60b7afd64c87'
     - name: e2eApplication
-      default: 'Pipeline'
+      default: 'CD-OTC'
     - name: e2eBuildId
       default: ''
   stepTemplate:
@@ -25,6 +25,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: CR_ID
+      - name: ENVIRONMENT
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: ENVIRONMENT
       - name: API_KEY
         valueFrom:
           secretKeyRef:
@@ -39,7 +44,7 @@ spec:
   - name: task-pvc
     mountPath: /workspace
   steps:
-  - name: add-preprod-ctask
+  - name: add-closing-ctask
     image: $(params.deployBaseImage)
     imagePullPolicy: IfNotPresent
     env:
@@ -48,7 +53,7 @@ spec:
       - name: SN_URL
         value: $(params.snUrl)
       - name: E2E_TOOLCHAIN_ID
-        value: $(params.e2eToolchainId)
+        value: $(params.toolchainId)
       - name: E2E_APPLICATION
         value: $(params.e2eApplication)
       - name: E2E_BUILD_ID
@@ -60,14 +65,6 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -eo pipefail
-        echo "Given E2E_BUILD_ID: ${E2E_BUILD_ID}"
-        ibmcloud config --check-version=false
-        echo Logging into ibmcloud
-        ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
-        BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
-
-        SYSTEM="continuous-delivery-pipeline"
-
         if [[ ! "$CR_ID" ]]; then
             echo "Failed: missing CR_ID"
             exit 1
@@ -76,33 +73,9 @@ spec:
             echo "Failed: missing E2E_BUILD_ID"
             exit 1
         fi
-        export TMP=/tmp/tmp_$$.json
 
-        echo "ServiceNow change request opened: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
-        echo "Checking ServiceNow change request state..."
-
-        # add mon01 E2E tests via a CTASK
-        echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
-        curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000&&sort_order=desc" \
-          -H  "accept: */*" \
-          -H "Authorization: $BEARER" >/workspace/tmp_doi.json
-        BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | grep integration | head -1 )
-        E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
-        E2E_STAGE_ENVIRONMENT=mon01
-        echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
-        SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$E2E_STAGE_ENVIRONMENT" \
-          -H  "accept: */*" \
-          -H "Authorization: $BEARER" | jq . | jq --raw-input --slurp  )
-
-        cat - >"$TMP" <<HERE
-        {
-          "required": "required",
-          "system": "$SYSTEM",
-          "shortdescription": "Staging test results",
-          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnvironment: $E2E_STAGE_ENVIRONMENT",
-          "data": $SUMMARY
-        }
-        HERE
+        SYSTEM="continuous-delivery-pipeline"
+        export TMP=/tmp/tmp_$$.txt
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
             ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
@@ -110,6 +83,35 @@ spec:
             ASSIGNED_TO=Olivier_Thomann@ca.ibm.com
         fi
 
+        ibmcloud config --check-version=false
+        echo Logging into ibmcloud
+        ibmcloud login -a cloud.ibm.com -r us-south --apikey ${API_KEY}
+        BEARER=$( ibmcloud iam oauth-tokens --output json | jq -r .iam_token )
+
+        # create E2E test CTASK
+        export SEARCH=umbrella-prod
+        if [ "$ENVIRONMENT" = "mon01" ]; then SEARCH=integration; E2E_APPLICATION=Pipeline; fi
+
+        echo "Querying DOI. Toolchain: $E2E_TOOLCHAIN_ID Application: $E2E_APPLICATION"
+        curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds?limit=1000" \
+          -H  "accept: */*" \
+          -H "Authorization: $BEARER" >/workspace/tmp_doi.json
+        BUILD_ID=$( jq -r '.[].build_id' /workspace/tmp_doi.json | sort -V | grep "$SEARCH" | tail -1 )
+        E2E_BUILD_ID=${E2E_BUILD_ID:-$BUILD_ID}
+        echo "Using DOI build id: $E2E_BUILD_ID (latest $BUILD_ID)"
+        SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$ENVIRONMENT" \
+          -H  "accept: */*" \
+          -H "Authorization: $BEARER" | jq . | jq --raw-input --slurp )
+
+        cat - >"$TMP" <<HERE
+        {
+          "required": "required",
+          "system": "$SYSTEM",
+          "shortdescription": "PROD test results for $ENVIRONMENT",
+          "description": "Toolchain: $E2E_TOOLCHAIN_ID\nApplication: $E2E_APPLICATION\nBuild id: $E2E_BUILD_ID\nEnvironment: $ENVIRONMENT",
+          "data": $SUMMARY
+        }
+        HERE
         RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
             -H "updated_by: $ASSIGNED_TO" \
             -H "Accept:application/json" \
@@ -123,9 +125,7 @@ spec:
             echo "Failed: $RESPONSE"
             exit 1
         fi
-
         echo Created task $CTASK_ID. Closing...
-
         PAYLOAD=$(jq --null-input "$(cat <<HERE
         {
             state: "Closed"
@@ -146,3 +146,4 @@ spec:
             echo "Failed: $RESPONSE"
             exit 1
         fi
+        echo "ServiceNow change request update: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"

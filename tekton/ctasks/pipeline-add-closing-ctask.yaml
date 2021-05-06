@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-add-closing-ctask
+spec:
+  params:
+    - name: snUrl
+    - name: e2eBuildId
+    - name: toolchainId
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: add-closing-ctask
+      taskRef:
+        name:  add-closing-ctask
+      params:
+        - name: snUrl
+          value: $(params.snUrl)
+        - name: e2eBuildId
+          value: $(params.e2eBuildId)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+
