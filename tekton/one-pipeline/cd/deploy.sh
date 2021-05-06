@@ -17,9 +17,9 @@ for app in "${apps[@]}"; do
         export CLUSTER_NAME2=$(cat /config/cluster_name2)
         export CLUSTER_NAME3=$(cat /config/cluster_name3)
         if [[ "$app" == "travis-worker" ]]; then
-            export CLUSTER_NAME1="$(echo $CLUSTER_NAME1 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME1 | cut -d - -f2-3)"
-            export CLUSTER_NAME2="$(echo $CLUSTER_NAME2 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME2 | cut -d - -f2-3)"
-            export CLUSTER_NAME3="$(echo $CLUSTER_NAME3 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME3 | cut -d - -f2-3)"
+            export CLUSTER_NAME1="$(echo $CLUSTER_NAME1 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME1 | cut -d - -f2-4)"
+            export CLUSTER_NAME2="$(echo $CLUSTER_NAME2 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME2 | cut -d - -f2-4)"
+            export CLUSTER_NAME3="$(echo $CLUSTER_NAME3 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME3 | cut -d - -f2-4)"
         fi
         deployComponent "${app}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${REGION}"
         deployComponent "${app}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${REGION}"
