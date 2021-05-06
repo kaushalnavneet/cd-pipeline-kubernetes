@@ -68,6 +68,7 @@ spec:
             echo "Failed: $RESPONSE"
             exit 1
         fi
+        export TMP=/tmp/tmp_$$.json
 
         echo "ServiceNow change request opened: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
         echo "Checking ServiceNow change request state..."
@@ -84,6 +85,7 @@ spec:
         SUMMARY=$( curl -s -X GET "https://dlms.us-south.devopsinsights.cloud.ibm.com/v3/toolchainids/$E2E_TOOLCHAIN_ID/buildartifacts/$E2E_APPLICATION/builds/$E2E_BUILD_ID/summaries?latest_only=true&environment_name=$E2E_STAGE_ENVIRONMENT" \
           -H  "accept: */*" \
           -H "Authorization: $BEARER" | jq . | jq --raw-input --slurp  )
+
         cat - >"$TMP" <<HERE
         {
           "required": "required",
