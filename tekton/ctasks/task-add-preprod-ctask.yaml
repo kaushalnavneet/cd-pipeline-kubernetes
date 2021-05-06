@@ -69,7 +69,11 @@ spec:
         SYSTEM="continuous-delivery-pipeline"
 
         if [[ ! "$CR_ID" ]]; then
-            echo "Failed: $RESPONSE"
+            echo "Failed: missing CR_ID"
+            exit 1
+        fi
+        if [[ ! "$E2E_BUILD_ID" ]]; then
+            echo "Failed: missing E2E_BUILD_ID"
             exit 1
         fi
         export TMP=/tmp/tmp_$$.json
