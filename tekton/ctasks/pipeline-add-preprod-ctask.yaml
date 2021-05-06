@@ -4,20 +4,12 @@ metadata:
   name: pipeline-add-preprod-ctask
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
-    - name: environment
-    - name: deployClusters
     - name: snUrl
-    - name: prodRepos
-      default: 'None'
     - name: e2eBuildId
   workspaces:
   - name: pipeline-pvc
   tasks:
     - name: add-preprod-ctask
-      runAfter: [get-deployment-info]
       taskRef:
         name:  add-preprod-ctask
       params:
