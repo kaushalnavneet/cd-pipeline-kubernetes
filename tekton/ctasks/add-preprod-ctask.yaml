@@ -74,7 +74,7 @@ spec:
           generatedBy: "add-preprod-ctask-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-open-cr
+          name: pipeline-add-preprod-ctask
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
