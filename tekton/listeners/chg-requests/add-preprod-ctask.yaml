@@ -1,0 +1,117 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: add-preprod-ctask-trigger-dev
+spec:
+  params:
+    - name: charts_repo
+    - name: charts_branch
+    - name: charts_directory
+    - name: environment
+    - name: deployClusters
+    - name: snUrl
+    - name: tocChannel
+    - name: deployChannel
+    - name: prodRepos
+    - name: override_cr_description
+      default: false
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: apikey
+      description: the ibmcloud api key
+    - name: toolchainRegion
+      description: the ibmcloud region containing the toolchain referencing the repository
+      default: us-south
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+    - name: toolchainId
+      description: The IBM Cloud Kubernetes cluster region
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        CR_ID: $(params.CR_ID)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+        SN_TOKEN: $(params.SN_TOKEN_TEST)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: $(params.charts_branch)-add-preprod-ctask-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: $(params.charts_branch)-add-preprod-ctask-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "add-preprod-ctask-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-open-cr
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: $(params.charts_branch)-add-preprod-ctask-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: snUrl
+            value: $(params.snUrl)
+          - name: e2eBuildId
+            value: $(params.E2E_BUILD_ID)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: add-preprod-ctask-binding-dev
+spec:
+  params:
+    - name: snUrl
+      value: 'https://watsontest.service-now.com'
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: add-preprod-ctask-dev
+spec:
+  triggers:
+    - binding:
+        name: add-preprod-ctask-binding-dev
+      template:
+        name: add-preprod-ctask-trigger-dev
