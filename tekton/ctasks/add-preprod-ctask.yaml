@@ -4,17 +4,7 @@ metadata:
   name: add-preprod-ctask-trigger-dev
 spec:
   params:
-    - name: charts_repo
-    - name: charts_branch
-    - name: charts_directory
-    - name: environment
-    - name: deployClusters
     - name: snUrl
-    - name: tocChannel
-    - name: deployChannel
-    - name: prodRepos
-    - name: override_cr_description
-      default: false
 
     # CD integration
     - name: api
@@ -46,7 +36,7 @@ spec:
       type: Opaque
       stringData:
         API_KEY: $(params.API_KEY_1416501)
-        SN_TOKEN: $(params.SN_TOKEN_TEST)
+        SN_TOKEN: $(params.SN_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
@@ -65,7 +55,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: $(params.charts_branch)-add-preprod-ctask-$(uid)-pvc
+        name: add-preprod-ctask-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -78,7 +68,7 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: $(params.charts_branch)-add-preprod-ctask-$(uid)
+        name: add-preprod-ctask-$(uid)
         labels:
           triggertemplated: "true"
           generatedBy: "add-preprod-ctask-trigger-dev"
@@ -88,7 +78,7 @@ spec:
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: $(params.charts_branch)-add-preprod-ctask-$(uid)-pvc
+              claimName: add-preprod-ctask-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: snUrl
@@ -103,7 +93,7 @@ metadata:
 spec:
   params:
     - name: snUrl
-      value: 'https://watsontest.service-now.com'
+      value: 'https://watson.service-now.com'
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
