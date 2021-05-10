@@ -171,7 +171,23 @@ spec:
           value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc 
+        workspace: pipeline-pvc
+    - name: go-va
+      runAfter: [go]
+      taskRef:
+        name: build-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/cd-deploy-base
+        - name: imageTag
+          value: go1.15
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
     - name: nodejs12-ubi-run
       runAfter: [nodejs12-ubi]
       taskRef:
