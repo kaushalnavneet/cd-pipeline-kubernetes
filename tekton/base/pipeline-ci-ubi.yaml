@@ -88,7 +88,7 @@ spec:
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
-    - name: deploy
+    - name: deploy-gen2
       runAfter: [clone-config-repo]
       taskRef:
         name:  build-base
@@ -99,6 +99,40 @@ spec:
           value: cd-deploy-base
         - name: imageTag
           value: gen2
+        - name: tagSuffix
+          value: ''
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: deploy-gen2-va
+      runAfter: [deploy]
+      taskRef:
+        name: run-va
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageUrl
+          value: us.icr.io/opentoolchain/cd-deploy-base
+        - name: runBaseImage
+          value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
+        - name: imageTag
+          value: gen2
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc
+    - name: deploy
+      runAfter: [clone-config-repo]
+      taskRef:
+        name:  build-base
+      params:
+        - name: source_directory
+          value: $(params.charts_directory)
+        - name: imageName
+          value: cd-deploy-base
+        - name: imageTag
+          value: deploy
         - name: tagSuffix
           value: ''
         - name: runBaseImage
@@ -118,7 +152,7 @@ spec:
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
         - name: imageTag
-          value: gen2
+          value: deploy
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
