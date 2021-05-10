@@ -5,7 +5,7 @@ metadata:
   name: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -14,7 +14,7 @@ metadata:
   namespace: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 ---
 apiVersion: v1
 kind: Secret
@@ -23,7 +23,7 @@ metadata:
   namespace: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 type: Opaque
 data:
   key: %instana_key%
@@ -36,7 +36,7 @@ metadata:
   namespace: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 data:
   cluster_name: "%cluster_name%"
   configuration.yaml: |
@@ -81,7 +81,7 @@ metadata:
   namespace: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 spec:
   selector:
     matchLabels:
@@ -94,7 +94,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: instana-agent
-        app.kubernetes.io/version: 1.2.13
+        app.kubernetes.io/version: %instana-agent-version%
         instana/agent-mode: "APM"
       annotations: {}
     spec:
@@ -178,7 +178,7 @@ spec:
           ports:
             - containerPort: 42699
         - name: leader-elector
-          image: "instana/leader-elector:0.5.4"
+          image: "instana/leader-elector:%leader_elector_version%"
           env:
             - name: INSTANA_AGENT_POD_NAME
               valueFrom:
@@ -239,7 +239,7 @@ metadata:
   name: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 rules:
 - nonResourceURLs:
     - "/version"
@@ -292,7 +292,7 @@ metadata:
   name: instana-agent
   labels:
     app.kubernetes.io/name: instana-agent
-    app.kubernetes.io/version: 1.2.13
+    app.kubernetes.io/version: %instana-agent-version%
 subjects:
 - kind: ServiceAccount
   name: instana-agent
