@@ -67,14 +67,14 @@ spec:
         fi
 
         function check_top_node() {
-            for iteration in {1..5}
+            for iteration in {1..10}
             do
                 echo "Running kubectl top node: $iteration / 5"
                 if kubectl top node; then
                     return 0
                 else
                     echo "kubectl top node failed. Trying again..."
-                    sleep 5
+                    sleep 20
                 fi
             done
             return 1
