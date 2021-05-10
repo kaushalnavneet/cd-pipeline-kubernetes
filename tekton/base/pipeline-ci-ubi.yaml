@@ -98,7 +98,7 @@ spec:
         - name: imageName
           value: cd-deploy-base
         - name: imageTag
-          value: onepipeline
+          value: gen2
         - name: tagSuffix
           value: ''
         - name: runBaseImage
@@ -118,7 +118,7 @@ spec:
         - name: runBaseImage
           value: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
         - name: imageTag
-          value: onepipeline
+          value: gen2
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
