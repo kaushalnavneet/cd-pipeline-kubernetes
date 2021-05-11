@@ -170,8 +170,8 @@ spec:
       taskRef:
         name: close-cr-secret-rotation
       params:
-        - name: environment
-          value: $(params.environment)
+        - name: region
+          value: $(params.region)
         - name: cr_id
           value: $(tasks.open-cr.results.cr_id)
       workspaces:
