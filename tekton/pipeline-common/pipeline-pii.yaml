@@ -15,6 +15,10 @@ spec:
       default: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
     - name: javaPattern
       default: 'false'
+    - name: nls_file_pattern
+      default: ''
+    - name: nls_folder_pattern
+      default: ''
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -58,6 +62,10 @@ spec:
           value: $(params.environment)
         - name: javaPattern
           value: $(params.javaPattern)
+        - name: nls_file_pattern
+          value: $(params.nls_file_pattern)
+        - name: nls_folder_pattern
+          value: $(params.nls_folder_pattern)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc 

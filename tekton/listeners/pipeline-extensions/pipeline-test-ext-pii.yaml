@@ -10,6 +10,10 @@ spec:
     - name: pii_repo
     - name: pii_branch
     - name: pii_directory
+    - name: nls_file_pattern
+      default: ""
+    - name: nls_folder_pattern
+      default: ""
 
     # CD integration
     - name: api
@@ -100,6 +104,10 @@ spec:
             value: $(params.pii_directory)
           - name: environment
             value: $(params.environment)
+          - name: nls_file_pattern
+            value: $(params.nls_file_pattern)
+          - name: nls_folder_pattern
+            value: $(params.nls_folder_pattern)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -121,6 +129,10 @@ spec:
       value: "pipeline-test-ext/pii"
     - name: environment
       value: "development"
+    - name: nls_file_pattern
+      value: $(params.NLS_FILE_PATTERN)
+    - name: nls_folder_pattern
+      value: $(params.NLS_FOLDER_PATTERN)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
