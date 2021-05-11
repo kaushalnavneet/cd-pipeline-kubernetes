@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: open-cr-secret-rotation
+  name: open-cr-managed-worker
 spec:
   params:
     - name: environment
@@ -15,9 +15,9 @@ spec:
     - name: cr_type
       default: "standard"
     - name: description
-      default: "Update all secrets in vaults, restart required pipeline apps, register new pipeline broker secret to otc-api and cleanup vaults from previous values. Update iam api key value in pipeline-consumption vault, restart pipeline-consumption pod."
+      default: "Updating Kata and/or Agent to the latest version"
     - name: purpose
-      default: "To rotate the pipeline broker secret, pipeline shared secret, devx secret and pipeline consumption iam api key secret that is used by pipeline-consumption app in Continuous Delivery service"
+      default: "Keeping Kata and/or Agent at the latest version"
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -92,9 +92,9 @@ spec:
             ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
         fi
 
-        # set CR time for 1 hour
+        # set CR time for 3 hour
         S_DATE=$(( $(date +%s) + 5 ))
-        E_DATE=$(( $(date +%s) + 4*3600 ))
+        E_DATE=$(( $(date +%s) + 4*10800 ))
 
         export TMP=/tmp/tmp_$$.json
 
@@ -109,7 +109,7 @@ spec:
           "environment": "$CRN",
           "purpose": "$PURPOSE",
           "description": "$DESCRIPTION",
-          "backoutplan": "Restore the previous secret values in vault and restart the pods that use them.",
+          "backoutplan": "Retry update",
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
           "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
           "deploymentready": "yes",

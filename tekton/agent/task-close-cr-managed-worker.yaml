@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: close-cr-secret-rotation
+  name: close-cr-managed-worker
 spec:
   params:
     - name: environment

@@ -47,8 +47,22 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-pvc
-    - name: update-managed-worker-1
+    - name: open-cr
       runAfter: [clone-kata-repo]
+      taskRef:
+        name: open-cr-managed-worker
+      params:
+        - name: environment
+          value: $(params.region)
+        - name: description
+          value: "Updating Kata and/or Agent to the latest version"
+        - name: purpose
+          value: "Keeping Kata and/or Agent at the latest version"
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
+    - name: update-managed-worker-1
+      runAfter: [open-cr]
       taskRef:
         name: update-managed-worker
       params:
@@ -151,4 +165,15 @@ spec:
       workspaces:
         - name: task-pvc
           workspace: pipeline-pvc
-
+    - name: close-cr
+      runAfter: [update-managed-worker-1,update-managed-worker-2,update-managed-worker-3,update-managed-worker-4]
+      taskRef:
+        name: close-cr-secret-rotation
+      params:
+        - name: environment
+          value: $(params.environment)
+        - name: cr_id
+          value: $(tasks.open-cr.results.cr_id)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
