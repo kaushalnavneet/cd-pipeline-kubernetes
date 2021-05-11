@@ -4,7 +4,7 @@ metadata:
   name: close-cr-managed-worker
 spec:
   params:
-    - name: environment
+    - name: region
       default: 'development'
     - name: snUrl
       default: 'https://watsontest.service-now.com'
@@ -38,11 +38,11 @@ spec:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(params.environment)
+        value: $(params.region)
       - name: SN_URL
         value: $(params.snUrl)
-      - name: ENVIRONMENT
-        value: $(params.environment)
+      - name: REGION
+        value: $(params.region)
       - name: CR_ID
         value: $(params.cr_id)
       - name: SLACK_DEPLOY_CHANNEL
@@ -51,8 +51,8 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [ $ENVIRONMENT == "development" ] || [ $ENVIRONMENT == "dev" ]; then
-          echo "Skip CR closing for $ENVIRONMENT environment"
+        if [ $REGION == "development" ] || [ $REGION == "dev" ]; then
+          echo "Skip CR closing for $REGION environment"
           exit 0
         fi
         CR_CLOSE_CATEGORY=successful
@@ -84,7 +84,7 @@ spec:
 
         SN_ICON=":delivery-pipeline:"
         
-        NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${ENVIRONMENT} has concluded."}
+        NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${REGION} has concluded."}
 
         ICON=${SN_ICON:=":mario-pipe-5339:"}
         SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}

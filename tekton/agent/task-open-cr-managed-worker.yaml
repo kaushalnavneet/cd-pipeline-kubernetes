@@ -4,7 +4,7 @@ metadata:
   name: open-cr-managed-worker
 spec:
   params:
-    - name: environment
+    - name: region
       default: 'development'
     - name: snUrl
       default: 'https://watsontest.service-now.com'
@@ -48,11 +48,11 @@ spec:
       - name: HOME
         value: "/root"
       - name: DEPLOY_TARGET
-        value: $(params.environment)
+        value: $(params.region)
       - name: SN_URL
         value: $(params.snUrl)
-      - name: ENVIRONMENT
-        value: $(params.environment)
+      - name: REGION
+        value: $(params.region)
       - name: CR_PRIORITY
         value: $(params.cr_priority)
       - name: CR_TYPE
@@ -67,8 +67,8 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [ $ENVIRONMENT == "development" ] || [ $ENVIRONMENT == "dev" ]; then
-          echo "Skip CR creation for $ENVIRONMENT environment"
+        if [ $REGION == "development" ] || [ $REGION == "dev" ]; then
+          echo "Skip CR creation for $REGION environment"
           CR_ID="no cr"
           echo -n $CR_ID | tee $(results.cr_id.path)
           exit 0
@@ -84,7 +84,7 @@ spec:
         fi
 
         SYSTEM="continuous-delivery-pipeline"
-        CRN="crn:v1:bluemix:public::$ENVIRONMENT::::"
+        CRN="crn:v1:bluemix:public::$REGION::::"
 
         if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
             ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
@@ -165,7 +165,7 @@ spec:
         cat << EOF > message.json
         {
           "channel": "${SLACK_DEPLOY_CHANNEL}",
-          "text": "${ENVIRONMENT}: ${PURPOSE} \n",
+          "text": "${REGION}: ${PURPOSE} \n",
           "username": "${SLACK_USERNAME}", 
           "icon_emoji": "${ICON}",
           "attachments": [
