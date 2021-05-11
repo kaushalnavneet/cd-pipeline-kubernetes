@@ -5,7 +5,7 @@ setup:
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
-    echo "Done"
+    source ./tekton/one-pipeline/script/scripts/pii.sh
 
 
 test:

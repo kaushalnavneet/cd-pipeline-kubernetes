@@ -5,8 +5,9 @@ setup:
   configmap: cd-config
   script: |
     #!/usr/bin/env bash
-
-    echo "Done"
+    export NLS_FOLDER_PATTERN=resources
+    export NLS_FILE_PATTERN=Language_en.properties
+    source ./tekton/one-pipeline/script/scripts/pii.sh
 
 
 test:

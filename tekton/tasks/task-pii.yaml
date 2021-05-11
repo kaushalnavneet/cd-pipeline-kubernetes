@@ -6,10 +6,10 @@ spec:
   params:
     - name: source_directory
     - name: runBaseImage
-    - name: environment
-      default: 'development'
     - name: javaPattern
       default: 'false'
+    - name: nls_folder_pattern
+    - name: nls_file_pattern
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -26,6 +26,10 @@ spec:
         value: "false"
       - name: JAVA_PATTERN
         value: $(params.javaPattern)
+      - name: NLS_FILE_PATTERN
+        value: $(params.nls_file_pattern)
+      - name: NLS_FOLDER_PATTERN
+        value: $(params.nls_folder_pattern)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
