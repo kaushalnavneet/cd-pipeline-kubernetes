@@ -56,6 +56,8 @@ spec:
         API_KEY: $(params.API_KEY)
         DEPLOY_API_KEY: $(params.API_KEY)
         IDS_TOKEN: $(params.IDS_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN_TEST)
+        SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
