@@ -52,7 +52,7 @@ spec:
       taskRef:
         name: open-cr-managed-worker
       params:
-        - name: environment
+        - name: region
           value: $(params.region)
         - name: description
           value: "Updating Kata and/or Agent to the latest version"
