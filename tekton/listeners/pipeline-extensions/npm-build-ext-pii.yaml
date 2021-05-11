@@ -98,8 +98,6 @@ spec:
             value: $(params.pii_branch)
           - name: pii_directory
             value: $(params.pii_directory)
-          - name: environment
-            value: $(params.environment)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -119,8 +117,6 @@ spec:
       value: "master"
     - name: pii_directory
       value: "npm-build-ext/pii"
-    - name: environment
-      value: "development"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
