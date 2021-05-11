@@ -37,6 +37,8 @@ spec:
         REGION: $(params.toolchainRegion)
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
+        NLS_FILE_PATTERN: $(params.NLS_FILE_PATTERN)
+        NLS_FOLDER_PATTERN: $(params.NLS_FOLDER_PATTERN)
     - apiVersion: v1
       kind: Secret
       metadata:

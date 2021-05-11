@@ -8,6 +8,18 @@ spec:
     - name: runBaseImage
     - name: javaPattern
       default: 'false'
+  stepTemplate:
+    env:
+      - name: NLS_FILE_PATTERN
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: NLS_FILE_PATTERN
+      - name: NLS_FOLDER_PATTERN
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: NLS_FOLDER_PATTERN
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
