@@ -130,7 +130,7 @@ spec:
         echo "RESPONSE: ${RESPONSE}"
         CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
         echo "CR ID: ${CR_ID}"
-        echo "https://watson.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}"
+        echo "SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}"
 
         sleep 10
         RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
