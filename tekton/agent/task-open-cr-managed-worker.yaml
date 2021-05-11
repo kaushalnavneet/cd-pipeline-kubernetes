@@ -146,4 +146,3 @@ spec:
         echo "ServiceNow change request is in $CR_STATE state."
 
         echo -n $CR_ID | tee $(results.cr_id.path)
-        echo ""
