@@ -8,8 +8,6 @@ spec:
       default: 'development'
     - name: snUrl
       default: 'https://watsontest.service-now.com'
-    - name: deployChannel
-      default: '#devops-otc-deployment'
     - name: cr_priority
       default: "moderate"
     - name: cr_type
@@ -32,11 +30,6 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SN_TOKEN
-      - name: SLACK_DEPLOY_HOOK
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: SLACK_DEPLOY_HOOK
   workspaces:
   - name: output
     mountPath: /workspace 
@@ -61,8 +54,6 @@ spec:
         value: $(params.description)
       - name: PURPOSE
         value: $(params.purpose)
-      - name: SLACK_DEPLOY_CHANNEL
-        value: $(params.deployChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -156,29 +147,3 @@ spec:
 
         echo -n $CR_ID | tee $(results.cr_id.path)
         echo ""
-
-        SN_ICON=":delivery-pipeline:"
-
-        ICON=${SN_ICON:=":mario-pipe-5339:"}
-        SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
-
-        cat << EOF > message.json
-        {
-          "channel": "${SLACK_DEPLOY_CHANNEL}",
-          "text": "${REGION}: ${PURPOSE} \n",
-          "username": "${SLACK_USERNAME}", 
-          "icon_emoji": "${ICON}",
-          "attachments": [
-            {
-              "title": "ServiceNow",
-              "type": "mrkdwn",
-              "text": "ChangeRequest ticket opened: <${SN_URL}/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}|${CR_ID}>"
-            }
-          ]
-        }
-        EOF
-
-        echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
-        curl -X POST -H "Content-Type: application/json" \
-            -d @message.json \
-            ${SLACK_DEPLOY_HOOK}

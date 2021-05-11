@@ -8,8 +8,6 @@ spec:
       default: 'development'
     - name: snUrl
       default: 'https://watsontest.service-now.com'
-    - name: deployChannel
-      default: '#devops-otc-deployment'
     - name: cr_id
   stepTemplate:
     env:
@@ -22,11 +20,6 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SN_TOKEN
-      - name: SLACK_DEPLOY_HOOK
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: SLACK_DEPLOY_HOOK
   workspaces:
   - name: output
     mountPath: /workspace 
@@ -45,8 +38,6 @@ spec:
         value: $(params.region)
       - name: CR_ID
         value: $(params.cr_id)
-      - name: SLACK_DEPLOY_CHANNEL
-        value: $(params.deployChannel)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -62,7 +53,7 @@ spec:
         cat - >"$TMP" <<HERE
         {
             "closecategory": "$CR_CLOSE_CATEGORY",
-            "closenotes": "DEPLOYMENT finished.",
+            "closenotes": "Kata and/or Agent update finished.",
             "actualendtime": "now"
         }
         HERE
@@ -81,24 +72,3 @@ spec:
         fi
 
         echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
-
-        SN_ICON=":delivery-pipeline:"
-        
-        NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${REGION} has concluded."}
-
-        ICON=${SN_ICON:=":mario-pipe-5339:"}
-        SLACK_USERNAME=${SN_SLACK_USERNAME:="Deployment Notification"}
-
-        cat << EOF > message.json
-        {
-          "channel": "${SLACK_DEPLOY_CHANNEL}",
-          "username": "${SLACK_USERNAME}",
-          "icon_emoji": "${ICON}",
-          "text": "${NOTICE_TEXT} \n"
-        }
-        EOF
-        echo Posting message to "${SLACK_DEPLOY_CHANNEL}" channel
-        #Post to slack deployment channel
-        curl -X POST -H "Content-Type: application/json" \
-            -d @message.json \
-            ${SLACK_DEPLOY_HOOK}
