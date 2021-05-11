@@ -7,7 +7,7 @@ spec:
     - name: environment
       default: 'development'
     - name: snUrl
-      default: 'https://watson.service-now.com'
+      default: 'https://watson.test.service-now.com'
     - name: deployChannel
       default: '#devops-otc-deployment'
     - name: cr_id
