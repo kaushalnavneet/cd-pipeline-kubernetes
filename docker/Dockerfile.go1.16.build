@@ -72,5 +72,5 @@ RUN helm init -c --stable-repo-url https://charts.helm.sh/stable
 
 RUN go get -u github.com/FiloSottile/gvt
 RUN go get github.com/stretchr/testify/assert
-#RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.38.0 && golangci-lint --version
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.38.0 && golangci-lint --version
 RUN go env -w GO111MODULE=off
