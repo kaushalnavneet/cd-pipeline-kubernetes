@@ -4,9 +4,6 @@
     name: cd-config
   data:
     SOURCE_BRANCH:  "master"
-    CHARTS_REPO: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
-    CONFIG_REPO: "https://github.ibm.com/ids-env/devops-config.git"
-    CONFIG_BRANCH: "master"
     ENVIRONMENT: "development"
     CLUSTERNAME: "otc-us-south-dev"
     CLUSTERNAMESPACE: "opentoolchain"
