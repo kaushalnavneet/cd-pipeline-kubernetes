@@ -6,7 +6,7 @@
 # Use, duplication or disclosure restricted by GSA ADP Schedule
 # Contract with IBM Corp.
 ###############################################################################
-FROM us.icr.io/opentoolchain/cd-build-base:go1.15 as build
+FROM us.icr.io/opentoolchain/cd-build-base:go1.16 as build
 
 ARG TINI_VERSION=v0.16.1
 ARG JQ_VERSION=jq-1.6
@@ -16,7 +16,6 @@ WORKDIR $GOPATH/src/github.com/travis-ci/worker
 ADD . $GOPATH/src/github.com/travis-ci/worker 
 
 RUN gvt rebuild
-RUN gometalinter --install --update
 
 RUN make
 RUN mkdir -p /work/component/export/keys

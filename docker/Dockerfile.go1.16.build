@@ -9,7 +9,7 @@
 ## 
 # used to build travis-worker image
 ##
-FROM golang:1.16.2-alpine3.13
+FROM golang:1.16.4-alpine3.13
 
 ARG OPERATOR_RELEASE_VERSION=v0.16.0
 ENV LANG=en_US.UTF-8
@@ -38,7 +38,7 @@ RUN wget --quiet --output-document /tmp/get_helm.sh https://raw.githubuserconten
 RUN curl -OJL https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_RELEASE_VERSION}/operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 RUN chmod +x operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu && cp operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${OPERATOR_RELEASE_VERSION}-x86_64-linux-gnu
 
-ENV IBMCLOUD_VERSION='1.4.0'
+ENV IBMCLOUD_VERSION='1.5.1'
 RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/ibm-cloud-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     export PATH=/opt/IBM/cf/bin:$PATH && \
@@ -48,9 +48,9 @@ RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/
     mkdir -p /usr/local/Bluemix/bin/cfcli && \
     mkdir -p /usr/local/ibmcloud/bin/cfcli
 
-RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
-    ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.50 && \
+RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.258 && \
+    ibmcloud plugin install container-registry -r Bluemix -v 0.1.525 && \
+    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.56 && \
     ibmcloud plugin list
 
 RUN mkdir -p /work/component/export
