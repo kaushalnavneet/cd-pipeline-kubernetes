@@ -94,6 +94,8 @@ spec:
           read -ra tar <<<"$TEMP_TARGET_KATA"
           TARGET_KATA=${tar[0]}
           CURRENT_KATA=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image | sed -e 's/^"//' -e 's/"$//')
+          echo $TARGET_KATA
+          echo $CURRENT_KATA
           purpose+="Keep kata up to date --- "
           description+="Update kata from version $CURRENT_KATA to $TARGET_KATA --- "
         fi
@@ -102,6 +104,8 @@ spec:
         then
           TARGET_AGENT=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
           CURRENT_AGENT=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
+          echo $TARGET_AGENT
+          echo $CURRENT_AGENT
           purpose+="Keep agent up to date --- "
           description+="Update agent from version $CURRENT_AGENT to $TARGET_AGENT --- "
         fi
