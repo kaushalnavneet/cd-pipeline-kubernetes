@@ -76,6 +76,8 @@ spec:
           exit 0
         fi
 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
 
         ibmcloud config --check-version=false
