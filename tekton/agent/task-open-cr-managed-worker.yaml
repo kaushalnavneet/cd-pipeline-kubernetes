@@ -88,7 +88,7 @@ spec:
         description=""
         purpose=""
 
-        if [[ UPDATE_KATA == "true" ]]
+        if [[ UPDATE_KATA == "true" || UPDATE_AGENT == true ]]
         then
           TEMP_TARGET_KATA=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml | sed -e 's/^"//' -e 's/"$//')    
           read -ra tar <<<"$TEMP_TARGET_KATA"
@@ -98,7 +98,7 @@ spec:
           description+="Update kata from version $CURRENT_KATA to $TARGET_KATA --- "
         fi
 
-        if [[ UPDATE_AGENT == "true" ]]
+        if [[ UPDATE_AGENT == "true" || UPDATE_AGENT == true ]]
         then
           TARGET_AGENT=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
           CURRENT_AGENT=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
