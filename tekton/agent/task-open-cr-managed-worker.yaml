@@ -76,10 +76,8 @@ spec:
           exit 0
         fi
 
-        export HOME=/root
-        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-
+        echo $(yq --version)
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
