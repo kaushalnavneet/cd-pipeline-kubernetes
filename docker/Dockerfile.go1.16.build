@@ -68,7 +68,7 @@ RUN wget --no-check-certificate https://github.com/stedolan/jq/releases/download
     && chmod +x /usr/bin/jq \
     && rm -f /tmp/jq-linux64
 
-RUN helm init --client-only
+RUN helm init -c --stable-repo-url https://charts.helm.sh/stable
 
 RUN go get -u github.com/FiloSottile/gvt
 RUN go get github.com/stretchr/testify/assert
