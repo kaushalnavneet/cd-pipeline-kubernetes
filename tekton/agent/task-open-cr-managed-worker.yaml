@@ -12,10 +12,8 @@ spec:
       default: "moderate"
     - name: cr_type
       default: "standard"
-    - name: description
-      default: "Updating Kata and/or Agent to the latest version"
-    - name: purpose
-      default: "Keeping Kata and/or Agent at the latest version"
+    - name: update_agent
+    - name: update_kata
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -50,10 +48,6 @@ spec:
         value: $(params.cr_priority)
       - name: CR_TYPE
         value: $(params.cr_type)
-      - name: DESCRIPTION
-        value: $(params.description)
-      - name: PURPOSE
-        value: $(params.purpose)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -87,6 +81,29 @@ spec:
         S_DATE=$(( $(date +%s) + 5 ))
         E_DATE=$(( $(date +%s) + 4*10800 ))
 
+        description=""
+        purpose=""
+
+        if [[ update_kata == "true" ]]
+        then
+          TEMP_TARGET_KATA=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml | sed -e 's/^"//' -e 's/"$//')    
+          read -ra tar <<<"$TEMP_TARGET_KATA"
+          TARGET_KATA=${tar[0]}
+          CURRENT_KATA=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image | sed -e 's/^"//' -e 's/"$//')
+          purpose+="Keep kata up to date\n"
+          description+="Update kata from version $CURRENT_KATA to $TARGET_KATA\n"
+        fi
+
+        if [[ updata_agent == "true" ]]
+        then
+          TARGET_AGENT=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
+          CURRENT_AGENT=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
+          purpose+="Keep agent up to date\n"
+          description+="Update agent from version $CURRENT_AGENT to $TARGET_AGENT\n"
+        fi
+
+        description+="Using the pipeline https://cloud.ibm.com/devops/pipelines/tekton/0dc0ca3b-f881-4d43-91ee-b0306632f81e?env_id=ibm:yp:us-south"
+
         export TMP=/tmp/tmp_$$.json
 
         # tag message adds link to ServiceNow query using deploy commit hash in the description field
@@ -98,8 +115,8 @@ spec:
           "outageduration": "0 00:00:00",
           "priority": "${CR_PRIORITY}",
           "environment": "$CRN",
-          "purpose": "$PURPOSE",
-          "description": "$DESCRIPTION",
+          "purpose": "$purpose",
+          "description": "$description",
           "backoutplan": "Retry update",
           "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
           "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 

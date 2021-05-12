@@ -54,10 +54,8 @@ spec:
       params:
         - name: region
           value: $(params.region)
-        - name: description
-          value: "Updating Kata and/or Agent to the latest version"
-        - name: purpose
-          value: "Keeping Kata and/or Agent at the latest version"
+        - name: update_kata
+        - name: update_agent
       workspaces:
       - name: output
         workspace: pipeline-pvc
