@@ -3,13 +3,6 @@
   metadata:
     name: cd-config
   data:
-    SOURCE_BRANCH:  "master"
-    ENVIRONMENT: "development"
-    CLUSTERNAME: "otc-us-south-dev"
-    CLUSTERNAMESPACE: "opentoolchain"
-    SKIPBUILD: "false"
-    SKIPVA: "true"
-    SKIPDEPLOY: "false"
     # original config map values
     API: "https://cloud.ibm.com"
     REGION: "us-south"
