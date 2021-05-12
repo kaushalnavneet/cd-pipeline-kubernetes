@@ -77,6 +77,8 @@ spec:
           ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
           ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
+          echo $(yq --version)
+
           echo "Current managed worker state:"
           echo ${CLUSTER_NAME}
           kubectl describe workeragents
