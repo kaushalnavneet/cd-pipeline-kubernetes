@@ -175,12 +175,12 @@ spec:
     - name: go-va
       runAfter: [go]
       taskRef:
-        name: build-base
+        name: run-va
       params:
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
-          value: us.icr.io/opentoolchain/cd-deploy-base
+          value: us.icr.io/opentoolchain/cd-build-base
         - name: imageTag
           value: go1.15
         - name: runBaseImage
@@ -207,12 +207,12 @@ spec:
     - name: go116-va
       runAfter: [go116]
       taskRef:
-        name: build-base
+        name: run-va
       params:
         - name: source_directory
           value: $(params.charts_directory)
         - name: imageUrl
-          value: us.icr.io/opentoolchain/cd-deploy-base
+          value: us.icr.io/opentoolchain/cd-build-base
         - name: imageTag
           value: go1.16
         - name: runBaseImage
