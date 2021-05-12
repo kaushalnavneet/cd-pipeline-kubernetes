@@ -66,6 +66,7 @@ spec:
         - |
           export HOME=/root
           [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+          echo $(yq --version)
           set -e
           if [ "${SKIP}" == true ]; then
             echo "Skipping Deploy"
@@ -76,8 +77,6 @@ spec:
           ibmcloud plugin install -f container-service
           ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
           ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
-
-          echo $(yq --version)
 
           echo "Current managed worker state:"
           echo ${CLUSTER_NAME}
