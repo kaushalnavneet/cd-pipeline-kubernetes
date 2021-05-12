@@ -55,7 +55,9 @@ spec:
         - name: region
           value: $(params.region)
         - name: update_kata
+          value: $(params.update_kata)
         - name: update_agent
+          value: $(params.update_agent)
       workspaces:
       - name: output
         workspace: pipeline-pvc
