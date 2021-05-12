@@ -143,6 +143,9 @@ spec:
             sleep 15
           fi 
 
+          target=$(yq --yaml-output '.spec.template.spec.containers[0].image'<(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install))
+          echo $target
+
           kubectl wait -l app=private-worker-agent --for=condition=ready pod --timeout=-1s -n tekton-pipelines
           kubectl wait -l app=tekton-pipelines-controller --for=condition=ready pod --timeout=-1s -n tekton-pipelines
           kubectl wait -l app=tekton-pipelines-webhook --for=condition=ready pod --timeout=-1s -n tekton-pipelines
