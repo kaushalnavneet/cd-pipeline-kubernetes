@@ -58,6 +58,8 @@ spec:
           value: $(params.update_kata)
         - name: update_agent
           value: $(params.update_agent)
+        - name: clusterName
+          value: $(params.clusterName1)
       workspaces:
       - name: output
         workspace: pipeline-pvc

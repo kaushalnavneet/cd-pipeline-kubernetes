@@ -14,6 +14,7 @@ spec:
       default: "standard"
     - name: update_agent
     - name: update_kata
+    - name: clusterName
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -28,6 +29,16 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: SN_TOKEN
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
   workspaces:
   - name: output
     mountPath: /workspace 
@@ -52,6 +63,8 @@ spec:
         value: $(params.update_agent)
       - name: UPDATE_KATA
         value: $(params.update_kata)
+      - name: CLUSTER_NAME
+        value: $(params.clusterName)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -64,6 +77,11 @@ spec:
         fi
 
         set -e
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+        ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
         if [ -z ${CR_TYPE} ]; then
           CR_TYPE="standard"
