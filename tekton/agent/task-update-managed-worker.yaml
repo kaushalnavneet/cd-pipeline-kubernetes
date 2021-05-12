@@ -108,9 +108,9 @@ spec:
           if [[ "$UPDATE_KATA" == "true" ]]
           then
             echo Comparing kata versions...
-            target=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml)
+            target=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml | sed -e 's/^"//' -e 's/"$//')
             read -ra tar <<<"$target"
-            current=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image)
+            current=$(kubectl get ds -n kube-system kata-deploy -o json | jq -r .spec.template.spec.containers[0].image | sed -e 's/^"//' -e 's/"$//')
             echo Current version = $current
             echo Target version = ${tar[0]}
             if ! [[ "$current" == "${tar[0]}" ]] 
@@ -128,19 +128,27 @@ spec:
 
           if [[ "$UPDATE_AGENT" == "true" ]]
           then
-            kubectl apply --filename "https://private-worker-service.${REGION}.${TARGET_DOMAIN}/update"
-            sleep 10
-            updaterPod=$(kubectl get pods | grep agent-updater | awk '{ print $1 }')
-            echo "Waiting for pod ${updaterPod} to complete"
-            while ! [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
-            if [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]]
-            sleep 10
+            echo Comparing agent versions...
+            target=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
+            current=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
+            echo Current version = $current
+            echo Target version = $target
+            if ! [[ "$current" == "$target" ]]
             then
-              updaterJob=$(kubectl get jobs | grep agent-updater | awk '{ print $1 }')
-              kubectl delete job ${updaterJob} &
+              kubectl apply --filename "https://private-worker-service.${REGION}.${TARGET_DOMAIN}/update"
+              sleep 10
+              updaterPod=$(kubectl get pods | grep agent-updater | awk '{ print $1 }')
+              echo "Waiting for pod ${updaterPod} to complete"
+              while ! [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
+              if [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]]
+              sleep 10
+              then
+                updaterJob=$(kubectl get jobs | grep agent-updater | awk '{ print $1 }')
+                kubectl delete job ${updaterJob} &
+              fi
+              echo "Pod ${updaterPod} is complete"
+              sleep 15
             fi
-            echo "Pod ${updaterPod} is complete"
-            sleep 15
           fi 
 
           kubectl wait -l app=private-worker-agent --for=condition=ready pod --timeout=-1s -n tekton-pipelines
