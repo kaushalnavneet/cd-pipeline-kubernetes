@@ -360,6 +360,15 @@ else
     }
     cluster_config ${CLUSTER_NAME}
 
+
+    set -x    
+    export TILLER_NAMESPACE=tiller
+    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz --output openshift-client-linux.tar.gz
+    mkdir -p openshift-client-linux && tar zxvf openshift-client-linux.tar.gz -C openshift-client-linux && mv openshift-client-linux/oc /usr/local/bin/oc && rm -rf openshift-client-linux
+    chmod +x /usr/local/bin/oc
+    oc login -u apikey -p ${API_KEY}
+    env
+
     set -e
     INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
     echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
