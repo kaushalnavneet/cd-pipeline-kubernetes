@@ -6,7 +6,7 @@ spec:
   triggers:
     - bindings:
         - name: region
-          value: "us-south"
+          value: "dev"
         - name: environment
           value: "dev-us-south"
         - name: clusterName1
