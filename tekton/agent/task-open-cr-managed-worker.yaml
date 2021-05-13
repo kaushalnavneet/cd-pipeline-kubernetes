@@ -103,7 +103,7 @@ spec:
         fi
 
         # set CR time for 3 hour
-        S_DATE=$(( $(date +%s) + 5 ))
+        S_DATE=$(( $(date +%s) + 30 ))
         E_DATE=$(( $(date +%s) + 4*10800 ))
 
         description=""
