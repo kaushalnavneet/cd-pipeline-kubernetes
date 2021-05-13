@@ -69,7 +69,7 @@ spec:
         function check_top_node() {
             for iteration in {1..10}
             do
-                echo "Running kubectl top node: $iteration / 5"
+                echo "Running kubectl top node: $iteration / 10"
                 if kubectl top node; then
                     return 0
                 else
