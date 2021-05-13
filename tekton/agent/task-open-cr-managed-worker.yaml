@@ -44,7 +44,7 @@ spec:
     mountPath: /workspace 
   steps:
   - name: open-cr
-    image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
+    image: us.icr.io/opentoolchain/cd-deploy-base:deploy
     imagePullPolicy: IfNotPresent
     env:
       - name: HOME
