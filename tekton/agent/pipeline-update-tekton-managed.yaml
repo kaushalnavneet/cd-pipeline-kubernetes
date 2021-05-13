@@ -60,6 +60,8 @@ spec:
           value: $(params.update_agent)
         - name: clusterName
           value: $(params.clusterName1)
+        - name: target_domain
+          value: $(params.target_domain)
       workspaces:
       - name: output
         workspace: pipeline-pvc

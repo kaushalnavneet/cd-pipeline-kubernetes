@@ -15,6 +15,7 @@ spec:
     - name: update_agent
     - name: update_kata
     - name: clusterName
+    - name: target_domain
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -65,6 +66,8 @@ spec:
         value: $(params.update_kata)
       - name: CLUSTER_NAME
         value: $(params.clusterName)
+      - name: TARGET_DOMAIN
+        value: $(params.target_domain)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
