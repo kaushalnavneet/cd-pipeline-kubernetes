@@ -119,10 +119,6 @@ initEnvVars() {
         export IDS_TOKEN=$(cat /config/IDS_TOKEN)
     fi
 
-    if [ -f "/config/CLUSTERNAMESPACE" ]; then
-        export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
-    fi
-
     if [ -f "/config/git-commit" ]; then
         export COMMIT_SHA="$(cat /config/git-commit)"
     fi

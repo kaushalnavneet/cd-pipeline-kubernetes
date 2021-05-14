@@ -10,7 +10,6 @@ initDefaults() {
     export REGISTRY_URL="us.icr.io"
     export REGISTRY_NAMESPACE="opentoolchain"
     export IMAGE_NAME=""
-    export CLUSTER_NAMESPACE="opentoolchain"
     export ENVIRONMENT="development"
     export SKIP="false"
     export HELM_OPTIONS=""
@@ -104,8 +103,8 @@ initEnvVars() {
         export IDS_TOKEN=$(cat /config/IDS_TOKEN)
     fi
 
-    if [ -f "/config/CLUSTERNAMESPACE" ]; then
-        export CLUSTERNAMESPACE=$(cat /config/CLUSTERNAMESPACE)
+    if [ -f "/config/CLUSTER_NAMESPACE" ]; then
+        export CLUSTER_NAMESPACE=$(cat /config/CLUSTER_NAMESPACE)
     fi
 
     if [ -f "/config/MAJOR_VERSION" ]; then
@@ -223,7 +222,7 @@ if [[ -z $DEV_MODE ]]; then
     CHART_VERSION=$(ls ${CHART_REPO_ABS}/charts/${APP_NAME}* 2> /dev/null | sort -V | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' || echo "${MAJOR_VERSION}.${MINOR_VERSION}.0")
     CHART_VERSION=${CHART_VERSION:=1.0.0}
 
-    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTERNAMESPACE}.\n"
+    printf "Publishing chart ${APP_NAME},\nversion ${CHART_VERSION},\nfor cluster ${DRY_RUN_CLUSTER},\nnamespace ${CLUSTER_NAMESPACE}.\n"
 
     ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${DRY_RUN_API_KEY}
 
@@ -271,8 +270,8 @@ if [[ -z $DEV_MODE ]]; then
     helm init -c --stable-repo-url https://charts.helm.sh/stable
     helm dep up ${APP_NAME}
     echo "=========================================================="
-    echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTERNAMESPACE}."
-    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTERNAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
+    echo -e "Dry run into: ${DRY_RUN_CLUSTER}/${CLUSTER_NAMESPACE}."
+    if helm upgrade ${APP_NAME} ${APP_NAME} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${RELEASE_ENVIRONMENT}.enabled=true --install --dry-run --debug; then
         echo "helm upgrade --dry-run done"
     else
         echo "helm upgrade --dry-run failed"
@@ -320,9 +319,9 @@ if [[ -z $DEV_MODE ]]; then
     if [[ $rc != 0 ]]; then exit $rc; fi
 
     # need to deploy to preprod environment
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
-    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTERNAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
+    deployComponent "${APP_NAME}" "${CLUSTER_NAME3}" "${CLUSTER_NAMESPACE}" "${REGION}" "${STAGING_REGION}" "${SOURCE_DIRECTORY}"
 else
     cd "${WORKSPACE}"/"${SOURCE_DIRECTORY}"
 
