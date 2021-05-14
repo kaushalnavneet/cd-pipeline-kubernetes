@@ -176,7 +176,7 @@ spec:
     - name: cr_directory
       value: "pipeline-config"
     - name: environment
-      value: "gen2-development"
+      value: "development"
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
