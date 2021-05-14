@@ -11,8 +11,9 @@
 ##
 FROM us.icr.io/opentoolchain/travis-worker:run
 
-ARG TINI_VERSION=v0.16.1
-ARG JQ_VERSION=jq-1.6
+ARG TINI_VERSION=tini-v0.16.1
+ARG JQ_VERSION=jq-linux64-1.6
+ARG ARTIFACTORY_API_KEY
 
 USER root
 
@@ -35,8 +36,8 @@ COPY ./docker/docker_ubi/docker_pre_stop.sh /root/docker_pre_stop.sh
 
 RUN chmod +x /root/docker_pull_start.sh /root/docker_pre_stop.sh
 
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /root/tini
-ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /root/jq
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /root/tini
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /root/jq
 RUN chmod +x /root/tini /root/jq
 
 RUN chmod a+x /root/entrypoint.sh
