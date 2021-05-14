@@ -1,0 +1,119 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-pgbouncer-gen2
+spec:
+  params:
+    - name: clusterName
+    - name: deployBaseImage
+      default: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    - name: environment
+      default: 'development'
+    - name: skipDeploy
+      default: 'true'
+    - name: chartNamespace
+      default: opentoolchain
+    - name: script_directory
+    - name: cr_directory
+  stepTemplate:
+    env:
+      - name: PIPELINE_RUN_URL
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DEPLOY_API_KEY
+      - name: REGISTRY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: REGISTRY_API_KEY
+      - name: TOOLCHAIN_ID
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: TOOLCHAIN_ID
+      - name: VAULT_SIDEKICK_ROLE_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_ROLE_ID
+      - name: VAULT_SIDEKICK_SECRET_ID
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: VAULT_SIDEKICK_SECRET_ID
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace 
+  steps:
+  - name: deploy
+    image: $(params.deployBaseImage)
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: SKIP
+        value: $(params.skipDeploy)
+      - name: CLUSTER_NAME
+        value: $(params.clusterName)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: CHART_NAMESPACE
+        value: $(params.chartNamespace)
+      - name: SCRIPT_DIRECTORY
+        value: $(params.script_directory)
+      - name: CR_DIRECTORY
+        value: $(params.cr_directory)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        set -x
+        if [ "${SKIP}" == true ]; then
+          echo "Skipping Deploy for $CLUSTER_NAME"
+          exit 0
+        fi
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        set +x
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+        set -x
+        set +e
+        function cluster_config() {
+            # 1 - cluster name
+            for iteration in {1..30}
+            do
+                echo "Running cluster config for cluster $1: $iteration / 30"
+                ibmcloud ks cluster config --cluster $1
+                if [[ $? -eq 0 ]]; then
+                    return 0
+                else
+                    echo "Cluster config for $1 failed. Trying again..."
+                    sleep 5
+                fi
+            done
+            return 1
+        }
+        cluster_config ${CLUSTER_NAME}
+        set -e
+
+        chmod a+x ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton-gen2.sh
+        bash ${SCRIPT_DIRECTORY}/scripts/deploy_pgbouncer_tekton-gen2.sh
