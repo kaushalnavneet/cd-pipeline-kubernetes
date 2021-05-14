@@ -13,7 +13,6 @@ FROM ubuntu:xenial
 
 ENV NODE_VERSION 14.16.1
 ENV ARCH x64
-ARG ARTIFACTORY_API_KEY
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
 RUN apt-get update -y
