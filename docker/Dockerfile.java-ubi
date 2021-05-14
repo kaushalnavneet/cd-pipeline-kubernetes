@@ -12,7 +12,7 @@
 FROM us.icr.io/opentoolchain/cd-build-base:java-ubi as build
 
 ARG DEVELOPMENT=true
-ARG JQ_VERSION=jq-1.5
+ARG JQ_VERSION=jq-linux64-1.6
 ARG ICD_REDIS_STORE
 ARG QR_STORE
 ARG MAVEN_USER_ID
@@ -22,7 +22,7 @@ ARG ARTIFACTORY_API_KEY
 ADD . /work/warbuild
 
 WORKDIR /work/warbuild
-ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/warbuild/jq
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /work/warbuild/jq
 
 COPY build_info.json /work/warbuild/src/main/resources/
 
