@@ -30,6 +30,7 @@ FROM us.icr.io/opentoolchain/ibmnode:14ubisecure
 
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
+ARG ARTIFACTORY_API_KEY
 
 ENV PORT=80
 
