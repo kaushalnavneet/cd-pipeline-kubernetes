@@ -47,6 +47,10 @@ initDefaults() {
         export ARTIFACTORY_AUTH_BASE64=$(cat /config/ARTIFACTORY_AUTH_BASE64)
     fi
 
+    if [ -f "/config/ARTIFACTORY_API_KEY" ]; then
+        export ARTIFACTORY_API_KEY=$(cat /config/ARTIFACTORY_API_KEY)
+    fi
+
     if [ -f "/config/ARTIFACTORY_ID" ]; then
         export ARTIFACTORY_ID=$(cat /config/ARTIFACTORY_ID)
     fi

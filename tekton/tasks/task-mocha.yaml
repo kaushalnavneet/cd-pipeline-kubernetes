@@ -89,6 +89,12 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: ARTIFACTORY_AUTH_BASE64
+      - name: ARTIFACTORY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_API_KEY
+
   workspaces:
   - name: task-pvc
     mountPath: /workspace 

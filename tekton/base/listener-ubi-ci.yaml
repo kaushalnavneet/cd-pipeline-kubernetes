@@ -49,7 +49,7 @@ spec:
         IDS_TOKEN: $(params.IDS_TOKEN)
         ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
         ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
-
+        ARTIFACTORY_API_KEY: $(params.ARTIFACTORY_API_KEY)
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
       kind: Secret

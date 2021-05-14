@@ -23,6 +23,8 @@ spec:
       stringData:
         ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
         ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
+        ARTIFACTORY_API_KEY: $(params.ARTIFACTORY_API_KEY)
+
     - apiVersion: v1
       kind: Secret
       metadata:

@@ -13,6 +13,7 @@ initDefaults() {
     export ENVIRONMENT="development"
     export ARTIFACTORY_TOKEN_BASE64=""
     export ARTIFACTORY_AUTH_BASE64=""
+    export ARTIFACTORY_API_KEY=""
     export ARTIFACTORY_ID=""
     export ICD_REDIS_STORE=""
     export QR_STORE=""
@@ -54,6 +55,10 @@ initDefaults() {
 
     if [ -f "/config/ARTIFACTORY_AUTH_BASE64" ]; then
         export ARTIFACTORY_AUTH_BASE64=$(cat /config/ARTIFACTORY_AUTH_BASE64) 
+    fi
+
+    if [ -f "/config/ARTIFACTORY_API_KEY" ]; then
+        export ARTIFACTORY_API_KEY=$(cat /config/ARTIFACTORY_API_KEY)
     fi
 
     if [ -f "/config/ARTIFACTORY_ID" ]; then
@@ -190,7 +195,8 @@ else
     COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
     --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" \
     --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
-    --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
+    --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}" \
+    --build-arg "ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}"
 
 fi
 if [ $? -ne 0 ]; then

@@ -95,6 +95,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: ARTIFACTORY_AUTH_BASE64
+      - name: ARTIFACTORY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: ARTIFACTORY_API_KEY
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
@@ -204,7 +209,8 @@ spec:
             COMPONENT=${COMPONENT_NAME} --build-arg DEVELOPMENT=false --build-arg IDS_USER=${IDS_USER} --build-arg IDS_TOKEN=${IDS_TOKEN}  \
             --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" \
             --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
-            --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}"
+            --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}" \
+            --build-arg "ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}"
 
         fi
         if [ $? -ne 0 ]; then
