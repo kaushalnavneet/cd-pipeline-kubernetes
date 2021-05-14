@@ -101,7 +101,7 @@ spec:
           generatedBy: "pgbouncer-dev-trigger-dev-gen2"
       spec:
         pipelineRef:
-          name: pgbouncer-pipeline
+          name: pgbouncer-pipeline-gen2
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
