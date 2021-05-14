@@ -273,7 +273,7 @@ spec:
         ibmcloud cr login
 
 
-        go env -w GOPROXY="https://idsorg%40us.ibm.com:${ARTIFACTORY_APIKEY}@na.artifactory.swg-devops.com/artifactory/api/go/wcp-otc-common-team-go-virtual"
+        go env -w GOPROXY="https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/api/go/wcp-otc-common-team-go-virtual"
 
         # docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_IMAGE%%/*}
         AGENT_VERSION=`cat version/version.go | grep "Version" | awk '{print $3}' | tr -d '"'`
