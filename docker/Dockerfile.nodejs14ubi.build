@@ -42,9 +42,9 @@ RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googl
 # Install Helm2
 ARG HELM2_VERSION='v2.14.3'
 RUN mkdir -p /tmp/helm_install \
-    && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh \
-    && chmod 700 get_helm.sh \
-    && ./get_helm.sh --version ${HELM2_VERSION} \
+    && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > /tmp/helm_install/get_helm.sh \
+    && chmod 700 /tmp/helm_install/get_helm.sh \
+    && /tmp/helm_install/get_helm.sh --version ${HELM2_VERSION} \
     && rm -rf /tmp/helm*
 
 ENV IBMCLOUD_VERSION='1.4.0'
