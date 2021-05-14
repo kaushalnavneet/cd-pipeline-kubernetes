@@ -26,9 +26,9 @@ RUN mv $GOPATH/bin/travis-worker /work/component/export/
 RUN mv $GOPATH/src/github.com/travis-ci/worker/entrypoint.component.sh /work/component/export/ 
 RUN chmod a+x /work/component/export/travis-worker
 
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /work/component/export/tini
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /work/component/export/jq
-RUN chmod +x /work/component/export/tini /work/component/export/jq
+RUN wget -O /work/component/export/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
+    wget -O /work/component/export/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
+    chmod +x /work/component/export/tini /work/component/export/jq
 
 FROM registry.access.redhat.com/ubi8:latest
 

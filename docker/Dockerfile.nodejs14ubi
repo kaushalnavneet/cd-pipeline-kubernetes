@@ -18,9 +18,6 @@ ARG ARTIFACTORY_AUTH_BASE64
 ARG ARTIFACTORY_API_KEY
 ARG ARTIFACTORY_ID
 
-ARG TINI_VERSION=tini-v0.16.1
-ARG JQ_VERSION=jq-linux64-1.6
-
 ADD . /work/component
 
 WORKDIR /work/component
@@ -34,6 +31,8 @@ FROM us.icr.io/opentoolchain/ibmnode:14ubisecure
 ARG APP_BUILD_NUMBER=latest
 ARG NODE_ENV=production
 ARG ARTIFACTORY_API_KEY
+ARG TINI_VERSION=tini-v0.16.1
+ARG JQ_VERSION=jq-linux64-1.6
 
 ENV PORT=80
 

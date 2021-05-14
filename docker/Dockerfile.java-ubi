@@ -22,7 +22,7 @@ ARG ARTIFACTORY_API_KEY
 ADD . /work/warbuild
 
 WORKDIR /work/warbuild
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /work/warbuild/jq
+RUN wget -O /work/warbuild/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION}
 
 COPY build_info.json /work/warbuild/src/main/resources/
 
