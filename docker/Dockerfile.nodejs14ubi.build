@@ -11,10 +11,9 @@
 ##
 FROM ubuntu:xenial
 
-ARG TINI_VERSION=v0.16.1
-ARG JQ_VERSION=jq-1.6
 ENV NODE_VERSION 14.16.1
 ENV ARCH x64
+ARG ARTIFACTORY_API_KEY
 
 RUN sed -i.bak "/^# deb .*partner/ s/^# //" /etc/apt/sources.list
 RUN apt-get update -y
@@ -31,9 +30,6 @@ RUN rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz"
 
 RUN mkdir -p /work/component/export
 ADD . /work
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /work/component/export/tini
-ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
-RUN chmod +x /work/component/export/tini /work/component/export/jq
 RUN cp -a /work/scripts/entrypoint.nodejsubi.sh /work/component/export/entrypoint.sh
 
 RUN wget --quiet --output-document /usr/local/bin/kubectl  https://storage.googleapis.com/kubernetes-release/release/$(wget --quiet --output-document - https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
@@ -47,7 +43,7 @@ RUN mkdir -p /tmp/helm_install \
     && /tmp/helm_install/get_helm.sh --version ${HELM2_VERSION} \
     && rm -rf /tmp/helm*
 
-ENV IBMCLOUD_VERSION='1.4.0'
+ENV IBMCLOUD_VERSION='1.5.1'
 RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/ibm-cloud-cli/${IBMCLOUD_VERSION}/IBM_Cloud_CLI_${IBMCLOUD_VERSION}_amd64.tar.gz && \
     tar -xzvf /tmp/Bluemix_CLI.tar.gz -C /tmp && \
     export PATH=/opt/IBM/cf/bin:$PATH && \
@@ -57,9 +53,9 @@ RUN wget --quiet -O /tmp/Bluemix_CLI.tar.gz https://download.clis.cloud.ibm.com/
     mkdir -p /usr/local/Bluemix/bin/cfcli && \
     mkdir -p /usr/local/ibmcloud/bin/cfcli
 
-RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.233 && \
-    ibmcloud plugin install container-registry -r Bluemix -v 0.1.514 && \
-    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.54 && \
+RUN ibmcloud plugin install container-service -r Bluemix -v 1.0.258 && \
+    ibmcloud plugin install container-registry -r Bluemix -v 0.1.525 && \
+    ibmcloud plugin install cloud-functions -r Bluemix -v 1.0.56 && \
     ibmcloud plugin list
 
 RUN ibmcloud --version

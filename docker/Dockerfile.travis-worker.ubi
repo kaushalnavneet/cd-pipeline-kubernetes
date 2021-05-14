@@ -1,6 +1,6 @@
 ###############################################################################
 # Licensed Materials - Property of IBM
-# (c) Copyright IBM Corporation 2017, 2020. All Rights Reserved.
+# (c) Copyright IBM Corporation 2017, 2021. All Rights Reserved.
 #
 # Note to U.S. Government Users Restricted Rights:
 # Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -8,8 +8,8 @@
 ###############################################################################
 FROM us.icr.io/opentoolchain/cd-build-base:go1.16 as build
 
-ARG TINI_VERSION=v0.16.1
-ARG JQ_VERSION=jq-1.6
+ARG TINI_VERSION=tini-v0.16.1
+ARG JQ_VERSION=jq-linux64-1.6
 ARG IDS_TOKEN
 ARG ARTIFACTORY_API_KEY
 
@@ -26,8 +26,8 @@ RUN mv $GOPATH/bin/travis-worker /work/component/export/
 RUN mv $GOPATH/src/github.com/travis-ci/worker/entrypoint.component.sh /work/component/export/ 
 RUN chmod a+x /work/component/export/travis-worker
 
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /work/component/export/tini
-ADD https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64 /work/component/export/jq
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /work/component/export/tini
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /work/component/export/jq
 RUN chmod +x /work/component/export/tini /work/component/export/jq
 
 FROM registry.access.redhat.com/ubi8:latest

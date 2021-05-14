@@ -36,6 +36,10 @@ ENV PORT=80
 ENV HOME /home/node
 WORKDIR /home/node
 
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /home/node/tini
+ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /home/node/jq
+RUN chmod +x /home/node/tini /home/node/jq
+
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
 RUN rm -rf /home/node/cd-pipeline-kubernetes
