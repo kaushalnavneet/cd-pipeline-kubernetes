@@ -36,11 +36,11 @@ COPY ./docker/docker_ubi/docker_pre_stop.sh /root/docker_pre_stop.sh
 
 RUN chmod +x /root/docker_pull_start.sh /root/docker_pre_stop.sh
 
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /root/tini
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /root/jq
-RUN chmod +x /root/tini /root/jq
-
-RUN chmod a+x /root/entrypoint.sh
+RUN wget -O /root/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
+    wget -O /root/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
+    chmod +x /root/tini /root/jq && \
+    ls -la /home/node && \
+    chmod a+x /root/entrypoint.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["/usr/bin/dockerd"]

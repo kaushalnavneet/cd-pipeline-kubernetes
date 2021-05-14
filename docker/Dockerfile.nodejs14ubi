@@ -18,6 +18,9 @@ ARG ARTIFACTORY_AUTH_BASE64
 ARG ARTIFACTORY_API_KEY
 ARG ARTIFACTORY_ID
 
+ARG TINI_VERSION=tini-v0.16.1
+ARG JQ_VERSION=jq-linux64-1.6
+
 ADD . /work/component
 
 WORKDIR /work/component
@@ -37,10 +40,10 @@ ENV PORT=80
 ENV HOME /home/node
 WORKDIR /home/node
 
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} /home/node/tini
-ADD https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} /home/node/jq
-RUN chmod +x /home/node/tini /home/node/jq
-RUN ls -la /home/node
+RUN wget -O /home/node/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
+    wget -O /home/node/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
+    chmod +x /home/node/tini /home/node/jq && \
+    ls -la /home/node
 
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
