@@ -13,11 +13,12 @@ ARG JQ_VERSION=jq-1.6
 ARG IDS_TOKEN
 ARG ARTIFACTORY_API_KEY
 
+RUN go env -w GOPROXY="https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/api/go/wcp-otc-common-team-go-virtual"
+
 WORKDIR $GOPATH/src/github.com/travis-ci/worker
 ADD . $GOPATH/src/github.com/travis-ci/worker 
 
 RUN gvt rebuild
-RUN go env -w GOPROXY="https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/api/go/wcp-otc-common-team-go-virtual"
 
 RUN make
 RUN mkdir -p /work/component/export/keys
