@@ -267,6 +267,7 @@ if [[ -z $DEV_MODE ]]; then
     #specify version
     yq write -i ${APP_NAME}/Chart.yaml version "${CHART_VERSION}"
 
+    helm version
     helm init -c --stable-repo-url https://charts.helm.sh/stable
     helm dep up ${APP_NAME}
     echo "=========================================================="
