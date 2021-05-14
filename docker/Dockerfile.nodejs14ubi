@@ -41,8 +41,7 @@ WORKDIR /home/node
 
 RUN wget -O /home/node/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
     wget -O /home/node/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
-    chmod +x /home/node/tini /home/node/jq && \
-    ls -la /home/node
+    chmod +x /home/node/tini /home/node/jq
 
 COPY --from=build /work/component/ /home/node
 COPY --from=build /work/component/export/ /home/node
