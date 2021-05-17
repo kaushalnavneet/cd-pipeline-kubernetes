@@ -178,7 +178,7 @@ spec:
           ports:
             - containerPort: 42699
         - name: leader-elector
-          image: "instana/leader-elector:%leader_elector_version%"
+          image: "instana/leader-elector:%leader-elector-version%"
           env:
             - name: INSTANA_AGENT_POD_NAME
               valueFrom:
