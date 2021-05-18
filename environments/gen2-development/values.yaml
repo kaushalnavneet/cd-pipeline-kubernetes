@@ -1,8 +1,8 @@
 pipeline:
   common:
-    basedomains:
-    - domain: us-south-gen2.devops.dev.cloud.ibm.com
-      tlsSecret: star.us-south-gen2.devops.dev.cloud.ibm.com
+    basedomains: 
+    - domain: us-south.devops.dev.cloud.ibm.com
+      tlsSecret: star.us-south.devops.dev.cloud.ibm.com
       hostNameSuffix: ""
     - domain: stage1.ng.bluemix.net
       tlsSecret: star.stage1.ng.bluemix.net
@@ -47,7 +47,7 @@ pipeline:
         S3_STORAGE_REGION: us-standard
         ENABLE_SECRET_BY_REF: true
         ENABLE_SECRET_PICKER: true
-        SECRETS_API_URL: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         TEKTON_PIPELINE_SERVICE_HOST: http://tekton-pipeline-service
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
@@ -100,7 +100,7 @@ pipeline:
         LOG4JS_CONFIG_PATH: app/assets/log4js.yml
         MQLIGHT_SERVICE: otc-webhook-relay-mqlight-test
         NEW_RELIC_APP_NAME: otc-webhook-relay - GEN2
-        POST_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline/triggers/
+        POST_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline/triggers/
   blade-pipeline-broker:
     replicas: 1
     revisionHistoryLimit: 3
@@ -114,13 +114,13 @@ pipeline:
       data:
         DASHBOARD_URL: /devops/pipelines
         NEW_RELIC_APP_NAME: Pipeline Broker - GEN2
-        LMS_API_URL: http://lms-api/v1/messaging
+        LMS_API_URL: https://lms-api.us-south.devops.dev.cloud.ibm.com/v1/messaging
         PIPELINE_API_URL: http://pipeline-service/pipeline
-        PRIVATE_WORKER_API_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
-        EXT_PIPELINE_API_URL: https://pipeline-service.us-south-gen2.devops.dev.cloud.ibm.com/pipeline
-        PIPELINE_UI_SERVER_URL: https://pipeline-ui.us-south-gen2.devops.dev.cloud.ibm.com
+        PRIVATE_WORKER_API_URL: http://private-worker-service
+        EXT_PIPELINE_API_URL: http://pipeline-service/pipeline
+        PIPELINE_UI_SERVER_URL: http://pipeline-ui
         enableTekton: true
-        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         DEBUG: cloudant:plugins:iamauth
   private-worker-service:
     replicas: 1
@@ -135,7 +135,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Private Worker - GEN2
         USE_NEW_RELIC: true
         IAM_URL: https://iam.test.cloud.ibm.com
-        PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        PRIVATE_WORKER_SERVICE_URL: http://private-worker-service
         LOG_SERVICE_URL: http://pipeline-log-service
         LOG_USE_HTTP: true
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
@@ -144,7 +144,7 @@ pipeline:
         ENABLE_S3_STORAGE: true
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
         DISABLE_TRIGGER_ENDPOINT: true
-        EVENT_SERVICE_URL: https://pipeline-event-service.us-south-gen2.devops.dev.cloud.ibm.com
+        EVENT_SERVICE_URL: http://pipeline-event-service
         ENABLE_RECORD_QUEUE_TIME: true
         GHOST_URL: https://api.global-search-tagging.test.cloud.ibm.com
         RC_URL: https://resource-controller.test.cloud.ibm.com
@@ -165,12 +165,12 @@ pipeline:
         NEW_RELIC_APP_NAME: Tekton Pipeline Service - GEN2
         USE_NEW_RELIC: true
         IAM_URL: https://iam.test.cloud.ibm.com
-        TEKTON_PIPELINE_SERVICE_URL: https://tekton-pipeline-service.us-south-gen2.devops.dev.cloud.ibm.com
+        TEKTON_PIPELINE_SERVICE_URL: http://tekton-pipeline-service
         LOG_SERVICE_URL: http://pipeline-log-service
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
         ENABLE_DISTRIBUTED_LOCK: true
-        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENCRYPTER_PAYLOAD_ENCRYPT: "false"
         REDIS_TIMEOUT: 3000
         ENABLE_SECRET_BY_REF: true
@@ -187,8 +187,8 @@ pipeline:
       data:
         NEW_RELIC_APP_NAME: Pipeline Event Service - GEN2
         USE_NEW_RELIC: true
-        PRIVATE_WORKER_SERVICE_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
-        DEVOPS_API_URL: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        PRIVATE_WORKER_SERVICE_URL: http://private-worker-service
+        DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENABLE_RATE_LIMIT: false
         ENABLE_RUN_ENDPOINT: true
   pipeline-consumption:
@@ -205,9 +205,9 @@ pipeline:
     configmap:
       data:
         NODE_ENV: development
-        OTC_API_URL: http://otc-api/api/v1
+        OTC_API_URL: https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1
         PIPELINE_API_URL: http://pipeline-service/pipeline
-        PRIVATE_WORKER_URL: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
+        PRIVATE_WORKER_URL: http://private-worker-service
         auth__ibmId: pipeauto@us.ibm.com
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
@@ -232,7 +232,7 @@ pipeline:
         AMQP_EXCHANGE: pipeline
         AMQP_QUEUE: pipeline-ui.
         AMQP_MSG_EXP_TIME: "3000"
-        ARS_URL: https://pipeline-artifact-repository-service.us-south-gen2.devops.dev.cloud.ibm.com/codestation/v2
+        ARS_URL: http://pipeline-artifact-repository-service/codestation/v2
         BLUEMIX_API_URL: https://api.stage1.ng.bluemix.net
         BLUEMIX_URL: https://dev.console.test.cloud.ibm.com
         BSS_CHECKED: true
@@ -261,7 +261,7 @@ pipeline:
         SESSION_CACHE_NAME: main-cache
         SESSION_KEY: opsConsole.sid
         SESSION_TTL: "86400"
-        TIAM_URL: http://otc-tiam/identity/v1
+        TIAM_URL: https://otc-tiam.us-south.devops.dev.cloud.ibm.com/identity/v1
         UAA_CLIENT_ID: otcclient
         U_SERVICES_DOMAIN: stage1.ng.bluemix.net
         USE_HTTP: true
@@ -274,7 +274,7 @@ pipeline:
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
-        OTC_API_URL: http://otc-api
+        OTC_API_URL: https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
@@ -286,19 +286,19 @@ pipeline:
         LATEST_DOCKER_IMAGE_UBI: "3.0"
         ENABLE_IMAGE_TYPE_CHOICE: true
         ENABLE_CONFIG_REACT: true
-        PIPELINE_API: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline
-        HOOKURL: https://otc-github-relay-pub.us-south-gen2.devops.dev.cloud.ibm.com
+        PIPELINE_API: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
+        HOOKURL: http://otc-github-relay-pub
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
-        PRIVATE_WORKER_API: https://private-worker-service.us-south-gen2.devops.dev.cloud.ibm.com
-        ORG_BSS_HOST: http://continuous-delivery-bss
-        RG_BSS_HOST: http://cd-broker
+        PRIVATE_WORKER_API: http://private-worker-service
+        ORG_BSS_HOST: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com/
+        RG_BSS_HOST: https://cd-broker.us-south.devops.dev.cloud.ibm.com/
         ENABLE_RG_ENTITLEMENT: true
         ENABLE_REDUX_DEBUG: true
         TEKTON_UI: true
         ENABLE_SECRET_BY_REF: false
         ENABLE_SECRET_PICKER: true
-        SECRETS_API_URL: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        SECRETS_API_URL: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         ENABLE_TIMER_TRIGGER: true
         ENABLE_TEKTON_PUBLIC_WORKERS: true
         ENABLE_TEKTON_PUBLIC_WORKERS_CLASSIC: true
@@ -309,7 +309,7 @@ pipeline:
         ENABLE_EVENT_SERVICE: true
         ENABLE_TRIGGER_DISABLED: true
         CLOUD_PAL_LAYOUT: true
-        SUPPORT_SERVICE_API_URL: https://pipeline-support-service.us-south-gen2.devops.dev.cloud.ibm.com
+        SUPPORT_SERVICE_API_URL: http://pipeline-support-service
         LINTER_ENABLE: true
         ECHO_ENABLED: true
         LOG4JS_WATCHER_INTERVAL: 180000
@@ -393,7 +393,7 @@ pipeline:
         com_ibm_team_integration_pipeline_jenkins_global_user_git_id: 8af3672b-c96d-4eb3-8a3c-bea1f51c6590
         com_ibm_team_integration_pipeline_jenkins_global_user_rtc_id: 8e55ba86-b3b1-4b8b-bc0b-9bd9620ee532
         contextPath: /pipelines
-        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.us-south-gen2.devops.dev.cloud.ibm.com:443
+        codestation_client_ribbon_listOfServers: pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com:443
         cleanup_disabled: false
         cleanup_buildsToKeep: 10
         cleanup_deploysToKeep: 10
@@ -448,7 +448,7 @@ pipeline:
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
         com_ibm_team_integration_pipeline_security_hybrisWhiteList: ''
         com_ibm_team_integration_pipeline_cloud_bluemix_targets: stage1.ng.bluemix.net,ng.bluemix.net
-        com_ibm_team_integration_pipeline_github_hook_url: https://otc-github-relay-pub.us-south-gen2.devops.dev.cloud.ibm.com
+        com_ibm_team_integration_pipeline_github_hook_url: http://otc-github-relay-pub
         debug_script: false
         artifact_size_limit: 0
         artifact_file_limit: 0
@@ -459,7 +459,7 @@ pipeline:
         com_ibm_team_integration_pipeline_db_cloudant_connections_pipeline: 30
         com_ibm_team_integration_pipeline_db_cloudant_connections_stage: 30
         com_ibm_team_integration_pipeline_db_cloudant_timeout: 1000
-        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.us-south-gen2.devops.dev.cloud.ibm.com/v1/pipeline
+        com_ibm_team_integration_pipeline_server_apiUrl: https://devops-api.us-south.devops.dev.cloud.ibm.com/v1/pipeline
         useKeystoreEncodings: false
         com_ibm_team_integration_pipeline_events_threadCount: 3
         codestation_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
@@ -523,7 +523,7 @@ pipeline:
         worker_globalBaseImage: "latest"
         enable_pull_request: true
         enable_secret_by_ref: true
-        secrets_api_url: https://otc-ui.us-south-gen2.devops.dev.cloud.ibm.com/devops/api/v1/secrets
+        secrets_api_url: https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
         worker_privateworkerqueue: true
         com_ibm_team_integration_pipeline_build_builder_cr_enabled: true
         com_ibm_team_integration_pipeline_bss_checkQuotas: true
@@ -545,7 +545,7 @@ pipeline:
         pipeline_event_service_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_ui_cast_enable: true
         com_ibm_team_integration_pipeline_server_without_test_server: true
-        com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south-gen2.devops.dev.cloud.ibm.com
+        com_ibm_team_integration_pipeline_webhook_devops_api: devops-api.us-south.devops.dev.cloud.ibm.com
         bitbucket_server_client_ribbon_ClientClassName: com.ibm.team.integration.pipeline.http.IgnoreCookieClient
   travis-worker:
     replicas: 2
