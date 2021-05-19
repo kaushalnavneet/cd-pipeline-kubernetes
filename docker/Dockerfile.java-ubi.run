@@ -9,7 +9,7 @@
 ## 
 # This is the runtime java image
 ##
-FROM ibmcom/websphere-liberty:21.0.0.1-full-java8-ibmjava-ubi-amd64
+FROM ibmcom/websphere-liberty:21.0.0.5-full-java8-ibmjava-ubi-amd64
 
 USER root
 
