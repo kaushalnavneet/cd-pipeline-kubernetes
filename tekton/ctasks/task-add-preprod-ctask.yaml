@@ -9,7 +9,7 @@ spec:
     - name: snUrl
       default: 'https://watson.service-now.com'
     - name: e2eToolchainId
-      default: 'd5c0676c-55ed-4c25-b763-60b7afd64c87'
+      default: '68213c68-4794-4d5e-ab50-f33d0d6190e4'
     - name: e2eApplication
       default: 'Pipeline'
     - name: e2eBuildId
