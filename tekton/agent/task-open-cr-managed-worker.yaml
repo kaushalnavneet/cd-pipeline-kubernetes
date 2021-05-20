@@ -123,8 +123,8 @@ spec:
 
         if [[ ${UPDATE_AGENT} == "true" ]]
         then
-          TARGET_AGENT=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
-          CURRENT_AGENT=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
+          CURRENT_AGENT=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
+          TARGET_AGENT=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
           echo $TARGET_AGENT
           echo $CURRENT_AGENT
           purpose+="Keep agent up to date --- "
