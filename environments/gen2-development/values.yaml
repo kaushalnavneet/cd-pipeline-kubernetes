@@ -159,7 +159,6 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
-       - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2020_10_30_10h27m37s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Tekton Pipeline Service - GEN2
@@ -176,6 +175,9 @@ pipeline:
         ENABLE_SECRET_BY_REF: true
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         ENABLE_MESSAGE_COMPRESSION: true
+        ENABLE_ENVIRONMENTS: true
+        AGENT_VERSION_RANGE: ">=0.4.0-dev"
+        AGENT_VERSION: "0.9.3-dev"
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
