@@ -22,7 +22,7 @@ do
             echo "$app in $namespace didn't restart properly"
         fi
     else
-        if ! kubectl -n $namespace rollout status deplopyment/$app -w --timeout=10m; then
+        if ! kubectl -n $namespace rollout status deployment/$app -w --timeout=10m; then
             echo "$app in $namespace didn't restart properly"
         fi
     fi
