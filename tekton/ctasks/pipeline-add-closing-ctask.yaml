@@ -18,6 +18,8 @@ spec:
           value: $(params.snUrl)
         - name: e2eBuildId
           value: $(params.e2eBuildId)
+        - name: toolchainId
+          value: $(params.toolchainId)
       workspaces:
       - name: task-pvc
         workspace: pipeline-pvc
