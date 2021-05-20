@@ -433,7 +433,7 @@ pipeline:
         toolchain_client_ribbon_listOfServers: ''
         com_ibm_team_integration_pipeline_features_context: Blade
         com_ibm_team_integration_pipeline_features_stage_queue: true
-        tiam_client_ribbon_listOfServers: otc-tiam
+        tiam_client_ribbon_listOfServers: https://otc-tiam.us-south.devops.dev.cloud.ibm.com
         tiam_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
         com_ibm_team_integration_pipeline_eventLogging_enabled: false
@@ -443,7 +443,7 @@ pipeline:
         com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
         mccp_client_ribbon_listOfServers: mccp.ng.bluemix.net:443
         mccp_client_ribbon_IsSecure: true
-        blade_toolchain_client_ribbon_listOfServers: otc-api
+        blade_toolchain_client_ribbon_listOfServers: https://otc-api.us-south.devops.dev.cloud.ibm.com
         blade_toolchain_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
@@ -484,10 +484,10 @@ pipeline:
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console
-        bss_service_client_ribbon_listOfServers: continuous-delivery-bss
+        bss_service_client_ribbon_listOfServers: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
         bss_service_client_ribbon_IsSecure: false
         bss_service_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bss_service_client_rg_ribbon_listOfServers: cd-broker
+        bss_service_client_rg_ribbon_listOfServers: https://cd-broker.us-south.devops.dev.cloud.ibm.com
         bss_service_client_rg_ribbon_IsSecure: false
         bss_service_client_rg_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         com_ibm_team_integration_pipeline_bss_disabled: false
