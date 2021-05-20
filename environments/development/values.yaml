@@ -139,7 +139,7 @@ pipeline:
         LOG_SERVICE_URL: http://pipeline-log-service
         LOG_USE_HTTP: true
         AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.9.3-dev"
+        AGENT_VERSION: "0.10.6-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         ENABLE_S3_STORAGE: true
         S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
