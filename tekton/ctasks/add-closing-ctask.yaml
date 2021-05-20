@@ -87,7 +87,7 @@ spec:
           - name: e2eBuildId
             value: $(params.E2E_BUILD_ID)
           - name: toolchainId
-            value: $(params.toolchainId)
+            value: $(params.TOOLCHAIN_ID)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
