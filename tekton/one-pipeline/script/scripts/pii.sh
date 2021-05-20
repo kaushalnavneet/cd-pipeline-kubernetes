@@ -21,6 +21,7 @@ else
     export RUN_PII=false
 fi
 if [ "$RUN_PII" == true ]; then
+    set -x
     echo "Cloning pii Repo"
     GIT_ASKPASS=./token.sh git clone --depth 1 "https://github.ibm.com/org-ids/pii"
     pii/run
