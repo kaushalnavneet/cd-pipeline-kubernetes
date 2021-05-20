@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 echo ">>>>>>>>>>>>>>>>>>>"
 env | sort
 CURRENT_DIR=$(pwd)
@@ -10,10 +11,10 @@ echo "Current dir: $(pwd)"
 echo ">>>>>>>>>>>>>>>>>>>"
 
 IDS_TOKEN=$(cat /config/IDS_TOKEN)
-echo "echo -n $IDS_TOKEN" > ./token.sh
-chmod +x ./token.sh
-ls
-echo ">>>>>>>>>>>>>>>>>>>"
+if [ -z "$IDS_TOKEN" ]; then
+    echo "IDS_TOKEN is missing"
+    exit 1
+fi
 
 if [ -f "/config/RUN_PII" ]; then
     export RUN_PII=$(cat /config/RUN_PII)
