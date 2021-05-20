@@ -23,6 +23,9 @@ fi
 if [ "$RUN_PII" == true ]; then
     echo "Cloning pii Repo"
     GIT_ASKPASS=./token.sh git clone --depth 1 "https://github.ibm.com/org-ids/pii"
+    REPO_URL=$(git config --get remote.origin.url | sed -E "s/^.*(@|\/\/)([^:\/]+)(\/|:)(.+)$/https:\/\/\2\/\4/" | sed -E "s/^(.*)\.git$/\1/")
+    REPO_NAME=${REPO_URL##*/}
+    echo "${REPO_NAME}"
     pii/run
     rm -rf pii
 else
