@@ -86,7 +86,7 @@ pipeline:
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - GEN2
         NODE_MODULES_CACHE: false
-        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
+        S3_LOGS_BUCKET_NAME: pipeline-logs-dev
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
   otc-github-relay-pub:
@@ -274,7 +274,7 @@ pipeline:
         ENABLE_MCCP_REGION_FEATURE: true
         IAM_CLIENT_ID_PROD: otc
         IAM_CLIENT_ID_INT: otc
-        OTC_API_URL: https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1
+        OTC_API_URL: https://otc-api.us-south.devops.dev.cloud.ibm.com
         OPTIMIZELY_ID: "7964536850"
         PIPELINE_PAGE_IN_REACT: true
         EXECUTION_PAGE_IN_REACT: true
@@ -291,8 +291,8 @@ pipeline:
         ANALYTICS_LINK_HOST: https://otcbroker-dev.us-south.devopsinsights.cloud.ibm.com
         PRIVATE_WORKER: true
         PRIVATE_WORKER_API: http://private-worker-service
-        ORG_BSS_HOST: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com/
-        RG_BSS_HOST: https://cd-broker.us-south.devops.dev.cloud.ibm.com/
+        ORG_BSS_HOST: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
+        RG_BSS_HOST: https://cd-broker.us-south.devops.dev.cloud.ibm.com
         ENABLE_RG_ENTITLEMENT: true
         ENABLE_REDUX_DEBUG: true
         TEKTON_UI: true
@@ -340,7 +340,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - GEN2-dev
         NODE_ENV: staging-us-south
         RUN_ARS_K8S: true
-        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
+        S3_ARS_BUCKET_NAME: pipeline-artifacts-dev
         SSL: true
         STATUS_TIMEOUT: "4500"
         USE_S3: true
@@ -432,7 +432,7 @@ pipeline:
         toolchain_client_ribbon_listOfServers: ''
         com_ibm_team_integration_pipeline_features_context: Blade
         com_ibm_team_integration_pipeline_features_stage_queue: true
-        tiam_client_ribbon_listOfServers: otc-tiam
+        tiam_client_ribbon_listOfServers: https://otc-tiam.us-south.devops.dev.cloud.ibm.com
         tiam_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_stage_execution_updateInterval: 120000
         com_ibm_team_integration_pipeline_eventLogging_enabled: false
@@ -442,7 +442,7 @@ pipeline:
         com_ibm_team_integration_pipeline_eventLogging_hystrixEnabled: false
         mccp_client_ribbon_listOfServers: mccp.ng.bluemix.net:443
         mccp_client_ribbon_IsSecure: true
-        blade_toolchain_client_ribbon_listOfServers: otc-api
+        blade_toolchain_client_ribbon_listOfServers: https://otc-api.us-south.devops.dev.cloud.ibm.com
         blade_toolchain_client_ribbon_IsSecure: false
         com_ibm_team_integration_pipeline_engine2_ys1RequestQueue: builds.linux
         com_ibm_team_integration_pipeline_engine2_hybrisDockerImage: ibm_devops_services/worker_base:hybris_v1
@@ -483,10 +483,10 @@ pipeline:
         com_ibm_team_integration_pipeline_stage_creationLimit: 30
         com_ibm_team_integration_pipeline_stage_job_creationLimit: 10
         log4jRootlogger: INFO, console
-        bss_service_client_ribbon_listOfServers: continuous-delivery-bss
+        bss_service_client_ribbon_listOfServers: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
         bss_service_client_ribbon_IsSecure: false
         bss_service_client_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
-        bss_service_client_rg_ribbon_listOfServers: cd-broker
+        bss_service_client_rg_ribbon_listOfServers: https://cd-broker.us-south.devops.dev.cloud.ibm.com
         bss_service_client_rg_ribbon_IsSecure: false
         bss_service_client_rg_sslsocketfactory: com.ibm.team.integration.pipeline.PipelineSSLSocketFactory
         com_ibm_team_integration_pipeline_bss_disabled: false
