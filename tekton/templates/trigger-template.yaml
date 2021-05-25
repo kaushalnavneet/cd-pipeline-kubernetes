@@ -1,0 +1,92 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: trigger-template-template
+spec:
+  resourcetemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: instana-deploy-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  5Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: instana-deploy-$(uid)
+      spec:
+        pipelineRef:
+          name: pipeline-instana-deploy
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: instana-deploy-$(uid)-pvc
+        params:
+          # SN params
+          - name: sn-region
+            value: $(params.sn-region)
+          - name: sn-url
+            value: $(params.sn-url)
+          - name: sn-token
+            value: $(params.sn-token)
+          - name: cr-priority
+            value: $(params.cr-priority)
+          - name: cr-type
+            value: $(params.cr-type)
+          - name: cr-description
+            value: $(params.cr-description)
+          - name: cr-purpose
+            value: $(params.cr-purpose)
+          - name: cr-close-notes
+            value: $(params.cr-close-notes)
+          - name: cr-close-category
+            value: $(params.cr-close-category)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: trigger-binding-dev-template
+spec:
+  params:
+    - name: sn-region
+      value: "development"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: deploy-dev-template
+spec:
+  triggers:
+    - bindings:
+        - name: servicenow
+        - name: test-servicenow
+        - name: trigger-binding-dev-template
+      template:
+        name: trigger-template-deploy-instana
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: trigger-binding-prod-template
+spec:
+  params:
+    - name: sn-region
+      value: "prod"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: deploy-prod-template
+spec:
+  triggers:
+    - bindings:
+        - name: servicenow
+        - name: prod-servicenow
+        - name: trigger-binding-prod-template
+      template:
+        name: trigger-template-deploy-instana
