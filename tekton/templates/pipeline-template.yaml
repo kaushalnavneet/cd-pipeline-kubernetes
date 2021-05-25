@@ -1,0 +1,69 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-template
+spec:
+  params:
+    # SN - OPEN and CLOSE CR params
+    - name: sn-region
+    - name: sn-url
+    - name: sn-token
+    - name: cr-priority
+    - name: cr-type
+    - name: cr-description
+    - name: cr-purpose
+    - name: cr-close-notes
+    - name: cr-close-category
+    # OTHER PARAMS HERE
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: open-cr
+      taskRef:
+        name: open-cr-template
+      params:
+        - name: sn-region
+          value: $(params.sn-region)
+        - name: sn-url
+          value: $(params.sn-url)
+        - name: sn-token
+          value: $(params.sn-token)
+        - name: cr-priority
+          value: $(params.cr-priority)
+        - name: cr-type
+          value: $(params.cr-type)
+        - name: cr-description
+          value: $(params.cr-description)
+        - name: cr-purpose
+          value: $(params.cr-purpose)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: task-work
+      runAfter: [open-cr]
+      taskRef:
+        name: work-template
+      params:
+        - name: test-param
+          value: "test"
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: close-cr
+      runAfter: [task-work]
+      taskRef:
+        name: close-cr-template
+      params:
+        - name: sn-url
+          value: $(params.sn-url)
+        - name: sn-token
+          value: $(params.sn-token)
+        - name: cr-close-notes
+          value: $(params.cr-close-notes)
+        - name: cr-close-category
+          value: $(params.cr-close-category)
+        - name: cr_id
+          value: $(tasks.open-cr.results.cr_id)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
