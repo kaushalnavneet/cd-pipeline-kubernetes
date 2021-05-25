@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: work-template
+spec:
+  description: >-
+    This task Is a dummy worker task
+  params:
+    - name: test-param
+      default: 'test-param'
+  workspaces:
+    - name: task-pvc
+      mountPath: /workspace
+  steps:
+    - name: deploy
+      image: $(params.deployBaseImage)
+      imagePullPolicy: IfNotPresent
+      workingDir: /workspace
+      command: ['/bin/bash', '-c']
+      args:
+          echo "Do Something"

@@ -1,0 +1,64 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: close-cr-template
+spec:
+  description: >-
+    This task closes a previously opened CR in ServiceNow. Most default text entries come form sn-bindings. Feel free to make further edits in the task body
+  params:
+    - name: sn-url
+    - name: sn-token
+    - name: cr_id
+    - name: cr-close-notes
+    - name: cr-close-category
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace
+  steps:
+  - name: close-cr
+    image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: SN_URL
+        value: $(params.sn-url)
+      - name: CR_ID
+        value: $(params.cr_id)
+      - name: SN_TOKEN
+        value: $(params.sn-token)
+      - name: CR_CLOSE_NOTES
+        value: $(params.cr-close-notes)
+      - name: CR_CLOSE_CATEGORY
+        values: $(pararms.cr-close-category)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        if [ $CR_ID == "no id" ]]; then
+          echo "Skip CR closing no ID given"
+          exit 0
+        fi
+
+        echo "Closing ServiceNow change request $CR_ID ..."
+        export TMP=/tmp/tmp_$$.txt
+        cat - >"$TMP" <<HERE
+        {
+            "closecategory": "$CR_CLOSE_CATEGORY",
+            "closenotes": "$CR_CLOSE_NOTES",
+            "actualendtime": "now"
+        }
+        HERE
+
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/change/$CR_ID/close" \
+            --silent --show-error)
+
+        RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
+
+        if [[ ! "$RESULT" ]]; then
+            echo "Failed: $RESPONSE"
+            exit 1
+        fi
+
+        echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
