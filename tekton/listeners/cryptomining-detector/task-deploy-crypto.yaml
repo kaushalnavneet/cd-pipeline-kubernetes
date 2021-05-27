@@ -98,7 +98,7 @@ spec:
             for iteration in {1..30}
             do
                 echo "Running cluster config for cluster $1: $iteration / 30"
-                ibmcloud ks cluster config --cluster $1
+                ibmcloud ks cluster config --admin --cluster $1
                 if [[ $? -eq 0 ]]; then
                     return 0
                 else
