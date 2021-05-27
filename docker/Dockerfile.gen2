@@ -65,8 +65,8 @@ RUN wget --no-check-certificate https://github.com/stedolan/jq/releases/download
     && chmod +x /usr/bin/jq \
     && rm -f /tmp/jq-linux64
 
-# Install OpenShift CLI 4.7.11
-RUN curl -sLo /tmp/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux-4.7.11.tar.gz \
+# Install OpenShift CLI 4.7.12
+RUN curl -sLo /tmp/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux-4.7.12.tar.gz \
     && tar xzvf /tmp/oc.tar.gz -C /tmp/ \
     && mv /tmp/oc /usr/local/bin/ \
     && rm -f /tmp/oc.tar.gz /tmp/oc /tmp/kubectl
