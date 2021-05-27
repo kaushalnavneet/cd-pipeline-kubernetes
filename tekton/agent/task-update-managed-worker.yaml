@@ -94,7 +94,7 @@ spec:
             do
                 string=$(kubectl get ns ${namespace})
                 age=$(echo $(echo ${string} | awk '{ print $NF }') | awk '{ print $NF }')
-                if [[ $age == *"d"* ]] || [[ ${age:0:1} -ge 6 && $age == *"h"* ]] ; then
+                if [[ $age == *"d"* ]] || { [[ ${age:1:1} -ge 6 ]] || [[ ${age:0:1} -ge 6 ]]; } && [[ $age == *"h"* ]] ; then
                     kubectl delete ns ${namespace} --force --grace-period=0 & 
                 fi
             done
