@@ -14,7 +14,7 @@ wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/downloa
     && ln -fs /usr/bin/yq2 /usr/bin/yq
 
 # update of the cluster name for the current deployment
-yq w -i ${VALUES} clusterName ${CLUSTER_NAME}
+/usr/bin/yq2 w -i ${VALUES} clusterName ${CLUSTER_NAME}
 
 helm delete --purge cryptomining-detector
 kubectl -n opentoolchain delete deployment cryptomining-detector
