@@ -1,0 +1,102 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: restart-ca-tor-trigger-dev
+spec:
+  params:
+    - name: environment
+    - name: clusters
+
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: restart-ca-tor-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage: 15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: restart-ca-tor-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "restart-ca-tor-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-restarter
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: restart-ca-tor-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: environment
+            value: $(params.environment)
+          - name: clusters
+            value: $(params.clusters)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: restart-ca-tor-binding-dev
+spec:
+  params:
+    - name: environment
+      value: "ca-tor"
+    - name: clusters
+      value: otc-pw-tor01-prod,otc-pw-tor04-prod,otc-pw-tor05-prod
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: restart-ca-tor-dev
+spec:
+  triggers:
+    - binding:
+        name: restart-ca-tor-binding-dev
+      template:
+        name: restart-ca-tor-trigger-dev

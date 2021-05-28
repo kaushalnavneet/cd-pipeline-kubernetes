@@ -1,0 +1,100 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-restarter-all-non-eu
+spec:
+  params:
+    - name: environment1
+    - name: environment2
+    - name: environment3
+    - name: environment4
+    - name: environment5
+    - name: environment6
+    - name: environment7
+    - name: clusters1
+    - name: clusters2
+    - name: clusters3
+    - name: clusters4
+    - name: clusters5
+    - name: clusters6
+    - name: clusters7
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: restart-au-syd
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment1)
+        - name: clusters
+          value: $(params.clusters1)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-ca-tor
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment2)
+        - name: clusters
+          value: $(params.clusters2)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-jp-osa
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment3)
+        - name: clusters
+          value: $(params.clusters3)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-jp-tok
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment4)
+        - name: clusters
+          value: $(params.clusters4)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-eu-gb
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment5)
+        - name: clusters
+          value: $(params.clusters5)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-us-east
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment6)
+        - name: clusters
+          value: $(params.clusters6)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc
+    - name: restart-us-south
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment7)
+        - name: clusters
+          value: $(params.clusters7)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc

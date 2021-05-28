@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-restarter
+spec:
+  params:
+    - name: environment
+    - name: clusters
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: restart-cryptomining
+      taskRef:
+        name: restart-deployment
+      params:
+        - name: environment
+          value: $(params.environment)
+        - name: clusters
+          value: $(params.clusters)
+      workspaces:
+        - name: task-pvc
+          workspace: pipeline-pvc

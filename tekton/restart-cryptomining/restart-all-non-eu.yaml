@@ -1,0 +1,158 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: restart-all-non-eu-trigger-dev
+spec:
+  params:
+    - name: environment1
+    - name: environment2
+    - name: environment3
+    - name: environment4
+    - name: environment5
+    - name: environment6
+    - name: environment7
+    - name: clusters1
+    - name: clusters2
+    - name: clusters3
+    - name: clusters4
+    - name: clusters5
+    - name: clusters6
+    - name: clusters7
+    # CD integration
+    - name: api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
+    - name: resourceGroup
+      description: the ibmcloud resource group containing the toolchain referencing the repository
+      default: default
+  resourcetemplates:
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        API: $(params.api)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.API_KEY_1416501)
+    # k8s resources to be able to pull docker image from a specific container registry
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: restart-all-non-eu-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage: 15Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        #generateName: $(params.source_branch)-base-run
+        name: restart-all-non-eu-$(uid)
+        labels:
+          triggertemplated: "true"
+          generatedBy: "restart-all-non-eu-trigger-dev"
+      spec:
+        pipelineRef:
+          name: pipeline-restarter-all-non-eu
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: restart-all-non-eu-$(uid)-pvc
+        serviceAccountName: docker-build-sa
+        params:
+          - name: environment1
+            value: $(params.environment1)
+          - name: environment2
+            value: $(params.environment2)
+          - name: environment3
+            value: $(params.environment3)
+          - name: environment4
+            value: $(params.environment4)
+          - name: environment5
+            value: $(params.environment5)
+          - name: environment6
+            value: $(params.environment6)
+          - name: environment7
+            value: $(params.environment7)
+          - name: clusters1
+            value: $(params.clusters1)
+          - name: clusters2
+            value: $(params.clusters2)
+          - name: clusters3
+            value: $(params.clusters3)
+          - name: clusters4
+            value: $(params.clusters4)
+          - name: clusters5
+            value: $(params.clusters5)
+          - name: clusters6
+            value: $(params.clusters6)
+          - name: clusters7
+            value: $(params.clusters7)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: restart-all-non-eu-binding-dev
+spec:
+  params:
+    - name: environment1
+      value: "au-syd"
+    - name: environment2
+      value: "ca-tor"
+    - name: environment3
+      value: "jp-osa"
+    - name: environment4
+      value: "jp-tok"
+    - name: environment5
+      value: "eu-gb"
+    - name: environment6
+      value: "us-east"
+    - name: environment7
+      value: "us-south"
+    - name: clusters1
+      value: "otc-pw-syd01-prod,otc-pw-syd04-prod,otc-pw-syd05-prod"
+    - name: clusters2
+      value: "otc-pw-tor01-prod,otc-pw-tor04-prod,otc-pw-tor05-prod"
+    - name: clusters3
+      value: "otc-pw-osa21-prod,otc-pw-osa22-prod,otc-pw-osa23-prod"
+    - name: clusters4
+      value: "otc-pw-tok02-prod,otc-pw-tok04-prod,otc-pw-tok05-prod"
+    - name: clusters5
+      value: "otc-pw-lon04-prod,otc-pw-lon05-prod,otc-pw-lon06-prod"
+    - name: clusters6
+      value: "otc-pw-wdc04-prod,otc-pw-wdc06-prod,otc-pw-wdc07-prod"
+    - name: clusters7
+      value: "otc-pw-dal10-prod,otc-pw-dal12-prod,otc-pw-dal13-prod"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: restart-all-non-eu-dev
+spec:
+  triggers:
+    - binding:
+        name: restart-all-non-eu-binding-dev
+      template:
+        name: restart-all-non-eu-trigger-dev
