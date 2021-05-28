@@ -6,6 +6,7 @@ spec:
   params:
     - name: region
       default: 'development'
+    - name: environment
     - name: snUrl
       default: 'https://watson.service-now.com'
     - name: cr_id
@@ -36,13 +37,15 @@ spec:
         value: $(params.snUrl)
       - name: REGION
         value: $(params.region)
+      - name: ENVIRONMENT
+        value: $(params.environment)
       - name: CR_ID
         value: $(params.cr_id)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [ $REGION == "development" ] || [ $REGION == "dev" ]; then
+        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
           echo "Skip CR closing for $REGION environment"
           exit 0
         fi

@@ -105,6 +105,8 @@ spec:
             value: $(params.update_kata)
           - name: region
             value: $(params.region)
+          - name: environment
+            value: $(params.environment)
           - name: set_worker_offline
             value: $(params.set_worker_offline)
           - name: run_commands

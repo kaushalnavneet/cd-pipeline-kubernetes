@@ -6,6 +6,7 @@ spec:
   params:
     - name: region
       default: 'development'
+    - name: environment
     - name: snUrl
       default: 'https://watson.service-now.com'
     - name: cr_priority
@@ -56,6 +57,8 @@ spec:
         value: $(params.snUrl)
       - name: REGION
         value: $(params.region)
+      - name: ENVIRONMENT
+        value: $(params.environment)
       - name: CR_PRIORITY
         value: $(params.cr_priority)
       - name: CR_TYPE
@@ -72,7 +75,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [ $REGION == "development" ] || [ $REGION == "dev" ]; then
+        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
           echo "Skip CR creation for $REGION environment"
           CR_ID="no cr"
           echo -n $CR_ID | tee $(results.cr_id.path)
@@ -80,7 +83,6 @@ spec:
         fi
 
         set -e
-        echo $(yq --version)
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-service
         ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}

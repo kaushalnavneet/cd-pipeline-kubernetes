@@ -4,6 +4,8 @@ metadata:
   name: update-managed-worker
 spec:
   params:
+    - name: cd_pipeline_kubernetes_directory
+      default: 'cd-pipeline-kubernetes'
     - name: kata_directory
       default: 'kata-deploy'
     - name: update_agent
@@ -40,7 +42,7 @@ spec:
   steps:
     - name: deploy
       image: $(params.deployBaseImage)
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
       env:
         - name: UPDATE_KATA
           value: $(params.update_kata)
@@ -48,6 +50,8 @@ spec:
           value: $(params.update_agent)
         - name: KATA_DIRECTORY
           value: $(params.kata_directory)
+        - name: CD_PIPELINE_KUBERNETES_DIRECTORY
+          value: $(params.cd_pipeline_kubernetes_directory)
         - name: SKIP
           value: $(params.skipDeploy)
         - name: CLUSTER_NAME
@@ -66,7 +70,6 @@ spec:
         - |
           export HOME=/root
           [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
-          echo $(yq --version)
           set -e
           if [ "${SKIP}" == true ]; then
             echo "Skipping Deploy"
@@ -134,7 +137,7 @@ spec:
             current=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
             echo Current version = $current
             echo Target version = $target
-            if ! [[ "$current" == "$target" ]]
+            if ! [[ "$current" == "$target" ]] ;
             then
               kubectl apply --filename "https://private-worker-service.${REGION}.${TARGET_DOMAIN}/update"
               sleep 10
@@ -150,6 +153,8 @@ spec:
               echo "Pod ${updaterPod} is complete"
               sleep 15
             fi
+            echo "Re-Applying network policies after agent update"
+            for f in ${CD_PIPELINE_KUBERNETES_DIRECTORY}/calico/managedworker/*.yaml; do calicoctl apply -f -<$f;done
           fi 
 
           kubectl wait -l app=private-worker-agent --for=condition=ready pod --timeout=-1s -n tekton-pipelines

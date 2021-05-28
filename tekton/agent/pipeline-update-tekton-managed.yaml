@@ -14,7 +14,14 @@ spec:
       default: "master"
     - name: kata_directory
       default: "kata-deploy"
+    - name: cd_pipeline_kubernetes_repo
+      default: "https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git"
+    - name: cd_pipeline_kubernetes_branch
+      default: "master"
+    - name: cd_pipeline_kubernetes_directory
+      default: "cd-pipeline-kubernetes"
     - name: region
+    - name: environment
     - name: target_domain
       default: 'devops.cloud.ibm.com'
     - name: set_worker_offline
@@ -47,13 +54,29 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-pvc
-    - name: open-cr
+    - name: clone-cd-pipeline-kubernetes-repo
       runAfter: [clone-kata-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.cd_pipeline_kubernetes_repo)
+        - name: branch
+          value: $(params.cd_pipeline_kubernetes_branch)
+        - name: directory-name
+          value: $(params.cd_pipeline_kubernetes_directory)
+      workspaces:
+        - name: output
+          workspace: pipeline-pvc
+    - name: open-cr
+      runAfter: [clone-cd-pipeline-kubernetes-repo]
       taskRef:
         name: open-cr-managed-worker
       params:
         - name: region
           value: $(params.region)
+        - name: environment
+          value: $(params.environment)
         - name: update_kata
           value: $(params.update_kata)
         - name: update_agent
@@ -76,6 +99,8 @@ spec:
           value: $(params.update_kata)
         - name: kata_directory
           value: $(params.kata_directory)
+        - name: cd_pipeline_kubernetes_directory
+          value: $(params.cd_pipeline_kubernetes_directory)
         - name: region
           value: $(params.region)
         - name: target_domain
@@ -102,6 +127,8 @@ spec:
           value: $(params.update_kata)
         - name: kata_directory
           value: $(params.kata_directory)
+        - name: cd_pipeline_kubernetes_directory
+          value: $(params.cd_pipeline_kubernetes_directory)
         - name: region
           value: $(params.region)
         - name: target_domain
@@ -128,6 +155,8 @@ spec:
           value: $(params.update_kata)
         - name: kata_directory
           value: $(params.kata_directory)
+        - name: cd_pipeline_kubernetes_directory
+          value: $(params.cd_pipeline_kubernetes_directory)
         - name: region
           value: $(params.region)
         - name: target_domain
@@ -154,6 +183,8 @@ spec:
           value: $(params.update_kata)
         - name: kata_directory
           value: $(params.kata_directory)
+        - name: cd_pipeline_kubernetes_directory
+          value: $(params.cd_pipeline_kubernetes_directory)
         - name: region
           value: $(params.region)
         - name: target_domain
@@ -176,6 +207,8 @@ spec:
       params:
         - name: region
           value: $(params.region)
+        - name: environment
+          value: $(params.environment)
         - name: cr_id
           value: $(tasks.open-cr.results.cr_id)
       workspaces:
