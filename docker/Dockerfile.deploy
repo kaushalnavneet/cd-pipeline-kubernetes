@@ -33,8 +33,8 @@ RUN wget --quiet --output-document=/usr/local/bin/kubectl  https://storage.googl
 
 # Install calicoctl
 ARG CALICOCTL_VERSION='v3.19.1'
-RUN wget --quiet --output-document=/usr/local/bin/calicoctl https://github.com/projectcalico/calicoctl/releases/download/${CALICOCTL_VERSION}/calicoctl
-    && chmod +x /usr/local/bin/calicoctl
+RUN wget --quiet --output-document=/usr/local/bin/calicoctl https://github.com/projectcalico/calicoctl/releases/download/${CALICOCTL_VERSION}/calicoctl && \
+    chmod +x /usr/local/bin/calicoctl
 
 # Install Helm2
 ARG HELM2_VERSION='v2.14.3'
