@@ -78,7 +78,12 @@ spec:
 
           ibmcloud config --check-version=false
           ibmcloud plugin install -f container-service
-          ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+          if [[ "$REGION" == "mon01" ]]
+          then
+            ibmcloud login -a ${API} -r us-south --apikey ${API_KEY}
+          else
+            ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+          fi
           ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
           echo "Current managed worker state:"
@@ -135,9 +140,10 @@ spec:
             echo Comparing agent versions...
             target=$(yq --yaml-output '.spec.template.spec.containers[0].image' <(curl https://private-worker-service.${REGION}.${TARGET_DOMAIN}/install) | grep pipeline-private-worker | sed -e 's/^"//' -e 's/"$//')
             current=$(kubectl -n tekton-pipelines get deployment private-worker-agent -ojson | jq -r '.spec.template.spec.containers[].image' | sed -e 's/^"//' -e 's/"$//')
+            read -ra tar <<<"$target"
             echo Current version = $current
-            echo Target version = $target
-            if ! [[ "$current" == "$target" ]] ;
+            echo Target version = ${tar[1]}
+            if ! [[ "$current" == "${tar[1]}" ]] ;
             then
               kubectl apply --filename "https://private-worker-service.${REGION}.${TARGET_DOMAIN}/update"
               sleep 10
