@@ -41,7 +41,9 @@ wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/downloa
 # update of the cluster name for the current deployment
 /usr/bin/yq2 w -i ${VALUES} clusterName ${CLUSTER_NAME}
 
+set +e
 helm delete --purge cryptomining-detector
+set -e
 kubectl -n ${CHART_NAMESPACE} delete deployment cryptomining-detector
 
 helm upgrade cryptomining-detector helm/cryptomining-detector \
@@ -57,6 +59,7 @@ if [ ${CR_DIRECTORY} == "" ]; then
 fi
 
 cd ${CR_DIRECTORY}
+set +e
 if [ -d cr/$ENVIRONMENT ]; then
   # save information for CR
   echo "Saving deploy info for CR"
