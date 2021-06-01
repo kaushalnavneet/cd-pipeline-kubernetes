@@ -8,7 +8,9 @@ COMPONENT_NAME=cryptomining-detector
 
 if [ -n ${IDS_TOKEN} ]; then
   echo "IDS_TOKEN set"
+  set +e
   kubectl -n${CHART_NAMESPACE} delete secret cryptomining-secret
+  set -e
   kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-secret --from-literal=IDS_TOKEN=${IDS_TOKEN}
 else
   echo "IDS_TOKEN is not set"
@@ -17,8 +19,10 @@ fi
 
 if [ -n ${DOCKER_CONFIG_JSON} ]; then
   echo "DOCKER_CONFIG_JSON is set"
+  set +e
   kubectl -n${CHART_NAMESPACE} delete secret cryptomining-detector-registry-secret
   DOCKER_CONFIG=$(echo -n ${DOCKER_CONFIG_JSON} | base64 -d)
+  set -e
   kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-detector-registry-secret \
       --from-literal=.dockerconfigjson=${DOCKER_CONFIG} \
       --type=kubernetes.io/dockerconfigjson
