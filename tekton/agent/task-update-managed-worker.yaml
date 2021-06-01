@@ -145,8 +145,8 @@ spec:
               echo "Waiting for pod ${updaterPod} to complete"
               while ! [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]] && kubectl -n default get pod | grep ${updaterPod}; do sleep 10; done
               if [[ $(kubectl -n default get pod ${updaterPod} -o json | jq -r .status.phase) =~ ^(Failed|Succeeded) ]]
-              sleep 10
               then
+                sleep 10
                 updaterJob=$(kubectl get jobs | grep agent-updater | awk '{ print $1 }')
                 kubectl delete job ${updaterJob} &
               fi
