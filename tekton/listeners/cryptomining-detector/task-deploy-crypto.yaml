@@ -43,6 +43,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: REGISTRY_API_KEY
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
       - name: TOOLCHAIN_ID
         valueFrom:
           configMapKeyRef:

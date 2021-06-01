@@ -6,7 +6,8 @@ DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/cryptomining_values.yaml
 COMPONENT_NAME=cryptomining-detector
 
-if [ -f ${IDS_TOKEN} ]; then
+if [ -n ${IDS_TOKEN} ]; then
+  echo "IDS_TOKEN set"
   kubectl -n${CHART_NAMESPACE} delete secret cryptomining-secret
   kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-secret --from-literal=IDS_TOKEN=${IDS_TOKEN}
 else
