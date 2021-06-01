@@ -1,0 +1,178 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: open-cr-helm3-plugin
+spec:
+  params:
+    - name: region
+      default: 'development'
+    - name: environment
+    - name: snUrl
+      default: 'https://watson.service-now.com'
+    - name: cr_priority
+      default: "moderate"
+    - name: cr_type
+      default: "standard"
+    - name: pluginName
+      default: "ibmcloud-block-storage-plugin"
+  results:
+    - name: cr_id
+      description: the cr id that was created by the task
+  stepTemplate:
+    env:
+      - name: PIPELINE_TRIGGERING_USER
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+      - name: SN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SN_TOKEN
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY
+  workspaces:
+  - name: output
+    mountPath: /workspace 
+  steps:
+  - name: open-cr
+    image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: SN_URL
+        value: $(params.snUrl)
+      - name: REGION
+        value: $(params.region)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: CR_PRIORITY
+        value: $(params.cr_priority)
+      - name: CR_TYPE
+        value: $(params.cr_type)
+      - name: PLUGIN_NAME
+        value: $(params.pluginName)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
+          echo "Skip CR creation for $REGION environment"
+          CR_ID="no cr"
+          echo -n $CR_ID | tee $(results.cr_id.path)
+          exit 0
+        fi
+
+        set -e
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-service
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+        ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
+
+        if [ -z ${CR_TYPE} ]; then
+          CR_TYPE="standard"
+        fi
+        if [ -z ${CR_PRIORITY} ]; then
+          CR_PRIORITY="moderate"
+        fi
+
+        SYSTEM="continuous-delivery-pipeline"
+        CRN="crn:v1:bluemix:public::$REGION::::"
+
+        if [[ "$PIPELINE_TRIGGERING_USER" =~ .+@.+\..+ && "$PIPELINE_TRIGGERING_USER" != "idsorg@us.ibm.com" ]]; then
+            ASSIGNED_TO="$PIPELINE_TRIGGERING_USER"
+        else
+            ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
+        fi
+
+        # set CR time for 3 hour
+        S_DATE=$(( $(date +%s) + 30 ))
+        E_DATE=$(( $(date +%s) + 4*10800 ))
+
+        description=""
+        purpose="Keeping helm3 plugin ${PLUGIN_NAME} up to date"
+
+        description+="Using the pipeline https://cloud.ibm.com/devops/pipelines/tekton/ef23818a-f2e5-4c66-9311-0c56b0ee3fb5?env_id=ibm:yp:us-south"
+        
+
+        #Fetch helm3 plugin version and compare
+        helm3 repo update
+
+        current=$(helm3 ls -A | grep ${PLUGIN_NAME} | awk '{ print $NF }')
+        target=$(helm3 search repo ${PLUGIN_NAME} | awk '{ print $2 }')
+
+        IFS='-' read -ra temp <<< "$current"
+
+        current_version = ${temp[${#temp[@]} - 1]}
+        target_version= printf $(echo $target | awk '{ print $2 }')
+
+        description+="---- updating ${PLUGIN_NAME} from version $current_version ---> $target_version"
+
+        export TMP=/tmp/tmp_$$.json
+
+        # tag message adds link to ServiceNow query using deploy commit hash in the description field
+        cat - >"$TMP" <<HERE
+        {
+          "assignedto": "$ASSIGNED_TO",
+          "system": "$SYSTEM",
+          "impact": "N/A",
+          "outageduration": "0 00:00:00",
+          "priority": "${CR_PRIORITY}",
+          "environment": "$CRN",
+          "purpose": "$purpose",
+          "description": "$description",
+          "backoutplan": "Retry update",
+          "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
+          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")", 
+          "deploymentready": "yes",
+          "type": "${CR_TYPE}"
+        }
+        HERE
+
+        echo "Opening CR with:"
+        cat "$TMP"
+
+        RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/create" \
+            --silent --show-error)
+
+        echo "RESPONSE: ${RESPONSE}"
+        CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+        echo "CR ID: ${CR_ID}"
+        echo "$SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}"
+
+        sleep 10
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/implement" \
+            --silent --show-error)
+        
+        echo "Checking ServiceNow change request state..."
+
+        sleep 10
+
+        RESPONSE=$(curl -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            "$SN_URL/api/ibmwc/v2/change/$CR_ID/read" \
+            --silent --show-error)
+
+        CR_STATE=$(jq --raw-output ".result.state | select (.!=null)" <<< "$RESPONSE")
+        echo "ServiceNow change request is in $CR_STATE state."
+
+        echo -n $CR_ID | tee $(results.cr_id.path)

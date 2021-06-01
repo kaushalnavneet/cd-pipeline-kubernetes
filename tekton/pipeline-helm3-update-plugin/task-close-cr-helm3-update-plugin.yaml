@@ -1,0 +1,75 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: close-cr-helm3-plugin
+spec:
+  params:
+    - name: region
+      default: 'development'
+    - name: environment
+    - name: snUrl
+      default: 'https://watson.service-now.com'
+    - name: cr_id
+  stepTemplate:
+    env:
+      - name: PIPELINE_TRIGGERING_USER
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+      - name: SN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: SN_TOKEN
+  workspaces:
+  - name: output
+    mountPath: /workspace 
+  steps:
+  - name: close-cr
+    image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: SN_URL
+        value: $(params.snUrl)
+      - name: REGION
+        value: $(params.region)
+      - name: ENVIRONMENT
+        value: $(params.environment)
+      - name: CR_ID
+        value: $(params.cr_id)
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
+          echo "Skip CR closing for $REGION environment"
+          exit 0
+        fi
+        CR_CLOSE_CATEGORY=successful
+
+        echo "Closing ServiceNow change request $CR_ID ..."
+        export TMP=/tmp/tmp_$$.txt
+        cat - >"$TMP" <<HERE
+        {
+            "closecategory": "$CR_CLOSE_CATEGORY",
+            "closenotes": "Kata and/or Agent update finished.",
+            "actualendtime": "now"
+        }
+        HERE
+
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/change/$CR_ID/close" \
+            --silent --show-error)
+
+        RESULT=$(jq ".result | select (.!=null)" <<< "$RESPONSE")
+
+        if [[ ! "$RESULT" ]]; then
+            echo "Failed: $RESPONSE"
+            exit 1
+        fi
+
+        echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"

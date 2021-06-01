@@ -1,0 +1,109 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-helm3-plugin
+spec:
+  params:
+    - name: pluginName
+      default: "ibmcloud-block-storage-plugin"
+    - name: namespace
+      default: "kube-system"
+    - name: clusterName
+      default: "otc-us-south-dev"
+    - name: skipDeploy
+      default: "false"
+    - name: deployBaseImage
+      default: "us.icr.io/opentoolchain/cd-deploy-base:deploy"
+    - name: region
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY
+  workspaces:
+    - name: task-pvc
+      mountPath: /workspace
+  steps:
+    - name: deploy
+      image: $(params.deployBaseImage)
+      imagePullPolicy: Always
+      env:
+        - name: HOME
+          value: "/root"
+        - name: PLUGIN_NAME
+          value: $(params.pluginName)
+        - name: NAMESPACE
+          value: $(params.namespace)
+        - name: CLUSTER_NAME
+          value: $(params.clusterName)
+        - name: SKIP
+          value: $(params.skipDeploy)
+        - name: REGION
+          value: $(params.region)
+      workingDir: /workspace
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          export HOME=/root
+          [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+          set -e
+          if [ "${SKIP}" == true ]; then
+            echo "Skipping restart"
+            exit 0
+          fi
+          cd /workspace
+
+          ibmcloud config --check-version=false
+          ibmcloud plugin install -f kubernetes-service
+          ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+
+          set +e
+          function cluster_config() {
+              # 1 - cluster name
+              for iteration in {1..30}
+              do
+                  echo "Running cluster config for cluster $1: $iteration / 30"
+                  ibmcloud ks cluster config --cluster $1
+                  if [[ $? -eq 0 ]]; then
+                      return 0
+                  else
+                      echo "Cluster config for $1 failed. Trying again..."
+                      sleep 5
+                  fi
+              done
+              return 1
+          }
+          
+          cluster_config ${CLUSTER_NAME}
+          set -e
+
+          echo "Checking if update is required for ${PLUGIN_NAME}..."
+          helm3 repo add iks-charts https://icr.io/helm/iks-charts
+          helm3 repo update
+          current=$(helm3 ls -A | grep ${PLUGIN_NAME} | awk '{ print $NF }')
+          target=$(helm3 search repo ${PLUGIN_NAME} | awk '{ print $2 }')
+          IFS='-' read -ra curr <<< "$current"
+          current_version=${curr[${#curr[@]} - 1]}
+          target_version=$(echo $target | awk '{ print $2 }')
+
+          echo current_version = $current_version
+          echo target_version = $target_version
+
+          if ! [[ "$current_version" == "$target_version" ]]
+          then
+            echo "Updating helm3 plugin ${PLUGIN_NAME}"
+            helm3 ls -A
+            helm3 upgrade ${PLUGIN_NAME} iks-charts/ibmcloud-block-storage-plugin -n ${NAMESPACE}
+            sleep 60
+            kubectl wait --for=condition=Ready pod -l app={PLUGIN_NAME} -n ${NAMESPACE}
+          else
+            echo "No update required"
+          fi
+          set +x
