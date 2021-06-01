@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eo pipefail
 CHART_NAMESPACE=${CHART_NAMESPACE:-opentoolchain}
 ENVIRONMENT=${ENVIRONMENT:-dev}
 DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
@@ -16,9 +16,11 @@ else
 fi
 
 if [ -n ${DOCKER_CONFIG_JSON} ]; then
-  kubectl -n${CHART_NAMESPACE} delete secret cryptomining-detector-registry-secret 
+  echo "DOCKER_CONFIG_JSON is set"
+  kubectl -n${CHART_NAMESPACE} delete secret cryptomining-detector-registry-secret
+  DOCKER_CONFIG=$(echo -n ${DOCKER_CONFIG_JSON} | base64 -D)
   kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-detector-registry-secret \
-      --from-literal=.dockerconfigjson=${DOCKER_CONFIG_JSON} \
+      --from-literal=.dockerconfigjson=${DOCKER_CONFIG} \
       --type=kubernetes.io/dockerconfigjson
 else
   echo "DOCKER_CONFIG_JSON is not set"
