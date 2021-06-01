@@ -36,12 +36,17 @@ ARG CALICOCTL_VERSION='v3.19.1'
 RUN wget --quiet --output-document=/usr/local/bin/calicoctl https://github.com/projectcalico/calicoctl/releases/download/${CALICOCTL_VERSION}/calicoctl && \
     chmod +x /usr/local/bin/calicoctl
 
-# Install Helm2
-ARG HELM2_VERSION='v2.14.3'
+# Install Helm3
+ARG HELM3_VERSION='v3.5.3'
 RUN mkdir -p /tmp/helm_install \
     && curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > /tmp/helm_install/get_helm.sh \
     && chmod 700 /tmp/helm_install/get_helm.sh \
-    && /tmp/helm_install/get_helm.sh --version ${HELM2_VERSION} \
+    && /tmp/helm_install/get_helm.sh --version ${HELM3_VERSION} \
+    && mv /usr/local/bin/helm /usr/local/bin/helm3
+    
+# Install Helm2
+ARG HELM2_VERSION='v2.14.3'
+RUN /tmp/helm_install/get_helm.sh --version ${HELM2_VERSION} \
     && rm -rf /tmp/helm*
 
 ENV IBMCLOUD_VERSION='1.5.0'
