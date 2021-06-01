@@ -40,7 +40,7 @@ RUN chmod +x /root/docker_pull_start.sh /root/docker_pre_stop.sh
 RUN wget -O /root/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
     wget -O /root/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
     chmod +x /root/tini /root/jq && \
-    ls -la /home/node && \
+    ls -la /root && \
     chmod a+x /root/entrypoint.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]
