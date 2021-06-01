@@ -43,8 +43,8 @@ wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/downloa
 
 set +e
 helm delete --purge cryptomining-detector
-set -e
 kubectl -n ${CHART_NAMESPACE} delete deployment cryptomining-detector
+set -e
 
 helm upgrade cryptomining-detector helm/cryptomining-detector \
   --install \
