@@ -16,7 +16,8 @@ else
 fi
 
 if [ -n ${DOCKER_CONFIG_JSON} ]; then
-  kubectl create secret generic cryptomining-detector-registry-secret \
+  kubectl -n${CHART_NAMESPACE} delete secret cryptomining-detector-registry-secret 
+  kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-detector-registry-secret \
       --from-literal=.dockerconfigjson=${DOCKER_CONFIG_JSON} \
       --type=kubernetes.io/dockerconfigjson
 else
