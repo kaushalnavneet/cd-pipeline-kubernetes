@@ -6,6 +6,9 @@ DEVOPS_CONFIG=${DEVOPS_CONFIG:-devops-config}
 VALUES=${DEVOPS_CONFIG}/environments/${ENVIRONMENT}/cryptomining_values.yaml
 COMPONENT_NAME=cryptomining-detector
 
+kubectl -n${CHART_NAMESPACE} delete secret cryptomining-secret
+kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-secret --from-literal=IDS_TOKEN=${IDS_TOKEN}
+
 # install yq 
 YQ2_VERSION=2.4.1
 wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/download/${YQ2_VERSION}/yq_linux_amd64 \
@@ -17,7 +20,7 @@ wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/downloa
 /usr/bin/yq2 w -i ${VALUES} clusterName ${CLUSTER_NAME}
 
 helm delete --purge cryptomining-detector
-kubectl -n opentoolchain delete deployment cryptomining-detector
+kubectl -n ${CHART_NAMESPACE} delete deployment cryptomining-detector
 
 helm upgrade cryptomining-detector helm/cryptomining-detector \
   --install \
