@@ -27,6 +27,7 @@ RUN awk '/nodocs/ { print; print "exclude=docker-*"; next }1' /etc/yum.conf >/et
     && mv /etc/yum2.conf /etc/yum.conf
 
 RUN yum update -y \
+    && yum install -y wget \
     && yum clean all -y
 
 # build context is from the docker folder parent
