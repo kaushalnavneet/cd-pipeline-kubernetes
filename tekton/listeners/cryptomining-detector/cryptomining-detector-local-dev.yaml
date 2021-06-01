@@ -181,7 +181,7 @@ spec:
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: myprodcluster
+      value: otc-tektonpw-us-south-dev
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
