@@ -18,7 +18,7 @@ fi
 if [ -n ${DOCKER_CONFIG_JSON} ]; then
   echo "DOCKER_CONFIG_JSON is set"
   kubectl -n${CHART_NAMESPACE} delete secret cryptomining-detector-registry-secret
-  DOCKER_CONFIG=$(echo -n ${DOCKER_CONFIG_JSON} | base64 -D)
+  DOCKER_CONFIG=$(echo -n ${DOCKER_CONFIG_JSON} | base64 -d)
   kubectl -n${CHART_NAMESPACE} create secret generic cryptomining-detector-registry-secret \
       --from-literal=.dockerconfigjson=${DOCKER_CONFIG} \
       --type=kubernetes.io/dockerconfigjson
