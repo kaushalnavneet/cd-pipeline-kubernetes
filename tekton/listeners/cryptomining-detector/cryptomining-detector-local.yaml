@@ -64,6 +64,7 @@ spec:
         DEPLOY_API_KEY: $(params.API_KEY_LOCAL)
         REGISTRY_API_KEY: $(params.API_KEY_LOCAL)
         IDS_TOKEN: $(params.IDS_TOKEN)
+        DOCKER_CONFIG_JSON: $(params.dockerconfigjson)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1

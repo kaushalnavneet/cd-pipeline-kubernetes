@@ -15,6 +15,15 @@ else
   exit 1
 fi
 
+if [ -n ${DOCKER_CONFIG_JSON} ]; then
+  kubectl create secret generic cryptomining-detector-registry-secret \
+      --from-literal=.dockerconfigjson=${DOCKER_CONFIG_JSON} \
+      --type=kubernetes.io/dockerconfigjson
+else
+  echo "DOCKER_CONFIG_JSON is not set"
+  exit 1
+fi
+
 # install yq 
 YQ2_VERSION=2.4.1
 wget --quiet -O yq2_linux_amd64 https://github.com/mikefarah/yq/releases/download/${YQ2_VERSION}/yq_linux_amd64 \

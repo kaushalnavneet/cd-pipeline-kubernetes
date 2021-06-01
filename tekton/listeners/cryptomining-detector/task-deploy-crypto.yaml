@@ -48,6 +48,11 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+      - name: DOCKER_CONFIG_JSON
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DOCKER_CONFIG_JSON
       - name: TOOLCHAIN_ID
         valueFrom:
           configMapKeyRef:
