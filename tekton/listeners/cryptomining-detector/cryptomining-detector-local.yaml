@@ -182,7 +182,7 @@ spec:
     - name: chartNamespace
       value: opentoolchain
     - name: clusterName1
-      value: myprodcluster
+      value: bog-cluster
     - name: skipDeploy1
       value: "false"
     - name: clusterName2
