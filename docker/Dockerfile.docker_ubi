@@ -14,8 +14,12 @@ FROM us.icr.io/opentoolchain/travis-worker:run
 ARG TINI_VERSION=tini-v0.16.1
 ARG JQ_VERSION=jq-linux64-1.6
 ARG ARTIFACTORY_API_KEY
+ARG RH_USERNAME
+ARG RH_PASSWORD
 
 USER root
+
+RUN subscription-manager register --username ${RH_USERNAME} --password ${RH_PASSWORD} --auto-attach
 
 RUN yum install -y procps \
     yum install -y http://mirror.centos.org/centos/7/extras/x86_64/Packages/fuse-overlayfs-0.7.2-6.el7_8.x86_64.rpm \
