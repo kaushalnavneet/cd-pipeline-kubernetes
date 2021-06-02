@@ -42,6 +42,16 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: API_KEY_1308775
+      - name: RH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: RH_PASSWORD
+      - name: RH_USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: RH_USERNAME
       - name: TOOLCHAIN_ID
         valueFrom:
           configMapKeyRef:
@@ -124,9 +134,9 @@ spec:
         echo "=========================================================="
         echo -e "Building container image: ${IMAGE_NAME}:${IMAGE_TAG}"
         set -x
-        docker build -f ${DOCKERFILE} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
+        docker build -f ${DOCKERFILE} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} . \
+        --build-arg "RH_PASSWORD=${RH_PASSWORD}" --build-arg "RH_USERNAME=${RH_USERNAME}"
         docker push ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
-        #ibmcloud cr build -f ${DOCKERFILE} ${EXTRA_DOCKER_OPTS} -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} .
         set +x
         ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
   sidecars:

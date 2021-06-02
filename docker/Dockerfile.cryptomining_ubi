@@ -9,7 +9,7 @@
 ## 
 # used inside private-worker-service (when an agent is created)
 ##
-FROM registry.access.redhat.com/ubi8:latest
+FROM registry.access.redhat.com/ubi8/ubi:8.4
 
 USER root
 
