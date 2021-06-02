@@ -128,8 +128,9 @@ pipeline:
     revisionHistoryLimit: 3
     vault:
       secretPaths:
-       - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
-       - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
+      - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+      - generic/project/continuous-delivery-dev/cd-pipeline/development/private-worker-service/private-worker-service_2021_06_02_14h26m58s
     configmap:
       data:
         NEW_RELIC_APP_NAME: Private Worker - YS1
