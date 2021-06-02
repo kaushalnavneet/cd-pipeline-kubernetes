@@ -36,6 +36,8 @@ spec:
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
         ARTIFACTORY_ID: $(params.ARTIFACTORY_ID)
+        RH_USERNAME: $(params.RH_USERNAME)
+
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -48,6 +50,8 @@ spec:
         ARTIFACTORY_TOKEN_BASE64: $(params.ARTIFACTORY_TOKEN_BASE64)
         ARTIFACTORY_AUTH_BASE64: $(params.ARTIFACTORY_AUTH_BASE64)
         ARTIFACTORY_API_KEY: $(params.ARTIFACTORY_API_KEY)
+        RH_PASSWORD: $(params.RH_PASSWORD)
+
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1
       kind: Secret
