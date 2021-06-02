@@ -207,7 +207,7 @@ spec:
     - name: nodejs14-ubi-run
       runAfter: [nodejs14-ubi]
       taskRef:
-        name: run-base
+        name: run-base-image
       params:
         - name: source_directory
           value: $(params.charts_directory)
@@ -241,7 +241,7 @@ spec:
     - name: websphere-liberty-ubi-run
       runAfter: [java-ubi]
       taskRef:
-        name: run-base
+        name: run-base-image
       params:
         - name: source_directory
           value: $(params.charts_directory)
