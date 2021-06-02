@@ -11,7 +11,12 @@
 ##
 FROM ibmcom/websphere-liberty:21.0.0.5-full-java8-ibmjava-ubi-amd64
 
+ARG RH_USERNAME
+ARG RH_PASSWORD
+
 USER root
+
+RUN subscription-manager register --username ${RH_USERNAME} --password ${RH_PASSWORD} --auto-attach
 
 RUN yum update -y && \
     yum install hostname -y && \

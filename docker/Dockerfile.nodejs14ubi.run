@@ -9,10 +9,10 @@
 ## 
 # Runtime image for node.js 14 based applications
 ##
+FROM registry.access.redhat.com/ubi8/nodejs-14:latest
+
 ARG RH_USERNAME
 ARG RH_PASSWORD
-
-FROM registry.access.redhat.com/ubi8/nodejs-14:latest
 
 USER root
 
