@@ -147,7 +147,7 @@ spec:
     - name: clusterName1
       value: otc-tektonpw-dal10-stage
     - name: skipDeploy1
-      value: "true"
+      value: "false"
     - name: clusterName2
       value: 'none'
     - name: skipDeploy2
