@@ -1,0 +1,70 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2017, 2021. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
+FROM us.icr.io/opentoolchain/cd-build-base:go1.16 as build
+
+ARG TINI_VERSION=tini-v0.16.1
+ARG JQ_VERSION=jq-linux64-1.6
+ARG IDS_TOKEN
+ARG ARTIFACTORY_API_KEY
+
+RUN go env -w GOPROXY="https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/api/go/wcp-otc-common-team-go-virtual"
+
+WORKDIR $GOPATH/src/github.com/travis-ci/worker
+ADD . $GOPATH/src/github.com/travis-ci/worker 
+
+RUN gvt rebuild
+
+RUN make
+RUN mkdir -p /work/component/export/keys
+RUN mv $GOPATH/bin/travis-worker /work/component/export/ 
+RUN mv $GOPATH/src/github.com/travis-ci/worker/entrypoint.component.sh /work/component/export/ 
+RUN chmod a+x /work/component/export/travis-worker
+
+RUN wget -O /work/component/export/tini https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/tini/${TINI_VERSION} && \
+    wget -O /work/component/export/jq https://idsorg%40us.ibm.com:${ARTIFACTORY_API_KEY}@na.artifactory.swg-devops.com/artifactory/wcp-otc-common-team-generic-local/jq-linux64/${JQ_VERSION} && \
+    chmod +x /work/component/export/tini /work/component/export/jq
+
+FROM registry.access.redhat.com/ubi8:latest
+
+ARG RH_USERNAME
+ARG RH_PASSWORD
+
+USER root
+
+RUN subscription-manager register --username ${RH_USERNAME} --password ${RH_PASSWORD} --auto-attach
+
+ARG APP_BUILD_NUMBER=latest
+
+ARG TRAVIS_HOME=/home/travis 
+ARG TRAVIS_USER=travis
+ENV TRAVIS_HOME=${TRAVIS_HOME}
+ENV TRAVIS_USER=${TRAVIS_USER} 
+ENV PATH=${TRAVIS_HOME}:${PATH}
+
+ENV TRAVIS_BINARY ${TRAVIS_HOME}/travis-worker
+ENV GO_SERVER_SYSTEM_PROPERTIES="-Dgo.ssl.protocols.include='TLSv1.2' -Dgo.ssl.protocols.exclude='SSLv3' -Dgo.ssl.renegotiation.allowed='N'"
+WORKDIR ${TRAVIS_HOME}
+
+COPY --from=build /work/component/export ${TRAVIS_HOME}
+
+RUN adduser -s /bin/bash -d ${TRAVIS_HOME} -U ${TRAVIS_USER}
+
+RUN mv ${TRAVIS_HOME}/entrypoint* /root/ && \
+    chown -R ${TRAVIS_USER} ${TRAVIS_HOME} && \
+    rm -fr /core*
+
+RUN yum update -y \
+    && yum install -y hostname procps \
+    && yum remove -y mariadb-connector-c \
+    && yum install -y http://img.cs.montana.edu/linux/fedora/updates/30/Everything/x86_64/Packages/m/musl-filesystem-1.2.0-3.fc30.x86_64.rpm \
+    && yum install -y http://img.cs.montana.edu/linux/fedora/updates/30/Everything/x86_64/Packages/m/musl-libc-1.2.0-3.fc30.x86_64.rpm \
+    && yum clean -y all
+
+ENTRYPOINT ["/root/entrypoint.sh"]
+CMD ["/home/travis/travis-worker" ]
