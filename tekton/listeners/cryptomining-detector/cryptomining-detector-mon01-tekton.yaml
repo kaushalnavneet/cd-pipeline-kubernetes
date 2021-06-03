@@ -44,6 +44,8 @@ spec:
         RESOURCE_GROUP: $(params.resourceGroup)
         TOOLCHAIN_ID: $(params.toolchainId)
         IDS_USER: $(params.IDS_USER)
+        IMAGE_NAME: $(params.IMAGE_NAME)
+        SCHEDULE: $(params.SCHEDULE)
 
     - apiVersion: v1
       kind: Secret
