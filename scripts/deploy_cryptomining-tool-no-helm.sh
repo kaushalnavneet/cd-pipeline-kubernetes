@@ -9,7 +9,7 @@
 ###############################################################################
 set -eo pipefail
 CHART_NAMESPACE=${CHART_NAMESPACE:-tekton-pipelines}
-SCHEDULE==${SCHEDULE:-120}
+SCHEDULE=${SCHEDULE:-120}
 
 if [ -n ${IDS_TOKEN} ]; then
   echo "IDS_TOKEN set"
@@ -46,10 +46,12 @@ echo "---"
 # do substitution inside json files located in releng folder
 cat releng/crypto_deploy.json | jq --arg CLUSTER_NAME ${CLUSTER_NAME} '(.spec.template.spec.containers[].env[] | select(.name == "CLUSTER_NAME") | .value) = $CLUSTER_NAME' > releng/1.json
 cat releng/1.json | jq --arg IMAGE_NAME ${IMAGE_NAME} '(.spec.template.spec.containers[].image) = $IMAGE_NAME' > releng/2.json
-cat releng/2.json | jq --arg SCHEDULE ${SCHEDULE} '(.spec.template.spec.containers[].env[] | select(.name == "SCHEDULE") | .value) = $SCHEDULE' > releng/final_crypto_deploy.json
+cat releng/2.json | jq --arg SCHEDULE ${SCHEDULE} '(.spec.template.spec.containers[].env[] | select(.name == "SCHEDULE") | .value) = $SCHEDULE' > releng/3.json
+cat releng/3.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_deploy.json
 rm releng/crypto_deploy.json
 rm releng/1.json
 rm releng/2.json
+rm releng/3.json
 cat releng/final_crypto_deploy.json
 echo "---"
 cat releng/crypto_serviceaccount.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_serviceaccount.json
