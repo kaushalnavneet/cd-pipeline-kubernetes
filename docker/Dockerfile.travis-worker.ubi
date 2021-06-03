@@ -32,6 +32,13 @@ RUN wget -O /work/component/export/tini https://idsorg%40us.ibm.com:${ARTIFACTOR
 
 FROM registry.access.redhat.com/ubi8:latest
 
+ARG RH_USERNAME
+ARG RH_PASSWORD
+
+USER root
+
+RUN subscription-manager register --username ${RH_USERNAME} --password ${RH_PASSWORD} --auto-attach
+
 ARG APP_BUILD_NUMBER=latest
 
 ARG TRAVIS_HOME=/home/travis 
