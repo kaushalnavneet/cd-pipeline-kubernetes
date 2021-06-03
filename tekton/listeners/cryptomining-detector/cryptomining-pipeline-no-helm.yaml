@@ -1,0 +1,108 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: cryptomining-pipeline-no-helm
+spec:
+  params:
+    - name: source_repo
+    - name: source_branch
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+    - name: chartNamespace
+    - name: clusterName1
+    - name: skipDeploy1
+    - name: clusterName2
+    - name: skipDeploy2
+    - name: clusterName3
+    - name: skipDeploy3
+  workspaces:
+  - name: pipeline-pvc
+  tasks:
+    - name: clone-source-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.source_repo)
+        - name: branch
+          value: $(params.source_branch)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc 
+    - name: clone-script-repo
+      runAfter: [clone-source-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.script_repo)
+        - name: branch
+          value: $(params.script_branch)
+        - name: directory-name
+          value: $(params.script_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
+    - name: clone-cr-repo
+      runAfter: [clone-config-repo]
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.cr_repo)
+        - name: branch
+          value: $(params.cr_branch)
+        - name: directory-name
+          value: $(params.cr_directory)
+      workspaces:
+      - name: output
+        workspace: pipeline-pvc
+    - name: deploy-cluster-1
+      runAfter: [clone-cr-repo]
+      taskRef:
+        name:  deploy-cryptomining-no-helm
+      params:
+        - name: skipDeploy
+          value: $(params.skipDeploy1)
+        - name: clusterName
+          value: $(params.clusterName1)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: script_directory
+          value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: deploy-cluster-2
+      runAfter: [deploy-cluster-1]
+      taskRef:
+        name:  deploy-cryptomining-no-helm
+      params:
+        - name: skipDeploy
+          value: $(params.skipDeploy2)
+        - name: clusterName
+          value: $(params.clusterName2)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: script_directory
+          value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
+    - name: deploy-cluster-3
+      runAfter: [deploy-cluster-2]
+      taskRef:
+        name:  deploy-cryptomining-no-helm
+      params:
+        - name: skipDeploy
+          value: $(params.skipDeploy3)
+        - name: clusterName
+          value: $(params.clusterName3)
+        - name: chartNamespace
+          value: $(params.chartNamespace)
+        - name: script_directory
+          value: $(params.script_directory)
+      workspaces:
+      - name: task-pvc
+        workspace: pipeline-pvc 
