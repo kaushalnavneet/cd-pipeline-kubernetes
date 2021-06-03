@@ -40,6 +40,8 @@ spec:
         IDS_USER: $(params.IDS_USER)
         IMAGE_NAME: $(params.IMAGE_NAME)
         IMAGE_TAG: $(params.IMAGE_TAG)
+        RH_USERNAME: $(params.RH_USERNAME)
+
     - apiVersion: v1
       kind: Secret
       metadata:
@@ -52,6 +54,7 @@ spec:
         DEPLOY_API_KEY: $(params.API_KEY_1651315)
         IDS_TOKEN: $(params.IDS_TOKEN)
         DOCKER_PASSWORD: $(params.DOCKER_PASSWORD)
+        RH_PASSWORD: $(params.RH_PASSWORD)
 
     # k8s resources to be able to pull docker image from a specific container registry
     - apiVersion: v1

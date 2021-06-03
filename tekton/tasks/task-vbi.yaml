@@ -73,6 +73,16 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: IDS_TOKEN
+      - name: RH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: RH_PASSWORD
+      - name: RH_USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: RH_USERNAME
   workspaces:
   - name: task-pvc
     mountPath: /workspace
@@ -118,7 +128,8 @@ spec:
         echo "Building using local Docker"
 
         echo "Dockerfile: ${DOCKERFILE}"
-        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE}
+        docker build . ${EXTRA_DOCKER_OPTS} -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE} \
+          --build-arg "RH_PASSWORD=${RH_PASSWORD}" --build-arg "RH_USERNAME=${RH_USERNAME}"
 
         if [ $? -ne 0 ]; then
             echo \"Failed during execution of docker build command\"
