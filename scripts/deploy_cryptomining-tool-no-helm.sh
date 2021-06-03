@@ -34,6 +34,10 @@ wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-
     && chmod +x /usr/bin/jq \
     && rm -f /tmp/jq-linux64
 
+jq --version 
+which jq
+ls -la releng/
+echo "---"
 # do substitution inside json files located in releng folder
 cat releng/crypto_deploy.json | jq --arg CLUSTER_NAME ${CLUSTER_NAME} '(.spec.template.spec.containers[].env[] | select(.name == "CLUSTER_NAME") | .value) = "$CLUSTER_NAME"' > releng/1.json
 cat releng/1.json | jq jq --arg IMAGE_NAME ${IMAGE_NAME} '(.spec.template.spec.containers[].image) = "$IMAGE_NAME"' > releng/2.json
