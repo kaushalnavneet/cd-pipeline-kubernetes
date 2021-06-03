@@ -1,4 +1,12 @@
 #!/bin/bash
+###############################################################################
+# Licensed Materials - Property of IBM
+# (c) Copyright IBM Corporation 2021. All Rights Reserved.
+#
+# Note to U.S. Government Users Restricted Rights:
+# Use, duplication or disclosure restricted by GSA ADP Schedule
+# Contract with IBM Corp.
+###############################################################################
 set -eo pipefail
 CHART_NAMESPACE=${CHART_NAMESPACE:-tekton-pipelines}
 SCHEDULE==${SCHEDULE:-120}
@@ -34,9 +42,6 @@ wget --no-check-certificate https://github.com/stedolan/jq/releases/download/jq-
     && chmod +x /usr/bin/jq \
     && rm -f /tmp/jq-linux64
 
-jq --version 
-which jq
-ls -la releng/
 echo "---"
 # do substitution inside json files located in releng folder
 cat releng/crypto_deploy.json | jq --arg CLUSTER_NAME ${CLUSTER_NAME} '(.spec.template.spec.containers[].env[] | select(.name == "CLUSTER_NAME") | .value) = "$CLUSTER_NAME"' > releng/1.json

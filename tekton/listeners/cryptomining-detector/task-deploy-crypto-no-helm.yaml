@@ -12,6 +12,7 @@ spec:
     - name: chartNamespace
       default: tekton-pipelines
     - name: script_directory
+
   stepTemplate:
     env:
       - name: PIPELINE_RUN_URL
@@ -53,6 +54,16 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: TOOLCHAIN_ID
+      - name: IMAGE_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IMAGE_NAME
+      - name: SCHEDULE
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: SCHEDULE
   workspaces:
   - name: task-pvc
     mountPath: /workspace 
