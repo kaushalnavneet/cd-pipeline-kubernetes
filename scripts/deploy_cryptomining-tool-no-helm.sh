@@ -63,3 +63,5 @@ rm releng/crypto_rolebinding.json
 cat releng/final_crypto_rolebinding.json
 echo "---"
 ls -la releng/
+
+kubectl apply -f releng/
