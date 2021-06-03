@@ -14,6 +14,8 @@ initDefaults() {
     export ARTIFACTORY_TOKEN_BASE64=""
     export ARTIFACTORY_AUTH_BASE64=""
     export ARTIFACTORY_API_KEY=""
+    export RH_USERNAME=""
+    export RH_PASSWORD=""
     export ARTIFACTORY_ID=""
     export ICD_REDIS_STORE=""
     export QR_STORE=""
@@ -78,6 +80,14 @@ initDefaults() {
     if [ -f "/config/ADD_CHGLOG_URL" ]; then
         export ADD_CHGLOG_URL=$(cat /config/ADD_CHGLOG_URL) 
     fi
+
+    if [ -f "/config/RH_PASSWORD" ]; then
+        export RH_PASSWORD=$(cat /config/RH_PASSWORD)
+    fi
+
+    if [ -f "/config/RH_USERNAME" ]; then
+        export RH_USERNAME=$(cat /config/RH_USERNAME)
+    fi    
 }
 
 initEnvVars() {
@@ -196,7 +206,8 @@ else
     --build-arg "ARTIFACTORY_TOKEN_BASE64=${ARTIFACTORY_TOKEN_BASE64}" --build-arg "ARTIFACTORY_AUTH_BASE64=${ARTIFACTORY_AUTH_BASE64}" \
     --build-arg "ARTIFACTORY_ID=${ARTIFACTORY_ID}" --build-arg "ICD_REDIS_STORE=${ICD_REDIS_STORE}" \
     --build-arg "QR_STORE=${QR_STORE}" --build-arg "MAVEN_USER_ID=${MAVEN_USER_ID}" \
-    --build-arg "ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}"
+    --build-arg "ARTIFACTORY_API_KEY=${ARTIFACTORY_API_KEY}" \
+    --build-arg "RH_PASSWORD=${RH_PASSWORD}" --build-arg "RH_USERNAME=${RH_USERNAME}"
 
 fi
 if [ $? -ne 0 ]; then
