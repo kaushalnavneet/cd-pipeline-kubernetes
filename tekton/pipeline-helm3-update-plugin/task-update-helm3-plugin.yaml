@@ -100,9 +100,9 @@ spec:
           then
             echo "Updating helm3 plugin ${PLUGIN_NAME}"
             helm3 ls -A
-            helm3 upgrade ${PLUGIN_NAME} iks-charts/ibmcloud-block-storage-plugin -n ${NAMESPACE}
+            helm3 upgrade ${PLUGIN_NAME} iks-charts/${PLUGIN_NAME} -n ${NAMESPACE}
             sleep 60
-            kubectl wait --for=condition=Ready pod -l app={PLUGIN_NAME} -n ${NAMESPACE}
+            kubectl wait --for=condition=Ready pod -l app=${PLUGIN_NAME} -n ${NAMESPACE}
           else
             echo "No update required"
           fi
