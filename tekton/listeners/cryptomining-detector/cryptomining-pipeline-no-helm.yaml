@@ -44,22 +44,8 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc
-    - name: clone-cr-repo
-      runAfter: [clone-config-repo]
-      taskRef:
-        name: git-clone-repo
-      params:
-        - name: repository
-          value: $(params.cr_repo)
-        - name: branch
-          value: $(params.cr_branch)
-        - name: directory-name
-          value: $(params.cr_directory)
-      workspaces:
-      - name: output
-        workspace: pipeline-pvc
     - name: deploy-cluster-1
-      runAfter: [clone-cr-repo]
+      runAfter: [clone-script-repo]
       taskRef:
         name:  deploy-cryptomining-no-helm
       params:
