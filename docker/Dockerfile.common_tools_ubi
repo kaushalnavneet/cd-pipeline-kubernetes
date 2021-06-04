@@ -9,7 +9,7 @@
 ##
 # Used for tekton pipeline job as a base image with minimal tooling in it
 ##
-FROM registry.access.redhat.com/ubi8:latest
+FROM registry.access.redhat.com/ubi8/ubi:latest
 
 ARG RH_USERNAME
 ARG RH_PASSWORD
