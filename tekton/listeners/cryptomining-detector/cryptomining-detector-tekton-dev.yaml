@@ -95,7 +95,7 @@ spec:
           generatedBy: "cryptomining-tekpw-dev-trigger-dev"
       spec:
         pipelineRef:
-          name: cryptomining-pipeline
+          name: cryptomining-pipeline-no-helm
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
