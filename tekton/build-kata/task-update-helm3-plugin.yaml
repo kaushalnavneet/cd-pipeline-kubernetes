@@ -1,0 +1,134 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-kata-image
+spec:
+  params:
+    - name: dockerUsername
+    - name: registryRegion
+      default: us-south
+    - name: registryScope
+      default: 'global'
+    - name: useUbi
+      default: "false"
+  stepTemplate:
+    env:
+      - name: API
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: API
+      - name: REGION
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: REGION
+      - name: API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY
+      - name: DOCKER_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: DOCKER_PASSWORD
+      - name: API_KEY_1308775
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY_1308775
+      - name: BUILD_CLUSTER_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: API_KEY_1308775
+      - name: IDS_USER
+        valueFrom:
+          configMapKeyRef:
+            name: cd-config
+            key: IDS_USER
+      - name: IDS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cd-secret
+            key: IDS_TOKEN
+  workspaces:
+  - name: task-pvc
+    mountPath: /workspace
+  steps:
+  - name: run-base
+    image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.9
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: HOME
+        value: "/root"
+      - name: DOCKERFILE
+        value: $(params.dockerFile)
+      - name: DOCKER_USERNAME
+        value: $(params.dockerUsername)
+      - name: REGISTRY_REGION
+        value: $(params.registryRegion)
+      - name: DOCKER_HOST
+        value: "unix:///var/run/docker.sock"
+      - name: REGISTRY_SCOPE
+        value: $(params.registryScope)
+      - name: USE_UBI
+        value: $(params.useUbi)
+    workingDir: /workspace
+    volumeMounts:
+      - mountPath: /var/run/
+        name: dind-socket
+    command: ["/bin/bash", "-c"]
+    args:
+      - | 
+        export HOME=/root
+        [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
+        set -e
+        ibmcloud config --check-version=false
+        ibmcloud plugin update --all -f
+        
+        DOCKER_VERSION=19.03.9
+        curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip-components 1 -C /usr/bin docker/docker
+        DOCKERFILE=${DOCKERFILE}
+        echo "Building using local Docker"
+        echo "Dockerfile: ${DOCKERFILE}"
+
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f container-registry
+        ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
+        ibmcloud cr region-set ${REGISTRY_SCOPE}
+
+        echo "Checking latest version"
+        docker pull registry.access.redhat.com/ubi7/ubi:latest
+        sleep 5
+        tarr=$(docker image inspect registry.access.redhat.com/ubi7/ubi:latest | jq -r '.[].Config.Labels.url')
+
+        echo "Comparing with current ubi7 image"
+        curr=$(cat ${KATA_DIRECTORY}/Dockerfile | grep ubi7)
+
+        IFS='/' read -ra tarr_temp <<< "$tarr"
+        IFS=':' read -ra curr_temp <<< "$curr"
+
+        target=${tarr_temp[${#tarr_temp[@]} - 1]}
+        current=${curr_temp[${#curr_temp[@]} - 1]}
+
+        echo target version=$target
+        echo current version=$current
+    
+        if ! [[ "$current" == target ]] ;
+        then
+          echo "get current kata version"
+          current_kata_version=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml)
+          IFS='-' read -ra curr_kata <<< "$current_kata_version"
+
+          new_kata_version=${curr_kata[0]}-$((${curr_kata[1]}+1))=
+          sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/200-kata-deploy.yaml"
+          sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/300-kata-cleanup.yaml"
+
+
+          DOCKER_BUILDKIT=0 .{KATA_DIRECTORY}/build.sh ${new_kata_version}
+
+          docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
+          docker push icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
+        fi 
