@@ -161,6 +161,8 @@ spec:
             fi
             echo "Re-Applying network policies after agent update"
             for f in ${CD_PIPELINE_KUBERNETES_DIRECTORY}/calico/managedworker/*.yaml; do calicoctl apply -f -<$f;done
+            echo "Re-Configuring default timeout"
+            kubectl patch cm/config-defaults -n tekton-pipelines -p $'data:\n default-timeout-minutes: "360"'
           fi 
 
           kubectl wait -l app=private-worker-agent --for=condition=ready pod --timeout=-1s -n tekton-pipelines
