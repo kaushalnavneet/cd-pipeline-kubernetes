@@ -130,7 +130,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: cryptomining-detector-jp-tok-binding-no-helm
+  name: cryptomining-detector-jp-tok-no-helm-binding
 spec:
   params:
     - name: script_repo
