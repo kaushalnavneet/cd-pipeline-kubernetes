@@ -43,19 +43,31 @@ wget --quiet --no-check-certificate https://github.com/stedolan/jq/releases/down
     && rm -f /tmp/jq-linux64
 
 # do substitution inside json files located in releng folder
-cat releng/crypto_deploy.json | jq --arg CLUSTER_NAME ${CLUSTER_NAME} '(.spec.template.spec.containers[].env[] | select(.name == "CLUSTER_NAME") | .value) = $CLUSTER_NAME' > releng/1.json
-cat releng/1.json | jq --arg IMAGE_NAME ${IMAGE_NAME} '(.spec.template.spec.containers[].image) = $IMAGE_NAME' > releng/2.json
-cat releng/2.json | jq --arg SCHEDULE ${SCHEDULE} '(.spec.template.spec.containers[].env[] | select(.name == "SCHEDULE") | .value) = $SCHEDULE' > releng/3.json
-cat releng/3.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_deploy.json
-rm releng/crypto_deploy.json
-rm releng/1.json
-rm releng/2.json
-rm releng/3.json
+if [ -f releng/final_crypto_deploy.json ]; then
+  echo "substitution is alredy done for crypto_deploy.json"
+else
+  cat releng/crypto_deploy.json | jq --arg CLUSTER_NAME ${CLUSTER_NAME} '(.spec.template.spec.containers[].env[] | select(.name == "CLUSTER_NAME") | .value) = $CLUSTER_NAME' > releng/1.json
+  cat releng/1.json | jq --arg IMAGE_NAME ${IMAGE_NAME} '(.spec.template.spec.containers[].image) = $IMAGE_NAME' > releng/2.json
+  cat releng/2.json | jq --arg SCHEDULE ${SCHEDULE} '(.spec.template.spec.containers[].env[] | select(.name == "SCHEDULE") | .value) = $SCHEDULE' > releng/3.json
+  cat releng/3.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_deploy.json
+  cp releng/crypto_deploy.json releng/crypto_deploy.json.original
+  rm releng/1.json
+  rm releng/2.json
+  rm releng/3.json
+fi
 
-cat releng/crypto_serviceaccount.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_serviceaccount.json
-rm releng/crypto_serviceaccount.json
+if [ -f releng/final_crypto_serviceaccount.json ]; then
+  echo "substitution is alredy done for crypto_serviceaccount.json"
+else
+  cat releng/crypto_serviceaccount.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.metadata.namespace) = $CHART_NAMESPACE' > releng/final_crypto_serviceaccount.json
+  rm releng/crypto_serviceaccount.json
+fi
 
-cat releng/crypto_rolebinding.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.subjects[].namespace) = $CHART_NAMESPACE' > releng/final_crypto_rolebinding.json
-rm releng/crypto_rolebinding.json
+if [ -f releng/final_crypto_rolebinding.json ]; then
+  echo "substitution is alredy done for crypto_rolebinding.json"
+else
+  cat releng/crypto_rolebinding.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.subjects[].namespace) = $CHART_NAMESPACE' > releng/final_crypto_rolebinding.json
+  rm releng/crypto_rolebinding.json
+fi
 
 kubectl apply -f releng/
