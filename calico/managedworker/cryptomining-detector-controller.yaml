@@ -1,0 +1,53 @@
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: cryptomining-detector-controller
+  namespace: tekton-pipelines
+spec:
+  egress:
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns' && projectcalico.org/namespace == 'kube-system'
+      namespaceSelector: all()
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 53
+      selector: k8s-app == 'kube-dns' && projectcalico.org/namespace == 'kube-system'
+      namespaceSelector: all()
+    protocol: TCP
+  - action: Allow
+    destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: UDP
+  - action: Allow
+    destination:
+      ports:
+      - 5353
+      selector: projectcalico.org/namespace == 'openshift-dns'
+      namespaceSelector: all()
+    protocol: TCP
+  - action: Allow
+    destination:
+      nets:
+      - 172.20.0.1/32
+  - action: Deny
+    destination:
+      selector: ibm.role == 'worker_private' || ibm.role == 'worker_public'
+      namespaceSelector: all()
+  - action: Allow
+    destination:
+      nets:
+      - 0.0.0.0/0
+      notNets:
+      - 172.16.0.0/12
+  order: 1000
+  selector: app == 'cryptomining-detector'
+  types:
+  - Egress
