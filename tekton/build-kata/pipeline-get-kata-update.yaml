@@ -30,6 +30,9 @@ spec:
       runAfter: [clone-kata-repo]
       taskRef:
         name: get-kata-update
+      params:
+        - name: task-pvc
+          value: $(params.pipeline-pvc)
       workspaces:
         - name: output
           workspace: pipeline-pvc
