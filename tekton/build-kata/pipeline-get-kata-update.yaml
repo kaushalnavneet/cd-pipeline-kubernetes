@@ -27,6 +27,7 @@ spec:
         - name: output
           workspace: pipeline-pvc
     - name: get-kata-update
+      runAfter: [clone-kata-repo]
       taskRef:
         name: get-kata-update
       workspaces:
