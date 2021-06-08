@@ -67,13 +67,6 @@ spec:
             persistentVolumeClaim:
               claimName: get-kata-update-$(uid)-pvc
         serviceAccountName: docker-build-sa
-        params:
-          - name: region
-            value: $(params.region)
-          - name: environment
-            value: $(params.environment)
-          - name: pluginName
-            value: $(params.pluginName)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
