@@ -10,6 +10,7 @@ spec:
       default: "master"
     - name: kata_directory
       default: "kata-deploy"
+    - name: dockerUsername
   workspaces:
     - name: pipeline-pvc
   tasks:
@@ -31,7 +32,8 @@ spec:
       taskRef:
         name: get-kata-update
       params:
-      
+        - name: dockerUsername
+          value:  $(params.dockerUsername)
       workspaces:
         - name: output
           workspace: pipeline-pvc
