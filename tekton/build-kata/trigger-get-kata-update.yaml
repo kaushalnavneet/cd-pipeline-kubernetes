@@ -58,7 +58,7 @@ spec:
         name: get-kata-update-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "get-kata-update-trigger-dev"
+          generatedBy: "get-kata-update-trigger"
       spec:
         pipelineRef:
           name: pipeline-get-kata-update
@@ -71,15 +71,15 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: get-kata-update-binding-dev
+  name: get-kata-update-binding
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: get-kata-update-dev
+  name: get-kata-update
 spec:
   triggers:
     - binding:
-        name: get-kata-update-binding-dev
+        name: get-kata-update-binding
       template:
-        name: get-kata-update-trigger-dev
+        name: get-kata-update-trigger
