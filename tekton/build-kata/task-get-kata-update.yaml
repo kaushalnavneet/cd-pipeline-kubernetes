@@ -117,15 +117,16 @@ spec:
         then
           echo "get current kata version"
           current_kata_version=$(yq --yaml-output '.spec.template.spec.containers[0].image' kata-deploy/config/200-kata-deploy.yaml)
-          IFS='-' read -ra curr_kata <<< "$current_kata_version"
+          echo $current_kata_version
+          #IFS='-' read -ra curr_kata <<< "$current_kata_version"
 
-          new_kata_version=${curr_kata[0]}-$((${curr_kata[1]}+1))=
-          sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/200-kata-deploy.yaml"
-          sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/300-kata-cleanup.yaml"
+          #new_kata_version=${curr_kata[0]}-$((${curr_kata[1]}+1))=
+          #sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/200-kata-deploy.yaml"
+          #sed -i '' -e "s/$current_kata_version/$new_kata_version/g" "${KATA_DIRECTORY}/config/300-kata-cleanup.yaml"
 
 
-          DOCKER_BUILDKIT=0 .{KATA_DIRECTORY}/build.sh ${new_kata_version}
+          #DOCKER_BUILDKIT=0 .{KATA_DIRECTORY}/build.sh ${new_kata_version}
 
-          docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
-          docker push icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
+          #docker tag ${IMAGE_NAME}:latest icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
+          #docker push icr.io/continuous-delivery/pipeline/kata-deploy:${new_kata_version}
         fi 
