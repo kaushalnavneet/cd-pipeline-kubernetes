@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-get-kata-update
+spec:
+  params:
+    - name: kata_repo
+      default: "https://github.ibm.com/org-ids/kata-deploy.git"
+    - name: kata_branch
+      default: "master"
+    - name: kata_directory
+      default: "kata-deploy"
+  workspaces:
+    - name: pipeline-pvc
+  tasks:
+    - name: clone-kata-repo
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.kata_repo)
+        - name: branch
+          value: $(params.kata_branch)
+        - name: directory-name
+          value: $(params.kata_directory)
+      workspaces:
+        - name: output
+          workspace: pipeline-pvc
+  tasks:
+    - name: get-kata-update
+      taskRef:
+        name: get-kata-update
+      params:
+      
+      workspaces:
+        - name: output
+          workspace: pipeline-pvc
+

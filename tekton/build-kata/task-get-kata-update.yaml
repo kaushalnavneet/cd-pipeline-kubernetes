@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: build-kata-image
+  name: get-kata-update
 spec:
   params:
     - name: dockerUsername
@@ -90,9 +90,6 @@ spec:
         
         DOCKER_VERSION=19.03.9
         curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip-components 1 -C /usr/bin docker/docker
-        DOCKERFILE=${DOCKERFILE}
-        echo "Building using local Docker"
-        echo "Dockerfile: ${DOCKERFILE}"
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
