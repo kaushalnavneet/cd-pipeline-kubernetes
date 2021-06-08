@@ -27,7 +27,6 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-pvc
-  tasks:
     - name: get-kata-update
       taskRef:
         name: get-kata-update
