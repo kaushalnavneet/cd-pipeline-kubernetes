@@ -4,7 +4,6 @@ metadata:
   name: get-kata-update
 spec:
   params:
-    - name: dockerUsername
     - name: registryRegion
       default: us-south
     - name: registryScope
@@ -28,11 +27,6 @@ spec:
           secretKeyRef:
             name: cd-secret
             key: API_KEY
-      - name: DOCKER_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: DOCKER_PASSWORD
       - name: API_KEY_1308775
         valueFrom:
           secretKeyRef:
@@ -63,10 +57,6 @@ spec:
     env:
       - name: HOME
         value: "/root"
-      - name: DOCKERFILE
-        value: $(params.dockerFile)
-      - name: DOCKER_USERNAME
-        value: $(params.dockerUsername)
       - name: REGISTRY_REGION
         value: $(params.registryRegion)
       - name: DOCKER_HOST
