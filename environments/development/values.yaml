@@ -161,6 +161,7 @@ pipeline:
       secretPaths:
        - generic/project/continuous-delivery-dev/otc-components/development/common-rabbitmq-icd_do_not_version
        - generic/project/continuous-delivery-dev/otc-components/development/common-redis-mzr-icd_do_not_version
+       - generic/project/continuous-delivery-dev/otc-components/development/common-tiam-client_do_not_version
     configmap:
       data:
         NEW_RELIC_APP_NAME: Tekton Pipeline Service - YS1
@@ -178,8 +179,9 @@ pipeline:
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         ENABLE_MESSAGE_COMPRESSION: true
         ENABLE_ENVIRONMENTS: true
-        AGENT_VERSION_RANGE: ">=0.4.0-dev"
-        AGENT_VERSION: "0.9.3-dev"
+        PRIVATE_WORKER_SERVICE: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
+        PIPELINE_ARTIFACT_HOST: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com
+        CD_BSS: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
