@@ -28,7 +28,7 @@ spec:
   steps:
   - name: run-base
     image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.9
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     env:
       - name: HOME
         value: "/root"
@@ -51,7 +51,7 @@ spec:
         
         DOCKER_VERSION=19.03.9
         curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip-components 1 -C /usr/bin docker/docker
-        sudo service docker restart
+        
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
