@@ -52,7 +52,7 @@ pipeline:
         TIAM_TOKEN_REFRESH_PERIOD_SECONDS: 0
         VAULT_CLIENT_INIT_RETRY_TIMEOUT: 3000
         ENABLE_TPS_CLASSIC: true
-        REDIRECT_PUBLIC_TRAVIS_TO_PUBLIC_TEKTON: false
+        REDIRECT_PUBLIC_TRAVIS_TO_PUBLIC_TEKTON: true
   pipeline-log-service:
     replicas: 1
     revisionHistoryLimit: 3
