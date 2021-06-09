@@ -4,8 +4,6 @@ metadata:
   name: get-kata-update
 spec:
   params:
-    - name: task-pvc
-      description: the output pvc - this is where the cloned repository will be stored
     - name: registryRegion
       default: us-south
     - name: registryScope
