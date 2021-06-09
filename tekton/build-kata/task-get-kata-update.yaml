@@ -48,7 +48,6 @@ spec:
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
         ibmcloud config --check-version=false
-        ibmcloud plugin update --all -f
         
         DOCKER_VERSION=19.03.9
         curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip-components 1 -C /usr/bin docker/docker
