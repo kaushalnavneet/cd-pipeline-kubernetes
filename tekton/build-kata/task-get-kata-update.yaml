@@ -66,9 +66,6 @@ spec:
       - name: USE_UBI
         value: $(params.useUbi)
     workingDir: /workspace
-    volumeMounts:
-      - mountPath: /var/run/
-        name: dind-socket
     command: ["/bin/bash", "-c"]
     args:
       - | 
