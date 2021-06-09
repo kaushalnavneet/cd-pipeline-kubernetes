@@ -17,26 +17,11 @@ spec:
           configMapKeyRef:
             name: cd-config
             key: API
-      - name: REGION
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: REGION
       - name: API_KEY
         valueFrom:
           secretKeyRef:
             name: cd-secret
             key: API_KEY
-      - name: IDS_USER
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: IDS_USER
-      - name: IDS_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: cd-secret
-            key: IDS_TOKEN
   workspaces:
   - name: task-pvc
     mountPath: /workspace
