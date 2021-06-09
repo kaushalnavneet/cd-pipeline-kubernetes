@@ -87,7 +87,7 @@ function deployComponent() {
         if [ ! -z "$deleted" ]; then
             helm delete --purge ${COMPONENT_NAME}
         fi
-        set -e
+        set -eo pipefail
         echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --dry-run"
@@ -95,7 +95,7 @@ function deployComponent() {
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     else
-        set -e
+        set -eo pipefail
         echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"

@@ -3,6 +3,7 @@
 #
 # prepare data
 #
+set -eo pipefail
 
 if [ -f "/config/DEV_MODE" ]; then
     export DEV_MODE=$(cat /config/DEV_MODE)

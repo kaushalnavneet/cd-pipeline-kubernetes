@@ -162,7 +162,7 @@ initEnvVars
 
 initDefaults
 
-set -e
+set -eo pipefail
 
 cd "${WORKSPACE}/${SOURCE_DIRECTORY}"
 

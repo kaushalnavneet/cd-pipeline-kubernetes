@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 echo ">>>>>>>>>>>>>>>>>>>"
 env | sort
 CURRENT_DIR=$(pwd)

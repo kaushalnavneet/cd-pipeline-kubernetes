@@ -176,7 +176,7 @@ fi
 
 export HOME=/root
 [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
-set -e
+set -eo pipefail
 if [ "${SKIP}" == true ]; then
     echo "Skipping Deploy"
     exit 0
@@ -196,7 +196,7 @@ if [[ -z $DEV_MODE ]]; then
     set +e
     REPOSITORY="$(cat /config/repository)"
     TAG="$(cat /config/custom-image-tag)"
-    set -e
+    set -eo pipefail
 
     set -x
     WORK_DIR=$(cat /config/SOURCE_DIRECTORY)
@@ -360,7 +360,7 @@ else
     }
     cluster_config ${CLUSTER_NAME}
 
-    set -e
+    set -eo pipefail
     INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
     echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
     if [[ ${INGRESS_SUBDOMAIN} == *,* ]];then
@@ -388,13 +388,13 @@ else
     if [ -z $chartExists ]; then
         deleted=$(helm list --all ${COMPONENT_NAME} | grep DELETED)
         echo "DELETED HELM: $deleted"
-        set -e
+        set -eo pipefail
         if [ ! -z "$deleted" ]; then
         helm delete --purge ${COMPONENT_NAME}
         fi
         helm install ${HELM_OPTIONS} --name ${COMPONENT_NAME} ${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     else
-        set -e
+        set -eo pipefail
         helm upgrade ${HELM_OPTIONS} --force ${COMPONENT_NAME} ${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} --set tags.environment=false --set ${ENVIRONMENT}.enabled=true --set pipeline.image.tag=${APPLICATION_VERSION} --set pipeline.image.repository=${IMAGE_URL} --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     fi
 fi
