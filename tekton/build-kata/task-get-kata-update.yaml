@@ -27,7 +27,7 @@ spec:
     mountPath: /workspace
   steps:
   - name: run-base
-    image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.9
+    image: icr.io/continuous-delivery/pipeline/pipeline-base-image:latest
     imagePullPolicy: Always
     env:
       - name: HOME
@@ -47,17 +47,11 @@ spec:
         export HOME=/root
         [ -f /root/.nvm/nvm.sh ] && source /root/.nvm/nvm.sh
         set -e
-        ibmcloud config --check-version=false
-        
-        DOCKER_VERSION=19.03.9
-        curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar zxvf - --strip-components 1 -C /usr/bin docker/docker
 
         ibmcloud config --check-version=false
         ibmcloud plugin install -f container-registry
         ibmcloud login -a ${API} -r ${REGISTRY_REGION} --apikey ${API_KEY}
         ibmcloud cr region-set ${REGISTRY_SCOPE}
-
-        export DOCKER_HOST='tcp://localhost:2375'
 
         echo "Checking latest version"
         docker pull registry.access.redhat.com/ubi7/ubi:latest
