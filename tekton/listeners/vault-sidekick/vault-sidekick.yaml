@@ -7,8 +7,6 @@ spec:
     - name: source_repo
     - name: source_branch
     - name: source_directory
-    - name: imageName
-    - name: imageTag
 
     # CD integration
     - name: api
