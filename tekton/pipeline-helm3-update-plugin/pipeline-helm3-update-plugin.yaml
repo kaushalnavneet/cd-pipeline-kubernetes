@@ -26,6 +26,8 @@ spec:
           value: $(params.environment)
         - name: pluginName
           value: $(params.pluginName)
+        - name: clusterName
+          value: $(params.clusterName1)
       workspaces:
       - name: output
         workspace: pipeline-pvc

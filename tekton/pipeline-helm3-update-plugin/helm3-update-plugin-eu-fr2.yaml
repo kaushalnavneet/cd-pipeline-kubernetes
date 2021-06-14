@@ -31,7 +31,7 @@ spec:
         name: cd-secret
       type: Opaque
       stringData:
-        API_KEY: $(params.API_KEY_1416501)
+        API_KEY: $(params.API_KEY_2113612)
         SN_TOKEN: $(params.SN_TOKEN)
 
     # k8s resources to be able to pull docker image from a specific container registry

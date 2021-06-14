@@ -15,6 +15,7 @@ spec:
       default: "standard"
     - name: pluginName
       default: "ibmcloud-block-storage-plugin"
+    - name: clusterName
   results:
     - name: cr_id
       description: the cr id that was created by the task
@@ -61,6 +62,8 @@ spec:
         value: $(params.cr_type)
       - name: PLUGIN_NAME
         value: $(params.pluginName)
+      - name: CLUSTER_NAME
+        value: $(params.clusterName)
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
@@ -73,10 +76,6 @@ spec:
         fi
 
         set -e
-        ibmcloud config --check-version=false
-        ibmcloud plugin install -f container-service
-        ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
-        ibmcloud ks cluster config --cluster ${CLUSTER_NAME}
 
         if [ -z ${CR_TYPE} ]; then
           CR_TYPE="standard"
@@ -98,22 +97,44 @@ spec:
         S_DATE=$(( $(date +%s) + 30 ))
         E_DATE=$(( $(date +%s) + 4*10800 ))
 
-        description=""
         purpose="Keeping helm3 plugin ${PLUGIN_NAME} up to date"
-
-        description+="Using the pipeline https://cloud.ibm.com/devops/pipelines/tekton/ef23818a-f2e5-4c66-9311-0c56b0ee3fb5?env_id=ibm:yp:us-south"
+        description="Using the pipeline https://cloud.ibm.com/devops/pipelines/tekton/ef23818a-f2e5-4c66-9311-0c56b0ee3fb5?env_id=ibm:yp:us-south"
         
 
+        ibmcloud config --check-version=false
+        ibmcloud plugin install -f kubernetes-service
+        ibmcloud login -a ${API} -r ${REGION} --apikey ${API_KEY}
+
+        set +e
+        function cluster_config() {
+            # 1 - cluster name
+            for iteration in {1..30}
+            do
+                echo "Running cluster config for cluster $1: $iteration / 30"
+                ibmcloud ks cluster config --cluster $1
+                if [[ $? -eq 0 ]]; then
+                    return 0
+                else
+                    echo "Cluster config for $1 failed. Trying again..."
+                    sleep 5
+                fi
+            done
+            return 1
+        }
+        
+        cluster_config ${CLUSTER_NAME}
+        set -e
+
         #Fetch helm3 plugin version and compare
+        echo "Checking update versions"
+        helm3 repo add iks-charts https://icr.io/helm/iks-charts
         helm3 repo update
 
         current=$(helm3 ls -A | grep ${PLUGIN_NAME} | awk '{ print $NF }')
         target=$(helm3 search repo ${PLUGIN_NAME} | awk '{ print $2 }')
-
-        IFS='-' read -ra temp <<< "$current"
-
-        current_version = ${temp[${#temp[@]} - 1]}
-        target_version= printf $(echo $target | awk '{ print $2 }')
+        IFS='-' read -ra curr <<< "$current"
+        current_version=${curr[${#curr[@]} - 1]}
+        target_version=$(echo $target | awk '{ print $2 }')
 
         description+="---- updating ${PLUGIN_NAME} from version $current_version ---> $target_version"
 
