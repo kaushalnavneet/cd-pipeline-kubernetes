@@ -14,7 +14,7 @@ spec:
     - name: dockerFile
       default: ''
     - name: runBaseImage
-      default: us.icr.io/opentoolchain/cd-build-base:nodejs14
+      default: us.icr.io/opentoolchain/cd-build-base:nodejs14ubi
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -61,7 +61,7 @@ spec:
         - name: imageUrl
           value: $(params.imageUrl)
         - name: runBaseImage
-          value: us.icr.io/opentoolchain/cd-build-base:nodejs14
+          value: $(params.runBaseImage)
         - name: imageTag
           value: ''
         - name: skipVA
