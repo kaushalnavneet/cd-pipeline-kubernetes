@@ -65,7 +65,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
+        if [[ "$ENVIRONMENT" == *"dev"* ]] || [[ "$ENVIRONMENT" == *"preprod"* ]] ; then
           echo "Skip CR creation for $REGION environment"
           CR_ID="no cr"
           echo -n $CR_ID | tee $(results.cr_id.path)
