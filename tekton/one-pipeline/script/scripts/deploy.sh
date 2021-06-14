@@ -362,7 +362,7 @@ else
 
     #Gen2 Changes Begin
     set -e
-    CLUSTER_TYPE=$(ibmcloud ks cluster get -c otc-us-south-dev-gen2 --output json | jq -r .type)
+    CLUSTER_TYPE=$(ibmcloud ks cluster get -c ${CLUSTER_NAME} --output json | jq -r .type)
     echo "Cluster Type is: ${CLUSTER_TYPE}"
     
     if [ ${CLUSTER_TYPE} == "openshift" ]; then
