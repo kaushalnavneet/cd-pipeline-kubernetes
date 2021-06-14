@@ -74,7 +74,7 @@ spec:
     volumeMounts:
       - mountPath: /var/run/
         name: dind-socket
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     env:
       - name: IDS_TOKEN
         value: $(params.idsToken)
