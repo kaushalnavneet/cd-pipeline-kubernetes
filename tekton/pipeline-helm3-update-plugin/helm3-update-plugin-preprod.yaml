@@ -107,11 +107,11 @@ spec:
     - name: environment
       value: "preprod-us-south"
     - name: clusterName1
-      value: otc-pw-dal10-preprod
+      value: otc-pw-dal10-stage
     - name: clusterName2
-      value: otc-pw-dal12-preprod
+      value: otc-pw-dal12-stage
     - name: clusterName3
-      value: otc-pw-dal13-preprod
+      value: otc-pw-dal13-stage
     - name: skipDeploy1
       value: "false"
     - name: skipDeploy2
