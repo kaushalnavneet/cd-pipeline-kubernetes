@@ -17,5 +17,11 @@ RUN wget --no-check-certificate -q -O /usr/local/bin/kubectl  https://storage.go
 
 ADD scripts/vault-sidekick-cache.sh /vault-sidekick-cache
 
+# Adding permissions for the root group to run on RHOS
+# per the described best practices. For details see:
+# https://github.ibm.com/org-ids/roadmap/issues/17736
+RUN chgrp -R root /home/vault && \
+    chmod -R g=u /home/vault
+
 USER vault
 ENTRYPOINT [ "/vault-sidekick-cache" ]
