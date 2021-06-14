@@ -93,9 +93,9 @@ spec:
             ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
         fi
 
-        # set CR time for 3 hour
+        # set CR time for 1 hour
         S_DATE=$(( $(date +%s) + 30 ))
-        E_DATE=$(( $(date +%s) + 4*10800 ))
+        E_DATE=$(( $(date +%s) + 3600 ))
 
         purpose="Keeping helm3 plugin ${PLUGIN_NAME} up to date"
         description="Using the pipeline https://cloud.ibm.com/devops/pipelines/tekton/ef23818a-f2e5-4c66-9311-0c56b0ee3fb5?env_id=ibm:yp:us-south"
