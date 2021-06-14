@@ -43,7 +43,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
       - |
-        if [[ "$ENVIRONMENT" == *"dev"* ]] ; then
+        if [[ "$ENVIRONMENT" == *"dev"* ]] || [[ "$ENVIRONMENT" == *"preprod"* ]] ; then
           echo "Skip CR closing for $REGION environment"
           exit 0
         fi
