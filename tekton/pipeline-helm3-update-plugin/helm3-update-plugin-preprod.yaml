@@ -122,7 +122,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: helm3-update-plugin-preprod
+  name: helm3-update-plugin-preprod-dev
 spec:
   triggers:
     - binding:
