@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: helm3-update-plugin-au-syd-trigger-dev
+  name: helm3-update-au-syd-trigger-dev
 spec:
   params:
     - name: region
@@ -50,7 +50,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: helm3-update-plugin-au-syd-$(uid)-pvc
+        name: helm3-update-au-syd-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -63,17 +63,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: helm3-update-plugin-au-syd-$(uid)
+        name: helm3-update-au-syd-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "helm3-update-plugin-au-syd-trigger-dev"
+          generatedBy: "helm3-update-au-syd-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-helm3-update-plugin
+          name: pipeline-helm3-update
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: helm3-update-plugin-au-syd-$(uid)-pvc
+              claimName: helm3-update-au-syd-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: region
@@ -98,7 +98,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: helm3-update-plugin-au-syd-binding-dev
+  name: helm3-update-au-syd-binding-dev
 spec:
   params:
     - name: region
@@ -121,10 +121,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: helm3-update-plugin-au-syd-dev
+  name: helm3-update-au-syd-dev
 spec:
   triggers:
     - binding:
-        name: helm3-update-plugin-au-syd-binding-dev
+        name: helm3-update-au-syd-binding-dev
       template:
-        name: helm3-update-plugin-au-syd-trigger-dev
+        name: helm3-update-au-syd-trigger-dev

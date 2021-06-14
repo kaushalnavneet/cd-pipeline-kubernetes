@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-helm3-update-plugin
+  name: pipeline-helm3-update
 spec:
   params:
     - name: region

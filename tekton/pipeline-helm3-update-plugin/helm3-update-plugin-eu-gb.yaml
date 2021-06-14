@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: helm3-update-plugin-eu-gb-trigger-dev
+  name: helm3-update-eu-gb-trigger-dev
 spec:
   params:
     - name: region
@@ -51,7 +51,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: helm3-update-plugin-eu-gb-$(uid)-pvc
+        name: helm3-update-eu-gb-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -64,17 +64,17 @@ spec:
       kind: PipelineRun
       metadata:
         #generateName: $(params.source_branch)-base-run
-        name: helm3-update-plugin-eu-gb-$(uid)
+        name: helm3-update-eu-gb-$(uid)
         labels:
           triggertemplated: "true"
-          generatedBy: "helm3-update-plugin-eu-gb-trigger-dev"
+          generatedBy: "helm3-update-eu-gb-trigger-dev"
       spec:
         pipelineRef:
-          name: pipeline-helm3-update-plugin
+          name: pipeline-helm3-update
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: helm3-update-plugin-eu-gb-$(uid)-pvc
+              claimName: helm3-update-eu-gb-$(uid)-pvc
         serviceAccountName: docker-build-sa
         params:
           - name: region
@@ -99,7 +99,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: helm3-update-plugin-eu-gb-binding-dev
+  name: helm3-update-eu-gb-binding-dev
 spec:
   params:
     - name: region
@@ -122,10 +122,10 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: helm3-update-plugin-eu-gb-dev
+  name: helm3-update-eu-gb-dev
 spec:
   triggers:
     - binding:
-        name: helm3-update-plugin-eu-gb-binding-dev
+        name: helm3-update-eu-gb-binding-dev
       template:
-        name: helm3-update-plugin-eu-gb-trigger-dev
+        name: helm3-update-eu-gb-trigger-dev
