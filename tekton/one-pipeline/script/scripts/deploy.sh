@@ -365,7 +365,7 @@ else
     CLUSTER_TYPE=$(ibmcloud ks cluster get -c otc-us-south-dev-gen2 --output json | jq -r .type)
     echo "Cluster Type is: ${CLUSTER_TYPE}"
     
-    if [ ${CLUSTER_TYPE} == "openshift"]; then
+    if [ ${CLUSTER_TYPE} == "openshift" ]; then
         export TILLER_NAMESPACE=tiller
         curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz --output openshift-client-linux.tar.gz
         mkdir -p openshift-client-linux && tar zxvf openshift-client-linux.tar.gz -C openshift-client-linux && mv openshift-client-linux/oc /usr/local/bin/oc && rm -rf openshift-client-linux
