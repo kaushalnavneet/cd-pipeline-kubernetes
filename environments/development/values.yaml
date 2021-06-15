@@ -183,6 +183,7 @@ pipeline:
         PRIVATE_WORKER_SERVICE: https://private-worker-service.us-south.devops.dev.cloud.ibm.com
         PIPELINE_ARTIFACT_HOST: https://pipeline-artifact-repository-service.us-south.devops.dev.cloud.ibm.com
         CD_BSS: https://continuous-delivery-bss.us-south.devops.dev.cloud.ibm.com
+        LMS_URL: https://devops-api.us-south.devops.test.cloud.ibm.com
   pipeline-event-service:
     replicas: 1
     revisionHistoryLimit: 3
