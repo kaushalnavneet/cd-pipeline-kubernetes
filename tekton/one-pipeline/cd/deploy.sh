@@ -10,8 +10,8 @@ export CLUSTER_NAMESPACE=$(cat /config/cluster-namespace)
 export API_KEY=$(cat /config/ibmcloud-api-key)
 declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}" | sort ))
 
-if [ -f "/config/environment" ]; then
-    export ENVIRONMENT=$(cat /config/environment)
+if [ -f "/config/config-environment" ]; then
+    export ENVIRONMENT=$(cat /config/config-environment)
 else
     export ENVIRONMENT=${REGION}
 fi
