@@ -10,6 +10,12 @@ export CLUSTER_NAMESPACE=$(cat /config/cluster-namespace)
 export API_KEY=$(cat /config/ibmcloud-api-key)
 declare -a apps=($(jq -rc '.[]' "${WORKSPACE}/${DEPLOYMENT_DELTA_PATH}" | sort ))
 
+if [ -f "/config/environment" ]; then
+    export ENVIRONMENT=$(cat /config/environment)
+else
+    export ENVIRONMENT=${REGION}
+fi
+
 for app in "${apps[@]}"; do
     if [[ "$app" != *"_image" ]]; then
         echo "deploy ${app}"
@@ -21,8 +27,8 @@ for app in "${apps[@]}"; do
             export CLUSTER_NAME2="$(echo $CLUSTER_NAME2 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME2 | cut -d - -f2-)"
             export CLUSTER_NAME3="$(echo $CLUSTER_NAME3 | cut -d - -f1)-pw-$(echo $CLUSTER_NAME3 | cut -d - -f2-)"
         fi
-        deployComponent "${app}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${REGION}"
-        deployComponent "${app}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${REGION}"
-        deployComponent "${app}" "${CLUSTER_NAME3}" "${CLUSTER_NAMESPACE}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME1}" "${CLUSTER_NAMESPACE}" "${ENVIRONMENT}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME2}" "${CLUSTER_NAMESPACE}" "${ENVIRONMENT}" "${REGION}"
+        deployComponent "${app}" "${CLUSTER_NAME3}" "${CLUSTER_NAMESPACE}" "${ENVIRONMENT}" "${REGION}"
     fi
 done
