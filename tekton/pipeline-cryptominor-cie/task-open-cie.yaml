@@ -1,0 +1,144 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: open-cie
+spec:
+  description: >-
+    This task opens a CIE in ServiceNow and returns a Incident ID.
+  params:
+    - name: sn-region
+      default: 'development'
+    - name: sn-url
+      default: 'https://watson.service-now.com'
+    - name: sn-token
+    - name: cr-priority
+      default: "moderate"
+    - name: cr-type
+      default: "standard"
+    - name: cr-description
+    - name: cr-purpose
+  results:
+    - name: incident_id
+      description: the incident id that was created by the task
+  workspaces:
+    - name: task-pvc
+      mountPath: /workspace
+  steps:
+  - name: open-cie
+    image: us.icr.io/opentoolchain/cd-deploy-base:deploy
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: SN_REGION
+        value: $(params.sn-region)
+      - name: SN_URL
+        value: $(params.sn-url)
+      - name: CR_PRIORITY
+        value: $(params.cr-priority)
+      - name: CR_TYPE
+        value: $(params.cr-type)
+      - name: CR_DESCRIPTION
+        value: $(params.cr-description)
+      - name: CR_PURPOSE
+        value: $(pararms.cr-purpose)
+      - name: SN_TOKEN
+        value: $(params.sn-token)
+      - name: SN_ASSIGNED_TO
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
+    workingDir: /workspace
+    command: ["/bin/bash", "-c"]
+    args:
+      - |
+        if [ $SN_REGION == "development" ] || [ $SN_REGION == "dev" ]; then
+          echo "Skip CIE creation for $SN_REGION environment"
+          INCIDENT_ID="no cie"
+          echo -n $INCIDENT_ID | tee $(results.incident_id.path)
+          exit 0
+        fi
+
+        if [ -z ${CR_TYPE} ]; then
+          CR_TYPE="standard"
+        fi
+        if [ -z ${CR_PRIORITY} ]; then
+          CR_PRIORITY="moderate"
+        fi
+
+        SYSTEM="continuous-delivery-pipeline"
+        CRN="crn:v1:bluemix:public::$SN_REGION::::"
+
+        if [[ "$SN_ASSIGNED_TO" =~ .+@.+\..+ && "$SN_ASSIGNED_TO" != "idsorg@us.ibm.com" ]]; then
+            ASSIGNED_TO="$SN_ASSIGNED_TO"
+        else
+            ASSIGNED_TO="$(git log -1 --pretty=format:'%ae')"
+        fi
+
+        # set CR time for 3 hour
+        S_DATE=$(( $(date +%s) + 30 ))
+        E_DATE=$(( $(date +%s) + 4*10800 ))
+
+        description="$CR_DESCRIPTION"
+        purpose="$CR_PURPOSE"
+
+        export TMP=/tmp/tmp_$$.json
+
+        # tag message adds link to ServiceNow query using deploy commit hash in the description field
+        cat - >"$TMP" <<HERE
+        {
+          "assignedto": "$ASSIGNED_TO",
+          "system": "$SYSTEM",
+          "impact": "N/A",
+          "outageduration": "0 00:00:00",
+          "priority": "${CR_PRIORITY}",
+          "environment": "$CRN",
+          "purpose": "$purpose",
+          "description": "$description",
+          "backoutplan": "Retry update",
+          "plannedstart": "$(date -u -d@${S_DATE} "+%Y-%m-%d %H:%M:%S")",
+          "plannedend": "$(date -u -d@${E_DATE} "+%Y-%m-%d %H:%M:%S")",
+          "deploymentready": "yes",
+          "type": "${CR_TYPE}"
+        }
+        HERE
+
+        echo "Opening CIE with:"
+        cat "$TMP"
+
+        RESPONSE=$(curl --request POST -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "@$TMP" "$SN_URL/api/ibmwc/v2/change/create" \
+            --silent --show-error)
+
+        echo "RESPONSE: ${RESPONSE}"
+
+        CR_ID=$(jq --raw-output ".result.number | select (.!=null)" <<< "$RESPONSE")
+
+        echo "CR ID: ${CR_ID}"
+        echo "$SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=${CR_ID}"
+
+        sleep 10
+
+        RESPONSE=$(curl --request PUT -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            --data "$PAYLOAD" "$SN_URL/api/ibmwc/v2/change/$CR_ID/implement" \
+            --silent --show-error)
+
+        echo "Checking ServiceNow change request state..."
+
+        sleep 10
+
+        RESPONSE=$(curl -H "Authorization:Bearer $SN_TOKEN" \
+            -H "updated_by: $ASSIGNED_TO" \
+            -H "Accept:application/json" \
+            -H "Content-Type:application/json" \
+            "$SN_URL/api/ibmwc/v2/change/$CR_ID/read" \
+            --silent --show-error)
+
+        CR_STATE=$(jq --raw-output ".result.state | select (.!=null)" <<< "$RESPONSE")
+        echo "ServiceNow change request is in $CR_STATE state."
+
+        echo -n $CR_ID | tee $(results.cr_id.path)
