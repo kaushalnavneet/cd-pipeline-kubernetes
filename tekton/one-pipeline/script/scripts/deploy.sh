@@ -360,6 +360,20 @@ else
     }
     cluster_config ${CLUSTER_NAME}
 
+    #Gen2 Changes Begin
+    set -e
+    CLUSTER_TYPE=$(ibmcloud ks cluster get -c ${CLUSTER_NAME} --output json | jq -r .type)
+    echo "Cluster Type is: ${CLUSTER_TYPE}"
+    
+    if [ ${CLUSTER_TYPE} == "openshift" ]; then
+        export TILLER_NAMESPACE=tiller
+        curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz --output openshift-client-linux.tar.gz
+        mkdir -p openshift-client-linux && tar zxvf openshift-client-linux.tar.gz -C openshift-client-linux && mv openshift-client-linux/oc /usr/local/bin/oc && rm -rf openshift-client-linux
+        chmod +x /usr/local/bin/oc
+        oc login -u apikey -p ${API_KEY}
+    fi;    
+    #Gen2 Changes End
+
     set -eo pipefail
     INGRESS_SUBDOMAIN=$(ibmcloud ks cluster get -s --cluster ${CLUSTER_NAME} | grep -i "Ingress subdomain:" | awk '{print $3;}')
     echo "INGRESS SUB DOMAIN: $INGRESS_SUBDOMAIN"
