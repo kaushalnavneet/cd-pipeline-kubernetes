@@ -89,17 +89,17 @@ function deployComponent() {
         echo "helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --dry-run"
-        #helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
-        #--set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
-        #--set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        helm install --name ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --namespace ${CLUSTER_NAMESPACE} \
+        --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true  \
+        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     else
         set -e
         echo "helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
         --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
         --set global.ingressSubDomain=${INGRESS_SUBDOMAIN}"
-        #helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
-        #--set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
-        #--set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
+        helm upgrade --force ${COMPONENT_NAME} tmp/${COMPONENT_NAME} --install --namespace ${CLUSTER_NAMESPACE} \
+        --set tags.environment=false  --set ${ENVIRONMENT}.enabled=true \
+        --set global.ingressSubDomain=${INGRESS_SUBDOMAIN} --set global.ingressSecret=${INGRESS_SECRET}
     fi
 
     echo "Remove tmp directory"
