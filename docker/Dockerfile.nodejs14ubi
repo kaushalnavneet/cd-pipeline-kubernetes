@@ -49,6 +49,13 @@ RUN rm -rf /home/node/cd-pipeline-kubernetes
 RUN chown -hR node /home/node \
     && chgrp -hR node /home/node
 
+# Adding permissions for the root group to run on RHOS
+# per the described best practices. For details see:
+# https://github.ibm.com/org-ids/roadmap/issues/17736
+RUN chgrp -R root /home/node && \
+    chmod -R g=u /home/node
+
+
 USER node
 EXPOSE 80
 
