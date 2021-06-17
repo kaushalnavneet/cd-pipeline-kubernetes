@@ -15,7 +15,7 @@ pipeline:
         cpu: 100m
       memory: 1Gi
     vault:
-      sidekickImageTag: 38dfea5b362e506e60becc91c9988c9d569e8014-202005112130UTC
+      sidekickImageTag: 21d93c41369e894f30a2b600e6a72c542f09dafe-202106150101UTC
     vaultcommon:
       secretPaths:
       - generic/project/continuous-delivery-dev/cd-pipeline/development/common/pipeline-common-do_not_version

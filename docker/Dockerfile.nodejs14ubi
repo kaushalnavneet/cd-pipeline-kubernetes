@@ -59,4 +59,5 @@ RUN chgrp -R root /home/node && \
 USER node
 EXPOSE 80
 
+ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
 CMD ["sh","-c","while true; do sleep 1; done"]
