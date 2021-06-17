@@ -4,19 +4,10 @@ metadata:
   name: trigger-template-devx-key-rotation
 spec:
   params:
-    - name: script_repo
-    - name: script_branch
-    - name: script_directory
     - name: config_repo
       default: "https://github.ibm.com/ids-env/devops-config.git"
-    - name: config_branch
     - name: config_directory
       default: "devops-config"
-
-    # CD integration
-    - name: apikey
-      description: the ibmcloud api key
-
   resourcetemplates:
     # PVC definition like pre-tekton-0.10.1
     - apiVersion: v1
@@ -88,8 +79,6 @@ spec:
             value: master
           - name: config_directory
             value: $(params.config_directory)
-          - name: cr-skip
-            value: $(params.cr-skip)
           - name: environment
             value: $(params.environment)
           - name: clusterNamespace
