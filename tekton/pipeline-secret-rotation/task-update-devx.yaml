@@ -57,10 +57,10 @@ spec:
         # update pipeline-support-service secret
         devx_vault_path=$(get_vault_path "${CONFIG_DIRECTORY}/environments/${ENVIRONMENT}/values.yaml" ${DEVX_SECRET_PATH} pipeline-support-service)
         echo "devx vault path: ${devx_vault_path}"
-        #devx_tempfile=$(mktemp)
-        #read_vault_path ${devx_vault_path} ${devx_tempfile}
-        #save_backup ${devx_tempfile} ${devx_vault_path}
-        #new_secret=$(generate_new_secret)
-        #generate_new_devx_value ${devx_tempfile} ${new_secret}
-        #updating_vault ${devx_tempfile} ${devx_vault_path}
-        #rm ${devx_tempfile}
+        devx_tempfile=$(mktemp)
+        read_vault_path ${devx_vault_path} ${devx_tempfile}
+        save_backup ${devx_tempfile} ${devx_vault_path}
+        new_secret=$(generate_new_secret)
+        generate_new_devx_value ${devx_tempfile} ${new_secret}
+        updating_vault ${devx_tempfile} ${devx_vault_path}
+        rm ${devx_tempfile}

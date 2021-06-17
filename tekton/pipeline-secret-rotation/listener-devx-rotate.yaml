@@ -129,7 +129,7 @@ spec:
     - name: clusterName3
       value: otc-us-south-dev
     - name: skipCluster1
-      value: true
+      value: false
     - name: skipCluster2
       value: true
     - name: skipCluster3
