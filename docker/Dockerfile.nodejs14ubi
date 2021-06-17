@@ -60,4 +60,5 @@ USER node
 EXPOSE 80
 
 #ENTRYPOINT ["/home/node/tini","--","/home/node/entrypoint.sh"]
-CMD ["sh","-c","env > /home/node/envcheck.txt && node --max-http-header-size=65535 index.js"]
+#CMD ["sh","-c","env > /home/node/envcheck.txt && node --max-http-header-size=65535 index.js"]
+CMD ["sh","-c","node --max-http-header-size=65535 index.js"]
