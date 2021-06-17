@@ -88,7 +88,7 @@ pipeline:
         LOGS_ROUTING_KEY: reporting.jobs.logs
         NEW_RELIC_APP_NAME: Pipeline Log Service - YS1
         NODE_MODULES_CACHE: false
-        S3_LOGS_BUCKET_NAME: pipeline-logs-dev
+        S3_LOGS_BUCKET_NAME: pipeline-logs-ys1-dev
         USE_HTTP: true
         PAYLOAD_ENCRYPT: true
   otc-github-relay-pub:
@@ -144,7 +144,7 @@ pipeline:
         AGENT_VERSION: "0.10.8-dev"
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
         ENABLE_S3_STORAGE: true
-        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-ys1-dev
         DISABLE_TRIGGER_ENDPOINT: true
         EVENT_SERVICE_URL: https://pipeline-event-service.us-south.devops.dev.cloud.ibm.com
         ENABLE_RECORD_QUEUE_TIME: true
@@ -171,7 +171,7 @@ pipeline:
         TEKTON_PIPELINE_SERVICE_URL: https://tekton-pipeline-service.us-south.devops.dev.cloud.ibm.com
         LOG_SERVICE_URL: http://pipeline-log-service
         TIMER_LOCK_ID: "c035a138-c3c7-465c-86c0-b3dbb078dcd2"
-        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-ys1-dev
         ENABLE_DISTRIBUTED_LOCK: true
         DEVOPS_API_URL: https://devops-api.us-south.devops.dev.cloud.ibm.com
         ENCRYPTER_PAYLOAD_ENCRYPT: "false"
@@ -220,7 +220,7 @@ pipeline:
         apiTest__monitorInterval: "60000"
         useResourceGroups: true
         TEKTON_MONITOR: true
-        S3_RESOURCES_BUCKET_NAME: tekton-resources-dev
+        S3_RESOURCES_BUCKET_NAME: tekton-resources-ys1-dev
   pipeline-ui:
     replicas: 1
     revisionHistoryLimit: 3
@@ -347,7 +347,7 @@ pipeline:
         NEW_RELIC_APP_NAME: Pipeline Artifact Repository Service - YS1-dev
         NODE_ENV: staging-us-south
         RUN_ARS_K8S: true
-        S3_ARS_BUCKET_NAME: pipeline-artifacts-dev
+        S3_ARS_BUCKET_NAME: pipeline-artifacts-ys1-dev
         SSL: true
         STATUS_TIMEOUT: "4500"
         USE_S3: true
