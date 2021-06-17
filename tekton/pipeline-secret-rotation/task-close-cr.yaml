@@ -29,7 +29,7 @@ spec:
             key: SLACK_DEPLOY_HOOK
   workspaces:
   - name: output
-    mountPath: /workspace 
+    mountPath: /workspace
   steps:
   - name: close-cr
     image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
@@ -83,7 +83,7 @@ spec:
         echo "ServiceNow change request closed: $SN_URL/nav_to.do?uri=change_request.do?sysparm_query=number=$CR_ID"
 
         SN_ICON=":delivery-pipeline:"
-        
+
         NOTICE_TEXT=${SN_CLOSE_NOTICE_TEXT:="The deployment in ${ENVIRONMENT} has concluded."}
 
         ICON=${SN_ICON:=":mario-pipe-5339:"}

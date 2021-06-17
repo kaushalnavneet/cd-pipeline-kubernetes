@@ -1,0 +1,162 @@
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: trigger-template-devx-key-rotation
+spec:
+  params:
+    - name: script_repo
+    - name: script_branch
+    - name: script_directory
+    - name: config_repo
+      default: "https://github.ibm.com/ids-env/devops-config.git"
+    - name: config_branch
+    - name: config_directory
+      default: "devops-config"
+
+    # CD integration
+    - name: apikey
+      description: the ibmcloud api key
+
+  resourcetemplates:
+    # PVC definition like pre-tekton-0.10.1
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: key-rotation-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage:  5Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    # CD context defined as a configmap and secret because it is immutable information
+    - apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cd-config
+      data:
+        REGION: $(params.region)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cd-secret
+      type: Opaque
+      stringData:
+        API_KEY: $(params.IAM_API_KEY)
+        DEPLOY_API_KEY: $(params.DEPLOY_API_KEY)
+        IAM_API_KEY: $(params.IAM_API_KEY)
+        VAULT_SIDEKICK_ROLE_ID: $(params.VAULT_SIDEKICK_ROLE_ID)
+        VAULT_SIDEKICK_SECRET_ID: $(params.VAULT_SIDEKICK_SECRET_ID)
+        IDS_TOKEN: $(params.IDS_TOKEN)
+        SN_TOKEN: $(params.SN_TOKEN)
+        SLACK_DEPLOY_HOOK: $(params.SLACK_DEPLOY_HOOK)
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: private-registry-secret
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: $(params.dockerconfigjson)
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: docker-build-sa
+      imagePullSecrets:
+        - name: private-registry-secret
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: key-rotation-$(params.environment)-$(uid)
+      spec:
+        pipelineRef:
+          name: pipeline-devx-secret-rotation
+        workspaces:
+          - name: pipeline-pvc
+            persistentVolumeClaim:
+              claimName: key-rotation-$(uid)-pvc
+        params:
+          - name: script_repo
+            value: https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+          - name: script_branch
+            value: master
+          - name: script_directory
+            value: script-cd-pipeline-kubernetes
+          - name: config_repo
+            value: $(params.config_repo)
+          - name: config_branch
+            value: master
+          - name: config_directory
+            value: $(params.config_directory)
+          - name: cr-skip
+            value: $(params.cr-skip)
+          - name: environment
+            value: $(params.environment)
+          - name: clusterNamespace
+            value: opentoolchain
+          - name: clusterName1
+            value: $(params.clusterName1)
+          - name: skipCluster1
+            value: $(params.skipCluster1)
+          - name: clusterName2
+            value: $(params.clusterName2)
+          - name: skipCluster2
+            value: $(params.skipCluster2)
+          - name: clusterName3
+            value: $(params.clusterName3)
+          - name: skipCluster3
+            value: $(params.skipCluster3)
+          - name: description
+            value: $(params.description)
+          - name: purpose
+            value: $(params.purpose)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: trigger-binding-devx-key-rotation
+spec:
+  params:
+    - name: IAM_API_KEY
+      value: $(params.IAM_API_KEY_1651315)
+    - name: DEPLOY_API_KEY
+      value: $(params.IAM_API_KEY_1651315)
+    - name: VAULT_SIDEKICK_ROLE_ID
+      value: $(params.VAULT_DEV_ROLEID)
+    - name: VAULT_SIDEKICK_SECRET_ID
+      value: $(params.VAULT_DEV_SECRETID)
+    - name: config_repo
+      value: https://github.ibm.com/org-ids/cd-pipeline-kubernetes.git
+    - name: region
+      value: us-south
+    - name: sn-region
+      value: DEV
+    - name: environment
+      value: development
+    - name: clusterName1
+      value: otc-us-south-dev
+    - name: clusterName2
+      value: otc-us-south-dev
+    - name: clusterName3
+      value: otc-us-south-dev
+    - name: skipCluster1
+      value: false
+    - name: skipCluster2
+      value: true
+    - name: skipCluster3
+      value: true
+    - name: description
+      value: "Update all secrets in vaults, restart required pipeline apps and cleanup vaults from previous values."
+    - name: purpose
+      value: "To rotate the devx secret that is used by the pipeline-support-service app in Continuous Delivery service"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: event-listener-devx-key-rotation
+spec:
+  triggers:
+    - binding:
+        name: trigger-binding-devx-key-rotation
+      template:
+        name: trigger-template-devx-key-rotation

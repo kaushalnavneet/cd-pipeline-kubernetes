@@ -15,11 +15,6 @@ spec:
         valueFrom:
           fieldRef:
             fieldPath: metadata.annotations['devops.cloud.ibm.com/pipeline-run-url']
-      - name: API
-        valueFrom:
-          configMapKeyRef:
-            name: cd-config
-            key: API
       - name: REGION
         valueFrom:
           configMapKeyRef:
@@ -32,7 +27,7 @@ spec:
             key: DEPLOY_API_KEY
   workspaces:
   - name: output
-    mountPath: /workspace 
+    mountPath: /workspace
   steps:
   - name: rolling-restart
     image: icr.io/continuous-delivery/pipeline/tekton/common-tools:2.0.0
