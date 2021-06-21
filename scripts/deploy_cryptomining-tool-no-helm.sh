@@ -69,5 +69,7 @@ else
   cat releng/crypto_rolebinding.json | jq --arg CHART_NAMESPACE ${CHART_NAMESPACE} '(.subjects[].namespace) = $CHART_NAMESPACE' > releng/final_crypto_rolebinding.json
   rm releng/crypto_rolebinding.json
 fi
-kubetcl delete clusterrole cryptomining-detector-role
+set +e
+kubectl delete clusterrole cryptomining-detector-role
+set -eo pipefail
 kubectl apply -f releng/
