@@ -39,8 +39,8 @@ spec:
   params:
     - name: param1
       value: ""
-    template:
-      name: trigger-open-cie
+  template:
+    name: trigger-open-cie
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
