@@ -18,14 +18,14 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: instana-deploy-$(uid)
+        name: pipeline-open-cie-$(uid)
       spec:
         pipelineRef:
           name: pipeline-open-cie
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
-              claimName: instana-deploy-$(uid)-pvc
+              claimName: pipeline-open-cie-$(uid)-pvc
         params:
           # SN params
           - name: param1
