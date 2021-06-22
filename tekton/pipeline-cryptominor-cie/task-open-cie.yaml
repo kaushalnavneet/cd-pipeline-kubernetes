@@ -21,9 +21,6 @@ spec:
     env:
       - name: SN_REGION
         value: $(params.param1)
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.annotations['devops.cloud.ibm.com/triggered-by']
     workingDir: /workspace
     command: ["/bin/bash", "-c"]
     args:
