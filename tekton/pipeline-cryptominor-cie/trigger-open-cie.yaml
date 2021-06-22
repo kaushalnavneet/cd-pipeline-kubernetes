@@ -7,7 +7,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: instana-deploy-$(uid)-pvc
+        name: pipeline-open-cie-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -21,7 +21,7 @@ spec:
         name: instana-deploy-$(uid)
       spec:
         pipelineRef:
-          name: pipeline-instana-deploy
+          name: pipeline-open-cie
         workspaces:
           - name: pipeline-pvc
             persistentVolumeClaim:
@@ -48,45 +48,24 @@ spec:
             value: $(params.cr-close-category)
 ---
 apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: trigger-binding-dev-template
-spec:
-  params:
-    - name: sn-region
-      value: "development"
----
-apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: deploy-dev-template
+  name: crypto-open-cie-listener
 spec:
   triggers:
     - bindings:
-        - name: servicenow
-        - name: test-servicenow
-        - name: trigger-binding-dev-template
+        - params:
+            - name: cr-type
+              value: ""
+            - name: cr-priority
+              value: ""
+            - name: cr-description
+              value: "Template cr description"
+            - name: cr-purpose
+              value: "Template cr purpose"
+            - name: cr-close-notes
+              value: "Templage ct close notes:"
+            - name: cr-close-category
+              value: "successful"
       template:
-        name: trigger-template-deploy-instana
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: trigger-binding-prod-template
-spec:
-  params:
-    - name: sn-region
-      value: "prod"
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: deploy-prod-template
-spec:
-  triggers:
-    - bindings:
-        - name: servicenow
-        - name: prod-servicenow
-        - name: trigger-binding-prod-template
-      template:
-        name: trigger-template-deploy-instana
+        name: trigger-open-cie
