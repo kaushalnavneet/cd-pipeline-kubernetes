@@ -39,7 +39,7 @@ spec:
   params:
     - name: param1
       value: ""
-  template:
+    template:
       name: trigger-open-cie
 ---
 apiVersion: tekton.dev/v1beta1
@@ -50,5 +50,5 @@ spec:
   triggers:
     - bindings:
         name: crypto-open-cie-binding
-    template:
-      name: trigger-open-cie
+      template:
+        name: trigger-open-cie
