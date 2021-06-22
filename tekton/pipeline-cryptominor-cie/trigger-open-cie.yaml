@@ -48,24 +48,31 @@ spec:
             value: $(params.cr-close-category)
 ---
 apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: crypto-open-cie-binding
+spec:
+  params:
+    - name: cr-type
+      value: ""
+    - name: cr-priority
+      value: ""
+    - name: cr-description
+      value: "Template cr description"
+    - name: cr-purpose
+      value: "Template cr purpose"
+    - name: cr-close-notes
+      value: "Templage ct close notes:"
+    - name: cr-close-category
+      value: "successful"
+---
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: crypto-open-cie-listener
 spec:
   triggers:
     - bindings:
-        - params:
-            - name: cr-type
-              value: ""
-            - name: cr-priority
-              value: ""
-            - name: cr-description
-              value: "Template cr description"
-            - name: cr-purpose
-              value: "Template cr purpose"
-            - name: cr-close-notes
-              value: "Templage ct close notes:"
-            - name: cr-close-category
-              value: "successful"
+        name: crypto-open-cie-binding
       template:
         name: trigger-open-cie
